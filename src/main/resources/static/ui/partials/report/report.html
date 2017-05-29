@@ -1,0 +1,199 @@
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default tabs">
+                        <ul class="nav nav-tabs pull-right" role="tablist">
+                            <li>
+                                <a href="#tab5" role="tab" data-toggle="tab" ng-click="tab='5'">
+                                    <span>الاستعلامات</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#tab4" role="tab" data-toggle="tab" ng-click="tab='4'">
+                                    <span>الرسم البياني</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#tab3" role="tab" data-toggle="tab" ng-click="tab='3'">
+                                    <span>السندات</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#tab2" role="tab" data-toggle="tab" ng-click="tab='2'">
+                                    <span>التسجيل</span>
+                                </a>
+                            </li>
+                            <li class="active" ng-init="tab='1'">
+                                <a href="#tab1" role="tab" data-toggle="tab" ng-click="tab='1'">
+                                    <span>العروض</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-body tab-content">
+
+                            <div id="tab1" class="tab-pane active">
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportOfferByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>عروض الفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportOfferByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>عروض التخصصات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportOfferByPersonModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>عروض المستخدمين</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportOfferByIdModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>عروض الاسعار</span>
+                                </div>
+                            </div>
+
+                            <div id="tab2" class="tab-pane">
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportAccountByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>الطلاب المسجلين للفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportAccountByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>الطلاب المسجلين للتخصصات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportAccountByCourseModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>الطلاب المسجلين للدورات</span>
+                                </div>
+                            </div>
+
+                            <div id="tab3" class="tab-pane">
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportPaymentByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>سندات الفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportPaymentByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>سندات التخصصات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportPaymentByCourseModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>سندات الدورات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportPaymentByAccountInModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>السندات من خلال البحث فى بيانات التسجيل</span>
+                                </div>
+                            </div>
+
+                            <div id="tab4" class="tab-pane">
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartOffersCountAverageByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط عدد العروض بين الفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartOffersCountAverageByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط عدد العروض بين التخصصات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartOffersPriceAverageByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط دخل العروض بين الفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartOffersPriceAverageByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط دخل العروض بين التخصصات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartPaymentPriceAverageByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط دخل السندات بين الفروع (تحت التطوير)</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartPaymentPriceAverageByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط دخل السندات بين التخصصات (تحت التطوير)</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartPaymentPriceAverageByCourseModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>متوسط دخل السندات بين الدورات (تحت التطوير)</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartAccountPopulateAverageByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>نسبة إقبال الطلاب بين الفروع (تحت التطوير)</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartAccountPopulateAverageByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>نسبة إقبال الطلاب بين التخصصات (تحت التطوير)</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportChartAccountPopulateAverageByCourseModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>نسبة إقبال الطلاب بين الدورات (تحت التطوير)</span>
+                                </div>
+                            </div>
+
+                            <div id="tab5" class="tab-pane">
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportBranchDetailsModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>بيانات الفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportMasterDetailsModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>بيانات التخصصات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="" ng-click="ReportModelProvider.openReportCourseDetailsModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>بيانات الدورات</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportUnRegisteredStudentDetailsByBranchModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>الطلاب الغير مسجلين للفروع</span>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href=""
+                                       ng-click="ReportModelProvider.openReportUnRegisteredStudentDetailsByMasterModel()"
+                                       class="tile tile-danger tile-valign"><span class="fa fa-file-pdf-o"></span></a>
+                                    <span>الطلاب الغير مسجلين للتخصصات</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

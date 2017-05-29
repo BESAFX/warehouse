@@ -1,0 +1,167 @@
+<form dir="rtl" name="from" ng-submit="submit()" novalidate="novalidate" focus-group="">
+
+    <div class="modal-header">
+        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+            <div class="form-group text-right col-sm-12">
+                <label for="name">اسم الطالب </label>
+                <input type="text"
+                       id="name"
+                       required="required"
+                       required-err-type="studentError1"
+                       class="form-control text-right"
+                       focus-index="1"
+                       placeholder="اسم الطالب..."
+                       ng-model="student.contact.name">
+            </div>
+
+            <div class="form-group text-right col-sm-4">
+                <label for="identityLocation">مكان الاصدار </label>
+                <input type="text"
+                       id="identityLocation"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       focus-index="4"
+                       placeholder="مكان الاصدار..."
+                       ng-model="student.contact.identityLocation">
+            </div>
+
+            <div class="form-group text-right col-sm-4">
+                <label for="identityNumber">رقم الهوية - الاقامة</label>
+                <input type="text"
+                       id="identityNumber"
+                       focus-index="3"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right "
+                       placeholder="رقم الهوية - الاقامة..."
+                       ng-model="student.contact.identityNumber">
+            </div>
+
+            <div class="form-group text-right col-sm-4">
+                <label for="nationality"> الجنسية </label>
+                <input type="text"
+                       id="nationality"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       focus-index="2"
+                       placeholder="الجنسية..."
+                       ng-model="student.contact.nationality">
+            </div>
+
+            <div class="form-group text-right col-md-6">
+                <label>تاريخ اصدار الهوية - الاقامة</label>
+                <div besa-date ng-model="student.contact.identityStartDate"></div>
+            </div>
+
+            <div class="form-group text-right col-md-6">
+                <label>تاريخ الميلاد</label>
+                <div besa-date ng-model="student.contact.birthDate"></div>
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="qualification"> المؤهل </label>
+                <input type="text"
+                       id="qualification"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       focus-index="6"
+                       placeholder=" المؤهل..."
+                       ng-model="student.contact.qualification">
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="birthLocation">مكان الميلاد </label>
+                <input type="text"
+                       id="birthLocation"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       focus-index="5"
+                       placeholder="مكان الميلاد..."
+                       ng-model="student.contact.birthLocation">
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="phone">رقم الهاتف </label>
+                <input type="text"
+                       id="phone"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right "
+                       focus-index="8"
+                       placeholder="رقم الهاتف..."
+                       ng-model="student.contact.phone">
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="mobile">رقم الجوال </label>
+                <input type="text"
+                       id="mobile"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right "
+                       focus-index="7"
+                       placeholder="رقم الجوال..."
+                       ng-model="student.contact.mobile">
+            </div>
+
+            <div class="form-group text-right col-md-12">
+                <label for="address"> العنوان </label>
+                <input type="text"
+                       id="address"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       focus-index="9"
+                       placeholder="مكان الاصدار..."
+                       ng-model="student.contact.address">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="form-group col-md-12" role="group">
+            <button type="button"
+                    focus-index="13"
+                    ng-click="cancel()"
+                    class="btn btn-danger pull-left">
+                <span>خروج</span>
+                <i class="fa fa-power-off  fa-lg"></i>
+            </button>
+            <button type="reset"
+                    focus-index="12"
+                    class="btn btn-info pull-left">
+                <span>مسح الحقول</span>
+                <i class="fa fa-recycle  fa-lg"></i>
+            </button>
+            <button ng-show="action=='update'"
+                    type="submit"
+                    focus-index="11"
+                    class="btn btn-warning pull-right">
+
+                <i class="fa fa-edit fa-lg"></i>
+            </button>
+            <button ng-show="action=='create'"
+                    type="submit"
+                    focus-index="10"
+                    class="btn btn-success pull-right">
+                <span>اضافة</span>
+                <i class="fa fa-plus-square fa-lg"></i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

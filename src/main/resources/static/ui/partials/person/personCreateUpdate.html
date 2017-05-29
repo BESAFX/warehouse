@@ -1,0 +1,271 @@
+<form dir="rtl" name="from" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack="" focus-group-head="loop" focus-group-tail="loop">
+
+    <div class="modal-header">
+        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+                <div class="alert alert-danger" role="alert">
+                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <div class="panel panel-info">
+                    <div class="panel-heading">البيانات الاساسية</div>
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="form-group text-right col-md-3">
+                                <label for="firstName" class="control-label">الاسم الأول </label>
+                                <input id="firstName"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       focus-index="1"
+                                       ng-model="personObject.contact.firstName">
+                            </div>
+
+                            <div class="form-group text-right col-md-3">
+                                <label for="secondName" class="control-label">اسم الاب </label>
+                                <input id="secondName"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="2"
+                                       ng-model="personObject.contact.secondName">
+                            </div>
+
+                            <div class="form-group text-right col-md-3">
+                                <label for="forthName" class="control-label">اسم العائلة </label>
+                                <input id="forthName"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       focus-index="3"
+                                       ng-model="personObject.contact.forthName">
+                            </div>
+
+                            <div class="form-group text-right col-md-3">
+                                <label for="thirdName" class="control-label">اسم الجد </label>
+                                <input id="thirdName"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="4"
+                                       ng-model="personObject.contact.thirdName">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group text-right col-md-6">
+                                <label for="birthLocation" class="control-label">مكان الميلاد </label>
+                                <input id="birthLocation"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="5"
+                                       ng-model="personObject.contact.birthLocation">
+                            </div>
+
+                            <div class="form-group text-right col-sm-6">
+                                <label for="endDate" class="control-label">تاريخ الميلاد</label>
+                                <div dir="ltr" class="input-group">
+                                    <input dir="rtl"
+                                           id="endDate"
+                                           type="text"
+                                           class="form-control text-right is-calendarPicker"
+                                           ng-model="personObject.contact.birthDate"
+                                           calendarType="ummalqura"
+                                           language="en"
+                                           dateFormat="yyyy/mm/dd"
+                                           showOnFocus="false"
+                                           readonly="readonly"
+                                           kdatepicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group text-right col-md-6">
+                                <label for="nationality" class="control-label">الجنسية </label>
+                                <input id="nationality"
+                                       type="text"
+                                       class="form-control text-right"
+                                       placeholder="الجنسية"
+                                       focus-index="7"
+                                       ng-model="personObject.contact.nationality">
+                            </div>
+
+                            <div class="form-group text-right col-md-6">
+                                <label for="identityNumber" class="control-label">رقم البطاقة</label>
+                                <input id="identityNumber"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="8"
+                                       ng-model="personObject.contact.identityNumber">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group text-right col-md-6">
+                                <label for="mobile" class="control-label">الجوال </label>
+                                <input id="mobile"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       focus-index="9"
+                                       ng-model="personObject.contact.mobile">
+                            </div>
+
+                            <div class="form-group text-right col-md-6">
+                                <label for="phone" class="control-label">الهاتف </label>
+                                <input id="phone"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="10"
+                                       ng-model="personObject.contact.phone">
+                            </div>
+                        </div>
+
+                        <div class="form-group text-right col-md-12">
+                            <label for="qualification" class="control-label">المنصب الوظيفي </label>
+                            <input id="qualification"
+                                   type="text"
+                                   required="required"
+                                   disable-validation-message=""
+                                   class="form-control text-right"
+                                   focus-index="11"
+                                   ng-model="personObject.contact.qualification">
+                        </div>
+
+                        <div class="form-group text-right col-md-12">
+                            <label for="address" class="control-label">العنوان الحالي </label>
+                            <input id="address"
+                                   type="text"
+                                   class="form-control text-right"
+                                   focus-index="12"
+                                   ng-model="personObject.contact.address">
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group text-right col-md-6">
+                                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                                <select id="branch"
+                                        data-placeholder="ابحث عن الفرع"
+                                        no-results-text="'لا توجد فروع توافق بحثك'"
+                                        placeholder-text-single="'اختر الفرع'"
+                                        class="form-control text-right"
+                                        chosen=""
+                                        ng-model="personObject.branch"
+                                        focus-index="13"
+                                        required="required"
+                                        disable-validation-message=""
+                                        ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                                </select>
+                            </div>
+
+                            <div class="form-group text-right col-md-6">
+                                <label for="team" class="control-label">مجموعة الصلاحيات</label>
+                                <select id="team"
+                                        data-placeholder="ابحث عن المجموعة"
+                                        no-results-text="'لا توجد مجموعات توافق بحثك'"
+                                        placeholder-text-single="'اختر المجموعة'"
+                                        class="form-control text-right"
+                                        chosen=""
+                                        ng-model="personObject.team"
+                                        focus-index="14"
+                                        required="required"
+                                        disable-validation-message=""
+                                        ng-options="team.name for team in teams track by team.id">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group text-right col-md-6">
+                                <label for="email" class="control-label">البريد الإلكتروني</label>
+                                <input id="email"
+                                       dir="ltr"
+                                       type="text"
+                                       focus-index="15"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-left"
+                                       ng-model="personObject.email">
+                            </div>
+
+                            <div class="form-group text-right col-md-6">
+                                <label for="password" class="control-label">الرقم السري</label>
+                                <input id="password"
+                                       dir="ltr"
+                                       type="password"
+                                       focus-index="16"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-left"
+                                       ng-model="personObject.password">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="panel panel-info">
+                    <div class="panel-heading">الصورة الشخصية</div>
+                    <div class="panel-body">
+
+                        <div class="col-md-12">
+                            <input type="file" nv-file-select="" uploader="uploader"/>
+                            <img ng-src="{{logoLink}}" style="width: 100%; height: 100%"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="form-group col-md-12" role="group">
+            <button type="button"
+                    focus-index="20"
+                    ng-click="cancel()"
+                    class="btn btn-danger pull-left">
+                <span>خروج</span>
+                <i class="fa fa-power-off fa-lg"></i>
+            </button>
+            <button type="reset"
+                    focus-index="19"
+                    class="btn btn-info pull-left">
+                <span>مسح الحقول</span>
+                <i class="fa fa-recycle fa-lg"></i>
+            </button>
+            <button ng-show="action=='update'"
+                    type="submit"
+                    focus-index="18"
+                    class="btn btn-warning pull-right">
+                <span>تعديل</span>
+                <i class="fa fa-edit fa-lg"></i>
+            </button>
+            <button ng-show="action=='create'"
+                    type="submit"
+                    focus-index="17"
+                    class="btn btn-success pull-right">
+                <span>اضافة</span>
+                <i class="fa fa-plus-square fa-lg"></i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

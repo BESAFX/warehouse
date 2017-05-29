@@ -1,0 +1,280 @@
+﻿<style>
+    #filter .chosen-container.chosen-with-drop .chosen-drop {
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    #filter .chosen-container .chosen-drop {
+        right: -9999px !important;
+        left: auto !important;
+    }
+</style>
+
+<div dir="rtl" id="filter"
+     ng-init="showFilter=false"
+     ps-open="showFilter"
+     pageslide=""
+     ng-style="{'opacity':sideOpacity}"
+     ps-side="left"
+     ps-click-outside="false"
+     ps-size="50%">
+
+    <form name="form" ng-submit="filter()" novalidate="novalidate" focus-group="" focus-stack=""
+          focus-group-head="loop" focus-group-tail="loop">
+
+        <div class="panel panel-info">
+
+            <div class="panel-heading">
+                <a class="pull-left" href="" ng-click="showFilter=false"><span class="fa fa-close fa-2x"></span></a>
+                <h3 class="panel-title pull-right">
+                    <span class="fa fa-filter"></span>
+                    <span>تصفية متعددة من قاعدة البيانات</span>
+                </h3>
+            </div>
+
+            <div class="panel-body"
+                 style="overflow-y: auto; overflow-x: hidden;"
+                 ng-style="resizeWithOffset(130)"
+                 resize="">
+
+                <div class="row">
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="codeTo" class="control-label">رقم الحساب (يحتوى علي)</label>
+                        <input id="codeTo"
+                               type="number"
+                               min="1"
+                               focus-index="1"
+                               class="form-control text-right"
+                               placeholder="ادخل رقم الحساب"
+                               ng-model="buffer.code">
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="name" class="control-label">اسم البنك (يحتوى علي)</label>
+                        <input id="name"
+                               type="text"
+                               focus-index="2"
+                               class="form-control text-right "
+                               placeholder="ادخل اسم البنك كاملاً او جزءاً منه"
+                               ng-model="buffer.name">
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="branch" class="control-label">فرع البنك (يحتوى على) </label>
+                        <input id="branch"
+                               type="text"
+                               focus-index="3"
+                               class="form-control text-right"
+                               placeholder="ادخل اسم فرع البنك كاملاً او جزءاً منه"
+                               ng-model="buffer.branch">
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="stockTo" class="control-label">الرصيد الحالي إلى </label>
+                        <input id="stockTo"
+                               type="number"
+                               focus-index="5"
+                               class="form-control text-right"
+                               placeholder="ادخل الرصيد الحالي من"
+                               ng-model="buffer.stockTo">
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="stockFrom" class="control-label">الرصيد الحالي من </label>
+                        <input id="stockFrom"
+                               type="number"
+                               focus-index="4"
+                               class="form-control text-right"
+                               placeholder="ادخل الرصيد الحالي إلى"
+                               ng-model="buffer.stockFrom">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="panel-footer">
+
+                <div class="row">
+
+                    <div class="form-group col-md-6 pull-left">
+                        <button type="submit"
+                                focus-index="5"
+                                style="width: 100%"
+                                class="btn btn-success">
+                            <span>عرض وتصفية البيانات</span>
+                            <i class="fa fa-filter fa-lg"></i>
+                        </button>
+                    </div>
+                    <div class="form-group col-md-6 pull-left">
+                        <button type="button"
+                                focus-index="13"
+                                style="width: 100%"
+                                ng-click="clear()"
+                                class="btn btn-info">
+                            <span>مسح الحقول</span>
+                            <i class="fa fa-recycle  fa-lg"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout-icon">
+            <a class="mdl-button mdl-js-button mdl-button--icon" ui-sref="menu">
+                <i class="material-icons">{{MDLIcon}}</i>
+            </a>
+        </div>
+        <div class="mdl-layout__header-row">
+            <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+                <li class="mdl-menu__item">
+                    <span>المساعدة</span>
+                </li>
+                <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">
+                    <span>الملف الشخصي</span>
+                </li>
+                <li class="mdl-menu__item" ng-click="logout()">
+                    <span>تسجيل الخروج</span>
+                </li>
+            </ul>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout__title">{{pageTitle}}</span>
+        </div>
+        <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
+            <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
+                <div class="form-group col-md-2 pull-right">
+                    <button id="offer-menu-lower-right" style="width: 100%;"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        <span>العمليات</span>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="offer-menu-lower-right">
+                        <li class="mdl-menu__item" ng-click="reload()">
+                            <span>تحديث</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="showFilter=true">
+                            <span>تصفية وعرض البيانات</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openCreateModel()"
+                            ng-if="contains(authorities, ['ROLE_BANK_CREATE'])">
+                            <span>اضافة</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openUpdateModel()"
+                            ng-if="contains(authorities, ['ROLE_BANK_UPDATE'])"
+                            ng-hide="!banks || banks.length==0">
+                            <span>تعديل</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="remove()"
+                            ng-if="contains(authorities, ['ROLE_BANK_DELETE'])"
+                            ng-hide="!banks || banks.length==0">
+                            <span>حذف</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+
+        <div dir="rtl" style="margin-top: 10px">
+
+            <div class="col-md-12">
+                <div class="panel panel-body">
+
+                    <div class="table-responsive">
+                        <table st-table="collection" st-safe-src="banks"
+                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+
+                                <th class="text-right">
+                                    <span>م</span>
+                                    <a href="" ng-click="showFilter=true"><span style="font-size: 25px"
+                                                                                class="fa fa-filter fa-lg"></span></a>
+                                </th>
+
+                                <th st-sort="code" class="text-right">
+                                    <span> رقم الحساب</span>
+                                </th>
+
+                                <th st-sort="name" class="text-right">
+                                    <span> اسم البنك</span>
+                                </th>
+
+                                <th st-sort="branch" class="text-right">
+                                    <span> فرع البنك</span>
+                                </th>
+
+                                <th st-sort="startAmount" class="text-right">
+                                    <span>الرصيد الافتتاحي</span>
+                                </th>
+
+                                <th st-sort="startAmountDate" class="text-right">
+                                    <span> تاريخ الرصيد الافتتاحي</span>
+                                </th>
+
+                                <th st-sort="stock" class="text-right">
+                                    <span>الرصيد الحالي</span>
+                                </th>
+
+                                <th st-sort="lastPerson.contact.id" class="text-right">
+                                    <span>مدخل الحساب</span>
+                                    <span class="fa fa-info-circle"
+                                          uib-tooltip="سيتم اعتبار آخر شخص قام بتعديل بيانات الحساب هو مدخل الحساب"></span>
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-right"
+                                ng-repeat="bank in collection"
+                                context-menu="rowMenu"
+                                ng-click="setSelected(bank)"
+                                ng-right-click="setSelected(bank)"
+                                st-select-mode="single"
+                                ng-class="{'mdl-color--brown-100':bank.isSelected}">
+                                <td st-select-row-custom="bank">{{$index+1}}</td>
+                                <td st-select-row-custom="bank">{{bank.code}}</td>
+                                <td st-select-row-custom="bank">{{bank.name}}</td>
+                                <td st-select-row-custom="bank">{{bank.branch}}</td>
+                                <td st-select-row-custom="bank">{{bank.startAmount | currency:'SAR':0}}</td>
+                                <td st-select-row-custom="bank">{{bank.startAmountDate | kdate: 'yyyy-mm-dd' : 'ar' :
+                                    'ummalqura'}}
+                                </td>
+                                <td st-select-row-custom="bank">{{bank.stock | currency:'SAR':0}}</td>
+                                <td st-select-row-custom="bank">{{bank.lastPerson.contact.firstName}}
+                                    {{bank.lastPerson.contact.forthName}}
+                                </td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                ng-show="!collection || collection.length ==0">
+                                <td colspan="8">لا توجد بيانات</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

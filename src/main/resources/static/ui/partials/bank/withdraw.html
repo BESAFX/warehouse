@@ -1,0 +1,538 @@
+﻿<style>
+    #filter .chosen-container.chosen-with-drop .chosen-drop {
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    #filter .chosen-container .chosen-drop {
+        right: -9999px !important;
+        left: auto !important;
+    }
+</style>
+
+<div dir="rtl" id="filter"
+     ng-init="showFilter=false"
+     ps-open="showFilter"
+     pageslide=""
+     ng-style="{'opacity':sideOpacity}"
+     ps-side="left"
+     ps-click-outside="false"
+     ps-size="50%">
+
+    <div class="panel panel-info" focus-group="" focus-stack=""
+         focus-group-head="loop" focus-group-tail="loop">
+
+        <div class="panel-heading">
+            <a class="pull-left" href="" ng-click="showFilter=false"><span class="fa fa-close fa-2x"></span></a>
+            <h3 class="panel-title pull-right">
+                <span class="fa fa-database"></span>
+                <span>بحث وطباعة</span>
+            </h3>
+        </div>
+
+        <div class="panel-body"
+             style="overflow-y: auto; overflow-x: hidden;"
+             ng-style="resizeWithOffset(130)"
+             resize="">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <uib-accordion close-others="true">
+                        <div uib-accordion-group class="panel panel-primary" is-open="true">
+                            <uib-accordion-heading>
+                                <i class="fa fa-search fa-lg"></i>
+                                <span>خيارات البحث - بيانات السحب</span>
+                            </uib-accordion-heading>
+
+                            <div class="row">
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="code" class="control-label">رقم السحب (يحتوى علي)</label>
+                                    <input id="code"
+                                           type="number"
+                                           min="1"
+                                           focus-index="1"
+                                           class="form-control text-right"
+                                           placeholder="ادخل رقم السحب"
+                                           ng-model="buffer.code">
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="amountFrom" class="control-label">قيمة السحب إلى </label>
+                                    <input id="amountFrom"
+                                           type="number"
+                                           focus-index="5"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرصيد الحالي من"
+                                           ng-model="buffer.amountFrom">
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="amountTo" class="control-label">قيمة السحب من </label>
+                                    <input id="amountTo"
+                                           type="number"
+                                           focus-index="4"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرصيد الحالي إلى"
+                                           ng-model="buffer.amountTo">
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="fromName" class="control-label">اسم الساحب (يحتوى علي)</label>
+                                    <input id="fromName"
+                                           type="text"
+                                           focus-index="2"
+                                           class="form-control text-right "
+                                           placeholder="ادخل اسم الساحب كاملاً او جزءاً منه"
+                                           ng-model="buffer.fromName">
+                                </div>
+
+                                <div class="form-group text-right col-sm-6">
+                                    <label for="dateTo" class="control-label">تاريخ السحب إلى</label>
+                                    <div dir="ltr" class="input-group">
+                                        <input dir="rtl"
+                                               id="dateTo"
+                                               type="text"
+                                               focus-index="3"
+                                               class="form-control text-right is-calendarPicker"
+                                               ng-model="buffer.dateTo"
+                                               calendarType="ummalqura"
+                                               language="en"
+                                               dateFormat="yyyy/mm/dd"
+                                               showOnFocus="false"
+                                               readonly="readonly"
+                                               kdatepicker>
+                                    </div>
+                                </div>
+
+                                <div class="form-group text-right col-sm-6">
+                                    <label for="dateFrom" class="control-label">تاريخ السحب من</label>
+                                    <div dir="ltr" class="input-group">
+                                        <input dir="rtl"
+                                               id="dateFrom"
+                                               type="text"
+                                               focus-index="3"
+                                               class="form-control text-right is-calendarPicker"
+                                               ng-model="buffer.dateFrom"
+                                               calendarType="ummalqura"
+                                               language="en"
+                                               dateFormat="yyyy/mm/dd"
+                                               showOnFocus="false"
+                                               readonly="readonly"
+                                               kdatepicker>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div uib-accordion-group class="panel panel-primary" is-open="false">
+                            <uib-accordion-heading>
+                                <i class="fa fa-search fa-lg"></i>
+                                <span>خيارات البحث - بيانات الحساب البنكي</span>
+                            </uib-accordion-heading>
+
+                            <div class="row">
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="bankCode" class="control-label">رقم الحساب (يحتوى علي)</label>
+                                    <input id="bankCode"
+                                           type="number"
+                                           min="1"
+                                           focus-index="1"
+                                           class="form-control text-right"
+                                           placeholder="ادخل رقم الحساب"
+                                           ng-model="buffer.bankCode">
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="bankName" class="control-label">اسم البنك (يحتوى علي)</label>
+                                    <input id="bankName"
+                                           type="text"
+                                           focus-index="2"
+                                           class="form-control text-right "
+                                           placeholder="ادخل اسم البنك كاملاً او جزءاً منه"
+                                           ng-model="buffer.bankName">
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="bankBranch" class="control-label">فرع البنك (يحتوى على) </label>
+                                    <input id="bankBranch"
+                                           type="text"
+                                           focus-index="3"
+                                           class="form-control text-right"
+                                           placeholder="ادخل اسم فرع البنك كاملاً او جزءاً منه"
+                                           ng-model="buffer.bankBranch">
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="bankStockTo" class="control-label">الرصيد الحالي إلى </label>
+                                    <input id="bankStockTo"
+                                           type="number"
+                                           focus-index="5"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرصيد الحالي من"
+                                           ng-model="buffer.bankStockTo">
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="bankStockFrom" class="control-label">الرصيد الحالي من </label>
+                                    <input id="bankStockFrom"
+                                           type="number"
+                                           focus-index="4"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرصيد الحالي إلى"
+                                           ng-model="buffer.bankStockFrom">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div uib-accordion-group class="panel panel-danger" is-open="false">
+
+                            <uib-accordion-heading>
+                                <i class="fa fa-print fa-lg"></i>
+                                <span>خيارات الطباعة</span>
+                            </uib-accordion-heading>
+
+                            <div class="row">
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="orientation" class="control-label">إتجاة الطباعة</label>
+                                    <select id="orientation"
+                                            style="height: 40px"
+                                            class="form-control text-right"
+                                            ng-model="buffer.orientation"
+                                            focus-index="2">
+                                        <option value="Landscape">
+                                            <span>افقي Landscape</span>
+                                        </option>
+                                        <option value="Portrait">
+                                            <span>عمودي Portrait</span>
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="exportType" class="control-label">نوع الملف المستخرج</label>
+                                    <select id="exportType"
+                                            style="height: 40px"
+                                            class="form-control text-right"
+                                            ng-model="buffer.exportType"
+                                            focus-index="2">
+                                        <option value="PDF">
+                                            <span>ملف من نوع PDF</span>
+                                        </option>
+                                        <option value="HTML">
+                                            <span>ملف من نوع HTML</span>
+                                        </option>
+                                        <option value="RTF">
+                                            <span>ملف من نوع RTF</span>
+                                        </option>
+                                        <option value="XHTML">
+                                            <span>ملف من نوع XHTML</span>
+                                        </option>
+                                        <option value="XLSX">
+                                            <span>ملف من نوع XLSX</span>
+                                        </option>
+                                        <option value="CSV">
+                                            <span>ملف من نوع CSV</span>
+                                        </option>
+                                        <option value="PPTX">
+                                            <span>ملف من نوع PPTX</span>
+                                        </option>
+                                        <option value="DOCX">
+                                            <span>ملف من نوع DOCX</span>
+                                        </option>
+                                        <option value="ODS">
+                                            <span>ملف من نوع ODS</span>
+                                        </option>
+                                        <option value="ODT">
+                                            <span>ملف من نوع ODT</span>
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-sm-12">
+                                    <label for="reportTitle" class="control-label">عنوان التقرير</label>
+                                    <input id="reportTitle"
+                                           type="text"
+                                           focus-index="2"
+                                           class="form-control text-right"
+                                           placeholder="ادخل عنوان التقرير"
+                                           ng-model="buffer.reportTitle">
+                                </div>
+
+                                <div class="form-group text-right col-sm-12">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+
+                                                <th></th>
+
+                                                <th class="text-center">
+                                                    <span>اسم العمود</span>
+                                                </th>
+
+                                                <th class="text-center fit">
+                                                    <span>عرض</span>
+                                                </th>
+
+                                                <th class="text-center fit">
+                                                    <span>تجميع</span>
+                                                </th>
+
+                                                <th class="text-center fit">
+                                                    <span>ترتيب</span>
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody ui-sortable="{ 'ui-floating': true, handle: '> .myHandle' }"
+                                                   ng-model="columns">
+                                            <tr class="text-right"
+                                                ng-repeat="column in columns">
+                                                <td class="myHandle fit" style="cursor: move"><i
+                                                        class="fa fa-arrows"></i></td>
+                                                <td>{{column.name}}</td>
+                                                <td class="fit"><input type="checkbox" style="height: 15px !important;"
+                                                                       ng-model="column.view"></td>
+                                                <td class="fit"><input type="checkbox" style="height: 15px !important;"
+                                                                       ng-model="column.groupBy"></td>
+                                                <td class="fit"><input type="checkbox" style="height: 15px !important;"
+                                                                       ng-model="column.sortBy"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="groupVariables" class="control-label">المعروض فى ذيل كل مجموعة</label>
+                                    <select id="groupVariables"
+                                            data-placeholder="اختر"
+                                            no-results-text="'لا توجد اختيارات توافق بحثك'"
+                                            placeholder-text-multiple="'اختر'"
+                                            class="form-control text-right"
+                                            chosen=""
+                                            multiple=""
+                                            ng-model="buffer.groupVariables"
+                                            focus-index="1"
+                                            ng-options="variable.name for variable in variables">
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="tableVariables" class="control-label">المعروض فى ذيل الجدول</label>
+                                    <select id="tableVariables"
+                                            data-placeholder="اختر"
+                                            no-results-text="'لا توجد اختيارات توافق بحثك'"
+                                            placeholder-text-multiple="'اختر'"
+                                            class="form-control text-right"
+                                            chosen=""
+                                            multiple=""
+                                            ng-model="buffer.tableVariables"
+                                            focus-index="1"
+                                            ng-options="variable.name for variable in variables">
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </uib-accordion>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+
+            <div class="row">
+
+                <div class="form-group col-md-4 pull-left">
+                    <button type="button"
+                            focus-index="5"
+                            style="width: 100%"
+                            ng-click="filter()"
+                            class="btn btn-primary">
+                        <span>عرض وتصفية</span>
+                        <i class="fa fa-filter fa-lg"></i>
+                    </button>
+                </div>
+                <div class="form-group col-md-4 pull-left">
+                    <button type="button"
+                            focus-index="5"
+                            style="width: 100%"
+                            ng-click="print()"
+                            class="btn btn-primary">
+                        <span>طباعة</span>
+                        <i class="fa fa-print fa-lg"></i>
+                    </button>
+                </div>
+                <div class="form-group col-md-4 pull-left">
+                    <button type="button"
+                            ng-click="clear()"
+                            focus-index="13"
+                            style="width: 100%"
+                            class="btn btn-primary">
+                        <span>مسح الحقول</span>
+                        <i class="fa fa-recycle  fa-lg"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout-icon">
+            <a class="mdl-button mdl-js-button mdl-button--icon" ui-sref="menu">
+                <i class="material-icons">{{MDLIcon}}</i>
+            </a>
+        </div>
+        <div class="mdl-layout__header-row">
+            <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+                <li class="mdl-menu__item">
+                    <span>المساعدة</span>
+                </li>
+                <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">
+                    <span>الملف الشخصي</span>
+                </li>
+                <li class="mdl-menu__item" ng-click="logout()">
+                    <span>تسجيل الخروج</span>
+                </li>
+            </ul>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout__title">{{pageTitle}}</span>
+        </div>
+        <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
+            <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
+                <div class="form-group col-md-2 pull-right">
+                    <button id="offer-menu-lower-right" style="width: 100%;"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        <span>العمليات</span>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="offer-menu-lower-right">
+                        <li class="mdl-menu__item" ng-click="reload()">
+                            <span>تحديث</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="showFilter=true">
+                            <span>تصفية وعرض البيانات</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openCreateModel()"
+                            ng-if="contains(authorities, ['ROLE_OFFER_CREATE'])">
+                            <span>اضافة</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openUpdateModel()"
+                            ng-if="contains(authorities, ['ROLE_OFFER_UPDATE'])"
+                            ng-hide="!offers || offers.length==0">
+                            <span>تعديل</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="remove()"
+                            ng-if="contains(authorities, ['ROLE_OFFER_DELETE'])"
+                            ng-hide="!offers || offers.length==0">
+                            <span>حذف</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+
+        <div dir="rtl" style="margin-top: 10px">
+
+            <div class="col-md-12">
+                <div class="panel panel-body">
+
+                    <div class="table-responsive">
+                        <table st-table="collection" st-safe-src="withdraws"
+                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+
+                                <th class="text-right">
+                                    <span>م</span>
+                                    <a href="" ng-click="showFilter=true"><span style="font-size: 25px"
+                                                                                class="fa fa-filter fa-lg"></span></a>
+                                </th>
+
+                                <th st-sort="code" class="text-right">
+                                    <span> رقم السحب</span>
+                                </th>
+
+                                <th st-sort="amount" class="text-right">
+                                    <span>قيمة السحب</span>
+                                </th>
+
+                                <th st-sort="fromName" class="text-right">
+                                    <span>اسم الساحب</span>
+                                </th>
+
+                                <th st-sort="date" class="text-right">
+                                    <span>تاريخ السحب</span>
+                                </th>
+
+                                <th st-sort="bank.code" class="text-right">
+                                    <span>رقم الحساب البنكي</span>
+                                </th>
+
+                                <th st-sort="lastPerson.contact.id" class="text-right">
+                                    <span>مدخل عملية السحب</span>
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-right"
+                                ng-repeat="withdraw in collection"
+                                ng-click="setSelected(withdraw)"
+                                ng-right-click="setSelected(withdraw)"
+                                st-select-mode="single"
+                                ng-class="{'mdl-color--brown-100':withdraw.isSelected}">
+                                <td st-select-row-custom="withdraw">{{$index+1}}</td>
+                                <td st-select-row-custom="withdraw">{{withdraw.code}}</td>
+                                <td st-select-row-custom="withdraw">{{withdraw.amount | currency:'SAR':0}}</td>
+                                <td st-select-row-custom="withdraw">{{withdraw.fromName}}</td>
+                                <td st-select-row-custom="withdraw">{{withdraw.date | kdate: 'yyyy-mm-dd' : 'ar' :
+                                    'ummalqura'}}
+                                </td>
+                                <td st-select-row-custom="withdraw">{{withdraw.bank.code}}</td>
+                                <td st-select-row-custom="withdraw">{{withdraw.lastPerson.contact.firstName}}
+                                    {{withdraw.lastPerson.contact.forthName}}
+                                </td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                ng-show="!collection || collection.length ==0">
+                                <td colspan="7">لا توجد بيانات</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

@@ -1,0 +1,164 @@
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout-icon">
+            <a class="mdl-button mdl-js-button mdl-button--icon" ui-sref="menu">
+                <i class="material-icons">{{MDLIcon}}</i>
+            </a>
+        </div>
+        <div class="mdl-layout__header-row">
+            <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+                <li class="mdl-menu__item">
+                    <span>المساعدة</span>
+                </li>
+                <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">
+                    <span>الملف الشخصي</span>
+                </li>
+                <li class="mdl-menu__item" ng-click="logout()">
+                    <span>تسجيل الخروج</span>
+                </li>
+            </ul>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout__title">{{pageTitle}}</span>
+        </div>
+        <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
+            <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
+                <div class="col-md-2 full-width-menu pull-right">
+                    <button id="course-menu-lower-right" style="width: 100%;"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        <span>العمليات</span>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="course-menu-lower-right">
+                        <li class="mdl-menu__item" ng-click="reload()">
+                            <span>تحديث</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="read()">
+                            <span>عرض</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openCreateModel()"
+                            ng-if="contains(authorities, ['ROLE_COURSE_CREATE'])">
+                            <span>اضافة</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openUpdateModel()"
+                            ng-if="contains(authorities, ['ROLE_COURSE_UPDATE']) && toggleList===1"
+                            ng-hide="!courses || courses.length==0">
+                            <span>تعديل</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="remove()"
+                            ng-if="contains(authorities, ['ROLE_COURSE_DELETE']) && toggleList===1"
+                            ng-hide="!courses || courses.length==0">
+                            <span>حذف</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pull-left" ng-init="toggleList=1">
+                    <div class="btn-toolbar">
+                        <div class="btn-group" data-toggle="buttons">
+                            <button class="btn btn-default mdl-black-icon mdl-button mdl-js-button mdl-js-ripple-effect"
+                                    type="button" ng-click="toggleList=1"
+                                    ng-class="{'active':toggleList===1}">
+                                <input type="radio" name="options"/>
+                                <i class="material-icons">reorder</i>
+                            </button>
+                            <button class="btn btn-default mdl-black-icon mdl-button mdl-js-button mdl-js-ripple-effect"
+                                    type="button" ng-click="toggleList=2"
+                                    ng-class="{'active':toggleList===2}">
+                                <input type="radio" name="options"/>
+                                <i class="material-icons">view_column</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+
+        <div dir="rtl" style="margin-top: 10px">
+
+            <div class="col-md-12" ng-show="toggleList===1">
+                <div class="panel panel-body">
+                    <div class="table-responsive">
+                        <table st-table="collection"  st-safe-src="courses" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <span>م</span>
+                                </th>
+
+                                <th st-sort="code" st-sort-default="true" class="text-right">
+                                    <span> رقم الدورة</span>
+                                </th>
+
+                                <th st-sort="startDate" class="text-right">
+                                    <span>تاريخ البداية</span>
+                                </th>
+
+                                <th st-sort="endDate" class="text-right">
+                                    <span>تاريخ النهاية</span>
+                                </th>
+
+                                <th st-sort="instructor" class="text-right">
+                                    <span>المدرب</span>
+                                </th>
+
+                                <th st-sort="companyName" class="text-right">
+                                    <span>الجهة الراعية للتدريب</span>
+                                </th>
+
+                                <th st-sort="master.name" class="text-right">
+                                    <span>التخصص</span>
+                                </th>
+
+                                <th st-sort="master.branch.name" class="text-right">
+                                    <span>الفرع</span>
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-right"
+                                ng-repeat="course in collection"
+                                st-select-mode="single"
+                                ng-click="setSelected(course)"
+                                ng-right-click="setSelected(course)"
+                                ng-class="{'mdl-color--brown-100':course.isSelected}">
+                                <td st-select-row-custom="course">{{$index+1}}</td>
+                                <td st-select-row-custom="course">{{course.code}}</td>
+                                <td st-select-row-custom="course">{{course.startDate | kdate: 'yyyy-mm-dd' : 'ar' :
+                                    'ummalqura'}}
+                                </td>
+                                <td st-select-row-custom="course">{{course.endDate | kdate: 'yyyy-mm-dd' : 'ar' :
+                                    'ummalqura'}}
+                                </td>
+                                <td st-select-row-custom="course">{{course.instructor}}</td>
+                                <td st-select-row-custom="course">{{course.companyName}}</td>
+                                <td st-select-row-custom="course">{{course.master.name}}</td>
+                                <td st-select-row-custom="course">{{course.master.branch.name}}</td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                ng-show="!collection || collection.length ==0">
+                                <td colspan="8">لا توجد بيانات</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12" ng-show="toggleList===2">
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

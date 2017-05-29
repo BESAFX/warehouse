@@ -1,0 +1,488 @@
+<form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
+      focus-group-head="loop" focus-group-tail="loop">
+
+    <div class="modal-header">
+        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+                <div class="alert alert-danger" role="alert">
+                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                </div>
+            </div>
+
+            <div class="col-md-6" ng-if="action=='create'">
+                <div class="panel panel-info">
+                    <div class="panel-heading">رقم الطالب</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="form-group text-right col-md-3">
+                                <label for="course" class="control-label">رقم الدورة</label>
+                                <select id="course"
+                                        data-placeholder="ابحث عن رقم الدورة المتاحة"
+                                        placeholder-text-single="'اختر...'"
+                                        no-results-text="'---'"
+                                        class="form-control text-right"
+                                        chosen=""
+                                        ng-model="account.course"
+                                        required="required"
+                                        disable-validation-message=""
+                                        ng-options="course.code for course in courses track by course.id">
+                                </select>
+                            </div>
+                            <div class="form-group text-right col-md-3">
+                                <label for="master" class="control-label">رقم التخصص</label>
+                                <select id="master"
+                                        data-placeholder="ابحث عن التخصص"
+                                        placeholder-text-single="'اختر...'"
+                                        no-results-text="'---'"
+                                        class="form-control text-right"
+                                        chosen=""
+                                        ng-model="account.course.master"
+                                        required="required"
+                                        disable-validation-message=""
+                                        ng-options="master.code for master in masters track by master.id">
+                                </select>
+                            </div>
+                            <div class="form-group text-right col-md-3">
+                                <label for="branch" class="control-label">رقم الفرع</label>
+                                <select id="branch"
+                                        data-placeholder="ابحث عن رقم الفرع"
+                                        placeholder-text-single="'اختر...'"
+                                        no-results-text="'---'"
+                                        class="form-control text-right"
+                                        chosen=""
+                                        ng-model="account.course.master.branch"
+                                        required="required"
+                                        disable-validation-message=""
+                                        ng-options="branch.code for branch in branches track by branch.id">
+                                </select>
+                            </div>
+                            <div class="form-group text-right col-md-3">
+                                <label>رقم السنة</label>
+                                <input type="number"
+                                       class="form-control text-right "
+                                       disabled="disabled"
+                                       ng-value="{{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-class="{'col-md-6':action=='create', 'col-md-12':action=='update'}">
+                <div class="panel panel-info">
+                    <div class="panel-heading">بيانات التسجيل</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="table-responsive" style="height: 154px">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td class="success" style="width: 150px;">رقم الطالب</td>
+                                        <td>
+                                            <span>##</span>
+                                            -
+                                            <span>{{account.course.code}}</span>
+                                            -
+                                            <span>{{account.course.master.code}}</span>
+                                            -
+                                            <span>{{account.course.master.branch.code}}</span>
+                                            -
+                                            <span>{{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">الفرع</td>
+                                        <td>{{account.course.master.branch.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">التخصص</td>
+                                        <td>{{account.course.master.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">رقم الدورة</td>
+                                        <td>{{account.course.code}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">الجهة الراعية للتدريب</td>
+                                        <td>{{account.course.companyName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">المدرب</td>
+                                        <td>{{account.course.instructor}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">تاريخ بداية الدورة</td>
+                                        <td>{{account.course.startDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="success">تاريخ نهاية الدورة</td>
+                                        <td>{{account.course.endDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div ng-class="{'col-md-9':action=='create', 'col-md-12':action=='update'}">
+                <div class="panel panel-info">
+                    <div class="panel-heading">البيانات الشخصية</div>
+                    <div class="panel-body">
+
+                        <div class="form-group row">
+                            <div class="form-group text-right col-md-3">
+                                <label for="firstName" class="control-label">الاسم الأول</label>
+                                <input id="firstName"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="1"
+                                       placeholder="الاسم الأول"
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="account.student.contact.firstName">
+                            </div>
+                            <div class="form-group text-right col-md-3">
+                                <label for="secondName" class="control-label">اسم الاب</label>
+                                <input id="secondName"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="2"
+                                       placeholder="اسم الاب"
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="account.student.contact.secondName">
+                            </div>
+                            <div class="form-group text-right col-md-3">
+                                <label for="thirdName" class="control-label">اسم الجد</label>
+                                <input id="thirdName"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="3"
+                                       placeholder="اسم الجد"
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="account.student.contact.thirdName">
+                            </div>
+                            <div class="form-group text-right col-md-3">
+                                <label for="forthName" class="control-label">اسم العائلة</label>
+                                <input id="forthName"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="4"
+                                       placeholder="اسم العائلة"
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="account.student.contact.forthName">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="identityNumber" class="control-label">رقم الهوية - الاقامة</label>
+                                <input id="identityNumber"
+                                       type="text"
+                                       focus-index="5"
+                                       class="form-control text-right "
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="account.student.contact.identityNumber">
+                            </div>
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="identityLocation" class="control-label">مكان الاصدار </label>
+                                <input id="identityLocation"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="6"
+                                       ng-model="account.student.contact.identityLocation">
+                            </div>
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="identityStartDate" class="control-label"> تاريخ الإصدار </label>
+                                <div dir="ltr" class="input-group">
+                                    <input dir="rtl"
+                                           id="identityStartDate"
+                                           type="text"
+                                           focus-index="7"
+                                           class="form-control text-right is-calendarPicker"
+                                           ng-model="account.student.contact.identityStartDate"
+                                           calendarType="ummalqura"
+                                           language="en"
+                                           dateFormat="yyyy/mm/dd"
+                                           showOnFocus="false"
+                                           readonly="readonly"
+                                           kdatepicker>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="qualification" class="control-label"> المؤهل </label>
+                                <input id="qualification"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="8"
+                                       ng-model="account.student.contact.qualification">
+                            </div>
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="birthLocation" class="control-label">مكان الميلاد </label>
+                                <input id="birthLocation"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="9"
+                                       ng-model="account.student.contact.birthLocation">
+                            </div>
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="birthDate" class="control-label">تاريخ الميلاد</label>
+                                <div dir="ltr" class="input-group">
+                                    <input dir="rtl"
+                                           id="birthDate"
+                                           type="text"
+                                           focus-index="10"
+                                           class="form-control text-right is-calendarPicker"
+                                           ng-model="account.student.contact.birthDate"
+                                           calendarType="ummalqura"
+                                           language="en"
+                                           dateFormat="yyyy/mm/dd"
+                                           showOnFocus="false"
+                                           readonly="readonly"
+                                           kdatepicker>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="nationality" class="control-label">الجنسية </label>
+                                <input id="nationality"
+                                       type="text"
+                                       class="form-control text-right "
+                                       focus-index="11"
+                                       ng-model="account.student.contact.nationality">
+                            </div>
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="mobile" class="control-label">رقم الجوال </label>
+                                <input id="mobile"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right "
+                                       focus-index="12"
+                                       ng-model="account.student.contact.mobile">
+                            </div>
+
+                            <div class="form-group text-right col-sm-4">
+                                <label for="phone" class="control-label">رقم الهاتف </label>
+                                <input id="phone"
+                                       type="text"
+                                       class="form-control text-right "
+                                       focus-index="13"
+                                       ng-model="account.student.contact.phone">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-md-12">
+                                <label for="address" class="control-label">العنوان </label>
+                                <input id="address"
+                                       type="text"
+                                       class="form-control text-right"
+                                       focus-index="14"
+                                       ng-model="account.student.contact.address">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-md-12">
+                                <label for="note" class="control-label">ملاحظات </label>
+                                <textarea id="note"
+                                          type="text"
+                                          focus-index="15"
+                                          msd-elastic="\n"
+                                          class="form-control text-right"
+                                          placeholder="اذكر باختصار ملاحظات التسجيل"
+                                          ng-model="account.note">
+                                </textarea>
+                            </textarea>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3" ng-if="action=='create'">
+                <div class="panel panel-info">
+                    <div class="panel-heading" style="height: 50px;">
+                        <div class="col-sm-6">
+                            <toggle-switch
+                                    dir="ltr"
+                                    style="width: 100%"
+                                    ng-model="showBox"
+                                    class="switch-danger"
+                                    on-label="نقدي"
+                                    off-label="قسط">
+                            </toggle-switch>
+                        </div>
+                        <span class="col-sm-6">طريقة الدفع</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="form-group text-right col-md-12">
+                                <label for="coursePrice" class="control-label"> المبلغ نقدا </label>
+                                <div dir="ltr"
+                                     class="input-group"
+                                     id="coursePrice">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input required="required"
+                                           required="required"
+                                           disable-validation-message=""
+                                           type="number"
+                                           min="0"
+                                           focus-index="16"
+                                           class="form-control text-right "
+                                           ng-model="account.coursePrice">
+                                </div>
+                            </div>
+                            <div class="form-group text-right col-md-12" ng-show="showBox">
+                                <label for="courseDiscountAmount" class="control-label"> نسبة الخصم </label>
+                                <div dir="ltr"
+                                     class="input-group"
+                                     id="courseDiscountAmount">
+                                    <span class="input-group-addon">%</span>
+                                    <input focus-index="17"
+                                           ng-required="showBox"
+                                           required="required"
+                                           disable-validation-message=""
+                                           type="number"
+                                           class="form-control text-right "
+                                           ng-model="account.courseDiscountAmount">
+                                </div>
+                            </div>
+                            <div class="form-group text-right col-md-12" ng-show="!showBox">
+                                <label for="courseProfitAmount" class="control-label"> نسبة الفائدة </label>
+                                <div dir="ltr"
+                                     class="input-group"
+                                     id="courseProfitAmount">
+                                    <span class="input-group-addon">%</span>
+                                    <input focus-index="18"
+                                           ng-required="!showBox"
+                                           required="required"
+                                           disable-validation-message=""
+                                           type="number"
+                                           class="form-control text-right"
+                                           ng-model="account.courseProfitAmount">
+                                </div>
+                            </div>
+                            <div class="form-group text-right col-md-12" ng-show="!showBox">
+                                <label for="courseCreditAmount" class="control-label"> قيمة القسط </label>
+                                <div dir="ltr"
+                                     class="input-group"
+                                     id="courseCreditAmount">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input type="number"
+                                           min="0"
+                                           max="{{account.price}}"
+                                           class="form-control text-right "
+                                           ng-model="account.courseCreditAmount"
+                                           ng-required="!showBox"
+                                           focus-index="19"
+                                           required="required"
+                                           disable-validation-message="">
+                                </div>
+                            </div>
+                            <div class="form-group text-right col-md-12" ng-show="showBox">
+                                <label for="priceAfterDiscount" class="control-label"> المبلغ بعد الخصم </label>
+                                <div dir="ltr" class="input-group"
+                                     id="priceAfterDiscount">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input type="number"
+                                           readonly="readonly"
+                                           class="form-control text-right "
+                                           ng-value="account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100)">
+                                </div>
+                            </div>
+                            <div class="form-group text-right col-md-12" ng-show="!showBox">
+                                <label for="priceAfterProfit" class="control-label"> المبلغ بعد الفائدة </label>
+                                <div dir="ltr"
+                                     class="input-group"
+                                     id="priceAfterProfit">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input readonly="readonly"
+                                           class="form-control text-right "
+                                           ng-value="account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100)">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="form-group col-md-12" role="group">
+            <button type="button"
+                    focus-index="23"
+                    ng-click="cancel()"
+                    class="btn btn-danger pull-left">
+                <span>خروج</span>
+                <i class="fa fa-power-off  fa-lg"></i>
+            </button>
+            <button type="button"
+                    focus-index="22"
+                    ng-click="clear()"
+                    class="btn btn-info pull-left">
+                <span>مسح الحقول</span>
+                <i class="fa fa-recycle  fa-lg"></i>
+            </button>
+            <button hidden="hidden" ng-show="action=='update'"
+                    type="submit"
+                    focus-index="21"
+                    class="btn btn-warning pull-right">
+                <span>تعديل</span>
+                <i class="fa fa-edit fa-lg"></i>
+            </button>
+            <button ng-show="action=='create'"
+                    type="submit"
+                    focus-index="20"
+                    class="btn btn-success pull-right">
+                <span>اضافة</span>
+                <i class="fa fa-plus-square fa-lg"></i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

@@ -1,0 +1,114 @@
+<form dir="rtl" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack="" focus-group-head="loop"
+      focus-group-tail="loop">
+
+    <div class="modal-header">
+        <h3 class="modal-title text-center">تقرير متوسط دخل العروض بين الفروع</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group text-right col-md-6">
+                <label>نوع الرسم البياني</label>
+                <ol class="nya-bs-select btn-lg form-control text-right"
+                    title="اختر نوع الرسم البياني"
+                    ng-model="buffer.chart"
+                    data-size="5"
+                    focus-autofocus=""
+                    required="required">
+                    <li nya-bs-option="chart in charts track by chart.id">
+                        <a class="text-right">
+                                    <span>
+                                        <i class="{{chart.class}}"></i>
+                                        {{ chart.name }}
+                                    </span>
+                            <span class="glyphicon glyphicon-ok check-mark"></span>
+                        </a>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="form-group text-right col-md-6">
+                <label>الفرع</label>
+                <ol class="nya-bs-select btn-lg form-control text-right"
+                    title="ابحث عن الفرع من خلال الإسم"
+                    multiple=""
+                    actions-box="true"
+                    ng-model="buffer.branchesList"
+                    data-size="5"
+                    focus-autofocus=""
+                    required="required"
+                    data-live-search="true">
+                    <li nya-bs-option="branch in branches track by branch.id">
+                        <a class="text-right">
+                            <span>{{ branch.name }}</span>
+                            <span class="small label label-success">{{ branch.code }}</span>
+                            <span class="glyphicon glyphicon-ok check-mark"></span>
+                        </a>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="endDate" class="control-label">التاريخ إلى</label>
+                <div dir="ltr" class="input-group">
+                    <input dir="rtl"
+                           id="endDate"
+                           type="text"
+                           focus-index="3"
+                           class="form-control text-right is-calendarPicker"
+                           ng-model="buffer.endDate"
+                           calendarType="ummalqura"
+                           language="en"
+                           dateFormat="yyyy/mm/dd"
+                           showOnFocus="false"
+                           readonly="readonly"
+                           kdatepicker>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="startDate" class="control-label">التاريخ من</label>
+                <div dir="ltr" class="input-group">
+                    <input dir="rtl"
+                           id="startDate"
+                           type="text"
+                           focus-index="4"
+                           class="form-control text-right is-calendarPicker"
+                           ng-model="buffer.startDate"
+                           calendarType="ummalqura"
+                           language="en"
+                           dateFormat="yyyy/mm/dd"
+                           showOnFocus="false"
+                           readonly="readonly"
+                           kdatepicker>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="form-group col-md-12" role="group">
+            <button type="button"
+                    focus-index="6"
+                    ng-click="cancel()"
+                    class="btn btn-danger pull-left">
+                <span>خروج</span>
+                <i class="fa fa-power-off  fa-lg"></i>
+            </button>
+
+            <button type="submit"
+                    focus-index="4"
+                    class="btn btn-success pull-right">
+                <span>طباعة</span>
+                <i class="fa fa-print fa-lg"></i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

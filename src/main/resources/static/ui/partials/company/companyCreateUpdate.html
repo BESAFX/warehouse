@@ -1,0 +1,215 @@
+<form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
+      focus-group-head="loop" focus-group-tail="loop">
+
+    <div class="modal-header">
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">{{action==='create' ? 'add' : 'edit'}}</i>
+                <strong>{{title}}</strong>
+            </span>
+        </h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12" ng-show="form.$invalid && form.$submitted">
+                <div class="alert alert-danger" role="alert">
+                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">الشعار الرسمي</div>
+                    <div class="panel-body">
+                        <input type="file" nv-file-select="" uploader="uploader" accept="image/*"/>
+                        <img ng-src="{{company.logo}}" style="width: 100%; height: 100%"/>
+                        <div ng-show="uploader.queue.length > 0" ng-hide="uploader.queue[0].isSuccess">
+                            <div class="progress" style="margin-bottom: 0;">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                     ng-style="{ 'width': uploader.queue[0].progress + '%' }"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">البيانات الاساسية</div>
+                    <div class="panel-body">
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             ng-show="action==='update'">
+                            <label for="code" class="control-label">رقم الشركة</label>
+                            <input id="code"
+                                   type="text"
+                                   ng-required="action==='update'"
+                                   disable-validation-message=""
+                                   class="form-control text-right"
+                                   placeholder="رقم غير مكرر للشركة"
+                                   focus-autofocus="1"
+                                   ng-model="company.code">
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="name" class="control-label">اسم الشركة</label>
+                                <input id="name"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="اسم الشركة"
+                                       focus-autofocus="2"
+                                       ng-model="company.name">
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="address" class="control-label">العنوان</label>
+                                <input id="address"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="العنوان"
+                                       ng-model="company.address">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="phone" class="control-label">الهاتف</label>
+                                <input id="phone"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="الهاتف"
+                                       ng-model="company.phone">
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="mobile" class="control-label">الجوال</label>
+                                <input id="mobile"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="الجوال"
+                                       ng-model="company.mobile">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="fax" class="control-label">الفاكس</label>
+                                <input id="fax"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="الفاكس"
+                                       ng-model="company.fax">
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="email" class="control-label">البريد الإلكتروني</label>
+                                <input id="email"
+                                       type="email"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="البريد الإلكتروني"
+                                       ng-model="company.email">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="website" class="control-label">الموقع الرسمي</label>
+                                <input id="website"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="الموقع الرسمي"
+                                       ng-model="company.website">
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="commericalRegisteration" class="control-label">السجل التجاري</label>
+                                <input id="commericalRegisteration"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="السجل التجاري"
+                                       ng-model="company.commericalRegisteration">
+                            </div>
+                        </div>
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="person" class="control-label"> المدير</label>
+                            <select id="person"
+                                    data-placeholder="ابحث عن حساب المستخدم من خلال الاسم"
+                                    no-results-text="'لا توجد بيانات'"
+                                    placeholder-text-single="'اختر حساب المستخدم'"
+                                    class="form-control text-right"
+                                    chosen=""
+                                    ng-model="company.manager"
+                                    required="required"
+                                    disable-validation-message=""
+                                    ng-options="person.contact.firstName + ' ' + person.contact.forthName for person in persons | orderBy:'contact.firstName' track by person.id">
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="row">
+            <button ng-if="action=='create'"
+                    uib-tooltip="اضافة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">add</i>
+            </button>
+            <button ng-if="action=='update'"
+                    uib-tooltip="تعديل"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">edit</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="cancel()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

@@ -1,0 +1,135 @@
+<form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
+      focus-group-head="loop" focus-group-tail="loop">
+
+    <div class="modal-header">
+        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+                <div class="alert alert-danger" role="alert">
+                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-md-12">
+                <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
+                <select id="master"
+                        data-placeholder="ابحث عن التخصص"
+                        no-results-text="'لا توجد تخصصات توافق بحثك'"
+                        placeholder-text-single="'اختر التخصص'"
+                        class="form-control text-right"
+                        chosen=""
+                        ng-change="setUpCoursesList()"
+                        ng-model="course.master"
+                        required="required"
+                        disable-validation-message=""
+                        focus-index="1"
+                        ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
+                </select>
+            </div>
+
+            <div class="form-group text-right col-sm-12">
+                <label for="companyName" class="control-label">الجهة الراعية للتدريب</label>
+                <input id="companyName"
+                       type="text"
+                       class="form-control text-right"
+                       focus-index="2"
+                       required="required"
+                       disable-validation-message=""
+                       ng-model="course.companyName">
+            </div>
+
+            <div class="form-group text-right col-sm-12">
+                <label for="instructor" class="control-label">المدرب</label>
+                <input id="instructor"
+                       type="text"
+                       focus-index="3"
+                       class="form-control text-right"
+                       ng-model="course.instructor"
+                       required="required"
+                       disable-validation-message="">
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="endDate" class="control-label">التاريخ إلى</label>
+                <div dir="ltr" class="input-group">
+                    <input dir="rtl"
+                           id="endDate"
+                           type="text"
+                           focus-index="3"
+                           class="form-control text-right is-calendarPicker"
+                           ng-model="course.endDate"
+                           required="required"
+                           calendarType="ummalqura"
+                           language="en"
+                           dateFormat="yyyy/mm/dd"
+                           showOnFocus="false"
+                           readonly="readonly"
+                           kdatepicker
+                           disable-validation-message="">
+                </div>
+            </div>
+
+            <div class="form-group text-right col-sm-6">
+                <label for="startDate" class="control-label">التاريخ من</label>
+                <div dir="ltr" class="input-group">
+                    <input dir="rtl"
+                           id="startDate"
+                           type="text"
+                           focus-index="3"
+                           class="form-control text-right is-calendarPicker"
+                           ng-model="course.startDate"
+                           required="required"
+                           calendarType="ummalqura"
+                           language="en"
+                           dateFormat="yyyy/mm/dd"
+                           showOnFocus="false"
+                           readonly="readonly"
+                           kdatepicker
+                           disable-validation-message="">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="form-group col-md-12" role="group">
+            <button type="button"
+                    focus-index="9"
+                    ng-click="cancel()"
+                    class="btn btn-danger pull-left">
+                <span>خروج</span>
+                <i class="fa fa-power-off  fa-lg"></i>
+            </button>
+            <button type="reset"
+                    focus-index="8"
+                    class="btn btn-info pull-left">
+                <span>مسح الحقول</span>
+                <i class="fa fa-recycle  fa-lg"></i>
+            </button>
+            <button ng-show="action=='update'"
+                    type="submit"
+                    focus-index="7"
+                    class="btn btn-warning pull-right">
+                <span>تعديل</span>
+                <i class="fa fa-edit fa-lg"></i>
+            </button>
+            <button ng-show="action=='create'"
+                    type="submit"
+                    focus-index="6"
+                    class="btn btn-success pull-right">
+                <span>اضافة</span>
+                <i class="fa fa-plus-square fa-lg"></i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

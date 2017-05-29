@@ -1,0 +1,481 @@
+<style>
+    #filter .chosen-container.chosen-with-drop .chosen-drop {
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    #filter .chosen-container .chosen-drop {
+        right: -9999px !important;
+        left: auto !important;
+    }
+</style>
+
+<div dir="rtl" id="filter"
+     ng-init="showFilter=false"
+     ps-open="showFilter"
+     pageslide=""
+     ng-style="{'opacity':sideOpacity}"
+     ps-side="left"
+     ps-click-outside="false"
+     ps-size="50%">
+
+    <div class="panel panel-info" focus-group="" focus-stack=""
+         focus-group-head="loop" focus-group-tail="loop">
+
+        <div class="panel-heading">
+            <a class="pull-left" href="" ng-click="showFilter=false"><span class="fa fa-close fa-2x"></span></a>
+            <h3 class="panel-title pull-right">
+                <span class="fa fa-database"></span>
+                <span>بحث وطباعة</span>
+            </h3>
+        </div>
+
+        <div class="panel-body"
+             style="overflow-y: auto; overflow-x: hidden;"
+             ng-style="resizeWithOffset(130)"
+             resize="">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <uib-accordion close-others="true">
+                        <div uib-accordion-group class="panel panel-primary" is-open="true">
+                            <uib-accordion-heading>
+                                <i class="fa fa-search fa-lg"></i>
+                                <span>خيارات البحث</span>
+                            </uib-accordion-heading>
+
+
+                            <div class="row">
+                                <div class="form-group text-right col-sm-6">
+                                    <label for="paymentCodeFrom" class="control-label">رقم السند من</label>
+                                    <input id="paymentCodeFrom"
+                                           type="number"
+                                           min="1"
+                                           focus-index="2"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرقم من"
+                                           ng-model="buffer.paymentCodeFrom">
+                                </div>
+
+                                <div class="form-group text-right col-sm-6">
+                                    <label for="paymentCodeTo" class="control-label">رقم السند إلى</label>
+                                    <input id="paymentCodeTo"
+                                           type="number"
+                                           min="1"
+                                           focus-index="2"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرقم إلى"
+                                           ng-model="buffer.paymentCodeTo">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group text-right col-sm-6">
+                                    <label for="paymentDateFrom" class="control-label">تاريخ السند من</label>
+                                    <div dir="ltr" class="input-group">
+                                        <input dir="rtl"
+                                               id="paymentDateFrom"
+                                               type="text"
+                                               focus-index="3"
+                                               class="form-control text-right is-calendarPicker"
+                                               ng-model="buffer.paymentDateFrom"
+                                               calendarType="ummalqura"
+                                               language="en"
+                                               dateFormat="yyyy/mm/dd"
+                                               showOnFocus="false"
+                                               readonly="readonly"
+                                               kdatepicker>
+                                    </div>
+                                </div>
+
+                                <div class="form-group text-right col-sm-6">
+                                    <label for="paymentDateTo" class="control-label">تاريخ السند إلى</label>
+                                    <div dir="ltr" class="input-group">
+                                        <input dir="rtl"
+                                               id="paymentDateTo"
+                                               type="text"
+                                               focus-index="3"
+                                               class="form-control text-right is-calendarPicker"
+                                               ng-model="buffer.paymentDateTo"
+                                               calendarType="ummalqura"
+                                               language="en"
+                                               dateFormat="yyyy/mm/dd"
+                                               showOnFocus="false"
+                                               readonly="readonly"
+                                               kdatepicker>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group text-right col-md-6">
+                                    <label for="amountFrom" class="control-label">قيمة السند من </label>
+                                    <input id="amountFrom"
+                                           type="number"
+                                           min="1"
+                                           focus-index="2"
+                                           class="form-control text-right"
+                                           placeholder="ادخل القيمة من"
+                                           ng-model="buffer.amountFrom">
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="amountTo" class="control-label">قيمة السند إلى </label>
+                                    <input id="amountTo"
+                                           type="number"
+                                           min="1"
+                                           focus-index="2"
+                                           class="form-control text-right"
+                                           placeholder="ادخل القيمة إلى"
+                                           ng-model="buffer.amountTo">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div uib-accordion-group class="panel panel-danger" is-open="false">
+
+                            <uib-accordion-heading>
+                                <i class="fa fa-print fa-lg"></i>
+                                <span>خيارات الطباعة</span>
+                            </uib-accordion-heading>
+
+                            <div class="row">
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="orientation" class="control-label">إتجاة الطباعة</label>
+                                    <select id="orientation"
+                                            style="height: 40px"
+                                            class="form-control text-right"
+                                            ng-model="buffer.orientation"
+                                            focus-index="2">
+                                        <option value="Landscape">
+                                            <span>افقي Landscape</span>
+                                        </option>
+                                        <option value="Portrait">
+                                            <span>عمودي Portrait</span>
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-md-6">
+                                    <label for="exportType" class="control-label">نوع الملف المستخرج</label>
+                                    <select id="exportType"
+                                            style="height: 40px"
+                                            class="form-control text-right"
+                                            ng-model="buffer.exportType"
+                                            focus-index="2">
+                                        <option value="PDF">
+                                            <span>ملف من نوع PDF</span>
+                                        </option>
+                                        <option value="HTML">
+                                            <span>ملف من نوع HTML</span>
+                                        </option>
+                                        <option value="RTF">
+                                            <span>ملف من نوع RTF</span>
+                                        </option>
+                                        <option value="XHTML">
+                                            <span>ملف من نوع XHTML</span>
+                                        </option>
+                                        <option value="XLSX">
+                                            <span>ملف من نوع XLSX</span>
+                                        </option>
+                                        <option value="CSV">
+                                            <span>ملف من نوع CSV</span>
+                                        </option>
+                                        <option value="PPTX">
+                                            <span>ملف من نوع PPTX</span>
+                                        </option>
+                                        <option value="DOCX">
+                                            <span>ملف من نوع DOCX</span>
+                                        </option>
+                                        <option value="ODS">
+                                            <span>ملف من نوع ODS</span>
+                                        </option>
+                                        <option value="ODT">
+                                            <span>ملف من نوع ODT</span>
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-sm-12">
+                                    <label for="reportTitle" class="control-label">عنوان التقرير</label>
+                                    <input id="reportTitle"
+                                           type="text"
+                                           focus-index="2"
+                                           class="form-control text-right"
+                                           placeholder="ادخل عنوان التقرير"
+                                           ng-model="buffer.reportTitle">
+                                </div>
+
+                                <div class="form-group text-right col-sm-12">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+
+                                                <th></th>
+
+                                                <th class="text-center">
+                                                    <span>اسم العمود</span>
+                                                </th>
+
+                                                <th class="text-center fit">
+                                                    <span>عرض</span>
+                                                </th>
+
+                                                <th class="text-center fit">
+                                                    <span>تجميع</span>
+                                                </th>
+
+                                                <th class="text-center fit">
+                                                    <span>ترتيب</span>
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody ui-sortable="{ 'ui-floating': true, handle: '> .myHandle' }"
+                                                   ng-model="columns">
+                                            <tr class="text-right"
+                                                ng-repeat="column in columns">
+                                                <td class="myHandle fit" style="cursor: move"><i
+                                                        class="fa fa-arrows"></i></td>
+                                                <td>{{column.name}}</td>
+                                                <td class="fit"><input type="checkbox" style="height: 15px !important;"
+                                                                       ng-model="column.view"></td>
+                                                <td class="fit"><input type="checkbox" style="height: 15px !important;"
+                                                                       ng-model="column.groupBy"></td>
+                                                <td class="fit"><input type="checkbox" style="height: 15px !important;"
+                                                                       ng-model="column.sortBy"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="groupVariables" class="control-label">المعروض فى ذيل كل مجموعة</label>
+                                    <select id="groupVariables"
+                                            data-placeholder="اختر"
+                                            no-results-text="'لا توجد اختيارات توافق بحثك'"
+                                            placeholder-text-multiple="'اختر'"
+                                            class="form-control text-right"
+                                            chosen=""
+                                            multiple=""
+                                            ng-model="buffer.groupVariables"
+                                            focus-index="1"
+                                            ng-options="variable.name for variable in variables">
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-md-12">
+                                    <label for="tableVariables" class="control-label">المعروض فى ذيل الجدول</label>
+                                    <select id="tableVariables"
+                                            data-placeholder="اختر"
+                                            no-results-text="'لا توجد اختيارات توافق بحثك'"
+                                            placeholder-text-multiple="'اختر'"
+                                            class="form-control text-right"
+                                            chosen=""
+                                            multiple=""
+                                            ng-model="buffer.tableVariables"
+                                            focus-index="1"
+                                            ng-options="variable.name for variable in variables">
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </uib-accordion>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+
+            <div class="row">
+
+                <div class="form-group col-md-4 pull-left">
+                    <button type="button"
+                            focus-index="5"
+                            style="width: 100%"
+                            ng-click="filter()"
+                            class="btn btn-success">
+                        <span>عرض وتصفية</span>
+                        <i class="fa fa-filter fa-lg"></i>
+                    </button>
+                </div>
+                <div class="form-group col-md-4 pull-left">
+                    <button type="button"
+                            focus-index="5"
+                            style="width: 100%"
+                            ng-click="print()"
+                            class="btn btn-warning">
+                        <span>طباعة</span>
+                        <i class="fa fa-print fa-lg"></i>
+                    </button>
+                </div>
+                <div class="form-group col-md-4 pull-left">
+                    <button type="button"
+                            ng-click="clear()"
+                            focus-index="13"
+                            style="width: 100%"
+                            class="btn btn-primary">
+                        <span>مسح الحقول</span>
+                        <i class="fa fa-recycle  fa-lg"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout-icon">
+            <a class="mdl-button mdl-js-button mdl-button--icon" ui-sref="menu">
+                <i class="material-icons">{{MDLIcon}}</i>
+            </a>
+        </div>
+        <div class="mdl-layout__header-row">
+            <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+                <li class="mdl-menu__item">
+                    <span>المساعدة</span>
+                </li>
+                <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">
+                    <span>الملف الشخصي</span>
+                </li>
+                <li class="mdl-menu__item" ng-click="logout()">
+                    <span>تسجيل الخروج</span>
+                </li>
+            </ul>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout__title">{{pageTitle}}</span>
+        </div>
+        <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
+            <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
+                <div class="form-group col-md-2 pull-right">
+                    <button id="offer-menu-lower-right" style="width: 100%;"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        <span>العمليات</span>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="offer-menu-lower-right">
+                        <li class="mdl-menu__item mdl-menu__item--full-bleed-divider" ng-click="reload()">
+                            <span>تحديث</span>
+                        </li>
+                        <li class="mdl-menu__item mdl-menu__item--full-bleed-divider" ng-click="showFilter=true">
+                            <span>تصفية وعرض البيانات</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openCreateModel()"
+                            ng-if="contains(authorities, ['ROLE_PAYMENT_CREATE'])">
+                            <span>اضافة سند صرف</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="openUpdateModel()"
+                            ng-if="contains(authorities, ['ROLE_PAYMENT_UPDATE'])"
+                            ng-hide="!payments || payments.length==0">
+                            <span>تعديل بيانات السند</span>
+                        </li>
+                        <li class="mdl-menu__item" ng-click="remove()"
+                            ng-if="contains(authorities, ['ROLE_PAYMENT_DELETE'])"
+                            ng-hide="!payments || payments.length==0">
+                            <span>حذف السند</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+
+        <div dir="rtl" style="margin-top: 10px">
+
+            <div class="col-md-12">
+                <div class="panel panel-body">
+
+                    <div class="table-responsive">
+                        <table st-table="collection" st-safe-src="payments"
+                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                                <th class="text-right">
+                                    <span>م</span>
+                                    <a href="" ng-click="showFilter=true">
+                                        <span style="font-size: 25px" class="fa fa-filter fa-lg"></span>
+                                    </a>
+                                </th>
+
+                                <th st-sort="code" class="text-right">
+                                    <span>رقم السند</span>
+                                </th>
+
+                                <th st-sort="date" class="text-right">
+                                    <span>تاريخ السند</span>
+                                </th>
+
+                                <th st-sort="amountNumber" class="text-right">
+                                    <span>قيمة السند</span>
+                                </th>
+
+                                <th st-sort="toName" class="text-right">
+                                    <span>وجهة الصرف</span>
+                                </th>
+
+                                <th st-sort="lastPerson.contact.firstName" class="text-right">
+                                    <span>مدخل السند</span>
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-right"
+                                ng-repeat="payment in collection"
+                                st-select-mode="single"
+                                ng-click="setSelected(payment)"
+                                ng-right-click="setSelected(payment)"
+                                ng-class="{'mdl-color--brown-100':payment.isSelected}">
+                                <td st-select-row-custom="payment">{{$index+1}}</td>
+                                <td st-select-row-custom="payment">
+                                    {{payment.code}}
+                                    <span class="fa fa-info-circle" tooltip-append-to-body="true" uib-tooltip="{{payment.note}}"></span>
+                                </td>
+                                <td st-select-row-custom="payment">{{payment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
+                                </td>
+                                <td st-select-row-custom="payment">{{payment.amountNumber}}</td>
+                                <td st-select-row-custom="payment">{{payment.toName}}</td>
+                                <td st-select-row-custom="payment">
+                                    {{payment.lastPerson.contact.firstName}}
+                                    {{payment.lastPerson.contact.forthName}}
+                                    <span class="label label-default">فرع / {{payment.lastPerson.branch.name}}</span>
+                                </td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                ng-show="!collection || collection.length ==0">
+                                <td colspan="6">لا توجد بيانات</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

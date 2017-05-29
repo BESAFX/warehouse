@@ -1,0 +1,236 @@
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout-icon">
+            <a class="mdl-button mdl-js-button mdl-button--icon" ui-sref="menu">
+                <i class="material-icons">{{MDLIcon}}</i>
+            </a>
+        </div>
+        <div class="mdl-layout__header-row">
+            <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp" for="menu-lower-left">
+                <li class="mdl-list__item mdl-list__item--two-line mdl-menu__item--full-bleed-divider">
+                    <span class="mdl-list__item-primary-content">
+                        <span class="material-icons mdl-list__item-avatar"
+                              ng-style="{'background-image': 'url(' + me.img + ')'}"></span>
+                        <span>{{me.contact.firstName}} {{me.contact.forthName}}</span>
+                        <span class="mdl-list__item-sub-title">{{me.email}}</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item" ng-click="goToHelp()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">help</i>
+                        <span>المساعدة</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider" ng-click="goToProfile()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">account_box</i>
+                        <span>الملف الشخصي</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item" ng-click="logout()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">exit_to_app</i>
+                        <span>تسجيل الخروج</span>
+                    </span>
+                </li>
+            </ul>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout__title">{{pageTitle}}</span>
+        </div>
+        <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
+            <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button style="width: 100%" id="company-menu-lower-right" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>العمليات</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="company-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider" ng-click="fetchTableData()">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">visibility</i>
+                                <span>عرض الشركات</span>
+                            </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openCompanyCreateModel()" ng-if="contains(authorities, ['ROLE_COMPANY_CREATE'])">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">add</i>
+                                <span>انشاء شركة جديدة</span>
+                            </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openCompanyUpdateModel(selected)" ng-if="contains(authorities, ['ROLE_COMPANY_UPDATE']) && toggleList===1" ng-hide="!companies || companies.length==0">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">edit</i>
+                                <span>تعديل بيانات الشركة</span>
+                            </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="delete()" ng-if="contains(authorities, ['ROLE_COMPANY_DELETE']) && toggleList===1" ng-hide="!companies || companies.length==0">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">delete</i>
+                                <span>حذف الشركة</span>
+                            </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-left" ng-init="toggleList=1">
+                        <div class="btn-toolbar">
+                            <div class="btn-group" data-toggle="buttons">
+                                <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="button" ng-click="toggleList=1"
+                                        ng-class="{'active':toggleList===1}">
+                                    <input type="radio" name="options"/>
+                                    <i class="material-icons">reorder</i>
+                                </button>
+                                <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="button" ng-click="toggleList=2"
+                                        ng-class="{'active':toggleList===2}">
+                                    <input type="radio" name="options"/>
+                                    <i class="material-icons">view_column</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+
+        <div dir="rtl" class="row" style="margin-top: 10px">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
+                <div class="panel panel-body">
+                    <div class="table-responsive">
+                        <table st-table="collection"  st-safe-src="companies" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+
+                                <th class="text-center ">
+                                    <span>م</span>
+                                </th>
+
+                                <th st-sort="code" class="text-right ">
+                                    <span> رقم الشركة</span>
+                                </th>
+
+                                <th st-sort="name" class="text-right">
+                                    <span> اسم الشركة</span>
+                                </th>
+
+                                <th st-sort="phone" class="text-right">
+                                    <span>الهاتف</span>
+                                </th>
+
+                                <th st-sort="mobile" class="text-right">
+                                    <span>الجوال</span>
+                                </th>
+
+                                <th st-sort="manager.name" class="text-right">
+                                    <span>مدير الشركة</span>
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-right"
+                                ng-repeat="company in collection"
+                                st-select-mode="single"
+                                context-menu="rowMenu"
+                                ng-click="setSelected(company)"
+                                ng-right-click="setSelected(company)"
+                                ng-class="{'mdl-color--brown-100':company.isSelected}">
+                                <td st-select-row-custom="company">{{$index+1}}</td>
+                                <td st-select-row-custom="company">{{company.code}}</td>
+                                <td st-select-row-custom="company">{{company.name}}</td>
+                                <td st-select-row-custom="company">{{company.phone}}</td>
+                                <td st-select-row-custom="company">{{company.mobile}}</td>
+                                <td st-select-row-custom="company">{{company.manager.contact.firstName}} {{company.manager.contact.forthName}}</td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                ng-show="!collection || collection.length ==0">
+                                <td colspan="6">لا توجد بيانات</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
+                <div st-table="collection" st-safe-src="companies">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="company in collection">
+                        <!-- CONTACT ITEM -->
+                        <div class="panel panel-default">
+                            <div class="panel-body profile">
+                                <div class="profile-image">
+                                    <img width="100" height="100" src="/ui/img/no-image.jpg"
+                                         alt="{{company.name}}"/>
+                                </div>
+                                <div class="profile-data">
+                                    <div class="profile-data-name">{{company.name}}</div>
+                                </div>
+                                <div class="profile-controls">
+                                    <!--<a href="" class="profile-control-left"><span class="fa fa-info-circle"></span></a>-->
+                                    <!--<a href="" class="profile-control-right"><span class="fa fa-phone"></span></a>-->
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="contact-info">
+                                    <p>
+                                        <small>مدير الشركة</small>
+                                        <br/>{{company.manager.contact.firstName}} {{company.manager.contact.forthName}}
+                                    </p>
+                                    <p>
+                                        <small>الهاتف</small>
+                                        <br/>{{company.phone}}
+                                    </p>
+                                    <p>
+                                        <small>البريد الإلكتروني</small>
+                                        <br/>{{company.email}}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <button uib-tooltip="شركة جديدة"
+                                            tooltip-append-to-body="true"
+                                            type="button"
+                                            ng-if="contains(authorities, ['ROLE_COMPANY_CREATE'])"
+                                            ng-click="ModalProvider.openCompanyCreateModel()"
+                                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <i class="material-icons">add</i>
+                                    </button>
+                                    <button uib-tooltip="تعديل"
+                                            tooltip-append-to-body="true"
+                                            type="button"
+                                            ng-if="contains(authorities, ['ROLE_COMPANY_UPDATE'])"
+                                            ng-click="ModalProvider.openCompanyUpdateModel(company)"
+                                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                    <button uib-tooltip="حذف"
+                                            tooltip-append-to-body="true"
+                                            type="button"
+                                            ng-if="contains(authorities, ['ROLE_COMPANY_DELETE'])"
+                                            ng-click="delete(company)"
+                                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END CONTACT ITEM -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

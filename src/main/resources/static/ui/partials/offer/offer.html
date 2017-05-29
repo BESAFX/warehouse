@@ -1,0 +1,423 @@
+﻿<style>
+    #filter .chosen-container.chosen-with-drop .chosen-drop {
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    #filter .chosen-container .chosen-drop {
+        right: -9999px !important;
+        left: auto !important;
+    }
+</style>
+
+<div dir="rtl" id="filter"
+     ng-init="showFilter=false"
+     ps-open="showFilter"
+     pageslide=""
+     ng-style="{'opacity':sideOpacity}"
+     ps-side="left"
+     ps-click-outside="false"
+     ps-size="50%">
+
+    <form name="form" ng-submit="filter()" novalidate="novalidate" focus-group="" focus-stack=""
+          focus-group-head="loop" focus-group-tail="loop">
+
+        <div class="panel panel-info">
+
+            <div class="panel-heading">
+                <a class="pull-left" href="" ng-click="showFilter=false"><span class="fa fa-close fa-2x"></span></a>
+                <h3 class="panel-title pull-right">
+                    <span class="fa fa-filter"></span>
+                    <span>تصفية متعددة من قاعدة البيانات</span>
+                </h3>
+            </div>
+
+            <div class="panel-body"
+                 style="overflow-y: auto; overflow-x: hidden;"
+                 ng-style="resizeWithOffset(130)"
+                 resize="">
+
+                <div class="row">
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="codeFrom" class="control-label">رقم العرض من </label>
+                        <input id="codeFrom"
+                               type="number"
+                               min="1"
+                               focus-index="1"
+                               class="form-control text-right"
+                               placeholder="ادخل رقم العرض من"
+                               ng-model="buffer.codeFrom">
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="codeTo" class="control-label">رقم العرض إلى </label>
+                        <input id="codeTo"
+                               type="number"
+                               min="1"
+                               focus-index="2"
+                               class="form-control text-right"
+                               placeholder="ادخل رقم العرض إلى"
+                               ng-model="buffer.codeTo">
+                    </div>
+
+                    <div class="form-group text-right col-sm-6">
+                        <label for="dateFrom" class="control-label">تاريخ العرض من</label>
+                        <div dir="ltr" class="input-group">
+                            <input dir="rtl"
+                                   id="dateFrom"
+                                   type="text"
+                                   focus-index="3"
+                                   class="form-control text-right is-calendarPicker"
+                                   ng-model="buffer.dateFrom"
+                                   calendarType="ummalqura"
+                                   language="en"
+                                   dateFormat="yyyy/mm/dd"
+                                   showOnFocus="false"
+                                   readonly="readonly"
+                                   kdatepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-right col-sm-6">
+                        <label for="dateTo" class="control-label">تاريخ العرض إلى</label>
+                        <div dir="ltr" class="input-group">
+                            <input dir="rtl"
+                                   id="dateTo"
+                                   type="text"
+                                   focus-index="3"
+                                   class="form-control text-right is-calendarPicker"
+                                   ng-model="buffer.dateTo"
+                                   calendarType="ummalqura"
+                                   language="en"
+                                   dateFormat="yyyy/mm/dd"
+                                   showOnFocus="false"
+                                   readonly="readonly"
+                                   kdatepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="customerName" class="control-label">اسم العميل (يحتوى على) </label>
+                        <input id="customerName"
+                               type="text"
+                               focus-index="3"
+                               class="form-control text-right"
+                               focus-index="5"
+                               placeholder="ادخل اسم العميل كاملاً او جزءاً منه"
+                               ng-model="buffer.customerName">
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة (يحتوى علي)</label>
+                        <input id="identityNumber"
+                               type="text"
+                               focus-index="6"
+                               class="form-control text-right "
+                               placeholder="ادخل رقم البطاقة كاملاً او جزءاً منه"
+                               ng-model="buffer.customerIdentityNumber">
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="mobile" class="control-label">رقم الجوال (يحتوى على)</label>
+                        <input id="mobile"
+                               type="text"
+                               focus-index="6"
+                               class="form-control text-right "
+                               placeholder="ادخل رقم الجوال كاملاً او جزءاً منه"
+                               ng-model="buffer.customerMobile">
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="masterPriceFrom" class="control-label">المبلغ نقداً من </label>
+                        <input id="masterPriceFrom"
+                               type="number"
+                               focus-index="2"
+                               class="form-control text-right"
+                               placeholder="ادخل المبلغ إلى"
+                               ng-model="buffer.masterPriceFrom">
+                    </div>
+
+                    <div class="form-group text-right col-md-6">
+                        <label for="masterPriceTo" class="control-label">المبلغ نقداً إلى </label>
+                        <input id="masterPriceTo"
+                               type="number"
+                               focus-index="2"
+                               class="form-control text-right"
+                               placeholder="ادخل المبلغ من"
+                               ng-model="buffer.masterPriceTo">
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                        <select id="branch"
+                                data-placeholder="ابحث عن الفرع"
+                                no-results-text="'لا توجد فروع توافق بحثك'"
+                                placeholder-text-single="'اختر الفرع'"
+                                class="form-control text-right"
+                                chosen=""
+                                ng-model="buffer.branch"
+                                ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                        </select>
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
+                        <select id="master"
+                                data-placeholder="ابحث عن التخصص"
+                                no-results-text="'لا توجد تخصصات توافق بحثك'"
+                                placeholder-text-single="'اختر التخصص'"
+                                class="form-control text-right"
+                                chosen=""
+                                ng-model="buffer.master"
+                                ng-options="(' [ ' + master.code + ' ] ' +  ' ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
+                        </select>
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label class="control-label">الحالة</label>
+                        <toggle-switch
+                                dir="ltr"
+                                style="width: 100%"
+                                ng-model="buffer.registered"
+                                class="switch-success"
+                                on-label="مسجل"
+                                off-label="غير مسجل">
+                        </toggle-switch>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="panel-footer">
+
+                <div class="row">
+
+                    <div class="form-group col-md-6 pull-left">
+                        <button type="submit"
+                                focus-index="5"
+                                style="width: 100%"
+                                class="btn btn-success">
+                            <span>عرض وتصفية البيانات</span>
+                            <i class="fa fa-filter fa-lg"></i>
+                        </button>
+                    </div>
+                    <div class="form-group col-md-6 pull-left">
+                        <button type="button"
+                                focus-index="13"
+                                style="width: 100%"
+                                ng-click="clear()"
+                                class="btn btn-info">
+                            <span>مسح الحقول</span>
+                            <i class="fa fa-recycle  fa-lg"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout-icon">
+            <a class="mdl-button mdl-js-button mdl-button--icon" ui-sref="menu">
+                <i class="material-icons">{{MDLIcon}}</i>
+            </a>
+        </div>
+        <div class="mdl-layout__header-row">
+            <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp" for="menu-lower-left">
+                <li class="mdl-list__item mdl-list__item--two-line mdl-menu__item--full-bleed-divider">
+                    <span class="mdl-list__item-primary-content">
+                        <span class="material-icons mdl-list__item-avatar"
+                              ng-style="{'background-image': 'url(' + me.img + ')'}"></span>
+                        <span>{{me.contact.firstName}} {{me.contact.forthName}}</span>
+                        <span class="mdl-list__item-sub-title">{{me.email}}</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item" ng-click="goToHelp()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">help</i>
+                        <span>المساعدة</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider" ng-click="goToProfile()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">account_box</i>
+                        <span>الملف الشخصي</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item" ng-click="logout()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">exit_to_app</i>
+                        <span>تسجيل الخروج</span>
+                    </span>
+                </li>
+            </ul>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout__title">{{pageTitle}}</span>
+        </div>
+        <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
+            <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
+                <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+                    <button id="branch-menu-lower-right" style="width: 100%;"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        <span>العمليات</span>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="branch-menu-lower-right">
+                        <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider" ng-click="showFilter=true">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">visibility</i>
+                                <span>عرض بيانات التخصصات</span>
+                            </span>
+                        </li>
+                        <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openOfferCreateModel()"
+                            ng-if="contains(authorities, ['ROLE_OFFER_CREATE'])">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">add</i>
+                                <span>انشاء عرض جديد</span>
+                            </span>
+                        </li>
+                        <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openOfferUpdateModel(selected)"
+                            ng-if="contains(authorities, ['ROLE_OFFER_UPDATE']) && toggleList===1"
+                            ng-hide="!offers || offers.length==0">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">edit</i>
+                                <span>تعديل بيانات العرض</span>
+                            </span>
+                        </li>
+                        <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
+                            ng-if="contains(authorities, ['ROLE_OFFER_DELETE']) && toggleList===1"
+                            ng-hide="!offers || offers.length==0">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">delete</i>
+                                <span>حذف العرض</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+
+        <div dir="rtl" class="row" style="margin-top: 10px">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-body">
+
+                    <div class="table-responsive">
+                        <table st-table="collection" st-safe-src="offers"
+                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+
+                                <th class="text-right">
+                                    <span>م</span>
+                                </th>
+
+                                <th st-sort="code" class="text-right">
+                                    <span> رقم العرض</span>
+                                </th>
+
+                                <th st-sort="lastUpdate" class="text-right">
+                                    <span> تاريخ العرض</span>
+                                </th>
+
+                                <th st-sort="customerName" class="text-right">
+                                    <span> اسم العميل</span>
+                                </th>
+
+                                <th st-sort="customerMobile" class="text-right">
+                                    <span> رقم الجوال</span>
+                                </th>
+
+                                <th st-sort="masterPaymentType" class="text-right">
+                                    <span> نوع الدفع</span>
+                                </th>
+
+                                <th st-sort="masterPrice" class="text-right">
+                                    <span>المبلغ نقداً</span>
+                                    <span class="fa fa-info-circle"
+                                          tooltip-append-to-body="true"
+                                          uib-tooltip="سعر التخصص المعطى للعميل دون حساب الخصومات"></span>
+                                </th>
+
+                                <th st-sort="registered" class="text-right">
+                                    <span>الحالة</span>
+                                    <span class="fa fa-info-circle"
+                                          tooltip-append-to-body="true"
+                                          uib-tooltip="المقصود بالحالة هي حالة العميل من ناحية التسجيل لدى المعهد"></span>
+                                </th>
+
+                                <th st-sort="master.branch.name" class="text-right">
+                                    <span>الفرع</span>
+                                </th>
+
+                                <th st-sort="master.name" class="text-right">
+                                    <span>التخصص</span>
+                                </th>
+
+                                <th st-sort="lastPerson.contact.id" class="text-right">
+                                    <span>مدخل العرض</span>
+                                    <span class="fa fa-info-circle"
+                                          tooltip-append-to-body="true"
+                                          uib-tooltip="سيتم اعتبار آخر شخص قام بتعديل بيانات العرض هو مدخل العرض"></span>
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-right"
+                                ng-repeat="offer in collection"
+                                context-menu="rowMenu"
+                                st-select-mode="single"
+                                ng-click="setSelected(offer)"
+                                ng-right-click="setSelected(offer)"
+                                ng-class="{'mdl-color--brown-100':offer.isSelected}">
+                                <td st-select-row-custom="offer">{{$index+1}}</td>
+                                <td st-select-row-custom="offer">{{offer.code}}</td>
+                                <td st-select-row-custom="offer">
+                                    {{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
+                                </td>
+                                <td st-select-row-custom="offer">{{offer.customerName}}</td>
+                                <td st-select-row-custom="offer">{{offer.customerMobile}}</td>
+                                <td st-select-row-custom="offer">{{offer.masterPaymentType}}</td>
+                                <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
+                                <td st-select-row-custom="offer" ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
+                                <td st-select-row-custom="offer">{{offer.master.branch.name}}</td>
+                                <td st-select-row-custom="offer">{{offer.master.name}}</td>
+                                <td st-select-row-custom="offer">
+                                    {{offer.lastPerson.contact.firstName}}
+                                    {{offer.lastPerson.contact.forthName}}
+                                </td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                ng-show="!collection || collection.length ==0">
+                                <td colspan="11">لا توجد بيانات</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
