@@ -57,6 +57,7 @@ public class Offer implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "master")
+    @JsonIgnoreProperties(value = {"courses"}, allowSetters = true)
     private Master master;
 
     @Temporal(TemporalType.TIMESTAMP)
