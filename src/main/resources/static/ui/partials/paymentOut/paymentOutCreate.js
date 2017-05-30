@@ -5,25 +5,6 @@ app.controller('paymentOutCreateCtrl', ['PaymentService', '$rootScope', '$scope'
 
         $scope.buffer = {};
 
-        $scope.findPaymentByCode = function () {
-            if (!$scope.payment.code) {
-                return;
-            }
-            PaymentService.findByCode($scope.payment.code).then(function (data) {
-                if (data) {
-                    noty({
-                        text: 'هذا الرقم غير متاح حالياَ، فضلاً ادخل رقم آخر للسند',
-                        layout: 'topCenter',
-                        type: 'danger',
-                        timeout: 5000
-                    });
-                    $scope.payment.code = "";
-                    $scope.form.$setPristine();
-                    $('#code').focus();
-                }
-            });
-        };
-
         $scope.submit = function () {
             $scope.payment.type = 'مصروفات';
             PaymentService.create($scope.payment).then(function (data) {

@@ -167,8 +167,8 @@ public class PaymentRest {
             @RequestParam(value = "course", required = false) final Long course,
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "branch", required = false) final Long branch,
+            @RequestParam(value = "personBranch", required = false) final Long personBranch,
             @RequestParam(value = "type", required = false) final String type) {
-
-        return paymentSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch, type);
+        return paymentSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch, personBranch, type);
     }
 }

@@ -40,6 +40,7 @@ public class PaymentSearch {
             final Long course,
             final Long master,
             final Long branch,
+            final Long personBranch,
             final String type
     ) {
 
@@ -64,6 +65,7 @@ public class PaymentSearch {
         Optional.ofNullable(course).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("account").get("course").get("id"), value)));
         Optional.ofNullable(master).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("account").get("course").get("master").get("id"), value)));
         Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("account").get("course").get("master").get("branch").get("id"), value)));
+        Optional.ofNullable(personBranch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("lastPerson").get("branch").get("id"), value)));
         Optional.ofNullable(type).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("type"), value)));
 
         if (!predicates.isEmpty()) {

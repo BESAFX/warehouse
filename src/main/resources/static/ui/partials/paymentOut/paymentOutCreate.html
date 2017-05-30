@@ -1,39 +1,46 @@
 <form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">add</i>
+                <strong>{{title}}</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body" id="modal-body">
 
         <div class="row">
 
-            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                 ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group text-right col-sm-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="code" class="control-label"> رقم السند </label>
                 <input id="code"
                        type="number"
                        min="1"
                        class="form-control text-right "
-                       focus-index="1"
                        required="required"
                        disable-validation-message=""
                        ng-blur="findPaymentByCode()"
                        ng-model="payment.code">
             </div>
 
-            <div class="form-group text-right col-sm-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="dateFrom" class="control-label">التاريخ</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
                            id="dateFrom"
                            type="text"
-                           focus-index="3"
                            class="form-control text-right is-calendarPicker"
                            ng-model="payment.date"
                            calendarType="ummalqura"
@@ -45,12 +52,11 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-sm-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="amountNumber" class="control-label"> قيمة السند </label>
                 <div dir="ltr" class="input-group">
                     <span class="input-group-addon">ريال سعودي</span>
                     <input id="amountNumber"
-                           focus-index="2"
                            dir="rtl"
                            type="number"
                            min="1"
@@ -61,38 +67,21 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-sm-12">
-                <label for="amountString" class="control-label">المبلغ بالحروف</label>
-                <div dir="ltr" class="input-group">
-                    <span class="input-group-addon">ريال سعودي</span>
-                    <input id="amountString"
-                           focus-index="3"
-                           dir="rtl"
-                           type="text"
-                           class="form-control text-right"
-                           required="required"
-                           disable-validation-message=""
-                           ng-model="payment.amountString">
-                </div>
-            </div>
-
-            <div class="form-group text-right col-sm-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="toName" class="control-label"> وجهة الصرف </label>
                 <input id="toName"
                        type="text"
                        class="form-control text-right "
-                       focus-index="4"
                        required="required"
                        placeholder="اذكر بإختصار وجهة الصرف"
                        disable-validation-message=""
                        ng-model="payment.toName">
             </div>
 
-            <div class="form-group text-right col-sm-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="note" class="control-label"> البيان </label>
                 <textarea id="note"
                           type="text"
-                          focus-index="5"
                           msd-elastic="\n"
                           class="form-control text-right"
                           placeholder="الملاحظات"
@@ -106,25 +95,26 @@
 
     <div class="modal-footer">
 
-        <div class="form-group col-md-12" role="group">
-            <button type="button"
-                    focus-index="8"
+        <div class="row">
+            <button uib-tooltip="اضافة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">add</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
                     ng-click="cancel()"
-                    class="btn btn-danger pull-left">
-                <span>خروج</span>
-                <i class="fa fa-power-off  fa-lg"></i>
-            </button>
-            <button type="reset"
-                    focus-index="7"
-                    class="btn btn-info pull-left">
-                <span>مسح الحقول</span>
-                <i class="fa fa-recycle  fa-lg"></i>
-            </button>
-            <button type="submit"
-                    focus-index="6"
-                    class="btn btn-success pull-right">
-                <span>اضافة</span>
-                <i class="fa fa-plus-square fa-lg"></i>
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
             </button>
         </div>
 

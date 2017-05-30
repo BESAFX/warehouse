@@ -16,13 +16,14 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                 ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <div class="panel-title-box pull-right">
@@ -85,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <div class="panel-title-box pull-right">
@@ -94,7 +95,7 @@
                     </div>
                     <div class="panel-body">
 
-                        <div class="form-group text-right col-md-6">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <label for="type" class="control-label">نوع السند</label>
                             <select id="type"
                                     style="height: 40px"
@@ -107,7 +108,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group text-right col-sm-6">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <label for="dateFrom" class="control-label">التاريخ</label>
                             <div dir="ltr" class="input-group">
                                 <input dir="rtl"
@@ -124,7 +125,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group text-right col-sm-6">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <label> رقم السند </label>
                             <input id="code"
                                    type="number"
@@ -135,7 +136,7 @@
                                    ng-model="payment.code">
                         </div>
 
-                        <div class="form-group text-right col-sm-6">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <label> قيمة السند </label>
                             <div dir="ltr" class="input-group">
                                 <span class="input-group-addon">ريال</span>
@@ -150,7 +151,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group text-right col-sm-12">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <label for="note" class="control-label"> البيان </label>
                             <textarea id="note"
                                       type="text"
