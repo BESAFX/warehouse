@@ -39,11 +39,50 @@
 
                 <div class="row">
 
+                    <div class="form-group text-right col-md-12">
+                        <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                        <select id="branch"
+                                data-placeholder="ابحث عن الفرع"
+                                no-results-text="'لا توجد فروع توافق بحثك'"
+                                placeholder-text-single="'اختر الفرع'"
+                                class="form-control text-right"
+                                chosen=""
+                                focus-autofocus="1"
+                                ng-model="buffer.branch"
+                                ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                        </select>
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
+                        <select id="master"
+                                data-placeholder="ابحث عن التخصص"
+                                no-results-text="'لا توجد تخصصات توافق بحثك'"
+                                placeholder-text-single="'اختر التخصص'"
+                                class="form-control text-right"
+                                chosen=""
+                                ng-model="buffer.master"
+                                ng-options="(' [ ' + master.code + ' ] ' +  ' ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
+                        </select>
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="course" class="control-label">رقم الدورة تبعاً للتخصص</label>
+                        <select id="course"
+                                data-placeholder="ابحث عن رقم الدورة"
+                                no-results-text="'لا توجد ارقام توافق بحثك'"
+                                placeholder-text-single="'اختر الرقم'"
+                                class="form-control text-right"
+                                chosen=""
+                                ng-model="buffer.course"
+                                ng-options="course.code for course in buffer.master.courses | orderBy:'code' track by course.id">
+                        </select>
+                    </div>
+
                     <div class="form-group text-right col-md-6">
                         <label for="firstName" class="control-label">الاسم الأول (يحتوى على) </label>
                         <input id="firstName"
                                type="text"
-                               focus-index="1"
                                class="form-control text-right"
                                placeholder="ادخل الاسم الأول او جزءاً منه"
                                ng-model="buffer.firstName">
@@ -53,7 +92,6 @@
                         <label for="secondName" class="control-label">الاسم الثاني (يحتوى على) </label>
                         <input id="secondName"
                                type="text"
-                               focus-index="2"
                                class="form-control text-right"
                                placeholder="ادخل الاسم الثاني او جزءاً منه"
                                ng-model="buffer.secondName">
@@ -63,7 +101,6 @@
                         <label for="thirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
                         <input id="thirdName"
                                type="text"
-                               focus-index="3"
                                class="form-control text-right"
                                placeholder="ادخل الاسم الثالث او جزءاً منه"
                                ng-model="buffer.thirdName">
@@ -73,7 +110,6 @@
                         <label for="forthName" class="control-label">الاسم الرابع (يحتوى على) </label>
                         <input id="forthName"
                                type="text"
-                               focus-index="4"
                                class="form-control text-right"
                                placeholder="ادخل الاسم الرابع او جزءاً منه"
                                ng-model="buffer.forthName">
@@ -117,7 +153,6 @@
                         <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة (يحتوى علي)</label>
                         <input id="identityNumber"
                                type="text"
-                               focus-index="5"
                                class="form-control text-right "
                                placeholder="ادخل رقم البطاقة كاملاً او جزءاً منه"
                                ng-model="buffer.studentIdentityNumber">
@@ -127,7 +162,6 @@
                         <label for="mobile" class="control-label">رقم الجوال (يحتوى على)</label>
                         <input id="mobile"
                                type="text"
-                               focus-index="6"
                                class="form-control text-right "
                                placeholder="ادخل رقم الجوال كاملاً او جزءاً منه"
                                ng-model="buffer.studentMobile">
@@ -137,7 +171,6 @@
                         <label for="coursePriceFrom" class="control-label">المبلغ نقداً من </label>
                         <input id="coursePriceFrom"
                                type="number"
-                               focus-index="7"
                                class="form-control text-right"
                                placeholder="ادخل المبلغ من"
                                ng-model="buffer.coursePriceFrom">
@@ -147,50 +180,9 @@
                         <label for="coursePriceTo" class="control-label">المبلغ نقداً إلى </label>
                         <input id="coursePriceTo"
                                type="number"
-                               focus-index="8"
                                class="form-control text-right"
                                placeholder="ادخل المبلغ إلى"
                                ng-model="buffer.coursePriceTo">
-                    </div>
-
-                    <div class="form-group text-right col-md-12">
-                        <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
-                        <select id="branch"
-                                data-placeholder="ابحث عن الفرع"
-                                no-results-text="'لا توجد فروع توافق بحثك'"
-                                placeholder-text-single="'اختر الفرع'"
-                                class="form-control text-right"
-                                chosen=""
-                                ng-model="buffer.branch"
-                                ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                        </select>
-                    </div>
-
-                    <div class="form-group text-right col-md-12">
-                        <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
-                        <select id="master"
-                                data-placeholder="ابحث عن التخصص"
-                                no-results-text="'لا توجد تخصصات توافق بحثك'"
-                                placeholder-text-single="'اختر التخصص'"
-                                class="form-control text-right"
-                                chosen=""
-                                ng-model="buffer.master"
-                                ng-options="(' [ ' + master.code + ' ] ' +  ' ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
-                        </select>
-                    </div>
-
-                    <div class="form-group text-right col-md-12">
-                        <label for="course" class="control-label">رقم الدورة تبعاً للتخصص</label>
-                        <select id="course"
-                                data-placeholder="ابحث عن رقم الدورة"
-                                no-results-text="'لا توجد ارقام توافق بحثك'"
-                                placeholder-text-single="'اختر الرقم'"
-                                class="form-control text-right"
-                                chosen=""
-                                focus-index="11"
-                                ng-model="buffer.course"
-                                ng-options="course.code for course in buffer.master.courses | orderBy:'code' track by course.id">
-                        </select>
                     </div>
 
                 </div>
@@ -200,27 +192,26 @@
             <div class="panel-footer">
 
                 <div class="row">
-
-                    <div class="form-group col-md-6 pull-left">
-                        <button type="submit"
-                                focus-index="13"
-                                style="width: 100%"
-                                class="btn btn-success">
-                            <span>عرض وتصفية البيانات</span>
-                            <i class="fa fa-filter fa-lg"></i>
-                        </button>
-                    </div>
-                    <div class="form-group col-md-6 pull-left">
-                        <button type="button"
-                                ng-click="clear()"
-                                focus-index="12"
-                                style="width: 100%"
-                                class="btn btn-info">
-                            <span>مسح الحقول</span>
-                            <i class="fa fa-recycle  fa-lg"></i>
-                        </button>
-                    </div>
-
+                    <button uib-tooltip="بحث"
+                            tooltip-append-to-body="true"
+                            type="submit"
+                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <i class="material-icons">search</i>
+                    </button>
+                    <button uib-tooltip="مسح الحقول"
+                            tooltip-append-to-body="true"
+                            type="button"
+                            ng-click="clear()"
+                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <i class="material-icons">delete</i>
+                    </button>
+                    <button uib-tooltip="خروج"
+                            tooltip-append-to-body="true"
+                            type="button"
+                            ng-click="showFilter=false"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <i class="material-icons">power_settings_new</i>
+                    </button>
                 </div>
 
             </div>
@@ -244,88 +235,98 @@
             <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
-                <li class="mdl-menu__item">
-                    <span>المساعدة</span>
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp"
+                for="menu-lower-left">
+                <li class="mdl-list__item mdl-list__item--two-line mdl-menu__item--full-bleed-divider">
+                    <span class="mdl-list__item-primary-content">
+                        <span class="material-icons mdl-list__item-avatar"
+                              ng-style="{'background-image': 'url(' + me.img + ')'}"></span>
+                        <span>{{me.contact.firstName}} {{me.contact.forthName}}</span>
+                        <span class="mdl-list__item-sub-title">{{me.email}}</span>
+                    </span>
                 </li>
-                <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">
-                    <span>الملف الشخصي</span>
+                <li class="mdl-menu__item mdl-list__item" ng-click="goToHelp()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">help</i>
+                        <span>المساعدة</span>
+                    </span>
                 </li>
-                <li class="mdl-menu__item" ng-click="logout()">
-                    <span>تسجيل الخروج</span>
+                <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider" ng-click="goToProfile()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">account_box</i>
+                        <span>الملف الشخصي</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item" ng-click="logout()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">exit_to_app</i>
+                        <span>تسجيل الخروج</span>
+                    </span>
                 </li>
             </ul>
-            <nav class="mdl-navigation">
-                <button id="report-offer-menu-lower-left" style="width: 100%;"
-                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                    <span>التقارير</span>
-                </button>
-                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
-                    for="report-offer-menu-lower-left">
-                    <li class="mdl-menu__item"
-                        ng-click="ReportModelProvider.openReportAccountByBranchModel()">
-                        <span>الطلاب المسجلين لكل فرع</span>
-                    </li>
-                    <li class="mdl-menu__item"
-                        ng-click="ReportModelProvider.openReportAccountByMasterModel()">
-                        <span>الطلاب المسجلين لكل تخصص</span>
-                    </li>
-                    <li class="mdl-menu__item mdl-menu__item--full-bleed-divider"
-                        ng-click="ReportModelProvider.openReportAccountByCourseModel()">
-                        <span>الطلاب المسجلين لكل دورة</span>
-                    </li>
-                    <li class="mdl-menu__item"
-                        ng-click="ReportModelProvider.openReportBranchDetailsModel()">
-                        <span>بيانات الفروع</span>
-                    </li>
-                    <li class="mdl-menu__item"
-                        ng-click="ReportModelProvider.openReportMasterDetailsModel()">
-                        <span>بيانات التخصصات</span>
-                    </li>
-                    <li class="mdl-menu__item"
-                        ng-click="ReportModelProvider.openReportCourseDetailsModel()">
-                        <span>بيانات الدورات</span>
-                    </li>
-                </ul>
-            </nav>
             <div class="mdl-layout-spacer"></div>
             <span class="mdl-layout__title">{{pageTitle}}</span>
         </div>
         <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
             <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
-                <div class="form-group col-md-2 pull-right">
-                    <button id="offer-menu-lower-right" style="width: 100%;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                        <span>العمليات</span>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="offer-menu-lower-right">
-                        <li class="mdl-menu__item mdl-menu__item--full-bleed-divider" ng-click="reload()">
-                            <span>تحديث</span>
-                        </li>
-                        <li class="mdl-menu__item mdl-menu__item--full-bleed-divider" ng-click="showFilter=true">
-                            <span>تصفية وعرض البيانات</span>
-                        </li>
-                        <li class="mdl-menu__item" ng-click="openCreateModel()"
-                            ng-if="contains(authorities, ['ROLE_ACCOUNT_CREATE'])">
-                            <span>اضافة تسجيل جديد</span>
-                        </li>
-                        <li class="mdl-menu__item" ng-click="openUpdateModel()"
-                            ng-if="contains(authorities, ['ROLE_ACCOUNT_UPDATE'])"
-                            ng-hide="!accounts || accounts.length==0">
-                            <span>تعديل بيانات التسجيل</span>
-                        </li>
-                        <li class="mdl-menu__item mdl-menu__item--full-bleed-divider" ng-click="remove()"
-                            ng-if="contains(authorities, ['ROLE_ACCOUNT_DELETE'])"
-                            ng-hide="!accounts || accounts.length==0">
-                            <span>حذف التسجيل</span>
-                        </li>
-                        <li class="mdl-menu__item" ng-click="openPaymentCreateFromAccountModel()"
-                            ng-if="contains(authorities, ['ROLE_PAYMENT_CREATE'])"
-                            ng-hide="!accounts || accounts.length==0">
-                            <span>اضافة سند جديد</span>
+                <div class="row">
+                    <ul dir="rtl" class="breadcrumb">
+                        <li ng-repeat="item in items | orderBy:'id' track by item.id">
+                            <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
+                            <span ng-if="item.type==='title'">{{item.name}}</span>
                         </li>
                     </ul>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button id="branch-menu-lower-right" style="width: 100%;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>العمليات</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="branch-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="showFilter=true">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">visibility</i>
+                                <span>عرض بيانات التسجيل</span>
+                            </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openAccountCreateModel()"
+                                ng-if="contains(authorities, ['ROLE_ACCOUNT_CREATE'])">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">add</i>
+                                    <span>انشاء تسجيل جديد</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="payment.account = selected;ModalProvider.openPaymentCreateModel(payment)"
+                                ng-if="contains(authorities, ['ROLE_PAYMENT_CREATE'])"
+                                ng-hide="!accounts || accounts.length==0">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">monetization_on</i>
+                                    <span>انشاء سند قبض</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openAccountUpdateModel(selected)"
+                                ng-if="contains(authorities, ['ROLE_ACCOUNT_UPDATE'])"
+                                ng-hide="!accounts || accounts.length==0">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">edit</i>
+                                    <span>تعديل بيانات التسجيل</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
+                                ng-if="contains(authorities, ['ROLE_ACCOUNT_DELETE'])"
+                                ng-hide="!accounts || accounts.length==0">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">delete</i>
+                                    <span>حذف التسجيل</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -333,9 +334,9 @@
 
     <main class="mdl-layout__content">
 
-        <div dir="rtl" style="margin-top: 10px">
+        <div dir="rtl" class="row" style="margin-top: 10px">
 
-            <div class="col-md-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel panel-body">
 
                     <div class="table-responsive">
@@ -345,9 +346,6 @@
                             <tr>
                                 <th class="text-right">
                                     <span>م</span>
-                                    <a href="" ng-click="showFilter=true">
-                                        <span style="font-size: 25px" class="fa fa-filter fa-lg"></span>
-                                    </a>
                                 </th>
 
                                 <th st-sort="student.code" class="text-right">
@@ -408,8 +406,8 @@
                                     -
                                     {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
                                 </td>
-                                <td st-select-row-custom="account">{{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :
-                                    'ummalqura'}}
+                                <td st-select-row-custom="account">
+                                    {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
                                 </td>
                                 <td st-select-row-custom="account">
                                     {{account.student.contact.firstName}}

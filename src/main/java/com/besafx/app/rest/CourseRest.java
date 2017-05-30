@@ -1,10 +1,13 @@
 package com.besafx.app.rest;
+import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Course;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Views;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,20 +50,22 @@ public class CourseRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_CREATE')")
     public Course create(@RequestBody Course course, Principal principal) {
-        course.setLastUpdate(new Date());
-        Integer maxCode = courseService.findLastCodeByMaster(course.getMaster().getId());
-        if (maxCode == null) {
+        Person person = personService.findByEmail(principal.getName());
+        Course topCourse = courseService.findTopByMasterOrderByCodeDesc(course.getMaster());
+        if (topCourse == null) {
             course.setCode(1);
         } else {
-            course.setCode(maxCode + 1);
+            course.setCode(topCourse.getCode() + 1);
         }
+        course.setLastUpdate(new Date());
+        course.setLastPerson(person);
         course = courseService.save(course);
         notificationService.notifyOne(Notification
                 .builder()
                 .title("العمليات على الدورات")
                 .message("تم إنشاء دورة جديدة بنجاح")
                 .type("success")
-                .icon("fa-database")
+                .icon("fa-plus-square")
                 .build(), principal.getName());
         return course;
     }
@@ -69,15 +74,21 @@ public class CourseRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_UPDATE')")
     public Course update(@RequestBody Course course, Principal principal) {
+        if (courseService.findByCodeAndMasterAndIdIsNot(course.getCode(), course.getMaster(), course.getId()) != null) {
+            throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
+        }
+        Person person = personService.findByEmail(principal.getName());
         Course object = courseService.findOne(course.getId());
         if (object != null) {
+            course.setLastUpdate(new Date());
+            course.setLastPerson(person);
             course = courseService.save(course);
             notificationService.notifyOne(Notification
                     .builder()
                     .title("العمليات على الدورات")
                     .message("تم تعديل بيانات الدورة بنجاح")
                     .type("success")
-                    .icon("fa-database")
+                    .icon("fa-edit")
                     .build(), principal.getName());
             return course;
         } else {
@@ -88,10 +99,17 @@ public class CourseRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         Course object = courseService.findOne(id);
         if (object != null) {
             courseService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على الدورات")
+                    .message("تم حذف الدورة بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
         }
     }
 
@@ -141,6 +159,13 @@ public class CourseRest {
             log.error(ex.getMessage(), ex);
             return null;
         }
+    }
+
+    @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(Views.Summery.class)
+    public List<Course> fetchTableDataSummery(Principal principal) {
+        return fetchTableData(principal);
     }
 
 }

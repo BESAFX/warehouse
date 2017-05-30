@@ -1,62 +1,33 @@
 app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService', 'CourseService', 'ModalProvider', '$rootScope', '$scope', '$timeout', '$log', '$state',
     function (AccountService, BranchService, MasterService, CourseService, ModalProvider, $rootScope, $scope, $timeout, $log, $state) {
 
+        $scope.buffer = {};
+
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب'});
+        //
+
         $timeout(function () {
-
             $scope.sideOpacity = 1;
-
-            $scope.buffer = {};
-
             BranchService.fetchTableData().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
             });
-
         }, 2000);
-
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
 
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.accounts, function (account) {
                     if (object.id == account.id) {
-                        account.isSelected = true;
-                        object = account;
+                        $scope.selected = account;
+                        return account.isSelected = true;
                     } else {
                         return account.isSelected = false;
                     }
                 });
-                $scope.selected = object;
             }
-        };
-
-        $scope.openCreateModel = function () {
-            ModalProvider.openAccountCreateModel();
-        };
-
-        $scope.openUpdateModel = function (account) {
-            if (account) {
-                ModalProvider.openAccountUpdateModel(account);
-                return;
-            }
-            ModalProvider.openAccountUpdateModel($scope.selected);
-        };
-
-        $scope.openPaymentCreateFromAccountModel = function (account) {
-            var payment = {};
-            if (account) {
-                payment.account = account;
-                ModalProvider.openPaymentCreateModel(payment);
-            } else {
-                payment.account = $scope.selected;
-                ModalProvider.openPaymentCreateModel(payment);
-            }
-        };
-
-        $scope.reload = function () {
-            $state.reload();
         };
 
         $scope.clear = function () {
@@ -142,56 +113,83 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
             AccountService.filter(search.join("")).then(function (data) {
                 $scope.accounts = data;
                 $scope.setSelected(data[0]);
+                $scope.items = [];
+                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع'});
+                $scope.items.push({
+                    'id': 4,
+                    'type': 'title',
+                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                });
+                if ($scope.buffer.master) {
+                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص'});
+                    $scope.items.push({
+                        'id': 6,
+                        'type': 'title',
+                        'name': ' [ ' + $scope.buffer.master.code + ' ] ' + $scope.buffer.master.name
+                    });
+                }
+                if ($scope.buffer.course) {
+                    $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة'});
+                    $scope.items.push({
+                        'id': 8,
+                        'type': 'title',
+                        'name': ' [ ' + $scope.buffer.course.code + ' ] '
+                    });
+                }
+            });
+        };
+
+        $scope.delete = function (account) {
+            if (account) {
+                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التسجيل فعلاً؟", "error", "fa-ban", function () {
+                    AccountService.remove(account.id).then(function () {
+
+                    });
+                });
+                return;
+            }
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التسجيل فعلاً؟", "error", "fa-ban", function () {
+                AccountService.remove($scope.selected.id).then(function () {
+
+                });
             });
         };
 
         $scope.rowMenu = [
             {
-                html: '<div style="cursor: pointer;padding: 10px;text-align: right"> اضافة تسجيل جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
+                html: '<div class="drop-menu"> انشاء تسجيل جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.openCreateModel();
+                    ModalProvider.openAccountCreateModel();
                 }
             },
             {
-                html: '<div style="cursor: pointer;padding: 10px;text-align: right"> تعديل بيانات الطالب <span class="fa fa-edit fa-lg"></span></div>',
+                html: '<div class="drop-menu"> تعديل بيانات التسجيل <span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.openUpdateModel($itemScope.account);
+                    ModalProvider.openAccountUpdateModel($itemScope.account);
                 }
             },
             {
-                html: '<div style="cursor: pointer;padding: 10px;text-align: right"> حذف التسجيل <span class="fa fa-minus-square-o fa-lg"></span></div>',
+                html: '<div class="drop-menu"> حذف التسجيل <span class="fa fa-minus-square-o fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-
-                }
-            },
-            {
-                html: '<div style="cursor: pointer;padding: 10px;text-align: right"> اضافة سند جديد <span class="fa fa-file-text fa-lg"></span></div>',
-                enabled: function () {
-                    return true;
-                },
-                click: function ($itemScope, $event, value) {
-                    $scope.openPaymentCreateFromAccountModel($itemScope.account);
-                }
-            },
-            {
-                html: '<div style="cursor: pointer;padding: 10px;text-align: right"> طباعة عقد <span class="fa fa-file-text fa-lg"></span></div>',
-                enabled: function () {
-                    return true;
-                },
-                click: function ($itemScope, $event, value) {
-                    $scope.print($itemScope.account);
-
+                    $scope.delete($itemScope.account);
                 }
             }
         ];
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
+
 
     }]);

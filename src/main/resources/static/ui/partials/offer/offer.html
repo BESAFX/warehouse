@@ -39,6 +39,44 @@
 
                 <div class="row">
 
+                    <div class="form-group text-right col-md-12">
+                        <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                        <select id="branch"
+                                data-placeholder="ابحث عن الفرع"
+                                no-results-text="'لا توجد فروع توافق بحثك'"
+                                placeholder-text-single="'اختر الفرع'"
+                                class="form-control text-right"
+                                chosen=""
+                                ng-model="buffer.branch"
+                                ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                        </select>
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
+                        <select id="master"
+                                data-placeholder="ابحث عن التخصص"
+                                no-results-text="'لا توجد تخصصات توافق بحثك'"
+                                placeholder-text-single="'اختر التخصص'"
+                                class="form-control text-right"
+                                chosen=""
+                                ng-model="buffer.master"
+                                ng-options="(' [ ' + master.code + ' ] ' +  ' ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
+                        </select>
+                    </div>
+
+                    <div class="form-group text-right col-md-12">
+                        <label class="control-label">الحالة</label>
+                        <toggle-switch
+                                dir="ltr"
+                                style="width: 100%"
+                                ng-model="buffer.registered"
+                                class="switch-success"
+                                on-label="مسجل"
+                                off-label="غير مسجل">
+                        </toggle-switch>
+                    </div>
+
                     <div class="form-group text-right col-md-6">
                         <label for="codeFrom" class="control-label">رقم العرض من </label>
                         <input id="codeFrom"
@@ -148,44 +186,6 @@
                                ng-model="buffer.masterPriceTo">
                     </div>
 
-                    <div class="form-group text-right col-md-12">
-                        <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
-                        <select id="branch"
-                                data-placeholder="ابحث عن الفرع"
-                                no-results-text="'لا توجد فروع توافق بحثك'"
-                                placeholder-text-single="'اختر الفرع'"
-                                class="form-control text-right"
-                                chosen=""
-                                ng-model="buffer.branch"
-                                ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                        </select>
-                    </div>
-
-                    <div class="form-group text-right col-md-12">
-                        <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
-                        <select id="master"
-                                data-placeholder="ابحث عن التخصص"
-                                no-results-text="'لا توجد تخصصات توافق بحثك'"
-                                placeholder-text-single="'اختر التخصص'"
-                                class="form-control text-right"
-                                chosen=""
-                                ng-model="buffer.master"
-                                ng-options="(' [ ' + master.code + ' ] ' +  ' ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
-                        </select>
-                    </div>
-
-                    <div class="form-group text-right col-md-12">
-                        <label class="control-label">الحالة</label>
-                        <toggle-switch
-                                dir="ltr"
-                                style="width: 100%"
-                                ng-model="buffer.registered"
-                                class="switch-success"
-                                on-label="مسجل"
-                                off-label="غير مسجل">
-                        </toggle-switch>
-                    </div>
-
                 </div>
 
             </div>
@@ -193,27 +193,26 @@
             <div class="panel-footer">
 
                 <div class="row">
-
-                    <div class="form-group col-md-6 pull-left">
-                        <button type="submit"
-                                focus-index="5"
-                                style="width: 100%"
-                                class="btn btn-success">
-                            <span>عرض وتصفية البيانات</span>
-                            <i class="fa fa-filter fa-lg"></i>
-                        </button>
-                    </div>
-                    <div class="form-group col-md-6 pull-left">
-                        <button type="button"
-                                focus-index="13"
-                                style="width: 100%"
-                                ng-click="clear()"
-                                class="btn btn-info">
-                            <span>مسح الحقول</span>
-                            <i class="fa fa-recycle  fa-lg"></i>
-                        </button>
-                    </div>
-
+                    <button uib-tooltip="بحث"
+                            tooltip-append-to-body="true"
+                            type="submit"
+                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <i class="material-icons">search</i>
+                    </button>
+                    <button uib-tooltip="مسح الحقول"
+                            tooltip-append-to-body="true"
+                            type="button"
+                            ng-click="clear()"
+                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <i class="material-icons">delete</i>
+                    </button>
+                    <button uib-tooltip="خروج"
+                            tooltip-append-to-body="true"
+                            type="button"
+                            ng-click="showFilter=false"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <i class="material-icons">power_settings_new</i>
+                    </button>
                 </div>
 
             </div>
@@ -302,7 +301,7 @@
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
                                 ng-click="ModalProvider.openOfferUpdateModel(selected)"
-                                ng-if="contains(authorities, ['ROLE_OFFER_UPDATE']) && toggleList===1"
+                                ng-if="contains(authorities, ['ROLE_OFFER_UPDATE'])"
                                 ng-hide="!offers || offers.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">edit</i>
@@ -310,7 +309,7 @@
                             </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                                ng-if="contains(authorities, ['ROLE_OFFER_DELETE']) && toggleList===1"
+                                ng-if="contains(authorities, ['ROLE_OFFER_DELETE'])"
                                 ng-hide="!offers || offers.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">delete</i>

@@ -46,8 +46,8 @@ app.factory("CourseService",
                     return response.data;
                 });
             },
-            fetchCount: function () {
-                return $http.get("/api/course/fetchCount").then(function (response) {
+            fetchTableDataSummery: function () {
+                return $http.get("/api/course/fetchTableDataSummery").then(function (response) {
                     return response.data;
                 });
             }

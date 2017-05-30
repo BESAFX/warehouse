@@ -1,6 +1,7 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,30 +28,43 @@ public class Course implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "courseSequenceGenerator")
+    @JsonView(Views.Summery.class)
     private Long id;
 
+    @JsonView(Views.Summery.class)
     private Integer code;
 
+    @JsonView(Views.Summery.class)
     private String instructor;
 
+    @JsonView(Views.Summery.class)
     private String companyName;
 
+    @Column(columnDefinition = "int default 1", nullable = false)
+    @JsonView(Views.Summery.class)
+    private Integer maxStudentCount;
+
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(Views.Summery.class)
     private Date startDate;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(Views.Summery.class)
     private Date endDate;
 
     @ManyToOne
     @JoinColumn(name = "master")
+    @JsonView(Views.Summery.class)
     private Master master;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(Views.Summery.class)
     private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name = "last_person")
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private Person lastPerson;
 
     @JsonCreator

@@ -82,10 +82,11 @@ public class OfferRest {
         if (offerService.findByCodeAndMasterBranchAndIdIsNot(offer.getCode(), offer.getMaster().getBranch(), offer.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
+        Person person = personService.findByEmail(principal.getName());
         Offer object = offerService.findOne(offer.getId());
         if (object != null) {
             offer.setLastUpdate(new Date());
-            offer.setLastPerson(personService.findByEmail(principal.getName()));
+            offer.setLastPerson(person);
             offer = offerService.save(offer);
             notificationService.notifyOne(Notification
                     .builder()

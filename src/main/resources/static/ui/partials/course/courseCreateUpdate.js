@@ -2,7 +2,7 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
     function (MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, course) {
 
         $timeout(function () {
-            MasterService.fetchTableData().then(function (data) {
+            MasterService.fetchTableDataSummery().then(function (data) {
                 $scope.masters = data;
             })
         }, 2000);
@@ -18,7 +18,6 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
         $scope.action = action;
 
         $scope.submit = function () {
-            $scope.course.lastPerson = $rootScope.person;
             switch ($scope.action) {
                 case 'create' :
                     CourseService.create($scope.course).then(function (data) {

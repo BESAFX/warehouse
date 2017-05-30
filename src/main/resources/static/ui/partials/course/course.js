@@ -1,51 +1,77 @@
 app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state',
     function (CourseService, MasterService, BranchService, ModalProvider, $rootScope, $scope, $log, $timeout, $state) {
 
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        $scope.selected = {};
 
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.courses, function (course) {
                     if (object.id == course.id) {
-                        course.isSelected = true;
-                        object = course;
+                        $scope.selected = course;
+                        return course.isSelected = true;
                     } else {
                         return course.isSelected = false;
                     }
                 });
-                $scope.selected = object;
             }
         };
 
-        $scope.read = function () {
+        $scope.fetchTableData = function () {
             CourseService.fetchTableData().then(function (data) {
                 $scope.courses = data;
                 $scope.setSelected(data[0]);
             });
         };
 
-        $scope.reload = function () {
-            $state.reload();
-        };
-
-        $scope.openCreateModel = function () {
-            ModalProvider.openCourseCreateModel();
-        };
-
-        $scope.openUpdateModel = function (course) {
+        $scope.delete = function (course) {
             if (course) {
-                ModalProvider.openCourseUpdateModel(course);
+                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
+                    CourseService.remove(course.id).then(function () {
+
+                    });
+                });
                 return;
             }
-            var coursesSelected = $scope.courses.filter(function (item) {
-                return item.isSelected === true;
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
+                CourseService.remove($scope.selected.id).then(function () {
+
+                });
             });
-            if (coursesSelected.length == 0) {
-                $rootScope.showNotify("خطأ", "فضلاً اختر العنصر أولاً", "error", 'fa-exclamation-triangle');
-                return;
-            }
-            ModalProvider.openCourseUpdateModel(coursesSelected[0]);
         };
+
+        $scope.rowMenu = [
+            {
+                html: '<div class="drop-menu"> انشاء دورة جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openCourseCreateModel();
+                }
+            },
+            {
+                html: '<div class="drop-menu"> تعديل بيانات الدورة <span class="fa fa-edit fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openCourseUpdateModel($itemScope.course);
+                }
+            },
+            {
+                html: '<div class="drop-menu"> حذف الدورة <span class="fa fa-minus-square-o fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.delete($itemScope.course);
+                }
+            }
+        ];
+
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
+
     }]);

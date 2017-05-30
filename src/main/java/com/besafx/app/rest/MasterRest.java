@@ -78,8 +78,11 @@ public class MasterRest {
         if (masterService.findByCodeAndBranchAndIdIsNot(master.getCode(), master.getBranch(), master.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
+        Person person = personService.findByEmail(principal.getName());
         Master object = masterService.findOne(master.getId());
         if (object != null) {
+            master.setLastUpdate(new Date());
+            master.setLastPerson(person);
             master = masterService.save(master);
             notificationService.notifyOne(Notification
                     .builder()

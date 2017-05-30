@@ -1,27 +1,24 @@
 app.controller("offerCtrl", ['OfferService', 'BranchService', 'MasterService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state',
     function (OfferService, BranchService, MasterService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state) {
 
+        $scope.buffer = {};
+
+        $scope.selected = {};
+
+        $scope.buffer.registered = false;
+
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'العروض'});
+        //
+
         $timeout(function () {
-
             $scope.sideOpacity = 1;
-
-            $scope.buffer = {};
-
-            $scope.selected = {};
-
-            $scope.buffer.registered = false;
-
-            //
-            $scope.items = [];
-            $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-            $scope.items.push({'id': 2, 'type': 'title', 'name': 'العروض'});
-            //
-
             BranchService.fetchTableData().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
             });
-
         }, 2000);
 
         $timeout(function () {
@@ -131,28 +128,12 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'MasterService', '
             $scope.buffer.branch = $scope.branches[0];
         };
 
-        $scope.reload = function () {
-            $state.reload();
-        };
-
         $scope.print = function (offer) {
             if (offer) {
                 window.open('/report/OfferById/' + offer.id);
                 return;
             }
             window.open('/report/OfferById/' + $scope.selected.id);
-        };
-
-        $scope.openCreateModel = function () {
-            ModalProvider.openOfferCreateModel();
-        };
-
-        $scope.openUpdateModel = function (offer) {
-            if (offer) {
-                ModalProvider.openOfferUpdateModel(offer);
-                return;
-            }
-            ModalProvider.openOfferUpdateModel($scope.selected);
         };
 
         $scope.delete = function (offer) {
