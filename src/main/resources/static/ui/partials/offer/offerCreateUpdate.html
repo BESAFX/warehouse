@@ -15,10 +15,23 @@
                 </div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="panel panel-info">
                     <div class="panel-heading">البيانات الاساسية</div>
                     <div class="panel-body">
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             ng-show="action==='update'">
+                            <label for="code" class="control-label">رقم العرض</label>
+                            <input id="code"
+                                   type="text"
+                                   focus-autofocus="1"
+                                   ng-required="action==='update'"
+                                   disable-validation-message=""
+                                   class="form-control text-right"
+                                   placeholder="رقم العرض الغير مكرر على مستوى الفروع"
+                                   ng-model="offer.code">
+                        </div>
 
                         <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
@@ -94,7 +107,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="panel panel-info">
                     <div class="panel-heading" style="height: 50px;">
                         <span class="col-sm-6">طريقة الدفع</span>
@@ -175,6 +188,7 @@
                                      id="priceAfterDiscount">
                                     <span class="input-group-addon">ريال سعودي</span>
                                     <input type="number"
+                                           readonly="readonly"
                                            class="form-control text-right "
                                            ng-value="offer.masterPrice - (offer.masterPrice * offer.masterDiscountAmount / 100)">
                                 </div>

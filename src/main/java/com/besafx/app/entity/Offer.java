@@ -41,12 +41,16 @@ public class Offer implements Serializable {
 
     private String masterPaymentType;
 
+    @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterPrice;
 
+    @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterDiscountAmount;
 
+    @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterProfitAmount;
 
+    @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterCreditAmount;
 
     private Boolean registered;

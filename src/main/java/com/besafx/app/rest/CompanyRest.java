@@ -55,7 +55,7 @@ public class CompanyRest {
                 .title("العمليات على الشركات")
                 .message("تم اضافة شركة جديدة بنجاح")
                 .type("success")
-                .icon("fa-fort-awesome")
+                .icon("fa-plus-square")
                 .build(), principal.getName());
         return company;
     }
@@ -75,7 +75,7 @@ public class CompanyRest {
                     .title("العمليات على الشركات")
                     .message("تم تعديل بيانات الشركة بنجاح")
                     .type("success")
-                    .icon("fa-fort-awesome")
+                    .icon("fa-trash")
                     .build(), principal.getName());
             return company;
         } else {
@@ -86,10 +86,17 @@ public class CompanyRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COMPANY_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         Company object = companyService.findOne(id);
         if (object != null) {
             companyService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على الشركات")
+                    .message("تم حذف الشركة بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
         }
     }
 

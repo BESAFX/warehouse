@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
@@ -7,6 +6,8 @@ import com.besafx.app.service.BranchService;
 import com.besafx.app.service.MasterService;
 import com.besafx.app.service.OfferService;
 import com.besafx.app.service.PersonService;
+import com.besafx.app.ws.Notification;
+import com.besafx.app.ws.NotificationService;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,20 +43,31 @@ public class OfferRest {
     @Autowired
     private MasterService masterService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
     public Offer create(@RequestBody Offer offer, Principal principal) {
         try {
-            Integer lastCode = offerService.findLastCodeByMasterBranch(offer.getMaster().getBranch().getId());
-            if (lastCode == null) {
+            Person person = personService.findByEmail(principal.getName());
+            Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(offer.getMaster().getBranch());
+            if (topOffer == null) {
                 offer.setCode(1);
             } else {
-                offer.setCode(lastCode + 1);
+                offer.setCode(topOffer.getCode() + 1);
             }
             offer.setLastUpdate(new Date());
-            offer.setLastPerson(personService.findByEmail(principal.getName()));
+            offer.setLastPerson(person);
             offer = offerService.save(offer);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على العروض")
+                    .message("تم انشاء عرض جديد بنجاح")
+                    .type("success")
+                    .icon("fa-plus-square")
+                    .build(), principal.getName());
             return offer;
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -67,11 +79,21 @@ public class OfferRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_UPDATE')")
     public Offer update(@RequestBody Offer offer, Principal principal) {
+        if (offerService.findByCodeAndMasterBranchAndIdIsNot(offer.getCode(), offer.getMaster().getBranch(), offer.getId()) != null) {
+            throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
+        }
         Offer object = offerService.findOne(offer.getId());
         if (object != null) {
             offer.setLastUpdate(new Date());
             offer.setLastPerson(personService.findByEmail(principal.getName()));
             offer = offerService.save(offer);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على الشركات")
+                    .message("تم تعديل بيانات العرض بنجاح")
+                    .type("success")
+                    .icon("fa-edit")
+                    .build(), principal.getName());
             return offer;
         } else {
             return null;
@@ -81,10 +103,17 @@ public class OfferRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         Offer object = offerService.findOne(id);
         if (object != null) {
             offerService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على الشركات")
+                    .message("تم حذف العرض بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
         }
     }
 
@@ -160,7 +189,6 @@ public class OfferRest {
             @RequestParam(value = "branch", required = false) final Long branch,
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "registered", required = false) final Boolean registered) {
-
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
@@ -174,7 +202,6 @@ public class OfferRest {
         Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("master").get("branch").get("id"), value)));
         Optional.ofNullable(master).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("master").get("id"), value)));
         Optional.ofNullable(registered).ifPresent(value -> predicates.add((root, cq, cb) -> value ? cb.isTrue(root.get("registered")) : cb.isFalse(root.get("registered"))));
-
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
