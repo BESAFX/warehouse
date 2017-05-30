@@ -273,7 +273,7 @@
                     <ul dir="rtl" class="breadcrumb">
                         <li ng-repeat="item in items | orderBy:'id' track by item.id">
                             <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
-                            <span ng-if="item.type==='title'">{{item.name}}</span>
+                            <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
                         </li>
                     </ul>
                 </div>
@@ -289,7 +289,7 @@
                                 ng-click="showFilter=true">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">visibility</i>
-                                <span>عرض بيانات التخصصات</span>
+                                <span>عرض بيانات العروض</span>
                             </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openOfferCreateModel()"

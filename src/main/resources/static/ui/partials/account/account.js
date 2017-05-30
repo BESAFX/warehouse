@@ -115,15 +115,15 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 $scope.setSelected(data[0]);
                 $scope.items = [];
                 $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب'});
-                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
                 $scope.items.push({
                     'id': 4,
                     'type': 'title',
                     'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
                 });
                 if ($scope.buffer.master) {
-                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص'});
+                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
                     $scope.items.push({
                         'id': 6,
                         'type': 'title',
@@ -131,7 +131,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                     });
                 }
                 if ($scope.buffer.course) {
-                    $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة'});
+                    $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
                     $scope.items.push({
                         'id': 8,
                         'type': 'title',

@@ -105,15 +105,15 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'MasterService', '
                 $scope.setSelected(data[0]);
                 $scope.items = [];
                 $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                $scope.items.push({'id': 2, 'type': 'title', 'name': 'العروض'});
-                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'العروض', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
                 $scope.items.push({
                     'id': 4,
                     'type': 'title',
                     'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
                 });
                 if ($scope.buffer.master) {
-                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص'});
+                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
                     $scope.items.push({
                         'id': 6,
                         'type': 'title',

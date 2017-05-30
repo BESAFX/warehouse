@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
 import com.besafx.app.service.*;
@@ -56,15 +55,15 @@ public class AccountRest {
     @PreAuthorize("hasRole('ROLE_ACCOUNT_CREATE')")
     public Account create(@RequestBody Account account, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
+        Account topAccount = accountService.findTopByCourseMasterBranchOrderByStudentCodeDesc(account.getCourse().getMaster().getBranch());
+        if (topAccount == null) {
+            account.getStudent().setCode(1);
+        } else {
+            account.getStudent().setCode(topAccount.getStudent().getCode() + 1);
+        }
         account.setRegisterDate(new Date());
         account.setLastUpdate(new Date());
         account.setLastPerson(person);
-        Integer lastCode = findMaxCodeByBranch(account.getCourse().getMaster().getBranch().getId());
-        if (lastCode == null) {
-            account.getStudent().setCode(1);
-        } else {
-            account.getStudent().setCode(lastCode + 1);
-        }
         account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
         account.setStudent(studentService.save(account.getStudent()));
         account = accountService.save(account);
@@ -73,7 +72,7 @@ public class AccountRest {
                 .title("العمليات على تسجيل الطلاب")
                 .message("تم اضافة تسجيل جديد بنجاح")
                 .type("success")
-                .icon("fa-database")
+                .icon("fa-plus-square")
                 .build(), principal.getName());
         return account;
     }
@@ -84,13 +83,20 @@ public class AccountRest {
     public Account update(@RequestBody Account account, Principal principal) {
         Account object = accountService.findOne(account.getId());
         if (object != null) {
-            account.setRegisterDate(new Date());
             Person person = personService.findByEmail(principal.getName());
+            account.setRegisterDate(new Date());
             account.setLastUpdate(new Date());
             account.setLastPerson(person);
             account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
             account.setStudent(studentService.save(account.getStudent()));
             account = accountService.save(account);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على تسجيل الطلاب")
+                    .message("تم تعديل بيانات التسجيل بنجاح")
+                    .type("success")
+                    .icon("fa-edit")
+                    .build(), principal.getName());
             return account;
         } else {
             return null;
@@ -100,10 +106,17 @@ public class AccountRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ACCOUNT_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         Account object = accountService.findOne(id);
         if (object != null) {
             accountService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على تسجيل الطلاب")
+                    .message("تم حذف الاشتراك وكل ما يتعلق به من سندات وحسابات بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
         }
     }
 
@@ -120,6 +133,7 @@ public class AccountRest {
     }
 
     @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Long count() {
         return accountService.count();
     }
@@ -184,56 +198,24 @@ public class AccountRest {
         return accountService.findByCourseMasterBranch(person.getBranch());
     }
 
-    @RequestMapping(value = "fetchCount", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Long fetchCount(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        return accountService.count();
-    }
-
-    @RequestMapping(value = "findMaxCodeByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Integer findMaxCodeByBranch(@PathVariable(value = "branchId") Long branchId) {
-        Branch branch = branchService.findOne(branchId);
-        if (courseService.findByMasterBranch(branch).isEmpty()) {
-            throw new CustomException("لا توجد دورات حالياً لهذا الفرع، فضلاً اضف دورات اولاً");
-        }
-        if (accountService.findByCourseMasterBranch(branch).isEmpty()) {
-            return 0;
-        }
-        return accountService.findTopByCourseMasterBranchOrderByStudentCodeDesc(branchService.findOne(branchId)).getStudent().getCode();
-    }
-
     @RequestMapping(value = "fetchAccountsCountByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<WrapperUtil> fetchAccountsCountByBranch(@PathVariable(value = "branchId") Long branchId) {
-
         Branch branch = branchService.findOne(branchId);
-
         List<WrapperUtil> list = new ArrayList<>();
-
         YearMonth thisMonth = YearMonth.now();
-
         for (int i = 0; i <= 4; i++) {
-
             YearMonth month = thisMonth.minusMonths(i);
-
             String monthLabel = month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-
             Date startDate = Date.from(month.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-
             Date endDate = Date.from(month.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
             Long monthData = accountService.countByCourseMasterBranchAndRegisterDateBetween(branch, startDate, endDate);
-
             WrapperUtil wrapperUtil = new WrapperUtil();
             wrapperUtil.setObj1(monthLabel);
             wrapperUtil.setObj2(monthData);
-
             list.add(wrapperUtil);
 
         }
-
         return list;
 
     }
@@ -241,33 +223,21 @@ public class AccountRest {
     @RequestMapping(value = "fetchAccountsCountByMaster/{masterId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<WrapperUtil> fetchAccountsCountByMaster(@PathVariable(value = "masterId") Long masterId) {
-
         Master master = masterService.findOne(masterId);
-
         List<WrapperUtil> list = new ArrayList<>();
-
         YearMonth thisMonth = YearMonth.now();
-
         for (int i = 0; i <= 4; i++) {
-
             YearMonth month = thisMonth.minusMonths(i);
-
             String monthLabel = month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-
             Date startDate = Date.from(month.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-
             Date endDate = Date.from(month.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
             Long monthData = accountService.countByCourseMasterAndRegisterDateBetween(master, startDate, endDate);
-
             WrapperUtil wrapperUtil = new WrapperUtil();
             wrapperUtil.setObj1(monthLabel);
             wrapperUtil.setObj2(monthData);
-
             list.add(wrapperUtil);
 
         }
-
         return list;
 
     }
@@ -275,33 +245,21 @@ public class AccountRest {
     @RequestMapping(value = "fetchAccountsCountByCourse/{courseId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<WrapperUtil> fetchAccountsCountByCourse(@PathVariable(value = "courseId") Long courseId) {
-
         Course course = courseService.findOne(courseId);
-
         List<WrapperUtil> list = new ArrayList<>();
-
         YearMonth thisMonth = YearMonth.now();
-
         for (int i = 0; i <= 4; i++) {
-
             YearMonth month = thisMonth.minusMonths(i);
-
             String monthLabel = month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-
             Date startDate = Date.from(month.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-
             Date endDate = Date.from(month.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
             Long monthData = accountService.countByCourseAndRegisterDateBetween(course, startDate, endDate);
-
             WrapperUtil wrapperUtil = new WrapperUtil();
             wrapperUtil.setObj1(monthLabel);
             wrapperUtil.setObj2(monthData);
-
             list.add(wrapperUtil);
 
         }
-
         return list;
 
     }
@@ -322,7 +280,6 @@ public class AccountRest {
             @RequestParam(value = "course", required = false) final Long course,
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "branch", required = false) final Long branch) {
-
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(firstName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("firstName"), "%" + value + "%")));
         Optional.ofNullable(secondName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("secondName"), "%" + value + "%")));
@@ -337,7 +294,6 @@ public class AccountRest {
         Optional.ofNullable(course).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("course").get("id"), value)));
         Optional.ofNullable(master).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("course").get("master").get("id"), value)));
         Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("course").get("master").get("branch").get("id"), value)));
-
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {

@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -56,6 +57,10 @@ public class Master implements Serializable {
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     @JsonView(Views.Summery.class)
     private Person lastPerson;
+
+    @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"master"}, allowSetters = true)
+    private List<Course> courses = new ArrayList<>();
 
     @JsonCreator
     public static Master Create(String jsonString) throws IOException {

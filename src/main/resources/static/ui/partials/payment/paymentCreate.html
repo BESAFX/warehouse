@@ -1,7 +1,15 @@
 <form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">add</i>
+                <strong>{{title}}</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body" id="modal-body">
@@ -93,8 +101,7 @@
                                     class="form-control text-right"
                                     ng-model="payment.type"
                                     required="required"
-                                    disable-validation-message=""
-                                    focus-index="2">
+                                    disable-validation-message="">
                                 <option>ايرادات اساسية</option>
                                 <option>ايرادات اضافية</option>
                             </select>
@@ -106,7 +113,6 @@
                                 <input dir="rtl"
                                        id="dateFrom"
                                        type="text"
-                                       focus-index="3"
                                        class="form-control text-right is-calendarPicker"
                                        ng-model="payment.date"
                                        calendarType="ummalqura"
@@ -124,10 +130,8 @@
                                    type="number"
                                    min="1"
                                    class="form-control text-right "
-                                   focus-index="3"
                                    required="required"
                                    disable-validation-message=""
-                                   ng-blur="findPaymentByCode()"
                                    ng-model="payment.code">
                         </div>
 
@@ -135,8 +139,7 @@
                             <label> قيمة السند </label>
                             <div dir="ltr" class="input-group">
                                 <span class="input-group-addon">ريال</span>
-                                <input focus-index="4"
-                                       dir="rtl"
+                                <input dir="rtl"
                                        type="number"
                                        min="1"
                                        ng-max="(payment.type=='ايرادات اساسية' && buffer.remainPrice)"
@@ -151,7 +154,6 @@
                             <label for="note" class="control-label"> البيان </label>
                             <textarea id="note"
                                       type="text"
-                                      focus-index="6"
                                       msd-elastic="\n"
                                       class="form-control text-right"
                                       placeholder="الملاحظات"
@@ -169,25 +171,26 @@
 
     <div class="modal-footer">
 
-        <div class="form-group col-md-12" role="group">
-            <button type="button"
-                    focus-index="10"
+        <div class="row">
+            <button uib-tooltip="اضافة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">add</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
                     ng-click="cancel()"
-                    class="btn btn-danger pull-left">
-                <span>خروج</span>
-                <i class="fa fa-power-off  fa-lg"></i>
-            </button>
-            <button type="reset"
-                    focus-index="9"
-                    class="btn btn-info pull-left">
-                <span>مسح الحقول</span>
-                <i class="fa fa-recycle  fa-lg"></i>
-            </button>
-            <button type="submit"
-                    focus-index="7"
-                    class="btn btn-success pull-right">
-                <span>اضافة</span>
-                <i class="fa fa-plus-square fa-lg"></i>
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
             </button>
         </div>
 

@@ -1,6 +1,7 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -28,35 +29,46 @@ public class Payment implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "paymentSequenceGenerator")
+    @JsonView(Views.Summery.class)
     private Long id;
 
+    @JsonView(Views.Summery.class)
     private Integer code;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(Views.Summery.class)
     private Date date;
 
+    @JsonView(Views.Summery.class)
     private String amountString;
 
+    @JsonView(Views.Summery.class)
     private Double amountNumber;
 
+    @JsonView(Views.Summery.class)
     private String type;
 
+    @JsonView(Views.Summery.class)
     private String toName;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
+    @JsonView(Views.Summery.class)
     private String note;
 
     @ManyToOne
     @JoinColumn(name = "account")
+    @JsonView(Views.Summery.class)
     private Account account;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(Views.Summery.class)
     private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name = "last_person")
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private Person lastPerson;
 
     @JsonCreator

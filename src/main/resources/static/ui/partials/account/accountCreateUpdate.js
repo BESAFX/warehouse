@@ -3,10 +3,7 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
 
         $scope.title = title;
         $scope.action = action;
-        $scope.accounts = [];
-        $scope.branches = [];
-        $scope.masters = [];
-        $scope.students = [];
+        $scope.buffer = {};
 
         $scope.clear = function () {
             $scope.account = {};
@@ -32,28 +29,15 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
                 BranchService.fetchTableData().then(function (data) {
                     $scope.branches = data;
                 });
-                $scope.$watch('account.course.master.branch', function (newValue, oldValue) {
-                    if (newValue) {
-                        MasterService.findByBranch(newValue).then(function (data) {
-                            $scope.masters = data;
-                        });
-                    }
-                }, true);
-                $scope.$watch('account.course.master', function (newValue, oldValue) {
-                    if (newValue) {
-                        if (newValue.id) {
-                            CourseService.findByMaster(newValue.id).then(function (data) {
-                                $scope.courses = data;
-                            });
-                        }
-                    }
-                }, true);
             }, 2000);
         }
         $scope.submit = function () {
-            $scope.account.coursePaymentType = ($scope.showBox ? 'نقدي' : 'قسط شهري');
             switch ($scope.action) {
                 case 'create' :
+                    $scope.account.coursePaymentType = ($scope.showBox ? 'نقدي' : 'قسط شهري');
+                    $scope.account.course = $scope.buffer.course;
+                    $scope.account.course.master = $scope.buffer.master;
+                    $scope.account.course.master.branch = $scope.buffer.branch;
                     AccountService.create($scope.account).then(function (data) {
                         $scope.account = data;
                         $scope.clear();

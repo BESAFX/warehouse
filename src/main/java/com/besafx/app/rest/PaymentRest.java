@@ -1,5 +1,5 @@
 package com.besafx.app.rest;
-
+import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.PaymentSearch;
@@ -8,6 +8,7 @@ import com.besafx.app.service.BranchService;
 import com.besafx.app.service.PaymentService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.ArabicLiteralNumberParser;
+import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +46,21 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public Payment create(@RequestBody Payment payment, Principal principal) {
+        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
+            throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات خاص به");
+        }
         Person person = personService.findByEmail(principal.getName());
         payment.setLastUpdate(new Date());
         payment.setLastPerson(person);
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
+        notificationService.notifyOne(Notification
+                .builder()
+                .title("العمليات على سندات القبض")
+                .message("تم انشاء سند قبض بنجاح")
+                .type("success")
+                .icon("fa-plus-square")
+                .build(), principal.getName());
         return payment;
     }
 
@@ -72,10 +83,17 @@ public class PaymentRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         Payment object = paymentService.findOne(id);
         if (object != null) {
             paymentService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على سندات القبض")
+                    .message("تم حذف سند القبض رقم " + object.getCode() + " بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
         }
     }
 

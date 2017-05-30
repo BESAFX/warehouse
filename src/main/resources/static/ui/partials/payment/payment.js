@@ -1,46 +1,52 @@
 app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchService', 'MasterService', 'CourseService', 'ModalProvider', '$rootScope', '$scope', '$timeout', '$log', '$state',
     function (AccountService, PaymentService, BranchService, MasterService, CourseService, ModalProvider, $rootScope, $scope, $timeout, $log, $state) {
 
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'السندات'});
+        //
+
+        $scope.buffer = {};
+
+        $scope.buffer.exportType = 'PDF';
+
+        $scope.buffer.orientation = 'Portrait';
+
+        $scope.buffer.reportTitle = 'كشف سندات القبض';
+
+        $scope.columns = [
+            {'name': 'رقم السند', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'تاريخ السند', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'قيمة السند', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'نوع السند', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'بيان السند', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'مدخل السند', 'view': false, 'groupBy': false, 'sortBy': false},
+
+            {'name': 'اسم الطالب', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'رقم البطاقة', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'رقم الجوال', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'الجنسية', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'العنوان', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'المبلغ المطلوب', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'الفرع', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'التخصص', 'view': false, 'groupBy': false, 'sortBy': false}
+        ];
+
+        $scope.variables = [
+            {'name': 'المتوسط الحسابي للسندات', 'expression': 'amountNumber', 'operation': 'Average'},
+            {'name': 'المجموع الكلي للسندات', 'expression': 'amountNumber', 'operation': 'Sum'},
+            {'name': 'أكبر قيمة للسندات', 'expression': 'amountNumber', 'operation': 'Highest'},
+            {'name': 'أقل قيمة للسندات', 'expression': 'amountNumber', 'operation': 'Lowest'}
+        ];
+
+        $scope.buffer.groupVariables = [];
+
+        $scope.buffer.tableVariables = [];
+
         $timeout(function () {
 
             $scope.sideOpacity = 1;
-
-            $scope.buffer = {};
-
-            $scope.buffer.exportType = 'PDF';
-
-            $scope.buffer.orientation = 'Portrait';
-
-            $scope.buffer.reportTitle = 'كشف سندات القبض';
-
-            $scope.columns = [
-                {'name': 'رقم السند', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'تاريخ السند', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'قيمة السند', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'نوع السند', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'بيان السند', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'مدخل السند', 'view': false, 'groupBy': false, 'sortBy': false},
-
-                {'name': 'اسم الطالب', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'رقم البطاقة', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'رقم الجوال', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'الجنسية', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'العنوان', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'المبلغ المطلوب', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'الفرع', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'التخصص', 'view': false, 'groupBy': false, 'sortBy': false}
-            ];
-
-            $scope.variables = [
-                {'name': 'المتوسط الحسابي للسندات', 'expression': 'amountNumber', 'operation': 'Average'},
-                {'name': 'المجموع الكلي للسندات', 'expression': 'amountNumber', 'operation': 'Sum'},
-                {'name': 'أكبر قيمة للسندات', 'expression': 'amountNumber', 'operation': 'Highest'},
-                {'name': 'أقل قيمة للسندات', 'expression': 'amountNumber', 'operation': 'Lowest'}
-            ];
-
-            $scope.buffer.groupVariables = [];
-
-            $scope.buffer.tableVariables = [];
 
             BranchService.fetchTableData().then(function (data) {
                 $scope.branches = data;
@@ -58,18 +64,13 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
             if (object) {
                 angular.forEach($scope.payments, function (payment) {
                     if (object.id == payment.id) {
-                        payment.isSelected = true;
-                        object = payment;
+                        $scope.selected = payment;
+                        return payment.isSelected = true;
                     } else {
                         return payment.isSelected = false;
                     }
                 });
-                $scope.selected = object;
             }
-        };
-
-        $scope.reload = function () {
-            $state.reload();
         };
 
         $scope.clear = function () {
@@ -79,14 +80,19 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
         };
 
         $scope.delete = function (payment) {
-            PaymentService.remove(payment.id).then(function () {
-                noty({text: 'تم الحذف بنجاح', layout: 'topCenter', type: 'error', timeout: 5000});
-                $scope.findPaymentsByAccount($scope.payment.account);
-            })
-        };
+            if (payment) {
+                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
+                    PaymentService.remove(payment.id).then(function () {
 
-        $scope.openCreateModel = function (payment) {
-            ModalProvider.openPaymentCreateModel(payment);
+                    });
+                });
+                return;
+            }
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
+                PaymentService.remove($scope.selected.id).then(function () {
+
+                });
+            });
         };
 
         $scope.filter = function () {
@@ -199,6 +205,31 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
             PaymentService.filter(search.join("")).then(function (data) {
                 $scope.payments = data;
                 $scope.setSelected(data[0]);
+                $scope.items = [];
+                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'السندات', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                $scope.items.push({
+                    'id': 4,
+                    'type': 'title',
+                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                });
+                if ($scope.buffer.master) {
+                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 6,
+                        'type': 'title',
+                        'name': ' [ ' + $scope.buffer.master.code + ' ] ' + $scope.buffer.master.name
+                    });
+                }
+                if ($scope.buffer.course) {
+                    $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 8,
+                        'type': 'title',
+                        'name': ' [ ' + $scope.buffer.course.code + ' ] '
+                    });
+                }
             });
         };
 

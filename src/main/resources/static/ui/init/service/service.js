@@ -16,7 +16,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             size: 'lg',
             resolve: {
                 title: function () {
-                    return 'انشاء اشتراك جديد';
+                    return 'تسجيل طالب جديد';
                 },
                 action: function () {
                     return 'create';
@@ -40,65 +40,13 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             size: 'lg',
             resolve: {
                 title: function () {
-                    return 'تعديل بيانات اشتراك';
+                    return 'تعديل بيانات طالب';
                 },
                 action: function () {
                     return 'update';
                 },
                 account: function () {
                     return account;
-                }
-            }
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Manager Model                                              *
-     *                                                            *
-     *************************************************************/
-    this.openManagerCreateModel = function () {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/manager/managerCreateUpdate.html',
-            controller: 'managerCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'انشاء مدير جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                manager: function () {
-                    return undefined;
-                }
-            }
-        });
-    };
-
-    this.openManagerUpdateModel = function (manager) {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/manager/managerCreateUpdate.html',
-            controller: 'managerCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات مدير';
-                },
-                action: function () {
-                    return 'update';
-                },
-                manager: function () {
-                    return manager;
                 }
             }
         });
@@ -367,108 +315,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
-    /**************************************************************
-     *                                                            *
-     * Department Model                                           *
-     *                                                            *
-     *************************************************************/
-    this.openDepartmentCreateModel = function () {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/department/departmentCreateUpdate.html',
-            controller: 'departmentCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'انشاء قسم جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                departmentfx: function () {
-                    return undefined;
-                }
-            }
-        });
-    };
-
-    this.openDepartmentUpdateModel = function (departmentfx) {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/department/departmentCreateUpdate.html',
-            controller: 'departmentCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات قسم';
-                },
-                action: function () {
-                    return 'update';
-                },
-                departmentfx: function () {
-                    return departmentfx;
-                }
-            }
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Employee Model                                             *
-     *                                                            *
-     *************************************************************/
-    this.openEmployeeCreateModel = function () {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/employee/employeeCreateUpdate.html',
-            controller: 'employeeCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'انشاء موظف جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                employee: function () {
-                    return undefined;
-                }
-            }
-        });
-    };
-
-    this.openEmployeeUpdateModel = function (employee) {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/employee/employeeCreateUpdate.html',
-            controller: 'employeeCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات موظف';
-                },
-                action: function () {
-                    return 'update';
-                },
-                employee: function () {
-                    return employee;
-                }
-            }
-        });
-    };
     /**************************************************************
      *                                                            *
      * Course Model                                               *

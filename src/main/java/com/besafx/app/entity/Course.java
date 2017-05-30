@@ -55,6 +55,7 @@ public class Course implements Serializable {
     @ManyToOne
     @JoinColumn(name = "master")
     @JsonView(Views.Summery.class)
+    @JsonIgnoreProperties(value = {"courses"}, allowSetters = true)
     private Master master;
 
     @Temporal(TemporalType.TIMESTAMP)
