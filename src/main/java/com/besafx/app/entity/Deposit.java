@@ -52,7 +52,7 @@ public class Deposit implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "bank")
-    private Bank Bank;
+    private Bank bank;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;

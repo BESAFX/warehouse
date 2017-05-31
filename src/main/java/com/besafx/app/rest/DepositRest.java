@@ -6,6 +6,8 @@ import com.besafx.app.search.DepositSearch;
 import com.besafx.app.service.BankService;
 import com.besafx.app.service.DepositService;
 import com.besafx.app.service.PersonService;
+import com.besafx.app.util.ArabicLiteralNumberParser;
+import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,24 +41,21 @@ public class DepositRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_DEPOSIT_CREATE')")
-    public Deposit create(@RequestBody Deposit deposit, Principal principal) {
+    public synchronized Deposit create(@RequestBody Deposit deposit, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         deposit.setLastUpdate(new Date());
         deposit.setLastPerson(person);
         deposit.getBank().setStock(deposit.getBank().getStock() + deposit.getAmount());
         deposit.setBank(bankService.save(deposit.getBank()));
         deposit = depositService.save(deposit);
+        notificationService.notifyOne(Notification
+                .builder()
+                .title("العمليات على قواعد البيانات")
+                .message("تم إيداع مبلغ بمقدار " + ArabicLiteralNumberParser.literalValueOf(deposit.getAmount()) + " ريال سعودي إلي الحساب رقم " + deposit.getCode() + " بنجاح.")
+                .type("success")
+                .icon("fa-plus-square")
+                .build(), principal.getName());
         return deposit;
-    }
-
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    @PreAuthorize("hasRole('ROLE_DEPOSIT_DELETE')")
-    public void delete(@PathVariable Long id) {
-        Deposit object = depositService.findOne(id);
-        if (object != null) {
-            depositService.delete(id);
-        }
     }
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -83,11 +82,11 @@ public class DepositRest {
 
             @RequestParam(value = "bankCode", required = false) final Long bankCode,
             @RequestParam(value = "bankName", required = false) final String bankName,
-            @RequestParam(value = "bankBranch", required = false) final String bankBranch,
+            @RequestParam(value = "bankBranch", required = false) final Long bankBranch,
+            @RequestParam(value = "bankBranchName", required = false) final String bankBranchName,
             @RequestParam(value = "bankStockFrom", required = false) final Long bankStockFrom,
             @RequestParam(value = "bankStockTo", required = false) final Long bankStockTo) {
-
-        return depositSearch.search(code, amountFrom, amountTo, fromName, dateFrom, dateTo, bankCode, bankName, bankBranch, bankStockFrom, bankStockTo);
+        return depositSearch.search(code, amountFrom, amountTo, fromName, dateFrom, dateTo, bankCode, bankName, bankBranch, bankBranchName, bankStockFrom, bankStockTo);
     }
 
 }

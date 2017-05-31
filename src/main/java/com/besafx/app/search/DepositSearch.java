@@ -1,5 +1,4 @@
 package com.besafx.app.search;
-
 import com.besafx.app.entity.Deposit;
 import com.besafx.app.service.DepositService;
 import com.google.common.collect.Lists;
@@ -29,11 +28,11 @@ public class DepositSearch {
 
             final Long bankCode,
             final String bankName,
-            final String bankBranch,
+            final Long bankBranch,
+            final String bankBranchName,
             final Long bankStockFrom,
             final Long bankStockTo
     ) {
-
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(code).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("code"), "%" + value + "%")));
         Optional.ofNullable(amountFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("amount"), value)));
@@ -41,13 +40,12 @@ public class DepositSearch {
         Optional.ofNullable(fromName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("fromName"), "%" + value + "%")));
         Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new Date(value))));
         Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new Date(value))));
-
         Optional.ofNullable(bankCode).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("code"), "%" + value + "%")));
         Optional.ofNullable(bankName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("name"), "%" + value + "%")));
-        Optional.ofNullable(bankBranch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("branch"), "%" + value + "%")));
+        Optional.ofNullable(bankBranch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("bank").get("branch").get("id"), value)));
+        Optional.ofNullable(bankBranchName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("branchName"), "%" + value + "%")));
         Optional.ofNullable(bankStockFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("bank").get("stock"), value)));
         Optional.ofNullable(bankStockTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("bank").get("stock"), value)));
-
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
@@ -58,6 +56,5 @@ public class DepositSearch {
             return Lists.newArrayList(depositService.findAll());
         }
     }
-
 
 }

@@ -1,14 +1,16 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,7 +31,19 @@ public class Team implements Serializable {
     @GeneratedValue(generator = "teamSequenceGenerator")
     private Long id;
 
+    private Integer code;
+
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "last_person")
+    @JsonIgnoreProperties(value = {"branch", "team"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
+    private Person lastPerson;
+
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"team"}, allowSetters = true)
+    private List<Person> persons = new ArrayList<>();
 
     @JsonCreator
     public static Team Create(String jsonString) throws IOException {

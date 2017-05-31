@@ -54,6 +54,7 @@ public class Person implements Serializable {
     @ManyToOne
     @JoinColumn(name = "team")
     @JsonView(Views.Summery.class)
+    @JsonIgnoreProperties(value = {"persons"}, allowSetters = true)
     private Team team;
 
     @ManyToOne

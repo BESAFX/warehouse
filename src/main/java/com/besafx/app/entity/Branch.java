@@ -81,6 +81,10 @@ public class Branch implements Serializable {
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     private List<Master> masters = new ArrayList<>();
 
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
+    private List<Bank> banks = new ArrayList<>();
+
     @JsonCreator
     public static Branch Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

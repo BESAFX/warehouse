@@ -15,7 +15,7 @@ app.controller('depositCreateCtrl', ['BankService', 'DepositService', '$scope', 
         $scope.deposit.bank = bank;
 
         $timeout(function () {
-            BankService.filter().then(function (data) {
+            BankService.fetchTableData().then(function (data) {
                 $scope.banks = data;
             });
         }, 2000);

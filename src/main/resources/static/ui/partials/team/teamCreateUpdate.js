@@ -59,10 +59,6 @@ app.controller('teamCreateUpdateCtrl',
 
             $scope.action = action;
 
-            $timeout(function () {
-                $('#name').focus();
-            }, 500);
-
             $scope.submit = function () {
                 for (var i = 0; i < $scope.roles.length; i++) {
                     $scope.roles[i].team = $scope.team;

@@ -44,7 +44,7 @@ public class Master implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "branch")
-    @JsonIgnoreProperties(value = {"manager", "masters"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"manager", "masters", "banks"}, allowSetters = true)
     @JsonView(Views.Summery.class)
     private Branch branch;
 

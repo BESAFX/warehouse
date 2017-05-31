@@ -183,61 +183,71 @@
         </div>
         <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
             <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
-                <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
-                    <button id="branch-menu-lower-right" style="width: 100%;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                        <span>العمليات</span>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="branch-menu-lower-right">
-                        <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
-                            ng-click="showFilter=true">
+                <div class="row">
+                    <ul dir="rtl" class="breadcrumb">
+                        <li ng-repeat="item in items | orderBy:'id' track by item.id">
+                            <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
+                            <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button id="branch-menu-lower-right" style="width: 100%;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>العمليات</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="branch-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="showFilter=true">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">visibility</i>
                                 <span>عرض الحسابات البنكية</span>
                             </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBankCreateModel()"
-                            ng-if="contains(authorities, ['ROLE_BANK_CREATE'])">
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBankCreateModel()"
+                                ng-if="contains(authorities, ['ROLE_BANK_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
                                 <span>انشاء حساب جديد</span>
                             </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBankUpdateModel(selected)"
-                            ng-if="contains(authorities, ['ROLE_BANK_UPDATE']) && toggleList===1"
-                            ng-hide="!banks || banks.length==0">
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openBankUpdateModel(selected)"
+                                ng-if="contains(authorities, ['ROLE_BANK_UPDATE']) && toggleList===1"
+                                ng-hide="!banks || banks.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">edit</i>
                                 <span>تعديل بيانات الحساب</span>
                             </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                            ng-if="contains(authorities, ['ROLE_BANK_DELETE']) && toggleList===1"
-                            ng-hide="!banks || banks.length==0">
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
+                                ng-if="contains(authorities, ['ROLE_BANK_DELETE']) && toggleList===1"
+                                ng-hide="!banks || banks.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">delete</i>
                                 <span>حذف الحساب</span>
                             </span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="pull-left" ng-init="toggleList=1">
-                    <div class="btn-toolbar">
-                        <div class="btn-group" data-toggle="buttons">
-                            <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
-                                    type="button" ng-click="toggleList=1"
-                                    ng-class="{'active':toggleList===1}">
-                                <input type="radio" name="options"/>
-                                <i class="material-icons">reorder</i>
-                            </button>
-                            <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
-                                    type="button" ng-click="toggleList=2"
-                                    ng-class="{'active':toggleList===2}">
-                                <input type="radio" name="options"/>
-                                <i class="material-icons">view_column</i>
-                            </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-left" ng-init="toggleList=1">
+                        <div class="btn-toolbar">
+                            <div class="btn-group" data-toggle="buttons">
+                                <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="button" ng-click="toggleList=1"
+                                        ng-class="{'active':toggleList===1}">
+                                    <input type="radio" name="options"/>
+                                    <i class="material-icons">reorder</i>
+                                </button>
+                                <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="button" ng-click="toggleList=2"
+                                        ng-class="{'active':toggleList===2}">
+                                    <input type="radio" name="options"/>
+                                    <i class="material-icons">view_column</i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

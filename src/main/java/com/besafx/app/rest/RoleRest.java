@@ -1,11 +1,14 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.entity.Permission;
+import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Role;
 import com.besafx.app.entity.Team;
 import com.besafx.app.service.PermissionService;
+import com.besafx.app.service.PersonService;
 import com.besafx.app.service.RoleService;
 import com.besafx.app.service.TeamService;
+import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.ListIterator;
 
 @RestController
 @RequestMapping(value = "/api/role")
@@ -28,6 +32,9 @@ public class RoleRest {
 
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private PersonService personService;
 
     @Autowired
     private NotificationService notificationService;
@@ -82,10 +89,21 @@ public class RoleRest {
     @RequestMapping(value = "setUpRoles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Role> setUpRoles(@RequestBody List<Role> roles, Principal principal) {
-
-        Team team = teamService.save(roles.get(0).getTeam());
-
-        roles.stream().forEach(role -> {
+        Person person = personService.findByEmail(principal.getName());
+        Team team = roles.get(0).getTeam();
+        if (team.getCode() == null) {
+            Team topTeam = teamService.findTopByOrderByCodeDesc();
+            if (topTeam == null) {
+                team.setCode(1);
+            } else {
+                team.setCode(topTeam.getCode() + 1);
+            }
+        }
+        team.setLastPerson(person);
+        team = teamService.save(team);
+        ListIterator<Role> listIterator = roles.listIterator();
+        while (listIterator.hasNext()) {
+            Role role = listIterator.next();
             Permission permission = permissionService.findByCreateEntityAndUpdateEntityAndDeleteEntityAndReportEntityAndScreen(
                     role.getPermission().getCreateEntity(),
                     role.getPermission().getUpdateEntity(),
@@ -107,9 +125,14 @@ public class RoleRest {
             role.setPermission(permission);
             role.setTeam(team);
             roleService.save(role);
-
-        });
-
+        }
+        notificationService.notifyOne(Notification
+                .builder()
+                .title("العمليات على قاعدة البيانات")
+                .message("تم تهيئة مجموعة الصلاحيات بنجاح")
+                .type("success")
+                .icon("fa-plus-square")
+                .build(), principal.getName());
         return roles;
     }
 }
