@@ -3,7 +3,7 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
         $timeout(function () {
             $scope.buffer = {};
             $scope.persons = [];
-            PersonService.fetchTableData().then(function (data) {
+            PersonService.findAllSummery().then(function (data) {
                 $scope.persons = data;
             })
         }, 1500);

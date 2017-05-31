@@ -19,7 +19,7 @@
                         chosen=""
                         ng-model="buffer.person"
                         focus-index="1"
-                        ng-options="person.email for person in persons track by person.id">
+                        ng-options="(person.contact.firstName + ' ' + person.contact.forthName) for person in persons track by person.id">
                 </select>
             </div>
 
