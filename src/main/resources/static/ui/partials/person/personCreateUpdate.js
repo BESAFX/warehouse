@@ -1,5 +1,5 @@
-app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'PersonService', 'FileUploader', 'FileService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'personObject',
-    function (TeamService, BranchService, PersonService, FileUploader, FileService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, personObject) {
+app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'PersonService', 'FileUploader', 'FileService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'person',
+    function (TeamService, BranchService, PersonService, FileUploader, FileService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, person) {
 
         $timeout(function () {
 
@@ -9,24 +9,16 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'Perso
                 $scope.teams = data;
             });
 
-            BranchService.fetchTableData().then(function (data) {
+            BranchService.fetchTableDataSummery().then(function (data) {
                 $scope.branches = data;
             });
 
         }, 2000);
 
-        if (personObject) {
-
-            $scope.personObject = personObject;
-
-            if (personObject.contact) {
-                FileService.getSharedLink(personObject.contact.photo).then(function (data) {
-                    $scope.logoLink = data;
-                });
-            }
-
+        if (person) {
+            $scope.person = person;
         } else {
-            $scope.personObject = {};
+            $scope.person = {};
         }
 
         $scope.title = title;
@@ -36,14 +28,14 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'Perso
         $scope.submit = function () {
             switch ($scope.action) {
                 case 'create' :
-                    PersonService.create($scope.personObject).then(function (data) {
-                        $scope.personObject = {};
+                    PersonService.create($scope.person).then(function (data) {
+                        $scope.person = {};
                         $scope.from.$setPristine();
                     });
                     break;
                 case 'update' :
-                    PersonService.update($scope.personObject).then(function (data) {
-                        $scope.personObject = data;
+                    PersonService.update($scope.person).then(function (data) {
+                        $scope.person = data;
                     });
                     break;
             }
@@ -51,40 +43,6 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'Perso
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
-        };
-
-        var uploader = $scope.uploader = new FileUploader({
-            url: 'uploadFile'
-        });
-
-        // a sync filter
-        uploader.filters.push({
-            name: 'syncFilter',
-            fn: function (item /*{File|FileLikeObject}*/, options) {
-                console.log('syncFilter');
-                return this.queue.length < 10;
-            }
-        });
-
-        // an async filter
-        uploader.filters.push({
-            name: 'asyncFilter',
-            fn: function (item /*{File|FileLikeObject}*/, options, deferred) {
-                console.log('asyncFilter');
-                setTimeout(deferred.resolve, 1e3);
-            }
-        });
-
-        uploader.onAfterAddingFile = function (fileItem) {
-            console.info('onAfterAddingFile', fileItem);
-            uploader.uploadAll();
-        };
-        uploader.onSuccessItem = function (fileItem, response, status, headers) {
-            console.info('onSuccessItem', fileItem, response, status, headers);
-            $scope.personObject.contact.photo = response;
-            FileService.getSharedLink(response).then(function (data) {
-                $scope.logoLink = data;
-            });
         };
 
     }]);

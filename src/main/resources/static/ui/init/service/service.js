@@ -537,14 +537,14 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                 action: function () {
                     return 'create';
                 },
-                personObject: function () {
+                person: function () {
                     return undefined;
                 }
             }
         });
     };
 
-    this.openPersonUpdateModel = function (personObject) {
+    this.openPersonUpdateModel = function (person) {
         $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
@@ -561,8 +561,8 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                 action: function () {
                     return 'update';
                 },
-                personObject: function () {
-                    return personObject;
+                person: function () {
+                    return person;
                 }
             }
         });

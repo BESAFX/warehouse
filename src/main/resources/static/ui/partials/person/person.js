@@ -3,15 +3,11 @@ app.controller("personCtrl", ['PersonService', 'ModalProvider', '$rootScope', '$
 
         $scope.selected = {};
 
-        $scope.read = function () {
-            PersonService.fetchTableData().then(function (data) {
+        $scope.fetchTableData = function () {
+            PersonService.findAllSummery().then(function (data) {
                 $scope.persons = data;
                 $scope.setSelected(data[0]);
             });
-        };
-
-        $scope.reload = function () {
-            $state.reload();
         };
 
         $timeout(function () {
@@ -22,26 +18,13 @@ app.controller("personCtrl", ['PersonService', 'ModalProvider', '$rootScope', '$
             if (object) {
                 angular.forEach($scope.persons, function (person) {
                     if (object.id == person.id) {
-                        person.isSelected = true;
-                        object = person;
+                        $scope.selected = person;
+                        return person.isSelected = true;
                     } else {
                         return person.isSelected = false;
                     }
                 });
-                $scope.selected = object;
             }
-        };
-
-        $scope.openCreateModel = function () {
-            ModalProvider.openPersonCreateModel();
-        };
-
-        $scope.openUpdateModel = function (person) {
-            if (person) {
-                ModalProvider.openPersonUpdateModel(person);
-                return;
-            }
-            ModalProvider.openPersonUpdateModel($scope.selected);
         };
 
     }]);
