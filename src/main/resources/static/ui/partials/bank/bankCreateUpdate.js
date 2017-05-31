@@ -1,28 +1,27 @@
-app.controller('bankCreateUpdateCtrl', ['BankService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'bank',
-    function (BankService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, bank) {
+app.controller('bankCreateUpdateCtrl', ['BankService', 'BranchService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'bank',
+    function (BankService, BranchService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, bank) {
 
         $scope.title = title;
 
         $scope.action = action;
 
-        $scope.clear = function () {
-            $scope.bank = {};
-            if ($scope.form) {
-                $scope.form.$setPristine()
-            }
-        };
-
         if (bank) {
             $scope.bank = bank;
         } else {
-            $scope.clear();
+            $scope.bank = {};
         }
+
+        $timeout(function () {
+            BranchService.fetchTableDataSummery().then(function (data) {
+                $scope.branches = data;
+            });
+        }, 1500);
 
         $scope.submit = function () {
             switch ($scope.action) {
                 case 'create' :
                     BankService.create($scope.bank).then(function (data) {
-                        $scope.clear();
+                        $scope.bank = {};
                         $scope.form.$setPristine();
                     });
                     break;

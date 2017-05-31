@@ -1,7 +1,6 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -51,7 +50,6 @@ public class BillBuy implements Serializable {
     @ManyToOne
     @JoinColumn(name = "branch")
     @JsonIgnoreProperties(value = {"manager", "masters"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private Branch branch;
 
     @Temporal(TemporalType.TIMESTAMP)

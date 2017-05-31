@@ -104,16 +104,18 @@ public class BankRest {
     public List<Bank> filter(
             @RequestParam(value = "code", required = false) final Long code,
             @RequestParam(value = "name", required = false) final String name,
-            @RequestParam(value = "branch", required = false) final String branch,
+            @RequestParam(value = "branchName", required = false) final String branchName,
             @RequestParam(value = "stockFrom", required = false) final Long stockFrom,
-            @RequestParam(value = "stockTo", required = false) final Long stockTo) {
+            @RequestParam(value = "stockTo", required = false) final Long stockTo,
+            @RequestParam(value = "branch", required = false) final Long branch) {
 
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(code).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("code"), "%" + value + "%")));
         Optional.ofNullable(name).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("name"), "%" + value + "%")));
-        Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("branch"), "%" + value + "%")));
+        Optional.ofNullable(branchName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("branchName"), "%" + value + "%")));
         Optional.ofNullable(stockFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("stock"), value)));
         Optional.ofNullable(stockTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("stock"), value)));
+        Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("branch").get("id"), value)));
 
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);

@@ -29,11 +29,11 @@ public class Bank implements Serializable {
     @GeneratedValue(generator = "bankSequenceGenerator")
     private Long id;
 
-    private String code;
+    private Long code;
 
     private String name;
 
-    private String branch;
+    private String branchName;
 
     private Double startAmount;
 
@@ -44,6 +44,11 @@ public class Bank implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
+
+    @ManyToOne
+    @JoinColumn(name = "branch")
+    @JsonIgnoreProperties(value = {"manager", "masters"}, allowSetters = true)
+    private Branch branch;
 
     @ManyToOne
     @JoinColumn(name = "last_person")

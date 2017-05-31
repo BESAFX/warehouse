@@ -1,13 +1,23 @@
-app.controller("bankCtrl", ['BankService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state',
-    function (BankService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state) {
+app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state',
+    function (BankService, BranchService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state) {
+
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'الحسابات البنكية'});
+        //
+
+        $scope.buffer = {};
+
+        $scope.selected = {};
 
         $timeout(function () {
             $scope.sideOpacity = 1;
-
-            $scope.buffer = {};
-
-            $scope.selected = {};
-        }, 2000);
+            BranchService.fetchTableDataSummery().then(function (data) {
+                $scope.branches = data;
+                $scope.buffer.branch = $scope.branches[0];
+            });
+        }, 1500);
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
@@ -17,13 +27,12 @@ app.controller("bankCtrl", ['BankService', 'ModalProvider', '$rootScope', '$scop
             if (object) {
                 angular.forEach($scope.banks, function (bank) {
                     if (object.id == bank.id) {
-                        bank.isSelected = true;
-                        object = bank;
+                        $scope.selected = bank;
+                        return bank.isSelected = true;
                     } else {
                         return bank.isSelected = false;
                     }
                 });
-                $scope.selected = object;
             }
         };
 
@@ -39,9 +48,9 @@ app.controller("bankCtrl", ['BankService', 'ModalProvider', '$rootScope', '$scop
                 search.push($scope.buffer.name);
                 search.push('&');
             }
-            if ($scope.buffer.branch) {
-                search.push('branch=');
-                search.push($scope.buffer.branch);
+            if ($scope.buffer.branchName) {
+                search.push('branchName=');
+                search.push($scope.buffer.branchName);
                 search.push('&');
             }
             if ($scope.buffer.stockFrom) {
@@ -54,31 +63,30 @@ app.controller("bankCtrl", ['BankService', 'ModalProvider', '$rootScope', '$scop
                 search.push($scope.buffer.stockTo);
                 search.push('&');
             }
+            if ($scope.buffer.branch) {
+                search.push('branchId=');
+                search.push($scope.buffer.branch.id);
+                search.push('&');
+            }
 
             BankService.filter(search.join("")).then(function (data) {
                 $scope.banks = data;
                 $scope.setSelected(data[0]);
+                $scope.items = [];
+                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'الحسابات البنكية', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                $scope.items.push({
+                    'id': 4,
+                    'type': 'title',
+                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                });
             });
         };
 
         $scope.clear = function () {
             $scope.buffer = {};
-        };
-
-        $scope.reload = function () {
-            $state.reload();
-        };
-
-        $scope.openCreateModel = function () {
-            ModalProvider.openBankCreateModel();
-        };
-
-        $scope.openUpdateModel = function (bank) {
-            if (bank) {
-                ModalProvider.openBankUpdateModel(bank);
-                return;
-            }
-            ModalProvider.openBankUpdateModel($scope.selected);
+            $scope.buffer.branch = $scope.branches[0];
         };
 
         $scope.openDepositModel = function (bank) {
