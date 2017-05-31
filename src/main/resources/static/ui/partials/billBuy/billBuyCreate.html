@@ -2,17 +2,42 @@
       focus-group-head="loop" focus-group-tail="loop">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">add</i>
+                <strong>{{title}}</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body" id="modal-body">
 
         <div class="row">
 
-            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                 ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                <select id="branch"
+                        data-placeholder="ابحث عن الفروع"
+                        no-results-text="'لا توجد فروع توافق بحثك'"
+                        placeholder-text-single="'اختر الفروع'"
+                        class="form-control text-right"
+                        chosen=""
+                        focus-autofocus="1"
+                        ng-model="billBuy.branch"
+                        required="required"
+                        disable-validation-message=""
+                        ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                </select>
             </div>
 
             <div class="row">
@@ -24,13 +49,11 @@
                         <input dir="rtl"
                                id="date"
                                type="text"
-                               focus-index="2"
                                class="form-control text-right is-calendarPicker"
                                ng-model="billBuy.date"
                                calendarType="ummalqura"
                                language="en"
                                dateFormat="yyyy/mm/dd"
-                               placeholder="ادخل تاريخ الفاتورة"
                                showOnFocus="false"
                                required="required"
                                disable-validation-message=""
@@ -43,16 +66,15 @@
                     <label for="code" class="control-label">رقم الفاتورة</label>
                     <input id="code"
                            type="text"
-                           focus-index="1"
                            required="required"
                            disable-validation-message=""
                            class="form-control text-right"
-                           placeholder="ادخل رقم الفاتورة"
+                           placeholder="اذكر رقم الفاتورة"
                            ng-model="billBuy.code">
                 </div>
             </div>
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="masterCreditAmount" class="control-label"> قيمة الفاتورة </label>
                 <div dir="ltr" class="input-group" id="masterCreditAmount">
                     <span class="input-group-addon">ريال سعودي</span>
@@ -60,15 +82,14 @@
                            min="1"
                            class="form-control text-right "
                            ng-model="billBuy.amount"
-                           focus-index="3"
-                           placeholder="ادخل القيمة"
+                           placeholder="اذكر القيمة"
                            required="required"
                            disable-validation-message="">
                 </div>
             </div>
 
-            <div class="form-group text-right col-md-12">
-                <label for="bank" class="control-label">الحساب [رقم الحساب] [اسم الحساب]</label>
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="bank" class="control-label">[رقم الحساب] اسم الحساب</label>
                 <select id="bank"
                         data-placeholder="ابحث عن الحساب"
                         no-results-text="'لا توجد حسابات بنكية توافق بحثك'"
@@ -76,18 +97,16 @@
                         class="form-control text-right"
                         chosen=""
                         ng-model="billBuy.billBuyType"
-                        focus-index="4"
                         required="required"
                         disable-validation-message=""
-                        ng-options="( ' [ ' + billBuyType.code + ' ] ' + ' [ ' + billBuyType.name + ' ] ' ) for billBuyType in billBuyTypes track by billBuyType.id">
+                        ng-options="( ' [ ' + billBuyType.code + ' ] ' + billBuyType.name ) for billBuyType in billBuyTypes | orderBy:'code' track by billBuyType.id">
                 </select>
             </div>
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="note" class="control-label">البيان</label>
                 <textarea id="note"
                           type="text"
-                          focus-index="5"
                           msd-elastic="\n"
                           required="required"
                           class="form-control text-right"
@@ -96,15 +115,14 @@
                 </textarea>
             </div>
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="name" class="control-label">مصدر الفاتورة</label>
                 <input id="name"
                        type="text"
-                       focus-index="6"
                        required="required"
                        disable-validation-message=""
                        class="form-control text-right"
-                       placeholder="ادخل مصدر الفاتورة"
+                       placeholder="اذكر مصدر الفاتورة"
                        ng-model="billBuy.fromName">
             </div>
 
@@ -114,25 +132,26 @@
 
     <div class="modal-footer">
 
-        <div class="form-group col-md-12" role="group">
-            <button type="button"
-                    focus-index="5"
+        <div class="row">
+            <button uib-tooltip="اضافة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">add</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
                     ng-click="cancel()"
-                    class="btn btn-danger pull-left">
-                <span>خروج</span>
-                <i class="fa fa-power-off  fa-lg"></i>
-            </button>
-            <button type="reset"
-                    focus-index="4"
-                    class="btn btn-info pull-left">
-                <span>مسح الحقول</span>
-                <i class="fa fa-recycle  fa-lg"></i>
-            </button>
-            <button type="submit"
-                    focus-index="2"
-                    class="btn btn-success pull-right">
-                <span>اضافة</span>
-                <i class="fa fa-plus-square fa-lg"></i>
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
             </button>
         </div>
 

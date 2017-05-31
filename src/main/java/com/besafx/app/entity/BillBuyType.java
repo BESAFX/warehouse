@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -29,9 +30,13 @@ public class BillBuyType implements Serializable {
     @GeneratedValue(generator = "billBuyTypeSequenceGenerator")
     private Long id;
 
-    private String code;
+    private Integer code;
 
     private String name;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String note;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;

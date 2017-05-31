@@ -46,10 +46,16 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public Payment create(@RequestBody Payment payment, Principal principal) {
-        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
-            throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات خاص به");
-        }
         Person person = personService.findByEmail(principal.getName());
+        if (payment.getType().equals("مصروفات")) {
+            if (paymentService.findByCodeAndLastPersonBranch(payment.getCode(), person.getBranch()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات صرف خاص به");
+            }
+        } else {
+            if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
+            }
+        }
         payment.setLastUpdate(new Date());
         payment.setLastPerson(person);
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));

@@ -20,8 +20,8 @@ public class BillBuySearch {
     private BillBuyService billBuyService;
 
     public List<BillBuy> search(
-            final String codeFrom,
-            final String codeTo,
+            final Long codeFrom,
+            final Long codeTo,
             final Long dateFrom,
             final Long dateTo,
             final Long amountFrom,
@@ -35,7 +35,7 @@ public class BillBuySearch {
         Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new Date(value))));
         Optional.ofNullable(amountFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("amountNumber"), value)));
         Optional.ofNullable(amountTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("amountNumber"), value)));
-        Optional.ofNullable(branchId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("lastPerson").get("branch").get("id"), value)));
+        Optional.ofNullable(branchId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("branch").get("id"), value)));
 
 
         if (!predicates.isEmpty()) {

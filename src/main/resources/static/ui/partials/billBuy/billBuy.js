@@ -1,74 +1,83 @@
 app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$state',
     function (BranchService, BillBuyService, BillBuyTypeService, ModalProvider, $scope, $rootScope, $timeout, $state) {
 
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'فواتير الشراء'});
+        //
+
+        $scope.buffer = {};
+
+        $scope.selected = {};
+
+        $scope.buffer.exportType = 'PDF';
+
+        $scope.buffer.orientation = 'Portrait';
+
+        $scope.buffer.reportTitle = 'كشف الفواتير';
+
+        $scope.billBuys = [];
+
+        $scope.columns = [
+            {'name': 'رقم الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'تاريخ الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'قيمة الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'نوع الحساب', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'مصدر الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'بيان الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
+            {'name': 'مدخل الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false}
+        ];
+
+        $scope.variables = [
+            {'name': 'المتوسط الحسابي للفواتير', 'expression': 'amount', 'operation': 'Average'},
+            {'name': 'المجموع الكلي للفواتير', 'expression': 'amount', 'operation': 'Sum'},
+            {'name': 'أكبر قيمة للفواتير', 'expression': 'amount', 'operation': 'Highest'},
+            {'name': 'أقل قيمة للفواتير', 'expression': 'amount', 'operation': 'Lowest'}
+        ];
+
+        $scope.buffer.groupVariables = [];
+
+        $scope.buffer.tableVariables = [];
+
         $timeout(function () {
 
             $scope.sideOpacity = 1;
 
-            $scope.buffer = {};
-
-            $scope.selected = {};
-
-            $scope.buffer.exportType = 'PDF';
-
-            $scope.buffer.orientation = 'Portrait';
-
-            $scope.buffer.reportTitle = 'كشف الفواتير';
-
-            $scope.billBuys = [];
-
-            $scope.columns = [
-                {'name': 'رقم الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'تاريخ الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'قيمة الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'نوع الحساب', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'مصدر الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'بيان الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false},
-                {'name': 'مدخل الفاتورة', 'view': false, 'groupBy': false, 'sortBy': false}
-            ];
-
-            $scope.variables = [
-                {'name': 'المتوسط الحسابي للفواتير', 'expression': 'amount', 'operation': 'Average'},
-                {'name': 'المجموع الكلي للفواتير', 'expression': 'amount', 'operation': 'Sum'},
-                {'name': 'أكبر قيمة للفواتير', 'expression': 'amount', 'operation': 'Highest'},
-                {'name': 'أقل قيمة للفواتير', 'expression': 'amount', 'operation': 'Lowest'}
-            ];
-
-            $scope.buffer.groupVariables = [];
-
-            $scope.buffer.tableVariables = [];
-
-            BranchService.fetchTableDataWithoutMasters().then(function (data) {
+            BranchService.fetchTableDataSummery().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
             });
 
         }, 2000);
 
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
-
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.billBuys, function (billBuy) {
                     if (object.id == billBuy.id) {
-                        billBuy.isSelected = true;
-                        object = billBuy;
+                        $scope.selected = billBuy;
+                        return billBuy.isSelected = true;
                     } else {
                         return billBuy.isSelected = false;
                     }
                 });
-                $scope.selected = object;
             }
         };
 
-        $scope.reload = function () {
-            $state.reload();
-        };
+        $scope.delete = function (billBuy) {
+            if (billBuy) {
+                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الفاتورة فعلاً؟", "error", "fa-ban", function () {
+                    BillBuyService.remove(billBuy.id).then(function () {
 
-        $scope.openCreateModel = function () {
-            ModalProvider.openBillBuyCreateModel();
+                    });
+                });
+                return;
+            }
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الفاتورة فعلاً؟", "error", "fa-ban", function () {
+                BillBuyService.remove($scope.selected.id).then(function () {
+
+                });
+            });
         };
 
         $scope.filter = function () {
@@ -111,6 +120,15 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
             BillBuyService.filter(search.join("")).then(function (data) {
                 $scope.billBuys = data;
                 $scope.setSelected(data[0]);
+                $scope.items = [];
+                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'السندات', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                $scope.items.push({
+                    'id': 4,
+                    'type': 'title',
+                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                });
             });
         };
 
@@ -184,6 +202,11 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
 
         $scope.clear = function () {
             $scope.buffer = {};
+            $scope.buffer.branch = $scope.branches[0];
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
 
     }]);

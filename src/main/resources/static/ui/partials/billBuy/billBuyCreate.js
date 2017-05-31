@@ -1,5 +1,5 @@
-app.controller('billBuyCreateCtrl', ['BillBuyTypeService', 'BillBuyService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title',
-    function (BillBuyTypeService, BillBuyService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title) {
+app.controller('billBuyCreateCtrl', ['BillBuyTypeService', 'BillBuyService', 'BranchService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title',
+    function (BillBuyTypeService, BillBuyService, BranchService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title) {
 
         $scope.billBuy = {};
 
@@ -8,7 +8,10 @@ app.controller('billBuyCreateCtrl', ['BillBuyTypeService', 'BillBuyService', '$s
         $timeout(function () {
             BillBuyTypeService.findAll().then(function (data) {
                 $scope.billBuyTypes = data;
-            })
+            });
+            BranchService.fetchTableDataSummery().then(function (data) {
+                $scope.branches = data;
+            });
         }, 2000);
 
         $scope.submit = function () {

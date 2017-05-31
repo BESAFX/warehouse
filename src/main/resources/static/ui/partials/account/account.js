@@ -113,6 +113,11 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
             AccountService.filter(search.join("")).then(function (data) {
                 $scope.accounts = data;
                 $scope.setSelected(data[0]);
+                angular.forEach($scope.accounts, function (account) {
+                    AccountService.findRemainPrice(account.id).then(function (data) {
+                        return account.remainPrice = data;
+                    });
+                });
                 $scope.items = [];
                 $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});

@@ -18,6 +18,7 @@ public interface PaymentService extends PagingAndSortingRepository<Payment, Long
 
     Payment findByCode(Integer code);
     Payment findByCodeAndAccountCourseMasterBranch(Integer code, Branch branch);
+    Payment findByCodeAndLastPersonBranch(Integer code, Branch branch);
     @Query("select sum(amountNumber) from Payment p where (p.account.id) = (:accountId) ")
     Double findPaidPriceByAccount(@Param("accountId") Long accountId);
     List<Payment> findByAccount(Account account);

@@ -372,6 +372,10 @@
                                     <span>المبلغ نقداً</span>
                                 </th>
 
+                                <th st-sort="remainPrice" class="text-right">
+                                    <span>الباقي</span>
+                                </th>
+
                                 <th st-sort="course.master.name" class="text-right">
                                     <span>التخصص</span>
                                 </th>
@@ -417,7 +421,8 @@
                                 </td>
                                 <td st-select-row-custom="account">{{account.student.contact.identityNumber}}</td>
                                 <td st-select-row-custom="account">{{account.student.contact.mobile}}</td>
-                                <td st-select-row-custom="account">{{account.coursePrice}}</td>
+                                <td st-select-row-custom="account">{{account.coursePrice | currency:'SAR':0}}</td>
+                                <td st-select-row-custom="account">{{account.remainPrice | currency:'SAR':0}}</td>
                                 <td st-select-row-custom="account">{{account.course.master.name}}</td>
                                 <td st-select-row-custom="account">{{account.course.master.branch.name}}</td>
                                 <td st-select-row-custom="account">
@@ -427,7 +432,7 @@
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">
-                                <td colspan="13">لا توجد بيانات</td>
+                                <td colspan="14">لا توجد بيانات</td>
                             </tr>
                             </tbody>
                         </table>

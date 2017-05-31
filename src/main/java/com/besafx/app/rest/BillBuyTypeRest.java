@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.BillBuyType;
 import com.besafx.app.entity.Person;
@@ -34,6 +33,12 @@ public class BillBuyTypeRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_TYPE_CREATE')")
     public BillBuyType create(@RequestBody BillBuyType billBuyType, Principal principal) {
+        BillBuyType topBillBuyType = billBuyTypeService.findTopByOrderByCodeDesc();
+        if (topBillBuyType == null) {
+            billBuyType.setCode(1);
+        } else {
+            billBuyType.setCode(topBillBuyType.getCode() + 1);
+        }
         Person person = personService.findByEmail(principal.getName());
         billBuyType.setLastUpdate(new Date());
         billBuyType.setLastPerson(person);
@@ -41,17 +46,10 @@ public class BillBuyTypeRest {
         notificationService.notifyOne(Notification
                 .builder()
                 .title("العمليات على قاعدة البيانات")
-                .message("تم اضافة حساب فاتورة جديد بنجاح")
+                .message("تم انشاء حساب فاتورة جديد بنجاح")
                 .type("success")
-                .icon("fa-database")
+                .icon("fa-plus-square")
                 .build(), principal.getName());
-        notificationService.notifyAllExceptMe(Notification
-                .builder()
-                .title("العمليات على قاعدة البيانات")
-                .message("تم اضافة حساب فاتورة جديد بواسطة " + principal.getName())
-                .type("warning")
-                .icon("fa-database")
-                .build());
         return billBuyType;
     }
 
@@ -59,13 +57,22 @@ public class BillBuyTypeRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_TYPE_UPDATE')")
     public BillBuyType update(@RequestBody BillBuyType billBuyType, Principal principal) {
+        if (billBuyTypeService.findByCodeAndIdIsNot(billBuyType.getCode(), billBuyType.getId()) != null) {
+            throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
+        }
         BillBuyType object = billBuyTypeService.findOne(billBuyType.getId());
         if (object != null) {
             Person person = personService.findByEmail(principal.getName());
             billBuyType.setLastUpdate(new Date());
             billBuyType.setLastPerson(person);
             billBuyType = billBuyTypeService.save(billBuyType);
-
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على قاعدة البيانات")
+                    .message("تم تعديل حساب الفاتورة بنجاح")
+                    .type("success")
+                    .icon("fa-edit")
+                    .build(), principal.getName());
             return billBuyType;
         } else {
             throw new CustomException("عفواً، لا يوجد هذا الحساب");
@@ -75,10 +82,17 @@ public class BillBuyTypeRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_TYPE_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         BillBuyType object = billBuyTypeService.findOne(id);
         if (object != null) {
             billBuyTypeService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على قاعدة البيانات")
+                    .message("تم حذف حساب الفاتورة بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
         }
     }
 
