@@ -1,5 +1,6 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -44,6 +46,15 @@ public class Person implements Serializable {
 
     @JsonView(Views.Summery.class)
     private Boolean active;
+
+    @JsonIgnore
+    private String hiddenPassword;
+
+    @JsonView(Views.Summery.class)
+    private Date lastLoginDate;
+
+    @JsonView(Views.Summery.class)
+    private String ipAddress;
 
     @ManyToOne
     @JoinColumn(name = "branch")

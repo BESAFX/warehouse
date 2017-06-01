@@ -26,8 +26,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Configuration
@@ -111,6 +113,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     UserDetails userDetails = (UserDetails) securityContext.getAuthentication().getPrincipal();
                     Person person = personService.findByEmail(userDetails.getUsername());
                     person.setActive(false);
+                    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+                    person.setIpAddress(request.getRemoteAddr());
                     personService.save(person);
                 }
                 super.sessionDestroyed(event);
@@ -132,9 +136,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         if (person == null) {
                             throw new UsernameNotFoundException(email);
                         }
-
+                        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
                         person.setActive(true);
-
+                        person.setLastLoginDate(new Date());
+                        person.setIpAddress(request.getRemoteAddr());
                         personService.save(person);
 
                         authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));

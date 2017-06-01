@@ -140,6 +140,14 @@
                                     <span>رقم الجوال</span>
                                 </th>
 
+                                <th st-sort="lastLoginDate" class="text-right">
+                                    <span>تاريخ آخر دخول</span>
+                                </th>
+
+                                <th st-sort="ipAddress" class="text-right">
+                                    <span>أخر عنوان دخول</span>
+                                </th>
+
                                 <th st-sort="branch.name" class="text-right">
                                     <span>الفرع</span>
                                 </th>
@@ -161,11 +169,16 @@
                                 <td st-select-row-custom="person">{{person.email}}</td>
                                 <td st-select-row-custom="person">{{person.team.name}}</td>
                                 <td st-select-row-custom="person">{{person.contact.mobile}}</td>
+                                <td st-select-row-custom="person">
+                                    <span>{{person.lastLoginDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                    <span class="label label-success">{{person.lastLoginDate | date:'h:m a'}}</span>
+                                </td>
+                                <td st-select-row-custom="person">{{person.ipAddress}}</td>
                                 <td st-select-row-custom="person">{{person.branch.name}}</td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">
-                                <td colspan="6">لا توجد بيانات</td>
+                                <td colspan="8">لا توجد بيانات</td>
                             </tr>
                             </tbody>
                         </table>
