@@ -96,7 +96,7 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                 }
                 case 'profile': {
                     $rootScope.pageTitle = 'الملف الشخصي';
-                    $rootScope.MDLIcon = 'lock';
+                    $rootScope.MDLIcon = 'account_circle';
                     break;
                 }
                 case 'report': {
@@ -128,9 +128,6 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
             $rootScope.me = {};
             PersonService.findActivePerson().then(function (data) {
                 $rootScope.me = data;
-                FileService.getSharedLink($rootScope.me.photo).then(function (data) {
-                    $rootScope.me.img = data;
-                });
             });
         });
 

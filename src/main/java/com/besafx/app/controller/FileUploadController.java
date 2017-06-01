@@ -1,6 +1,5 @@
 package com.besafx.app.controller;
 import com.besafx.app.config.DropboxManager;
-import com.besafx.app.service.PersonService;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +54,9 @@ public class FileUploadController {
         }
     }
 
-    @RequestMapping(value = "/uploadContactLogo", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    @RequestMapping(value = "/uploadContactPhoto", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String uploadContactLogo(@RequestParam("file") MultipartFile file) throws Exception {
+    public String uploadContactPhoto(@RequestParam("file") MultipartFile file) throws Exception {
         String fileName = new BigInteger(130, random).toString(32) + "." + FilenameUtils.getExtension(file.getOriginalFilename());
         Future<Boolean> task = dropboxManager.uploadFile(file, "/ararosr/Contacts/" + fileName);
         if (task.get()) {
