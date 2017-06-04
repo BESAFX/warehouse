@@ -288,6 +288,17 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$cssPr
             templateUrl: "/ui/partials/profile/profile.html",
             controller: "profileCtrl"
         });
+
+        /**************************************************************
+         *                                                            *
+         * About State                                                *
+         *                                                            *
+         *************************************************************/
+        $stateProvider.state("about", {
+            url: "/about",
+            templateUrl: "/ui/partials/about/about.html",
+            controller: "aboutCtrl"
+        });
     }
 ]);
 

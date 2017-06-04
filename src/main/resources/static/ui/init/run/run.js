@@ -20,8 +20,8 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                     break;
                 }
                 case 'company': {
-                    $rootScope.pageTitle = 'الشركات';
-                    $rootScope.MDLIcon = 'account_balance';
+                    $rootScope.pageTitle = 'الشركة';
+                    $rootScope.MDLIcon = 'domain';
                     break;
                 }
                 case 'branch': {
@@ -85,8 +85,8 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                     break;
                 }
                 case 'team': {
-                    $rootScope.pageTitle = 'مجموعة الصلاحيات';
-                    $rootScope.MDLIcon = 'settings_input_composite';
+                    $rootScope.pageTitle = 'الصلاحيات';
+                    $rootScope.MDLIcon = 'security';
                     break;
                 }
                 case 'person': {
@@ -97,6 +97,11 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                 case 'profile': {
                     $rootScope.pageTitle = 'الملف الشخصي';
                     $rootScope.MDLIcon = 'account_circle';
+                    break;
+                }
+                case 'about': {
+                    $rootScope.pageTitle = 'عن البرنامج';
+                    $rootScope.MDLIcon = 'info';
                     break;
                 }
                 case 'report': {
@@ -325,6 +330,9 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
         };
         $rootScope.goToProfile = function () {
             $state.go('profile');
+        };
+        $rootScope.goToAbout = function () {
+            $state.go('about');
         };
 
     }]);

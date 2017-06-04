@@ -66,7 +66,8 @@ public class PartialController {
             "/team",
             "/person",
             "/help",
-            "/profile"
+            "/profile",
+            "/about"
     })
     public ModelAndView navToView() {
         return new ModelAndView("forward:/");

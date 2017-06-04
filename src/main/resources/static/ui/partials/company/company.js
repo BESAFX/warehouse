@@ -1,75 +1,48 @@
-app.controller("companyCtrl", ['CompanyService', 'ModalProvider', 'FileService', '$scope', '$rootScope', '$log', '$http', '$state', '$timeout',
-    function (CompanyService, ModalProvider, FileService, $scope, $rootScope, $log, $http, $state, $timeout) {
+app.controller("companyCtrl", ['CompanyService', 'PersonService', 'ModalProvider', 'FileUploader', '$scope', '$rootScope', '$log', '$http', '$state', '$timeout',
+    function (CompanyService, PersonService, ModalProvider, FileUploader, $scope, $rootScope, $log, $http, $state, $timeout) {
 
         $scope.selected = {};
 
-        $scope.setSelected = function (object) {
-            if (object) {
-                angular.forEach($scope.companies, function (company) {
-                    if (object.id == company.id) {
-                        $scope.selected = company;
-                        return company.isSelected = true;
-                    } else {
-                        return company.isSelected = false;
-                    }
-                });
-            }
-        };
-
-        $scope.fetchTableData = function () {
-            CompanyService.fetchTableData().then(function (data) {
-                $scope.companies = data;
-                $scope.setSelected(data[0]);
+        $scope.submit = function () {
+            CompanyService.update($scope.selected).then(function (data) {
+                $scope.selected = data;
             });
         };
 
-        $scope.delete = function (company) {
-            if (company) {
-                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الشركة فعلاً؟", "error", "fa-ban", function () {
-                    CompanyService.remove(company.id).then(function () {
+        var uploader = $scope.uploader = new FileUploader({
+            url: 'uploadCompanyLogo'
+        });
 
-                    });
-                });
-                return;
+        uploader.filters.push({
+            name: 'syncFilter',
+            fn: function (item, options) {
+                return this.queue.length < 10;
             }
-            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الشركة فعلاً؟", "error", "fa-ban", function () {
-                CompanyService.remove($scope.selected.id).then(function () {
+        });
 
-                });
-            });
+
+        uploader.filters.push({
+            name: 'asyncFilter',
+            fn: function (item, options, deferred) {
+                setTimeout(deferred.resolve, 1e3);
+            }
+        });
+
+        uploader.onAfterAddingFile = function (fileItem) {
+            uploader.uploadAll();
         };
 
-        $scope.rowMenu = [
-            {
-                html: '<div class="drop-menu"> اضافة <span class="fa fa-plus-square-o fa-lg"></span></div>',
-                enabled: function () {
-                    return true
-                },
-                click: function ($itemScope, $event, value) {
-                    ModalProvider.openCompanyCreateModel();
-                }
-            },
-            {
-                html: '<div class="drop-menu"> تعديل <span class="fa fa-edit fa-lg"></span></div>',
-                enabled: function () {
-                    return true
-                },
-                click: function ($itemScope, $event, value) {
-                    ModalProvider.openCompanyUpdateModel($itemScope.company);
-                }
-            },
-            {
-                html: '<div class="drop-menu"> حذف <span class="fa fa-minus-square-o fa-lg"></span></div>',
-                enabled: function () {
-                    return true
-                },
-                click: function ($itemScope, $event, value) {
-                    $scope.delete($itemScope.company);
-                }
-            }
-        ];
+        uploader.onSuccessItem = function (fileItem, response, status, headers) {
+            $scope.selected.logo = response;
+        };
 
         $timeout(function () {
+            CompanyService.fetchTableData().then(function (data) {
+                $scope.selected = data[0];
+            });
+            PersonService.findAllSummery().then(function (data) {
+                $scope.persons = data;
+            });
             window.componentHandler.upgradeAllRegistered();
         }, 1500);
 

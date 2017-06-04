@@ -132,7 +132,6 @@ gulp.task('scripts', function () {
         './partials/menu/menu.js',
         './partials/chat/chat.js',
         './partials/company/company.js',
-        './partials/company/companyCreateUpdate.js',
         './partials/branch/branch.js',
         './partials/branch/branchCreateUpdate.js',
         './partials/master/master.js',
@@ -190,7 +189,8 @@ gulp.task('scripts', function () {
         './partials/person/personCreateUpdate.js',
 
         './partials/help/help.js',
-        './partials/profile/profile.js'
+        './partials/profile/profile.js',
+        './partials/about/about.js'
 
     ])
         .pipe(concat('app.js'))

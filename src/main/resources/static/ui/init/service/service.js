@@ -51,58 +51,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Company Model                                              *
-     *                                                            *
-     *************************************************************/
-    this.openCompanyCreateModel = function () {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/company/companyCreateUpdate.html',
-            controller: 'companyCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'انشاء شركة جديدة';
-                },
-                action: function () {
-                    return 'create';
-                },
-                company: function () {
-                    return undefined;
-                }
-            }
-        });
-    };
 
-    this.openCompanyUpdateModel = function (company) {
-        $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/company/companyCreateUpdate.html',
-            controller: 'companyCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات شركة';
-                },
-                action: function () {
-                    return 'update';
-                },
-                company: function () {
-                    return company;
-                }
-            }
-        });
-    };
     /**************************************************************
      *                                                            *
      * Branch Model                                               *
