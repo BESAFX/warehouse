@@ -364,6 +364,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
+
     /**************************************************************
      *                                                            *
      * Offer Model                                                *
@@ -412,6 +413,23 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                 },
                 offer: function () {
                     return offer;
+                }
+            }
+        });
+    };
+
+    this.openOfferHeavyWorkModel = function () {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/offer/offerHeavyWork.html',
+            controller: 'offerHeavyWorkCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'انشاء دفعة من العروض';
                 }
             }
         });

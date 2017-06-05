@@ -138,6 +138,7 @@ gulp.task('scripts', function () {
         './partials/master/masterCreateUpdate.js',
         './partials/offer/offer.js',
         './partials/offer/offerCreateUpdate.js',
+        './partials/offer/offerHeavyWork.js',
         './partials/course/course.js',
         './partials/course/courseCreateUpdate.js',
         './partials/student/student.js',
