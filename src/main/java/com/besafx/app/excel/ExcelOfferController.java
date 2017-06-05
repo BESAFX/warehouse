@@ -17,10 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -66,8 +63,8 @@ public class ExcelOfferController {
         random = new SecureRandom();
     }
 
-    @RequestMapping(value = "/api/heavy-work/offer/write", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void writeBranchFile(HttpServletResponse response, Principal principal) {
+    @RequestMapping(value = "/api/heavy-work/offer/write/{rowCount}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public void writeBranchFile(@PathVariable(value = "rowCount") Integer rowCount, HttpServletResponse response, Principal principal) {
         log.info("فحص المستخدم");
         Person person = personService.findByEmail(principal.getName());
         List<Master> masters = masterService.findByBranch(person.getBranch());
@@ -176,7 +173,7 @@ public class ExcelOfferController {
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(8, 20 * 256);
         //
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //

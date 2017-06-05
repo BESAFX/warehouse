@@ -3,8 +3,10 @@ app.controller('offerHeavyWorkCtrl', ['$scope', '$rootScope', '$timeout', '$uibM
 
         $scope.title = title;
 
+        $scope.buffer = {};
+
         $scope.downloadOfferExcelFile = function () {
-            window.open('/api/heavy-work/offer/write');
+            window.open('/api/heavy-work/offer/write/' + $scope.buffer.rowCount);
         };
 
         $scope.uploadOfferExcelFile = function () {
