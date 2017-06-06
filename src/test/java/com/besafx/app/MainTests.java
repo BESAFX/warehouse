@@ -1,4 +1,5 @@
 package com.besafx.app;
+import com.besafx.app.component.ScheduledTasks;
 import com.besafx.app.config.EmailSender;
 import com.besafx.app.service.*;
 import org.junit.Test;
@@ -57,8 +58,12 @@ public class MainTests {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private ScheduledTasks scheduledTasks;
+
     @Test
     public void contextLoads() throws Exception {
-
+        scheduledTasks.notifyBossAboutOffersToday();
+        Thread.sleep(20000000);
     }
 }

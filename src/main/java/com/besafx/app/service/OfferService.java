@@ -16,24 +16,25 @@ public interface OfferService extends PagingAndSortingRepository<Offer, Long>, J
 
     Offer findTopByMasterBranchOrderByCodeDesc(Branch branch);
     Offer findByCodeAndMasterBranchAndIdIsNot(Integer code, Branch branch, Long id);
+    List<Offer> findByLastUpdateBetween(@Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Offer> findByMasterBranchCompany(Company companyFX);
     List<Offer> findByMasterBranch(Branch branch);
     List<Offer> findByMasterBranchIn(List<Branch> branches);
-    List<Offer> findByMasterBranchAndLastUpdateBetween(Branch branch, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
-    List<Offer> findByMasterBranchInAndLastUpdateBetween(List<Branch> branches, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    List<Offer> findByMasterBranchAndLastUpdateBetween(Branch branch, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+    List<Offer> findByMasterBranchInAndLastUpdateBetween(List<Branch> branches, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Offer> findByMaster(Master master);
     List<Offer> findByMasterIn(List<Master> masters);
-    List<Offer> findByMasterAndLastUpdateBetween(Master master, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
-    List<Offer> findByMasterInAndLastUpdateBetween(List<Master> masters, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    List<Offer> findByMasterAndLastUpdateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+    List<Offer> findByMasterInAndLastUpdateBetween(List<Master> masters, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Offer> findByLastPerson(Person person);
-    List<Offer> findByLastPersonAndLastUpdateBetween(Person person, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    List<Offer> findByLastPersonAndLastUpdateBetween(Person person, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     Long countByMasterBranchCompany(Company company);
     Long countByMasterBranch(Branch branch);
-    Long countByMasterBranchAndLastUpdateBetween(Branch branch, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    Long countByMasterBranchAndLastUpdateBetween(Branch branch, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     Long countByMasterBranchIn(List<Branch> branches);
-    Long countByMasterBranchInAndLastUpdateBetween(List<Branch> branches, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    Long countByMasterBranchInAndLastUpdateBetween(List<Branch> branches, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     Long countByMaster(Master master);
-    Long countByMasterAndLastUpdateBetween(Master master, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    Long countByMasterAndLastUpdateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     Long countByMasterIn(List<Master> masters);
-    Long countByMasterInAndLastUpdateBetween(List<Master> masters, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    Long countByMasterInAndLastUpdateBetween(List<Master> masters, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 }

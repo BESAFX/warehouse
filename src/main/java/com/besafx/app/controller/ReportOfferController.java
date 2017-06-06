@@ -1,5 +1,4 @@
 package com.besafx.app.controller;
-
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Master;
 import com.besafx.app.entity.Offer;
@@ -12,17 +11,25 @@ import com.besafx.app.util.DateConverter;
 import com.besafx.app.util.WrapperUtil;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.concurrent.Future;
 
 @RestController
 public class ReportOfferController {
+
+    private final Logger log = LoggerFactory.getLogger(ReportOfferController.class);
 
     @Autowired
     private OfferService offerService;
@@ -294,6 +301,37 @@ public class ReportOfferController {
         JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
     }
 
+    @Async("threadPoolReportGenerator")
+    public Future<byte[]> ReportOffersToday() {
+        /**
+         * Insert Parameters
+         */
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder param1 = new StringBuilder();
+        param1.append("المعهد الأهلي العالي للتدريب");
+        param1.append("\n");
+        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
+        param1.append("\n");
+        param1.append("تقرير عن العروض المدخلة اليوم من كافة الفروع");
+        map.put("title", param1.toString());
+        DateTime today = new DateTime().withTimeAtStartOfDay();
+        DateTime tomorrow = new DateTime().plusDays(1).withTimeAtStartOfDay();
+        List<Offer> offers = offerService.findByLastUpdateBetween(today.toDate(), tomorrow.toDate());
+        map.put("list", offers);
+        if (offers.isEmpty()) {
+            return null;
+        }
+        try {
+            ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/OffersToday.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+            return new AsyncResult<>(JasperExportManager.exportReportToPdf(jasperPrint));
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+            return null;
+        }
+    }
+
     private List<WrapperUtil> initDateList(List<Offer> offers) {
         List<WrapperUtil> list = new ArrayList<>();
         ListIterator<Offer> listIterator = offers.listIterator();
@@ -316,6 +354,5 @@ public class ReportOfferController {
 
         return list;
     }
-
 
 }
