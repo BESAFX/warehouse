@@ -5,9 +5,9 @@ import com.besafx.app.entity.Person;
 import com.besafx.app.service.MasterService;
 import com.besafx.app.service.OfferService;
 import com.besafx.app.service.PersonService;
+import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -29,12 +29,9 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ExcelOfferController {
@@ -68,7 +65,7 @@ public class ExcelOfferController {
         log.info("فحص المستخدم");
         Person person = personService.findByEmail(principal.getName());
         List<Master> masters = masterService.findByBranch(person.getBranch());
-        masters.sort((m1, m2) -> m1.getCode().compareTo(m2.getCode()));
+        masters.sort((m1, m2) -> m1.getName().compareTo(m2.getName()));
         //
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(person.getContact().getFirstName() + " " + person.getContact().getForthName() + " - " + " فرع " + person.getBranch().getName());
@@ -162,47 +159,68 @@ public class ExcelOfferController {
         sheet.setColumnWidth(6, 20 * 256);
         //
         cell = row.createCell(7);
-        cell.setCellValue("رقم فهرس التخصص");
+        cell.setCellValue("اسم التخصص");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(7, 20 * 256);
         //
         cell = row.createCell(8);
-        cell.setCellValue("تاريخ العرض");
+        cell.setCellValue("يوم العرض");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(8, 20 * 256);
+        //
+        cell = row.createCell(9);
+        cell.setCellValue("شهر العرض");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(9, 20 * 256);
+        //
+        cell = row.createCell(10);
+        cell.setCellValue("سنة العرض");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(10, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 8; j++) {
+            for (int j = 0; j <= 10; j++) {
                 cell = row.createCell(j);
-                if (j == 8) {
-                    cell.setCellType(CellType.NUMERIC);
-                    cell.setCellValue(new Date());
-                    cell.setCellStyle(cellStyle);
-                    continue;
-                }
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
                 cell.setCellStyle(styleCellDate);
             }
         }
         //
+        XSSFSheet realSheet = workbook.createSheet("قائمة التخصصات");
+        XSSFSheet hidden = workbook.createSheet("hidden");
+        for (int i = 0, length = masters.size(); i < length; i++) {
+            String name = masters.get(i).getName();
+            Row hiddenRow = hidden.createRow(i);
+            Cell hiddenCell = hiddenRow.createCell(0);
+            hiddenCell.setCellValue(name);
+        }
+        Name namedCell = workbook.createName();
+        namedCell.setNameName("hidden");
+        namedCell.setRefersToFormula("hidden!$A$1:$A$" + masters.size());
+        //
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
-        XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(Lists.newArrayList(masters).stream().map(company -> company.getCode().toString()).collect(Collectors.toList()).stream().toArray(String[]::new));
-        CellRangeAddressList addressList = new CellRangeAddressList(1, 8, 7, 7);
+//        XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(Lists.newArrayList(masters).stream().map(master -> master.getName().toString()).collect(Collectors.toList()).stream().toArray(String[]::new));
+        XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createFormulaListConstraint("hidden");
+        CellRangeAddressList addressList = new CellRangeAddressList(1, 10, 7, 7);
         XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
-        validation.createErrorBox("العروض الذكية", "فضلاً اختر رقم فهرس التخصص دون تعديل من القائمة.");
+        validation.createErrorBox("العروض الذكية", "فضلاً اختر اسم التخصص دون تعديل من القائمة.");
         sheet.addValidationData(validation);
+        //
+        realSheet.addValidationData(validation);
         //
         dvHelper = new XSSFDataValidationHelper(sheet);
         dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"مسجل", "غير مسجل"});
-        addressList = new CellRangeAddressList(1, 8, 3, 3);
+        addressList = new CellRangeAddressList(1, 10, 3, 3);
         validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
@@ -211,7 +229,7 @@ public class ExcelOfferController {
         //
         dvHelper = new XSSFDataValidationHelper(sheet);
         dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"نقدي", "قسط شهري"});
-        addressList = new CellRangeAddressList(1, 8, 5, 5);
+        addressList = new CellRangeAddressList(1, 10, 5, 5);
         validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
@@ -252,6 +270,7 @@ public class ExcelOfferController {
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
                 Offer offer = new Offer();
+                Integer day = null, month = null, year = null;
                 boolean accept = true;
                 while (cellIterator.hasNext()) {
                     Cell nextCell = cellIterator.next();
@@ -326,14 +345,7 @@ public class ExcelOfferController {
                                 break;
                             }
                             nextCell.setCellType(CellType.STRING);
-                            Integer masterCode;
-                            try {
-                                masterCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-                            } catch (Exception ex) {
-                                accept = false;
-                                break;
-                            }
-                            Master master = masterService.findByCodeAndBranch(masterCode, person.getBranch());
+                            Master master = masterService.findByNameAndBranch((String) excelCellHelper.getCellValue(nextCell), person.getBranch());
                             if (master == null) {
                                 accept = false;
                                 break;
@@ -345,18 +357,40 @@ public class ExcelOfferController {
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
-                            nextCell.setCellType(CellType.NUMERIC);
-                            Date date;
+                            nextCell.setCellType(CellType.STRING);
                             try {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                date = dateFormat.parse((String) excelCellHelper.getCellValue(nextCell));
+                                day = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
                             } catch (Exception ex) {
-                                log.error(ex.getMessage(), ex);
                                 accept = false;
                                 break;
                             }
-                            offer.setLastUpdate(date);
-                            log.info(date.toString());
+                            log.info((String) excelCellHelper.getCellValue(nextCell));
+                            break;
+                        case 9:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                month = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            log.info((String) excelCellHelper.getCellValue(nextCell));
+                            break;
+                        case 10:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                year = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            log.info((String) excelCellHelper.getCellValue(nextCell));
                             break;
                     }
 
@@ -369,6 +403,7 @@ public class ExcelOfferController {
                         offer.setCode(topOffer.getCode() + 1);
                     }
                     offer.setLastPerson(person);
+                    offer.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
                     offer.setMasterCreditAmount(0.0);
                     offer.setMasterDiscountAmount(0.0);
                     offer.setMasterProfitAmount(0.0);

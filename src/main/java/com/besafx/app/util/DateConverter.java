@@ -105,6 +105,16 @@ public class DateConverter {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
+    public static Date getDateFromHijri(int year, int month, int day) {
+        try {
+            HijrahDate date = HijrahChronology.INSTANCE.date(year, month, day);
+            LocalDate localDate = IsoChronology.INSTANCE.date(date);
+            return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static String getDateStringFromHijri(HijrahDate date) {
         return IsoChronology.INSTANCE.date(date).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }

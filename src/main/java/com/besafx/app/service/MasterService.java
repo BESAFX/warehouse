@@ -21,6 +21,7 @@ public interface MasterService extends PagingAndSortingRepository<Master, Long>,
     List<Master> findByBranch(Branch branch);
     List<Master> findByBranchCompany(Company company);
     Master findByCodeAndBranch(Integer Code, Branch branch);
+    Master findByNameAndBranch(String name, Branch branch);
     Long countByBranchCompany(Company company);
     Long countByBranch(Branch branch);
 }

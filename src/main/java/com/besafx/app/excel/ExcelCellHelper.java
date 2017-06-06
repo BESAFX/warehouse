@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 public class ExcelCellHelper {
 
     public Object getCellValue(Cell cell) {
-        System.out.println("TYPE CELL: " + cell.getCellTypeEnum());
         switch (cell.getCellTypeEnum()) {
             case STRING:
                 return cell.getRichStringCellValue().getString();
