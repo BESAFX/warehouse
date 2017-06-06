@@ -40,6 +40,8 @@ public class ExcelOfferController {
 
     private SecureRandom random;
 
+    private Integer day = null, month = null, year = null;
+
     @Autowired
     private MasterService masterService;
 
@@ -270,7 +272,6 @@ public class ExcelOfferController {
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
                 Offer offer = new Offer();
-                Integer day = null, month = null, year = null;
                 boolean accept = true;
                 while (cellIterator.hasNext()) {
                     Cell nextCell = cellIterator.next();
@@ -351,7 +352,8 @@ public class ExcelOfferController {
                                 break;
                             }
                             offer.setMaster(master);
-                            log.info((String) excelCellHelper.getCellValue(nextCell));
+                            log.info("اسم التخصص من قواعد البيانات: " + master.getName());
+                            log.info("اسم فرع التخصص: " + master.getBranch().getName());
                             break;
                         case 8:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
@@ -396,18 +398,22 @@ public class ExcelOfferController {
 
                 }
                 if (accept) {
-                    Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(offer.getMaster().getBranch());
-                    if (topOffer == null) {
-                        offer.setCode(1);
-                    } else {
-                        offer.setCode(topOffer.getCode() + 1);
+                    try {
+                        Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(offer.getMaster().getBranch());
+                        if (topOffer == null) {
+                            offer.setCode(1);
+                        } else {
+                            offer.setCode(topOffer.getCode() + 1);
+                        }
+                        offer.setLastPerson(person);
+                        offer.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
+                        offer.setMasterCreditAmount(0.0);
+                        offer.setMasterDiscountAmount(0.0);
+                        offer.setMasterProfitAmount(0.0);
+                        offerList.add(offer);
+                    } catch (Exception ex) {
+                        log.info(ex.getMessage());
                     }
-                    offer.setLastPerson(person);
-                    offer.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
-                    offer.setMasterCreditAmount(0.0);
-                    offer.setMasterDiscountAmount(0.0);
-                    offer.setMasterProfitAmount(0.0);
-                    offerList.add(offer);
                 }
             }
             offerService.save(offerList);
