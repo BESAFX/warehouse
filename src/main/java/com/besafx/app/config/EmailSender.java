@@ -1,7 +1,4 @@
 package com.besafx.app.config;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -18,7 +15,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
@@ -31,13 +27,11 @@ public class EmailSender {
 
     private static final int SMTP_HOST_PORT = 465;
 
-    private static List<Email> emails = new ArrayList<>();
-
-    private static List<Email> activeEmails = new ArrayList<>();
-
     private static String SMTP_AUTH_USER = "sender1@ararhni.com";
 
     private static String SMTP_AUTH_PWD = "sender1";
+
+    private static Integer activeIndex = 1;
 
     private final Logger log = LoggerFactory.getLogger(EmailSender.class);
 
@@ -57,14 +51,6 @@ public class EmailSender {
         mailSession = Session.getDefaultInstance(props);
         mailSession.setDebug(true);
         log.info("Preparing email service successfully");
-        log.info("Preparing Emails List...");
-        emails.add(new Email("sender1@ararhni.com", "sender1"));
-        emails.add(new Email("sender2@ararhni.com", "sender2"));
-        emails.add(new Email("sender3@ararhni.com", "sender3"));
-        emails.add(new Email("sender4@ararhni.com", "sender4"));
-        emails.add(new Email("sender5@ararhni.com", "sender5"));
-        emails.add(new Email("sender6@ararhni.com", "sender6"));
-        activeEmails.addAll(emails);
     }
 
     @Async("threadPoolEmailSender")
@@ -94,24 +80,8 @@ public class EmailSender {
             log.info("Sending email successfully to this destinations: " + toEmailList);
         } catch (Exception ex) {
             log.info(ex.getMessage());
-            if (ex.getMessage().startsWith("550 User " + SMTP_AUTH_USER + " has exceeded its 24-hour sending limit")) {
-                log.info("Removing this email from active emails list: " + SMTP_AUTH_USER);
-                if (activeEmails.isEmpty()) {
-                    activeEmails.addAll(emails);
-                }
-                ListIterator<Email> listIterator = activeEmails.listIterator();
-                while (listIterator.hasNext()) {
-                    Email nextEmail = listIterator.next();
-                    if (nextEmail.getName().equals(SMTP_AUTH_USER)) {
-                        listIterator.remove();
-                        continue;
-                    }
-                    SMTP_AUTH_USER = nextEmail.getName();
-                    SMTP_AUTH_PWD = nextEmail.getPassword();
-                    log.info("محاولة إرسال الرسالة مرة أخري بإستخدام الحساب /" + SMTP_AUTH_USER);
-                    send(title, content, toEmailList);
-                }
-            }
+            resend();
+            send(title, content, toEmailList);
         }
     }
 
@@ -155,24 +125,8 @@ public class EmailSender {
             log.info("Sending email successfully to this destinations: " + toEmailList);
         } catch (Exception ex) {
             log.info(ex.getMessage());
-            if (ex.getMessage().startsWith("550 User " + SMTP_AUTH_USER + " has exceeded its 24-hour sending limit")) {
-                log.info("Removing this email from active emails list: " + SMTP_AUTH_USER);
-                if (activeEmails.isEmpty()) {
-                    activeEmails.addAll(emails);
-                }
-                ListIterator<Email> listIterator = activeEmails.listIterator();
-                while (listIterator.hasNext()) {
-                    Email nextEmail = listIterator.next();
-                    if (nextEmail.getName().equals(SMTP_AUTH_USER)) {
-                        listIterator.remove();
-                        continue;
-                    }
-                    SMTP_AUTH_USER = nextEmail.getName();
-                    SMTP_AUTH_PWD = nextEmail.getPassword();
-                    log.info("محاولة إرسال الرسالة مرة أخري بإستخدام الحساب /" + SMTP_AUTH_USER);
-                    send(title, content, toEmailList, files);
-                }
-            }
+            resend();
+            send(title, content, toEmailList, files);
         }
     }
 
@@ -197,24 +151,8 @@ public class EmailSender {
             log.info("Sending email successfully to this destinations: " + email);
         } catch (Exception ex) {
             log.info(ex.getMessage());
-            if (ex.getMessage().startsWith("550 User " + SMTP_AUTH_USER + " has exceeded its 24-hour sending limit")) {
-                log.info("Removing this email from active emails list: " + SMTP_AUTH_USER);
-                if (activeEmails.isEmpty()) {
-                    activeEmails.addAll(emails);
-                }
-                ListIterator<Email> listIterator = activeEmails.listIterator();
-                while (listIterator.hasNext()) {
-                    Email nextEmail = listIterator.next();
-                    if (nextEmail.getName().equals(SMTP_AUTH_USER)) {
-                        listIterator.remove();
-                        continue;
-                    }
-                    SMTP_AUTH_USER = nextEmail.getName();
-                    SMTP_AUTH_PWD = nextEmail.getPassword();
-                    log.info("محاولة إرسال الرسالة مرة أخري بإستخدام الحساب /" + SMTP_AUTH_USER);
-                    send(title, content, email);
-                }
-            }
+            resend();
+            send(title, content, email);
         }
     }
 
@@ -253,35 +191,18 @@ public class EmailSender {
             return new AsyncResult<>(true);
         } catch (Exception ex) {
             log.info(ex.getMessage());
-            if (ex.getMessage().startsWith("550 User " + SMTP_AUTH_USER + " has exceeded its 24-hour sending limit")) {
-                log.info("Removing this email from active emails list: " + SMTP_AUTH_USER);
-                if (activeEmails.isEmpty()) {
-                    activeEmails.addAll(emails);
-                }
-                ListIterator<Email> listIterator = activeEmails.listIterator();
-                while (listIterator.hasNext()) {
-                    Email nextEmail = listIterator.next();
-                    if (nextEmail.getName().equals(SMTP_AUTH_USER)) {
-                        listIterator.remove();
-                        continue;
-                    }
-                    SMTP_AUTH_USER = nextEmail.getName();
-                    SMTP_AUTH_PWD = nextEmail.getPassword();
-                    log.info("محاولة إرسال الرسالة مرة أخري بإستخدام الحساب /" + SMTP_AUTH_USER);
-                    send(title, content, email, files);
-                }
-            }
+            resend();
+            send(title, content, email, files);
             return new AsyncResult<>(false);
         }
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    private class Email {
-
-        private String name;
-
-        private String password;
+    private void resend() {
+        if (activeIndex == 6) {
+            activeIndex = 0;
+        }
+        SMTP_AUTH_USER = "sender" + (activeIndex++) + "@ararhni.com";
+        SMTP_AUTH_PWD = "sender" + (activeIndex++);
+        log.info("محاولة إرسال الرسالة مرة أخري بإستخدام الحساب /" + SMTP_AUTH_USER);
     }
 }
