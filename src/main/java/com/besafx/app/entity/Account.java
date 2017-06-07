@@ -32,6 +32,9 @@ public class Account implements Serializable {
     @JsonView(Views.Summery.class)
     private Long id;
 
+    @JsonView(Views.Summery.class)
+    private Integer code;
+
     @Temporal(TemporalType.TIMESTAMP)
     @JsonView(Views.Summery.class)
     private Date registerDate;

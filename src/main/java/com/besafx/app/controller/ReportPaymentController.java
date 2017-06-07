@@ -304,7 +304,7 @@ public class ReportPaymentController {
                             + "-" + row.getAccount().getCourse().getMaster().getBranch().getCode()
                             + "-" + row.getAccount().getCourse().getMaster().getCode()
                             + "-" + row.getAccount().getCourse().getCode()
-                            + "-" + row.getAccount().getStudent().getCode()
+                            + "-" + row.getAccount().getCode()
             );
             wrapperUtil.setObj4(accountRest.findRequiredPrice(row.getAccount().getId()));
             wrapperUtil.setObj5(accountRest.findPaidPrice(row.getAccount().getId()));

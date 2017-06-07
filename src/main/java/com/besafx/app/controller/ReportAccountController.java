@@ -268,7 +268,7 @@ public class ReportAccountController {
         Map<String, Object> map = new HashMap<>();
         map.put("BRANCH_NAME", account.getCourse().getMaster().getBranch().getName());
         map.put("STUDENT_NAME", account.getStudent().getContact().getFirstName() + " " + account.getStudent().getContact().getSecondName() + " " + account.getStudent().getContact().getThirdName() + " " + account.getStudent().getContact().getForthName());
-        map.put("STUDENT_NUMBER", account.getStudent().getCode() + " " + account.getCourse().getCode() + " " + account.getCourse().getMaster().getCode() + " " + account.getCourse().getMaster().getBranch().getCode() + " " + DateConverter.getYearShortcut(account.getRegisterDate()));
+        map.put("STUDENT_NUMBER", account.getCode() + " " + account.getCourse().getCode() + " " + account.getCourse().getMaster().getCode() + " " + account.getCourse().getMaster().getBranch().getCode() + " " + DateConverter.getYearShortcut(account.getRegisterDate()));
         map.put("STUDENT_IDENTITY_NUMBER", account.getStudent().getContact().getIdentityNumber());
         map.put("STUDENT_MOBILE", account.getStudent().getContact().getMobile());
         map.put("MASTER_NAME", account.getCourse().getMaster().getName());

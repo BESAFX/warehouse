@@ -14,8 +14,9 @@ import java.util.List;
 @Transactional
 public interface AccountService extends PagingAndSortingRepository<Account, Long>, JpaSpecificationExecutor<Account> {
 
-    Account findTopByCourseMasterBranchOrderByStudentCodeDesc(Branch branch);
+    Account findTopByCourseMasterBranchOrderByCodeDesc(Branch branch);
     List<Account> findByStudent(Student student);
+    List<Account> findByStudentContactIdentityNumber(String identityNumber);
     List<Account> findByCourse(Course course);
     List<Account> findByCourseAndRegisterDateBetween(Course course, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
     List<Account> findByCourseMaster(Master master);

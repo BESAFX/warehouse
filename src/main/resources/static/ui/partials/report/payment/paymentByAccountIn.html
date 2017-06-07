@@ -37,7 +37,7 @@
                         multiple=""
                         ng-model="buffer.accountsList"
                         focus-index="1"
-                        ng-options="(' [ ' + account.student.contact.firstName + ' ' + account.student.contact.secondName  + ' ' + account.student.contact.thirdName +  ' ' + account.student.contact.forthName +  ' ] ' + ' [ ' + account.student.contact.identityNumber +  ' ] ' + ' [ ' + account.student.contact.mobile +  ' ] ' + ' [ ' + ( account.student.code + '-' + account.course.code + '-' + account.course.master.code + '-' + account.course.master.branch.code + '-' + (account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura') ) + ' ] ' + ' ' + ' [ ' + account.course.master.name + ' ] ') group by account.course.master.branch.name for account in accounts track by account.id">
+                        ng-options="(' [ ' + account.student.contact.firstName + ' ' + account.student.contact.secondName  + ' ' + account.student.contact.thirdName +  ' ' + account.student.contact.forthName +  ' ] ' + ' [ ' + account.student.contact.identityNumber +  ' ] ' + ' [ ' + account.student.contact.mobile +  ' ] ' + ' [ ' + ( account.code + '-' + account.course.code + '-' + account.course.master.code + '-' + account.course.master.branch.code + '-' + (account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura') ) + ' ] ' + ' ' + ' [ ' + account.course.master.name + ' ] ') group by account.course.master.branch.name for account in accounts track by account.id">
                 </select>
             </div>
 

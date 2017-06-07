@@ -55,17 +55,36 @@ public class AccountRest {
     @PreAuthorize("hasRole('ROLE_ACCOUNT_CREATE')")
     public Account create(@RequestBody Account account, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
-        Account topAccount = accountService.findTopByCourseMasterBranchOrderByStudentCodeDesc(account.getCourse().getMaster().getBranch());
+        Account topAccount = accountService.findTopByCourseMasterBranchOrderByCodeDesc(account.getCourse().getMaster().getBranch());
         if (topAccount == null) {
-            account.getStudent().setCode(1);
+            account.setCode(1);
         } else {
-            account.getStudent().setCode(topAccount.getStudent().getCode() + 1);
+            account.setCode(topAccount.getCode() + 1);
         }
         account.setRegisterDate(new Date());
         account.setLastUpdate(new Date());
         account.setLastPerson(person);
-        account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
-        account.setStudent(studentService.save(account.getStudent()));
+        Student student = studentService.findByContactIdentityNumber(account.getStudent().getContact().getIdentityNumber().toLowerCase().trim());
+        if (student == null) {
+            account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
+            account.setStudent(studentService.save(account.getStudent()));
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على تسجيل الطلاب")
+                    .message("تم انشاء حساب جديد لهذا الطالب")
+                    .type("success")
+                    .icon("fa-plus-square")
+                    .build(), principal.getName());
+        } else {
+            account.setStudent(student);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على تسجيل الطلاب")
+                    .message("تم استخدام بيانات الطالب المسجلة سابقاً")
+                    .type("success")
+                    .icon("fa-plus-square")
+                    .build(), principal.getName());
+        }
         account = accountService.save(account);
         notificationService.notifyOne(Notification
                 .builder()

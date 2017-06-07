@@ -661,7 +661,7 @@ $F{obj1}.getStudent().getContact().getForthName()]]></textFieldExpression>
 $F{obj1}.getCourse().getMaster().getBranch().getCode() + "-" + 
 $F{obj1}.getCourse().getMaster().getCode() + "-" + 
 $F{obj1}.getCourse().getCode() + "-" +
-$F{obj1}.getStudent().getCode()]]></textFieldExpression>
+$F{obj1}.getCode()]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
