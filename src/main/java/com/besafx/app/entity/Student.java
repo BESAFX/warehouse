@@ -27,8 +27,6 @@ public class Student implements Serializable {
     @GeneratedValue(generator = "studentSequenceGenerator")
     private Long id;
 
-    private Integer code;
-
     @ManyToOne
     @JoinColumn(name = "contact")
     private Contact contact;

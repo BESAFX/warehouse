@@ -17,9 +17,8 @@
                         placeholder-text-single="'اختر التخصص'"
                         class="form-control text-right"
                         chosen=""
+                        focus-autofocus="1"
                         ng-model="buffer.master"
-                        ng-change="setUpCoursesList()"
-                        focus-index="1"
                         required="required"
                         disable-validation-message=""
                         ng-options="('[' + master.branch.name + ']' + master.name) group by master.branch.name for master in masters track by master.id">
@@ -36,10 +35,9 @@
                         chosen=""
                         multiple=""
                         ng-model="buffer.coursesList"
-                        focus-index="2"
                         required="required"
                         disable-validation-message=""
-                        ng-options="course.code for course in courses track by course.id">
+                        ng-options="(' [ ' + course.code + ' ] ' + course.instructor) for course in buffer.master.courses | orderBy:'code' track by course.id">
                 </select>
             </div>
 
@@ -49,20 +47,26 @@
 
     <div class="modal-footer">
 
-        <div class="form-group col-md-12" role="group">
-            <button type="button"
-                    focus-index="4"
-                    ng-click="cancel()"
-                    class="btn btn-danger pull-left">
-                <span>خروج</span>
-                <i class="fa fa-power-off  fa-lg"></i>
+        <div class="row">
+            <button uib-tooltip="طباعة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">print</i>
             </button>
-
-            <button type="submit"
-                    focus-index="3"
-                    class="btn btn-success pull-right">
-                <span>طباعة</span>
-                <i class="fa fa-print fa-lg"></i>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="cancel()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
             </button>
         </div>
 

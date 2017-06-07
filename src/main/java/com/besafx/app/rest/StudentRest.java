@@ -1,8 +1,6 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.entity.Contact;
 import com.besafx.app.entity.Student;
-import com.besafx.app.repository.StudentRepository;
 import com.besafx.app.service.ContactService;
 import com.besafx.app.service.StudentService;
 import com.google.common.collect.Lists;
@@ -23,9 +21,6 @@ public class StudentRest {
     @Autowired
     private ContactService contactService;
 
-    @Autowired
-    private StudentRepository studentRepository;
-
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_STUDENT_CREATE')")
@@ -33,12 +28,6 @@ public class StudentRest {
         if (student.getContact().getId() == null) {
             Contact contact = contactService.save(student.getContact());
             student.setContact(contact);
-        }
-        Integer maxCode = studentService.findMaxCode();
-        if (maxCode == null) {
-            student.setCode(1);
-        } else {
-            student.setCode(maxCode + 1);
         }
         return studentService.save(student);
     }
@@ -72,22 +61,10 @@ public class StudentRest {
         return Lists.newArrayList(studentService.findAll());
     }
 
-    @RequestMapping(value = "findUnRegistered/{branchId}/{masterId}/{courseId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Student> findUnRegistered(@PathVariable Long branchId, @PathVariable Long masterId, @PathVariable Long courseId) {
-        return studentRepository.findUnRegistered(branchId, masterId, courseId);
-    }
-
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Student findOne(@PathVariable Long id) {
         return studentService.findOne(id);
-    }
-
-    @RequestMapping(value = "findByCode", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Student findByCode(@RequestParam(value = "code") Integer code) {
-        return studentService.findByCode(code);
     }
 
 }
