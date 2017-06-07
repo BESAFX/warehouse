@@ -22,7 +22,7 @@
                         ng-model="buffer.mastersList"
                         required="required"
                         disable-validation-message=""
-                        ng-options="('[' + master.branch.name + ']' + master.name) group by master.branch.name for master in masters track by master.id">
+                        ng-options="(' [ ' + master.code + ' ] ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>
             </div>
 
