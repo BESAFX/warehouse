@@ -198,11 +198,12 @@ public class EmailSender {
     }
 
     private void resend() {
-        if (activeIndex == 6) {
+        if (activeIndex >= 6) {
             activeIndex = 0;
         }
-        SMTP_AUTH_USER = "sender" + (activeIndex++) + "@ararhni.com";
-        SMTP_AUTH_PWD = "sender" + (activeIndex++);
+        activeIndex++;
+        SMTP_AUTH_USER = "sender" + activeIndex + "@ararhni.com";
+        SMTP_AUTH_PWD = "sender" + activeIndex;
         log.info("محاولة إرسال الرسالة مرة أخري بإستخدام الحساب /" + SMTP_AUTH_USER);
     }
 }
