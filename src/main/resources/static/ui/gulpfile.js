@@ -145,6 +145,7 @@ gulp.task('scripts', function () {
         './partials/student/studentCreateUpdate.js',
         './partials/account/account.js',
         './partials/account/accountCreateUpdate.js',
+        './partials/account/accountHeavyWork.js',
         './partials/payment/payment.js',
         './partials/payment/paymentCreate.js',
         './partials/paymentOut/paymentOut.js',

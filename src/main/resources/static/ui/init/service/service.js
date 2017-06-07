@@ -52,6 +52,24 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openAccountHeavyWorkModel = function () {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountHeavyWork.html',
+            controller: 'accountHeavyWorkCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تسجيل دفعة من الطلاب';
+                }
+            }
+        });
+    };
+
+
     /**************************************************************
      *                                                            *
      * Branch Model                                               *

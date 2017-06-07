@@ -306,6 +306,14 @@
                                 </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openAccountHeavyWorkModel()"
+                                ng-if="contains(authorities, ['ROLE_ACCOUNT_CREATE'])">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">build</i>
+                                    <span>تسجيل دفعة من الطلاب</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
                                 ng-click="payment.account = selected;ModalProvider.openPaymentCreateModel(payment)"
                                 ng-if="contains(authorities, ['ROLE_PAYMENT_CREATE'])"
                                 ng-hide="!accounts || accounts.length==0">
