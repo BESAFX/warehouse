@@ -226,7 +226,8 @@
             <button id="menu-lower-left" class="mdl-button mdl-js-button mdl-button--icon">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp" for="menu-lower-left">
+            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp"
+                for="menu-lower-left">
                 <li class="mdl-list__item mdl-list__item--two-line mdl-menu__item--full-bleed-divider">
                     <span class="mdl-list__item-primary-content">
                         <span class="material-icons mdl-list__item-avatar"
@@ -308,18 +309,27 @@
                                 ng-click="ModalProvider.openOfferUpdateModel(selected)"
                                 ng-if="contains(authorities, ['ROLE_OFFER_UPDATE'])"
                                 ng-hide="!offers || offers.length==0">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">edit</i>
-                                <span>تعديل بيانات العرض</span>
-                            </span>
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">edit</i>
+                                    <span>تعديل بيانات العرض</span>
+                                </span>
                             </li>
-                            <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="delete()"
                                 ng-if="contains(authorities, ['ROLE_OFFER_DELETE'])"
                                 ng-hide="!offers || offers.length==0">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">delete</i>
-                                <span>حذف العرض</span>
-                            </span>
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">delete</i>
+                                    <span>حذف العرض</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="print()"
+                                ng-hide="!offers || offers.length==0">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>طباعة عرض سعر</span>
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -349,6 +359,13 @@
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">print</i>
                                    <span>العروض حسب المستخدم</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportOfferByIdModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>العروض حسب رقم العرض</span>
                                 </span>
                             </li>
                         </ul>
@@ -443,7 +460,8 @@
                                 <td st-select-row-custom="offer">{{offer.customerMobile}}</td>
                                 <td st-select-row-custom="offer">{{offer.masterPaymentType}}</td>
                                 <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
-                                <td st-select-row-custom="offer" ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
+                                <td st-select-row-custom="offer"
+                                    ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
                                 <td st-select-row-custom="offer">{{offer.master.branch.name}}</td>
                                 <td st-select-row-custom="offer">{{offer.master.name}}</td>
                                 <td st-select-row-custom="offer">

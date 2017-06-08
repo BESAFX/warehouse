@@ -1,9 +1,8 @@
 app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
     function (BranchService, $scope, $rootScope, $timeout, $uibModalInstance) {
+        $scope.buffer = {};
         $timeout(function () {
-            $scope.buffer = {};
-            $scope.branches = [];
-            BranchService.fetchTableData().then(function (data) {
+            BranchService.fetchTableDataSummery().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);
@@ -12,10 +11,11 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
             if ($scope.buffer.startDate && $scope.buffer.endDate) {
                 window.open('/report/OfferByBranch/'
                     + $scope.buffer.branch.id + "?"
+                    + 'exportType=' + $scope.buffer.exportType + '&'
                     + "startDate=" + $scope.buffer.startDate.getTime() + "&"
                     + "endDate=" + $scope.buffer.endDate.getTime());
             } else {
-                window.open('/report/OfferByBranch/' + $scope.buffer.branch.id);
+                window.open('/report/OfferByBranch/' + $scope.buffer.branch.id + '?exportType=' + $scope.buffer.exportType);
             }
         };
 

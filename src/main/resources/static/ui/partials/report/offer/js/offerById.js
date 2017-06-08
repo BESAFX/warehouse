@@ -16,7 +16,7 @@ app.controller('offerByIdCtrl', ['MasterService', 'OfferService', '$scope', '$ro
         };
 
         $scope.submit = function () {
-            window.open('/report/OfferById/' + $scope.buffer.offer.id);
+            window.open('/report/OfferById/' + $scope.buffer.offer.id + '?exportType=' + $scope.buffer.exportType);
         };
 
         $scope.cancel = function () {

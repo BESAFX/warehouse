@@ -12,10 +12,11 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
             if ($scope.buffer.startDate && $scope.buffer.endDate) {
                 window.open('/report/OfferByPerson/'
                     + $scope.buffer.person.id + "?"
+                    + 'exportType=' + $scope.buffer.exportType + '&'
                     + "startDate=" + $scope.buffer.startDate.getTime() + "&"
                     + "endDate=" + $scope.buffer.endDate.getTime());
             } else {
-                window.open('/report/OfferByPerson/' + $scope.buffer.person.id);
+                window.open('/report/OfferByPerson/' + $scope.buffer.person.id + '?exportType=' + $scope.buffer.exportType);
             }
         };
 

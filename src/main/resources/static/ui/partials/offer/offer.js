@@ -130,10 +130,10 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'MasterService', '
 
         $scope.print = function (offer) {
             if (offer) {
-                window.open('/report/OfferById/' + offer.id);
+                window.open('/report/OfferById/' + offer.id + '?exportType=PDF');
                 return;
             }
-            window.open('/report/OfferById/' + $scope.selected.id);
+            window.open('/report/OfferById/' + $scope.selected.id + '?exportType=PDF');
         };
 
         $scope.delete = function (offer) {
