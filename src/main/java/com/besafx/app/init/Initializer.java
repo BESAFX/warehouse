@@ -64,6 +64,7 @@ public class Initializer implements CommandLineRunner {
         person.setPassword(passwordEncoder.encode("admin"));
         person.setEnabled(true);
         person.setTokenExpired(false);
+        person.setActive(false);
         personService.save(person);
 
         Company company = new Company();

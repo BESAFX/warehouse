@@ -46,6 +46,9 @@ public class PersonRest {
         if (person.getContact() != null) {
             person.setContact(contactService.save(person.getContact()));
         }
+        person.setTokenExpired(false);
+        person.setActive(false);
+        person.setEnabled(true);
         person = personService.save(person);
         notificationService.notifyOne(Notification
                 .builder()
