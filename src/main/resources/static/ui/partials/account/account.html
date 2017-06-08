@@ -75,7 +75,7 @@
                                 class="form-control text-right"
                                 chosen=""
                                 ng-model="buffer.course"
-                                ng-options="course.code for course in buffer.master.courses | orderBy:'code' track by course.id">
+                                ng-options="(' [ ' + course.code + ' ] ' + course.instructor) for course in buffer.master.courses | orderBy:'code' track by course.id">
                         </select>
                     </div>
 

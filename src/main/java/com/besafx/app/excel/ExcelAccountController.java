@@ -1,11 +1,7 @@
 package com.besafx.app.excel;
-import com.besafx.app.entity.Account;
-import com.besafx.app.entity.Contact;
-import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Student;
-import com.besafx.app.service.AccountService;
-import com.besafx.app.service.MasterService;
-import com.besafx.app.service.PersonService;
+import com.besafx.app.entity.*;
+import com.besafx.app.service.*;
+import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import org.apache.commons.io.FileUtils;
@@ -43,7 +39,13 @@ public class ExcelAccountController {
     private Integer day = null, month = null, year = null, masterCode = null, courseCode = null;
 
     @Autowired
-    private MasterService masterService;
+    private CourseService courseService;
+
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private ContactService contactService;
 
     @Autowired
     private AccountService accountService;
@@ -236,7 +238,7 @@ public class ExcelAccountController {
         //
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
         XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"نقدي", "قسط شهري"});
-        CellRangeAddressList addressList = new CellRangeAddressList(1, 19, 5, 5);
+        CellRangeAddressList addressList = new CellRangeAddressList(1, 19, 13, 13);
         XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
@@ -481,6 +483,32 @@ public class ExcelAccountController {
                 }
                 if (accept) {
                     try {
+                        Course course = courseService.findByCodeAndMasterCodeAndMasterBranch(courseCode, masterCode, person.getBranch());
+                        if (course == null) {
+                            continue;
+                        }
+                        log.info("تم إيجاد الدورة تحت إشراف المدرب / " + course.getInstructor());
+                        account.setCourse(course);
+                        Account topAccount = accountService.findTopByCourseMasterBranchOrderByCodeDesc(person.getBranch());
+                        if (topAccount == null) {
+                            account.setCode(1);
+                        } else {
+                            account.setCode(topAccount.getCode() + 1);
+                        }
+                        account.setRegisterDate(DateConverter.getDateFromHijri(year, month, day));
+                        account.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
+                        account.setLastPerson(person);
+                        Student tempStudent = studentService.findByContactIdentityNumber(contact.getIdentityNumber().toLowerCase().trim());
+                        if (tempStudent == null) {
+                            student.setContact(contactService.save(contact));
+                            account.setStudent(studentService.save(student));
+                        } else {
+                            account.setStudent(tempStudent);
+                        }
+                        account.setCourseCreditAmount(0.0);
+                        account.setCourseDiscountAmount(0.0);
+                        account.setCourseProfitAmount(0.0);
+                        accountList.add(account);
                     } catch (Exception ex) {
                         log.info(ex.getMessage());
                     }

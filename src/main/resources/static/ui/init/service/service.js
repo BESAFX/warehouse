@@ -672,8 +672,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/offer/offerByBranch.html",
             controller: "offerByBranchCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -688,8 +688,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/offer/offerByMaster.html",
             controller: "offerByMasterCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -704,8 +704,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/offer/offerByPerson.html",
             controller: "offerByPersonCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -720,8 +720,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/offer/offerById.html",
             controller: "offerByIdCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -736,8 +736,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/account/accountByBranch.html",
             controller: "accountByBranchCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -752,8 +752,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/account/accountByMaster.html",
             controller: "accountByMasterCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -768,8 +768,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/account/accountByCourse.html",
             controller: "accountByCourseCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -784,8 +784,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/payment/paymentByBranch.html",
             controller: "paymentByBranchCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -800,8 +800,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/payment/paymentByMaster.html",
             controller: "paymentByMasterCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -816,8 +816,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/payment/paymentByCourse.html",
             controller: "paymentByCourseCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -832,8 +832,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/payment/paymentByAccountIn.html",
             controller: "paymentByAccountInCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -848,8 +848,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/chart/offersCountAverageByBranch.html",
             controller: "offersCountAverageByBranchCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -864,8 +864,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/chart/offersCountAverageByMaster.html",
             controller: "offersCountAverageByMasterCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -880,8 +880,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/chart/offersPriceAverageByBranch.html",
             controller: "offersPriceAverageByBranchCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -896,8 +896,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/chart/offersPriceAverageByMaster.html",
             controller: "offersPriceAverageByMasterCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -912,8 +912,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/info/branchDetails.html",
             controller: "branchDetailsCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -928,8 +928,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/info/masterDetails.html",
             controller: "masterDetailsCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -944,8 +944,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/info/courseDetails.html",
             controller: "courseDetailsCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -960,8 +960,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/info/unRegisteredStudentDetailsByBranch.html",
             controller: "unRegisteredStudentDetailsByBranchCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
     /**************************************************************
@@ -976,8 +976,8 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/info/unRegisteredStudentDetailsByMaster.html",
             controller: "unRegisteredStudentDetailsByMasterCtrl",
-            keyboard: true,
-            backdrop: true
+            backdrop: 'static',
+            keyboard: false
         });
     };
 
