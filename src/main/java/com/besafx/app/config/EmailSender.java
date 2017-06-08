@@ -63,7 +63,7 @@ public class EmailSender {
             message = new MimeMessage(mailSession);
             message.setSubject(title, "UTF-8");
             message.setText(content, "UTF-8", "html");
-            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية | Smart Offer", "UTF-8"));
+            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية", "UTF-8"));
             //
             message.addRecipient(Message.RecipientType.TO, new InternetAddress("anni4ksa@gmail.com"));
             //
@@ -93,7 +93,7 @@ public class EmailSender {
             log.info("Trying sending email to this destinations: " + toEmailList);
             transport = mailSession.getTransport();
             message = new MimeMessage(mailSession);
-            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية | Smart Offer", "UTF-8"));
+            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية", "UTF-8"));
             message.setSubject(title, "UTF-8");
             //
             message.addRecipient(Message.RecipientType.TO, new InternetAddress("anni4ksa@gmail.com"));
@@ -140,7 +140,7 @@ public class EmailSender {
             message = new MimeMessage(mailSession);
             message.setSubject(title, "UTF-8");
             message.setText(content, "UTF-8", "html");
-            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية | Smart Offer", "UTF-8"));
+            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية", "UTF-8"));
             //
             message.addRecipient(Message.RecipientType.TO, new InternetAddress("anni4ksa@gmail.com"));
             //
@@ -164,7 +164,7 @@ public class EmailSender {
             log.info("Trying sending email to this destinations: " + email);
             transport = mailSession.getTransport();
             message = new MimeMessage(mailSession);
-            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية | Smart Offer", "UTF-8"));
+            message.setFrom(new InternetAddress("admin@ararhni.com", "العروض الذكية", "UTF-8"));
             message.setSubject(title, "UTF-8");
             //
             message.addRecipient(Message.RecipientType.TO, new InternetAddress("anni4ksa@gmail.com"));
