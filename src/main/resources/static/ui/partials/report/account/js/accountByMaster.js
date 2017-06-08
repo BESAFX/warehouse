@@ -12,10 +12,11 @@ app.controller('accountByMasterCtrl', ['MasterService', '$scope', '$rootScope', 
             if ($scope.buffer.startDate && $scope.buffer.endDate) {
                 window.open('/report/AccountByMaster/'
                     + $scope.buffer.master.id + "?"
+                    + 'exportType=' + $scope.buffer.exportType + '&'
                     + "startDate=" + $scope.buffer.startDate.getTime() + "&"
                     + "endDate=" + $scope.buffer.endDate.getTime());
             } else {
-                window.open('/report/AccountByMaster/' + $scope.buffer.master.id);
+                window.open('/report/AccountByMaster/' + $scope.buffer.master.id + '?exportType=' + $scope.buffer.exportType);
             }
         };
 

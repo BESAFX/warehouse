@@ -13,10 +13,11 @@ app.controller('accountByCourseCtrl', ['MasterService', 'CourseService', '$scope
             if ($scope.buffer.startDate && $scope.buffer.endDate) {
                 window.open('/report/AccountByCourse/'
                     + $scope.buffer.course.id + "?"
+                    + 'exportType=' + $scope.buffer.exportType + '&'
                     + "startDate=" + $scope.buffer.startDate.getTime() + "&"
                     + "endDate=" + $scope.buffer.endDate.getTime());
             } else {
-                window.open('/report/AccountByCourse/' + $scope.buffer.course.id);
+                window.open('/report/AccountByCourse/' + $scope.buffer.course.id + '?exportType=' + $scope.buffer.exportType);
             }
         };
 

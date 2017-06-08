@@ -1,6 +1,4 @@
 package com.besafx.app.service;
-
-import com.besafx.app.entity.Permission;
 import com.besafx.app.entity.Role;
 import com.besafx.app.entity.Team;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,6 +13,4 @@ import java.util.List;
 public interface RoleService extends PagingAndSortingRepository<Role, Long>, JpaSpecificationExecutor<Role> {
 
     List<Role> findByTeam(Team team);
-
-    List<Role> findByPermission(Permission permission);
 }

@@ -18,6 +18,8 @@
                         class="form-control text-right"
                         chosen=""
                         ng-model="buffer.master"
+                        required="required"
+                        disable-validation-message=""
                         ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>
             </div>

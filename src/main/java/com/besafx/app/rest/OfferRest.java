@@ -1,23 +1,27 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
+import com.besafx.app.config.EmailSender;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.MasterService;
 import com.besafx.app.service.OfferService;
 import com.besafx.app.service.PersonService;
+import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +50,9 @@ public class OfferRest {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private EmailSender emailSender;
+
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
@@ -68,6 +75,22 @@ public class OfferRest {
                     .type("success")
                     .icon("fa-plus-square")
                     .build(), principal.getName());
+            ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
+            String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
+            message = message.replaceAll("OFFER_PERSON", offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName());
+            message = message.replaceAll("OFFER_CODE", offer.getCode().toString());
+            message = message.replaceAll("OFFER_DATE", DateConverter.getHijriStringFromDateRTLWithTime(offer.getLastUpdate()));
+            message = message.replaceAll("OFFER_CUSTOMER_NAME", offer.getCustomerName());
+            message = message.replaceAll("OFFER_CUSTOMER_MOBILE", offer.getCustomerMobile());
+            message = message.replaceAll("OFFER_PAYMENT_TYPE", offer.getMasterPaymentType());
+            message = message.replaceAll("OFFER_MASTER_PRICE", offer.getMasterPrice().toString() + " ريال سعودي ");
+            message = message.replaceAll("OFFER_MASTER_NAME", offer.getMaster().getName());
+            message = message.replaceAll("OFFER_BRANCH_NAME", offer.getMaster().getBranch().getName());
+            log.info("إرسال رسالة إلى مدير الشركة ومدير الفرع");
+            emailSender.send(
+                    "عرض جديد بواسطة الموظف /  " + offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName(),
+                    message,
+                    Lists.newArrayList(offer.getLastPerson().getBranch().getManager().getEmail(), offer.getLastPerson().getBranch().getCompany().getManager().getEmail()));
             return offer;
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);

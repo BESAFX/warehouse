@@ -18,16 +18,13 @@ public interface AccountService extends PagingAndSortingRepository<Account, Long
     List<Account> findByStudent(Student student);
     List<Account> findByStudentContactIdentityNumber(String identityNumber);
     List<Account> findByCourse(Course course);
-    List<Account> findByCourseAndRegisterDateBetween(Course course, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    List<Account> findByCourseAndRegisterDateBetween(Course course, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Account> findByCourseMaster(Master master);
-    List<Account> findByCourseMasterAndRegisterDateBetween(Master master, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
+    List<Account> findByCourseMasterAndRegisterDateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Account> findByCourseMasterBranch(Branch branch);
-    List<Account> findByCourseMasterBranchAndRegisterDateBetween(Branch branch, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
-    List<Account> findByCourseMasterBranchCompany(Company company);
+    List<Account> findByCourseMasterBranchAndRegisterDateBetween(Branch branch, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     Long countByCourse(Course course);
-    Long countByCourseAndRegisterDateBetween(Course course, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
-    Long countByCourseMasterAndRegisterDateBetween(Master master, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
-    Long countByCourseMasterBranch(Branch branch);
-    Long countByCourseMasterBranchAndRegisterDateBetween(Branch branch, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);
-    Long countByCourseMasterBranchCompany(Company company);
+    Long countByCourseAndRegisterDateBetween(Course course, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+    Long countByCourseMasterAndRegisterDateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+    Long countByCourseMasterBranchAndRegisterDateBetween(Branch branch, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 }

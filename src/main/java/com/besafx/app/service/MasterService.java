@@ -1,6 +1,5 @@
 package com.besafx.app.service;
 import com.besafx.app.entity.Branch;
-import com.besafx.app.entity.Company;
 import com.besafx.app.entity.Master;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -19,9 +18,7 @@ public interface MasterService extends PagingAndSortingRepository<Master, Long>,
     Integer findLastCodeByBranch(@Param("id") Long id);
     Master findByCodeAndBranchAndIdIsNot(Integer code, Branch branch, Long id);
     List<Master> findByBranch(Branch branch);
-    List<Master> findByBranchCompany(Company company);
     Master findByCodeAndBranch(Integer Code, Branch branch);
     Master findByNameAndBranch(String name, Branch branch);
-    Long countByBranchCompany(Company company);
     Long countByBranch(Branch branch);
 }

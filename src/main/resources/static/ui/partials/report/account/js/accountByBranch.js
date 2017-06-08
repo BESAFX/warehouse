@@ -12,10 +12,11 @@ app.controller('accountByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
             if ($scope.buffer.startDate && $scope.buffer.endDate) {
                 window.open('/report/AccountByBranch/'
                     + $scope.buffer.branch.id + "?"
+                    + 'exportType=' + $scope.buffer.exportType + '&'
                     + "startDate=" + $scope.buffer.startDate.getTime() + "&"
                     + "endDate=" + $scope.buffer.endDate.getTime());
             } else {
-                window.open('/report/AccountByBranch/' + $scope.buffer.branch.id);
+                window.open('/report/AccountByBranch/' + $scope.buffer.branch.id + '?exportType=' + $scope.buffer.exportType);
             }
         };
 
