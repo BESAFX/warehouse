@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-01-16T16:13:02 -->
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2017-06-10T23:44:51 -->
 <jasperReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
@@ -9,6 +9,7 @@
               uuid="d667083a-5ee3-46f8-b604-36494df2d410">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <import value="com.besafx.app.util.DateConverter"/>
     <style name="BACKGROUND_FIELD" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF">
         <pen lineWidth="1.0" lineStyle="Dotted"/>
         <box>
@@ -518,7 +519,8 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
                                     <textElement textAlignment="Center" verticalAlignment="Middle">
                                         <font fontName="Arial" size="8"/>
                                     </textElement>
-                                    <textFieldExpression><![CDATA[$F{obj1}.getLastUpdate()]]></textFieldExpression>
+                                    <textFieldExpression>
+                                        <![CDATA[DateConverter.getHijriStringFromDateRTL($F{obj1}.getLastUpdate())]]></textFieldExpression>
                                 </textField>
                             </jr:detailCell>
                         </jr:column>
