@@ -127,7 +127,8 @@ public class ReportOfferController {
         if (startDate == null && endDate == null) {
             offers = offerService.findByMasterBranch(branch);
         } else {
-            offers = offerService.findByMasterBranchAndLastUpdateBetween(branch, new Date(startDate), new Date(endDate));
+//            offers = offerService.findByMasterBranchAndLastUpdateBetween(branch, new Date(startDate), new Date(endDate));
+            offers = offerService.findByMasterBranchAndLastUpdateBetween(branch, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")
