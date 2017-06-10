@@ -34,7 +34,6 @@ public class Screen implements Serializable {
 
     private String name;
 
-
     @JsonCreator
     public static Screen Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Withdraw;
 import com.besafx.app.search.WithdrawSearch;
@@ -80,13 +79,11 @@ public class WithdrawRest {
             @RequestParam(value = "fromName", required = false) final String fromName,
             @RequestParam(value = "dateFrom,", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo,", required = false) final Long dateTo,
-
             @RequestParam(value = "bankCode", required = false) final Long bankCode,
             @RequestParam(value = "bankName", required = false) final String bankName,
             @RequestParam(value = "bankBranch", required = false) final String bankBranch,
             @RequestParam(value = "bankStockFrom", required = false) final Long bankStockFrom,
             @RequestParam(value = "bankStockTo", required = false) final Long bankStockTo) {
-
         return withdrawSearch.search(code, amountFrom, amountTo, fromName, dateFrom, dateTo, bankCode, bankName, bankBranch, bankStockFrom, bankStockTo);
     }
 

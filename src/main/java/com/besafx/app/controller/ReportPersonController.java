@@ -1,5 +1,4 @@
 package com.besafx.app.controller;
-
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DateConverter;
@@ -30,17 +29,13 @@ public class ReportPersonController {
             @RequestParam("branchList") List<Long> branchList,
             HttpServletResponse response)
             throws JRException, IOException {
-
-
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "inline; filename=Report.pdf");
         final OutputStream outStream = response.getOutputStream();
-
         /**
          * Insert Parameters
          */
         Map<String, Object> map = new HashMap<>();
-
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
         param1.append("\n");
@@ -51,18 +46,13 @@ public class ReportPersonController {
         param1.append("كشف تفصيلي عن بيانات المستخدمين");
         map.put("param1", param1.toString());
         map.put("param2", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-
         /**
          * Insert Data
          */
-
         List<WrapperUtil> list = new ArrayList<>();
-
-
         ClassPathResource jrxmlFile = new ClassPathResource("/report/person/ReportPersonByBranch.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-
         JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
     }
 }

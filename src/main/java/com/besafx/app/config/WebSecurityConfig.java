@@ -1,5 +1,4 @@
 package com.besafx.app.config;
-
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.service.RoleService;
@@ -67,24 +66,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/billBuy").access("hasRole('ROLE_BILL_BUY_CREATE') or hasRole('ROLE_BILL_BUY_UPDATE') or hasRole('ROLE_BILL_BUY_DELETE') or hasRole('ROLE_BILL_BUY_REPORT')")
                 .antMatchers("/billBuyType").access("hasRole('ROLE_BILL_BUY_TYPE_CREATE') or hasRole('ROLE_BILL_BUY_TYPE_UPDATE') or hasRole('ROLE_BILL_BUY_TYPE_DELETE') or hasRole('ROLE_BILL_BUY_TYPE_REPORT')")
                 .anyRequest().authenticated();
-
         http.formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/menu")
                 .permitAll();
-
         http.logout()
                 .logoutUrl("/logout")
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-
         http.rememberMe();
-
         http.csrf().disable();
-
         http.sessionManagement()
                 .maximumSessions(2)
                 .sessionRegistry(sessionRegistry());
@@ -124,15 +118,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.userDetailsService((String email) -> {
-
                     Person person = personService.findByEmail(email);
-
                     List<GrantedAuthority> authorities = new ArrayList<>();
-
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
-
                         if (person == null) {
                             throw new UsernameNotFoundException(email);
                         }
@@ -141,9 +130,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         person.setLastLoginDate(new Date());
                         person.setIpAddress(request.getRemoteAddr());
                         personService.save(person);
-
                         authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));
-
                         roleService.findByTeam(person.getTeam()).stream().forEach(role -> {
                             if (role.getPermission().getCreateEntity()) {
                                 SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.getPermission().getScreen().getCode().name() + "_CREATE");
@@ -164,11 +151,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         });
 
                     }
-
                     return new org.springframework.security.core.userdetails.User(person.getEmail(), person.getPassword(),
                             person.getEnabled(), true, true, true, authorities);
                 }
-
         ).passwordEncoder(passwordEncoder);
 
     }

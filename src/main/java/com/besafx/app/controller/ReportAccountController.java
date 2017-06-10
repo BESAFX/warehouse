@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
@@ -77,7 +78,7 @@ public class ReportAccountController {
         if (startDate == null && endDate == null) {
             accounts = accountService.findByCourseMasterBranch(branch);
         } else {
-            accounts = accountService.findByCourseMasterBranchAndRegisterDateBetween(branch, new Date(startDate), new Date(endDate));
+            accounts = accountService.findByCourseMasterBranchAndRegisterDateBetween(branch, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")
@@ -132,7 +133,7 @@ public class ReportAccountController {
         if (startDate == null && endDate == null) {
             accounts = accountService.findByCourseMaster(master);
         } else {
-            accounts = accountService.findByCourseMasterAndRegisterDateBetween(master, new Date(startDate), new Date(endDate));
+            accounts = accountService.findByCourseMasterAndRegisterDateBetween(master, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")
@@ -190,7 +191,7 @@ public class ReportAccountController {
         if (startDate == null && endDate == null) {
             accounts = accountService.findByCourse(course);
         } else {
-            accounts = accountService.findByCourseAndRegisterDateBetween(course, new Date(startDate), new Date(endDate));
+            accounts = accountService.findByCourseAndRegisterDateBetween(course, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")

@@ -1,5 +1,4 @@
 package com.besafx.app.search;
-
 import com.besafx.app.entity.BillBuy;
 import com.besafx.app.service.BillBuyService;
 import com.google.common.collect.Lists;
@@ -36,8 +35,6 @@ public class BillBuySearch {
         Optional.ofNullable(amountFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("amountNumber"), value)));
         Optional.ofNullable(amountTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("amountNumber"), value)));
         Optional.ofNullable(branchId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("branch").get("id"), value)));
-
-
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {

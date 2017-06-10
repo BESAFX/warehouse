@@ -1,5 +1,4 @@
 package com.besafx.app.search;
-
 import com.besafx.app.entity.Withdraw;
 import com.besafx.app.service.WithdrawService;
 import com.google.common.collect.Lists;
@@ -26,14 +25,12 @@ public class WithdrawSearch {
             final String fromName,
             final Long dateFrom,
             final Long dateTo,
-
             final Long bankCode,
             final String bankName,
             final String bankBranch,
             final Long bankStockFrom,
             final Long bankStockTo
     ) {
-
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(code).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("code"), "%" + value + "%")));
         Optional.ofNullable(amountFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("amount"), value)));
@@ -41,13 +38,11 @@ public class WithdrawSearch {
         Optional.ofNullable(fromName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("fromName"), "%" + value + "%")));
         Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new Date(value))));
         Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new Date(value))));
-
         Optional.ofNullable(bankCode).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("code"), "%" + value + "%")));
         Optional.ofNullable(bankName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("name"), "%" + value + "%")));
         Optional.ofNullable(bankBranch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("branch"), "%" + value + "%")));
         Optional.ofNullable(bankStockFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("bank").get("stock"), value)));
         Optional.ofNullable(bankStockTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("bank").get("stock"), value)));
-
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
@@ -58,6 +53,5 @@ public class WithdrawSearch {
             return Lists.newArrayList(withdrawService.findAll());
         }
     }
-
 
 }

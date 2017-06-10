@@ -1,5 +1,4 @@
 package com.besafx.app.controller;
-
 import com.besafx.app.entity.Student;
 import com.besafx.app.service.StudentService;
 import com.besafx.app.util.DateConverter;
@@ -28,18 +27,15 @@ public class ReportStudentController {
     @RequestMapping(value = "/report/StudentAll", method = RequestMethod.GET, produces = "application/pdf")
     @ResponseBody
     public void printStudentAll(HttpServletResponse response) throws JRException, IOException {
-
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "inline; filename=Report.pdf");
         final OutputStream outStream = response.getOutputStream();
-
         /**
          * Insert Parameters
          */
         Map<String, Object> map = new HashMap<>();
         map.put("param1", "كشف بيانات الطلبة");
         map.put("param2", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-
         /**
          * Insert Data
          */
@@ -52,11 +48,9 @@ public class ReportStudentController {
                     .setObj2(DateConverter.getHijriStringFromDateRTL(contact.getBirthDate().getTime())));
             list.add(wrapperUtil);
         });
-
         ClassPathResource jrxmlFile = new ClassPathResource("/report/ReportStudentAll.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-
         JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
     }
 }

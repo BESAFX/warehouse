@@ -1,5 +1,4 @@
 package com.besafx.app.search;
-
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.service.PaymentService;
@@ -43,7 +42,6 @@ public class PaymentSearch {
             final Long personBranch,
             final String type
     ) {
-
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(paymentCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(paymentCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
@@ -51,7 +49,6 @@ public class PaymentSearch {
         Optional.ofNullable(paymentDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new Date(value))));
         Optional.ofNullable(amountFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("amountNumber"), value)));
         Optional.ofNullable(amountTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("amountNumber"), value)));
-
         Optional.ofNullable(firstName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("firstName"), "%" + value + "%")));
         Optional.ofNullable(secondName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("secondName"), "%" + value + "%")));
         Optional.ofNullable(thirdName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("thirdName"), "%" + value + "%")));
@@ -67,7 +64,6 @@ public class PaymentSearch {
         Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("account").get("course").get("master").get("branch").get("id"), value)));
         Optional.ofNullable(personBranch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("lastPerson").get("branch").get("id"), value)));
         Optional.ofNullable(type).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("type"), value)));
-
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {

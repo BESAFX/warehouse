@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.entity.Deposit;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.DepositSearch;
@@ -79,7 +78,6 @@ public class DepositRest {
             @RequestParam(value = "fromName", required = false) final String fromName,
             @RequestParam(value = "dateFrom,", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo,", required = false) final Long dateTo,
-
             @RequestParam(value = "bankCode", required = false) final Long bankCode,
             @RequestParam(value = "bankName", required = false) final String bankName,
             @RequestParam(value = "bankBranch", required = false) final Long bankBranch,

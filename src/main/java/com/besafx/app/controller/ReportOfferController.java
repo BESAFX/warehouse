@@ -127,7 +127,6 @@ public class ReportOfferController {
         if (startDate == null && endDate == null) {
             offers = offerService.findByMasterBranch(branch);
         } else {
-//            offers = offerService.findByMasterBranchAndLastUpdateBetween(branch, new Date(startDate), new Date(endDate));
             offers = offerService.findByMasterBranchAndLastUpdateBetween(branch, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
@@ -184,7 +183,7 @@ public class ReportOfferController {
         if (startDate == null && endDate == null) {
             offers = offerService.findByMaster(master);
         } else {
-            offers = offerService.findByMasterAndLastUpdateBetween(master, new Date(startDate), new Date(endDate));
+            offers = offerService.findByMasterAndLastUpdateBetween(master, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")
@@ -237,7 +236,7 @@ public class ReportOfferController {
         if (startDate == null && endDate == null) {
             offers = offerService.findByLastPerson(person);
         } else {
-            offers = offerService.findByLastPersonAndLastUpdateBetween(person, new Date(startDate), new Date(endDate));
+            offers = offerService.findByLastPersonAndLastUpdateBetween(person, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")

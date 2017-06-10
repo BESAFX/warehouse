@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.entity.Contact;
 import com.besafx.app.service.ContactService;
 import com.google.common.collect.Lists;

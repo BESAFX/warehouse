@@ -25,7 +25,6 @@ public class DepositSearch {
             final String fromName,
             final Long dateFrom,
             final Long dateTo,
-
             final Long bankCode,
             final String bankName,
             final Long bankBranch,

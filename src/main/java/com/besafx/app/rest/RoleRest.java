@@ -1,5 +1,4 @@
 package com.besafx.app.rest;
-
 import com.besafx.app.entity.Permission;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Role;
@@ -112,7 +111,6 @@ public class RoleRest {
                     role.getPermission().getScreen()
             );
             if (permission == null) {
-
                 permission = new Permission();
                 permission.setCreateEntity(role.getPermission().getCreateEntity());
                 permission.setUpdateEntity(role.getPermission().getUpdateEntity());
@@ -121,7 +119,6 @@ public class RoleRest {
                 permission.setScreen(role.getPermission().getScreen());
                 permissionService.save(permission);
             }
-
             role.setPermission(permission);
             role.setTeam(team);
             roleService.save(role);
