@@ -181,8 +181,14 @@
                                 <td st-select-row-custom="course">{{course.instructor}}</td>
                                 <td st-select-row-custom="course">{{course.companyName}}</td>
                                 <td st-select-row-custom="course">{{course.maxStudentCount}}</td>
-                                <td st-select-row-custom="course">{{course.master.name}}</td>
-                                <td st-select-row-custom="course">{{course.master.branch.name}}</td>
+                                <td st-select-row-custom="course">
+                                    [ {{course.master.code}} ]
+                                    {{course.master.name}}
+                                </td>
+                                <td st-select-row-custom="course">
+                                    [ {{course.master.branch.code}} ]
+                                    {{course.master.branch.name}}
+                                </td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">

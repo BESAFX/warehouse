@@ -488,8 +488,14 @@
                                 <td st-select-row-custom="account">{{account.student.contact.mobile}}</td>
                                 <td st-select-row-custom="account">{{account.coursePrice | currency:'SAR':0}}</td>
                                 <td st-select-row-custom="account">{{account.remainPrice | currency:'SAR':0}}</td>
-                                <td st-select-row-custom="account">{{account.course.master.name}}</td>
-                                <td st-select-row-custom="account">{{account.course.master.branch.name}}</td>
+                                <td st-select-row-custom="account">
+                                    [ {{account.course.master.code}} ]
+                                    {{account.course.master.name}}
+                                </td>
+                                <td st-select-row-custom="account">
+                                    [ {{account.course.master.branch.code}} ]
+                                    {{account.course.master.branch.name}}
+                                </td>
                                 <td st-select-row-custom="account">
                                     {{account.lastPerson.contact.firstName}}
                                     {{account.lastPerson.contact.forthName}}

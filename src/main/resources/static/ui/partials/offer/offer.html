@@ -462,8 +462,14 @@
                                 <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
                                 <td st-select-row-custom="offer"
                                     ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
-                                <td st-select-row-custom="offer">{{offer.master.branch.name}}</td>
-                                <td st-select-row-custom="offer">{{offer.master.name}}</td>
+                                <td st-select-row-custom="offer">
+                                    [ {{offer.master.branch.code}} ]
+                                    {{offer.master.branch.name}}
+                                </td>
+                                <td st-select-row-custom="offer">
+                                    [ {{offer.master.code}} ]
+                                    {{offer.master.name}}
+                                </td>
                                 <td st-select-row-custom="offer">
                                     {{offer.lastPerson.contact.firstName}}
                                     {{offer.lastPerson.contact.forthName}}
