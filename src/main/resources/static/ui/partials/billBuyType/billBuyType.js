@@ -71,6 +71,7 @@ app.controller("billBuyTypeCtrl", ['BillBuyTypeService', 'ModalProvider', '$scop
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
+            $scope.fetchTableData();
         }, 1500);
 
     }]);

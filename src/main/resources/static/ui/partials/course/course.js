@@ -72,6 +72,7 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
+            $scope.fetchTableData();
         }, 1500);
 
     }]);

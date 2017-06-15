@@ -71,6 +71,7 @@ app.controller("branchCtrl", ['BranchService', 'PersonService', 'ModalProvider',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
+            $scope.fetchTableData();
         }, 1500);
 
     }]);

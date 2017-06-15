@@ -12,6 +12,7 @@ app.controller("personCtrl", ['PersonService', 'ModalProvider', '$rootScope', '$
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
+            $scope.fetchTableData();
         }, 1500);
 
         $scope.setSelected = function (object) {

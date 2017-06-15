@@ -71,6 +71,7 @@ app.controller("masterCtrl", ['MasterService', 'BranchService', 'ModalProvider',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
+            $scope.fetchTableData();
         }, 1500);
 
     }]);

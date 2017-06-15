@@ -318,7 +318,10 @@ public class AccountRest {
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            return Lists.newArrayList(accountService.findAll(result));
+            List<Account> list = Lists.newArrayList(accountService.findAll(result));
+            Comparator<Account> comparator = Comparator.comparing(account -> account.getCourse().getId());
+            list.sort(comparator);
+            return list;
         } else {
             throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");
         }

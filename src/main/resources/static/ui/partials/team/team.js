@@ -3,10 +3,6 @@ app.controller("teamCtrl", ['TeamService', 'PersonService', 'ModalProvider', '$r
 
         $scope.selected = {};
 
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
-
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.teams, function (team) {
@@ -26,6 +22,11 @@ app.controller("teamCtrl", ['TeamService', 'PersonService', 'ModalProvider', '$r
                 $scope.setSelected(data[0]);
             });
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+            $scope.fetchTableData();
+        }, 1500);
 
 
     }]);

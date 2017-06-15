@@ -21,10 +21,6 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'MasterService', '
             });
         }, 2000);
 
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
-
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.offers, function (offer) {
@@ -181,5 +177,9 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'MasterService', '
                 }
             }
         ];
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
 
     }]);

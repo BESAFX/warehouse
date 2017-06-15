@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -231,7 +228,9 @@ public class OfferRest {
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            return Lists.newArrayList(offerService.findAll(result));
+            List<Offer> list = Lists.newArrayList(offerService.findAll(result));
+            list.sort(Comparator.comparing(offer -> offer.getMaster().getId()));
+            return list;
         } else {
             throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");
         }
