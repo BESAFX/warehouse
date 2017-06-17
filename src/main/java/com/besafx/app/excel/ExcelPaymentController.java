@@ -2,6 +2,7 @@ package com.besafx.app.excel;
 import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
+import com.besafx.app.rest.AccountRest;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.PaymentService;
 import com.besafx.app.service.PersonService;
@@ -45,6 +46,9 @@ public class ExcelPaymentController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private AccountRest accountRest;
 
     @Autowired
     private PaymentService paymentService;
@@ -364,10 +368,18 @@ public class ExcelPaymentController {
                         if (account == null) {
                             continue;
                         }
+                        log.info("تم إيجاد التسجيل بنجاح...");
+                        log.info("فحص هل تبقي مبالغ لم تسدد لهذا الحساب");
+                        if (payment.getType().equals("ايرادات اساسية")) {
+                            if (accountRest.findRemainPrice(account.getId()) < payment.getAmountNumber()) {
+                                log.info("لا يمكن قبول قيمة اكبر من الباقي من التسجيل");
+                                continue;
+                            }
+                        }
                         if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), person.getBranch()) != null) {
+                            log.info("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
                             continue;
                         }
-                        log.info("تم إيجاد التسجيل بنجاح...");
                         payment.setAccount(account);
                         payment.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
                         payment.setLastPerson(person);

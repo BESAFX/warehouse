@@ -1,8 +1,10 @@
 package com.besafx.app.service;
 import com.besafx.app.entity.*;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,5 +29,7 @@ public interface PaymentService extends PagingAndSortingRepository<Payment, Long
     List<Payment> findByAccountCourseMasterAndDateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Payment> findByAccountCourseAndDateBetween(Course course, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Payment> findByAccountInAndDateBetween(List<Account> accounts, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+    @Query("select sum(p.amountNumber) from Payment p where p.account = (:account) and p.type = (:type) ")
+    Double sumByAccountAndType(@Param(value = "account") Account account, @Param(value = "type") String type);
 
 }

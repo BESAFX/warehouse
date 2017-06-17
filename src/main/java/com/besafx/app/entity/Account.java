@@ -86,4 +86,12 @@ public class Account implements Serializable {
         Account account = mapper.readValue(jsonString, Account.class);
         return account;
     }
+
+    public Double getRequiredPrice() {
+        if (this.coursePaymentType.equals("نقدي")) {
+            return (this.coursePrice - (this.coursePrice * this.courseDiscountAmount / 100));
+        } else {
+            return (this.coursePrice + (this.coursePrice * this.courseProfitAmount / 100));
+        }
+    }
 }

@@ -208,25 +208,22 @@ public class AccountRest {
     @ResponseBody
     public Double findRequiredPrice(@PathVariable Long accountId) {
         Account account = findOne(accountId);
-        if (account.getCoursePaymentType().equals("نقدي")) {
-            return (account.getCoursePrice() - (account.getCoursePrice() * account.getCourseDiscountAmount() / 100));
-        } else {
-            return (account.getCoursePrice() + (account.getCoursePrice() * account.getCourseProfitAmount() / 100));
-        }
+        return account.getRequiredPrice();
     }
 
     @RequestMapping(value = "findRemainPrice/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Double findRemainPrice(@PathVariable Long accountId) {
         Account account = findOne(accountId);
-        return findRequiredPrice(accountId) - paymentService.findByAccountAndType(account, "ايرادات اساسية").stream().mapToDouble(payment -> payment.getAmountNumber()).sum();
+        return account.getRequiredPrice() - findPaidPrice(accountId);
     }
 
     @RequestMapping(value = "findPaidPrice/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Double findPaidPrice(@PathVariable Long accountId) {
         Account account = findOne(accountId);
-        return paymentService.findByAccountAndType(account, "ايرادات اساسية").stream().mapToDouble(payment -> payment.getAmountNumber()).sum();
+        Double paid = paymentService.sumByAccountAndType(account, "ايرادات اساسية");
+        return paid == null ? 0.0 : paid;
     }
 
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
