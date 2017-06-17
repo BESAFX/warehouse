@@ -1,5 +1,5 @@
-app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state',
-    function (CourseService, MasterService, BranchService, ModalProvider, $rootScope, $scope, $log, $timeout, $state) {
+app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService', 'AccountService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state',
+    function (CourseService, MasterService, BranchService, AccountService, ModalProvider, $rootScope, $scope, $log, $timeout, $state) {
 
         $scope.selected = {};
 
@@ -39,9 +39,25 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             });
         };
 
+        $scope.deleteAccounts = function (course) {
+            if (course) {
+                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
+                    AccountService.removeByCourse(course.id).then(function () {
+
+                    });
+                });
+                return;
+            }
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
+                AccountService.removeByCourse($scope.selected.id).then(function () {
+
+                });
+            });
+        };
+
         $scope.rowMenu = [
             {
-                html: '<div class="drop-menu"> انشاء دورة جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
+                html: '<div class="drop-menu">انشاء دورة جديد<span class="fa fa-pencil fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
@@ -50,7 +66,7 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                 }
             },
             {
-                html: '<div class="drop-menu"> تعديل بيانات الدورة <span class="fa fa-edit fa-lg"></span></div>',
+                html: '<div class="drop-menu">تعديل بيانات الدورة<span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
@@ -59,7 +75,7 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                 }
             },
             {
-                html: '<div class="drop-menu"> حذف الدورة <span class="fa fa-minus-square-o fa-lg"></span></div>',
+                html: '<div class="drop-menu">حذف الدورة<span class="fa fa-trash fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
@@ -68,7 +84,6 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                 }
             }
         ];
-
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();

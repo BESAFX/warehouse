@@ -478,6 +478,23 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openPaymentHeavyWorkModel = function () {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/payment/paymentHeavyWork.html',
+            controller: 'paymentHeavyWorkCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'إنشاء دفعة من سندات القبض';
+                }
+            }
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * PaymentOut Model                                           *

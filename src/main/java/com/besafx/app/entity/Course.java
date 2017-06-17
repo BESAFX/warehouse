@@ -9,7 +9,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -55,7 +57,7 @@ public class Course implements Serializable {
     @ManyToOne
     @JoinColumn(name = "master")
     @JsonView(Views.Summery.class)
-    @JsonIgnoreProperties(value = {"courses"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"courses", "lastPerson", "lastUpdate"}, allowSetters = true)
     private Master master;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -67,6 +69,10 @@ public class Course implements Serializable {
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     @JsonView(Views.Summery.class)
     private Person lastPerson;
+
+    @OneToMany(mappedBy = "course")
+    @JsonIgnoreProperties(value = {"course", "student", "lastPerson", "lastUpdate", "registerDate"}, allowSetters = true)
+    private List<Account> accounts = new ArrayList<>();
 
     @JsonCreator
     public static Course Create(String jsonString) throws IOException {

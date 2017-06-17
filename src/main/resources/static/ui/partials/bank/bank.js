@@ -107,48 +107,30 @@ app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$r
 
         $scope.rowMenu = [
             {
-                html: '<div style="cursor: pointer;padding: 10px"><span class="fa fa-plus-square-o fa-lg"></span> اضافة</div>',
+                html: '<div class="drop-menu">انشاء حساب جديد<span class="fa fa-pencil fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.openCreateModel();
+                    ModalProvider.openBankCreateModel();
                 }
             },
             {
-                html: '<div style="cursor: pointer;padding: 10px"><span class="fa fa-edit fa-lg"></span> تعديل</div>',
+                html: '<div class="drop-menu">تعديل بيانات الحساب<span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.openUpdateModel($itemScope.bank);
+                    ModalProvider.openBankUpdateModel($itemScope.bank);
                 }
             },
             {
-                html: '<div style="cursor: pointer;padding: 10px"><span class="fa fa-minus-square-o fa-lg"></span> حذف</div>',
+                html: '<div class="drop-menu">حذف الحساب<span class="fa fa-trash fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    $log.info($itemScope.bank);
-                }
-            },
-            {
-                html: '<div style="cursor: pointer;padding: 10px"><span class="fa fa-upload fa-lg"></span> إيداع</div>',
-                enabled: function () {
-                    return true
-                },
-                click: function ($itemScope, $event, value) {
-                    $scope.openDepositModel($itemScope.bank);
-                }
-            },
-            {
-                html: '<div style="cursor: pointer;padding: 10px"><span class="fa fa-download fa-lg"></span> سحب</div>',
-                enabled: function () {
-                    return true
-                },
-                click: function ($itemScope, $event, value) {
-                    $scope.openWithdrawModel($itemScope.bank);
+                    $scope.delete($itemScope.bank);
                 }
             }
         ];

@@ -21,6 +21,11 @@ app.factory("AccountService", ['$http', '$log',
                     return response.data;
                 });
             },
+            removeByCourse: function (courseId) {
+                return $http.delete("/api/account/deleteByCourse/" + courseId).then(function (response) {
+                    return response.data;
+                });
+            },
             update: function (account) {
                 return $http.put("/api/account/update", account).then(function (response) {
                     return response.data;

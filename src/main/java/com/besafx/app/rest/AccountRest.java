@@ -139,6 +139,25 @@ public class AccountRest {
         }
     }
 
+    @RequestMapping(value = "deleteByCourse/{courseId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ACCOUNT_DELETE')")
+    public void deleteByCourse(@PathVariable Long courseId, Principal principal) {
+        List<Account> accounts = accountService.findByCourseId(courseId);
+        if (!accounts.isEmpty()) {
+            List<Payment> payments = paymentService.findByAccountIn(accounts);
+            paymentService.delete(payments);
+            accountService.delete(accounts);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على تسجيل الطلاب")
+                    .message("تم حذف الاشتراكات وكل ما يتعلق بها من سندات وحسابات بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
+        }
+    }
+
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Account> findAll() {

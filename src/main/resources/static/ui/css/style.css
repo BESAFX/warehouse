@@ -392,7 +392,10 @@ WebKit inertia scrolling is being added here for any present/future devices that
     cursor: pointer;
     padding: 10px;
     text-align: right;
-    font-size: 15px;
+}
+
+.drop-menu .fa {
+    margin-left: 10px;
 }
 
 .drop-menu:hover{

@@ -164,7 +164,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
 
         $scope.rowMenu = [
             {
-                html: '<div class="drop-menu"> انشاء تسجيل جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
+                html: '<div class="drop-menu">انشاء تسجيل جديد<span class="fa fa-pencil fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
@@ -173,7 +173,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 }
             },
             {
-                html: '<div class="drop-menu"> تعديل بيانات التسجيل <span class="fa fa-edit fa-lg"></span></div>',
+                html: '<div class="drop-menu">تعديل بيانات التسجيل<span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
@@ -182,7 +182,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 }
             },
             {
-                html: '<div class="drop-menu"> حذف التسجيل <span class="fa fa-minus-square-o fa-lg"></span></div>',
+                html: '<div class="drop-menu">حذف التسجيل<span class="fa fa-trash fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },

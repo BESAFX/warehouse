@@ -65,7 +65,7 @@ public class ExcelAccountController {
     }
 
     @RequestMapping(value = "/api/heavy-work/account/write/{rowCount}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void writeBranchFile(@PathVariable(value = "rowCount") Integer rowCount, HttpServletResponse response, Principal principal) {
+    public void writeExcelFile(@PathVariable(value = "rowCount") Integer rowCount, HttpServletResponse response, Principal principal) {
         log.info("فحص المستخدم");
         Person person = personService.findByEmail(principal.getName());
         //
@@ -260,7 +260,7 @@ public class ExcelAccountController {
     }
 
     @RequestMapping(value = "/api/heavy-work/account/read", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void readBranchFile(@RequestParam("file") MultipartFile multipartFile, Principal principal) {
+    public void readExcelFile(@RequestParam("file") MultipartFile multipartFile, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         try {
             List<Account> accountList = new ArrayList<>();
@@ -509,15 +509,15 @@ public class ExcelAccountController {
                         account.setCourseDiscountAmount(0.0);
                         account.setCourseProfitAmount(0.0);
                         accountList.add(account);
+                        accountService.save(account);
                     } catch (Exception ex) {
                         log.info(ex.getMessage());
                     }
                 }
             }
-            accountService.save(accountList);
             notificationService.notifyOne(Notification
                     .builder()
-                    .title("العمليات على العروض")
+                    .title("العمليات على تسجيل الطلاب")
                     .message("تم اضافة عدد " + accountList.size() + " من التسجيلات بنجاح.")
                     .type("success")
                     .icon("fa-plus-circle")
