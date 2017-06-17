@@ -37,7 +37,10 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             {id: 33, name: 'حذف فاتورة شراء', value: 'ROLE_BILL_BUY_DELETE', selected: false},
             {id: 34, name: 'إنشاء الصلاحيات', value: 'ROLE_TEAM_CREATE', selected: false},
             {id: 35, name: 'تعديل بيانات الصلاحيات', value: 'ROLE_TEAM_UPDATE', selected: false},
-            {id: 36, name: 'حذف الصلاحيات', value: 'ROLE_TEAM_DELETE', selected: false}
+            {id: 36, name: 'حذف الصلاحيات', value: 'ROLE_TEAM_DELETE', selected: false},
+            {id: 34, name: 'إنشاء المستخدمون', value: 'ROLE_PERSON_CREATE', selected: false},
+            {id: 35, name: 'تعديل بيانات المستخدمون', value: 'ROLE_PERSON_UPDATE', selected: false},
+            {id: 36, name: 'حذف المستخدمون', value: 'ROLE_PERSON_DELETE', selected: false}
         ];
 
 

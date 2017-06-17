@@ -86,7 +86,10 @@ public class Initializer implements CommandLineRunner {
                 "ROLE_PROFILE_UPDATE",
                 "ROLE_TEAM_CREATE",
                 "ROLE_TEAM_UPDATE",
-                "ROLE_TEAM_DELETE"
+                "ROLE_TEAM_DELETE",
+                "ROLE_PERSON_CREATE",
+                "ROLE_PERSON_UPDATE",
+                "ROLE_PERSON_DELETE"
         ));
         teamService.save(team);
         log.info("أنشاء المستخدم الخاص بمدير النظام");
