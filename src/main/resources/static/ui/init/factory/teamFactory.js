@@ -6,6 +6,11 @@ app.factory("TeamService",
                     return response.data;
                 });
             },
+            findAllSummery: function () {
+                return $http.get("/api/team/findAllSummery").then(function (response) {
+                    return response.data;
+                });
+            },
             findOne: function (id) {
                 return $http.get("/api/team/findOne/" + id).then(function (response) {
                     return response.data;
@@ -21,11 +26,6 @@ app.factory("TeamService",
             },
             update: function (team) {
                 return $http.put("/api/team/update", team).then(function (response) {
-                    return response.data;
-                });
-            },
-            fetchTableData: function () {
-                return $http.get("/api/team/fetchTableData").then(function (response) {
                     return response.data;
                 });
             }

@@ -1,24 +1,25 @@
 package com.besafx.app.init;
-import com.besafx.app.entity.*;
-import com.besafx.app.service.*;
+import com.besafx.app.entity.Company;
+import com.besafx.app.entity.Contact;
+import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Team;
+import com.besafx.app.service.CompanyService;
+import com.besafx.app.service.PersonService;
+import com.besafx.app.service.TeamService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
-
 @Component
 public class Initializer implements CommandLineRunner {
 
-    @Autowired
-    private ScreenService screenService;
+    private final static Logger log = LoggerFactory.getLogger(Initializer.class);
 
     @Autowired
     private TeamService teamService;
-
-    @Autowired
-    private ContactService contactService;
 
     @Autowired
     private PersonService personService;
@@ -27,133 +28,95 @@ public class Initializer implements CommandLineRunner {
     private CompanyService companyService;
 
     @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
-        if (contactService.count() == 0) {
+        if (personService.count() == 0) {
             runForFirstTimeOnly();
         }
     }
 
     private void runForFirstTimeOnly() {
+        log.info("انشاء مجموعة الصلاحيات");
         Team team = new Team();
-        team.setName("مدراء الشركات");
+        team.setCode(1);
+        team.setName("مدير النظام");
+        team.setAuthorities(String.join(",",
+                "ROLE_COMPANY_UPDATE",
+                "ROLE_BRANCH_CREATE",
+                "ROLE_BRANCH_UPDATE",
+                "ROLE_BRANCH_DELETE",
+                "ROLE_MASTER_CREATE",
+                "ROLE_MASTER_UPDATE",
+                "ROLE_MASTER_DELETE",
+                "ROLE_OFFER_CREATE",
+                "ROLE_OFFER_UPDATE",
+                "ROLE_OFFER_DELETE",
+                "ROLE_COURSE_CREATE",
+                "ROLE_COURSE_UPDATE",
+                "ROLE_COURSE_DELETE",
+                "ROLE_STUDENT_CREATE",
+                "ROLE_STUDENT_UPDATE",
+                "ROLE_STUDENT_DELETE",
+                "ROLE_ACCOUNT_CREATE",
+                "ROLE_ACCOUNT_UPDATE",
+                "ROLE_ACCOUNT_DELETE",
+                "ROLE_PAYMENT_CREATE",
+                "ROLE_PAYMENT_UPDATE",
+                "ROLE_PAYMENT_DELETE",
+                "ROLE_BANK_CREATE",
+                "ROLE_BANK_UPDATE",
+                "ROLE_BANK_DELETE",
+                "ROLE_DEPOSIT_CREATE",
+                "ROLE_DEPOSIT_UPDATE",
+                "ROLE_DEPOSIT_DELETE",
+                "ROLE_WITHDRAW_CREATE",
+                "ROLE_WITHDRAW_UPDATE",
+                "ROLE_WITHDRAW_DELETE",
+                "ROLE_BILL_BUY_CREATE",
+                "ROLE_BILL_BUY_UPDATE",
+                "ROLE_BILL_BUY_DELETE",
+                "ROLE_BILL_BUY_TYPE_CREATE",
+                "ROLE_BILL_BUY_TYPE_UPDATE",
+                "ROLE_BILL_BUY_TYPE_DELETE",
+                "ROLE_PERSON_CREATE",
+                "ROLE_PERSON_UPDATE",
+                "ROLE_PERSON_DELETE",
+                "ROLE_PROFILE_UPDATE",
+                "ROLE_TEAM_CREATE",
+                "ROLE_TEAM_UPDATE",
+                "ROLE_TEAM_DELETE"
+        ));
         teamService.save(team);
+        log.info("أنشاء المستخدم الخاص بمدير النظام");
         Contact contact = new Contact();
-        contact.setFirstName("المدير");
-        contact.setForthName("العام");
-        contact.setPhoto("/no-image.jpg");
-        contact.setQualification("مدير شركة");
-        contactService.save(contact);
+        contact.setFirstName("مدير");
+        contact.setForthName("النظام");
+        contact.setNationality("---");
+        contact.setIdentityNumber("---");
+        contact.setAddress("---");
+        contact.setMobile("---");
+        contact.setQualification("---");
+        contact.setPhoto(null);
         Person person = new Person();
-        person.setContact(contact);
-        person.setTeam(team);
-        person.setEmail("admin@email.com");
+        person.setEmail("admin@ararhni.com");
         person.setPassword(passwordEncoder.encode("admin"));
+        person.setHiddenPassword("admin");
         person.setEnabled(true);
         person.setTokenExpired(false);
         person.setActive(false);
+        person.setTeam(team);
         personService.save(person);
+        log.info("انشاء الشركة");
         Company company = new Company();
+        company.setCode(1);
+        company.setName("المعهد الأهلي للتدريب");
+        company.setPhone("0138099353");
+        company.setFax("0138099352");
+        company.setEmail("admin@arahni.com");
+        company.setWebsite("www.ararhni.com");
         company.setManager(person);
-        company.setName("شركة تجريبية");
         companyService.save(company);
-        Screen screen = new Screen();
-        screen.setCode(Screen.ScreenCode.COMPANY);
-        screen.setName("الشركات");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.BRANCH);
-        screen.setName("الفروع");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.MASTER);
-        screen.setName("التخصصات");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.OFFER);
-        screen.setName("العروض");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.COURSE);
-        screen.setName("الدورات");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.STUDENT);
-        screen.setName("الطلاب");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.ACCOUNT);
-        screen.setName("تسجيل الطلاب");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.PAYMENT);
-        screen.setName("السندات");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.BANK);
-        screen.setName("الحسابات البنكية");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.DEPOSIT);
-        screen.setName("الإيداعات البنكية");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.WITHDRAW);
-        screen.setName("السحبيات البنكية");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.BILL_BUY);
-        screen.setName("فواتير الشراء");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.BILL_BUY_TYPE);
-        screen.setName("حسابات فواتير الشراء");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.TEAM);
-        screen.setName("المجموعات");
-        screenService.save(screen);
-        screen = new Screen();
-        screen.setCode(Screen.ScreenCode.PERSON);
-        screen.setName("حسابات المستخدمين");
-        screenService.save(screen);
-        Iterator<Screen> iterator = screenService.findAll().iterator();
-        while (iterator.hasNext()) {
-            screen = iterator.next();
-            Permission permissionFounded = permissionService
-                    .findByCreateEntityAndUpdateEntityAndDeleteEntityAndReportEntityAndScreen(
-                            true,
-                            true,
-                            true,
-                            true,
-                            screen);
-            if (permissionFounded == null) {
-                Permission permission = new Permission();
-                permission.setScreen(screen);
-                permission.setCreateEntity(true);
-                permission.setUpdateEntity(true);
-                permission.setDeleteEntity(true);
-                permission.setReportEntity(true);
-                permissionService.save(permission);
-                Role role = new Role();
-                role.setTeam(team);
-                role.setPermission(permission);
-                roleService.save(role);
-            } else {
-                Role role = new Role();
-                role.setTeam(team);
-                role.setPermission(permissionFounded);
-                roleService.save(role);
-            }
-        }
     }
-
 }

@@ -116,7 +116,7 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
         });
 
         $rootScope.contains = function (list, values) {
-            return _.intersection(values, list).length > 0;
+            return list ? _.intersection(values, list.split(',')).length > 0 : false;
         };
 
         $rootScope.logout = function () {
@@ -128,12 +128,8 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
 
         $rootScope.ModalProvider = ModalProvider;
 
-        PersonService.findAuthorities().then(function (data) {
-            $rootScope.authorities = data;
-            $rootScope.me = {};
-            PersonService.findActivePerson().then(function (data) {
-                $rootScope.me = data;
-            });
+        PersonService.findActivePerson().then(function (data) {
+            $rootScope.me = data;
         });
 
         $rootScope.showNotify = function (title, message, type, icon) {

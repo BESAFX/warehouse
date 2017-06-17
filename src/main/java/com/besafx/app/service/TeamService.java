@@ -11,4 +11,6 @@ public interface TeamService extends PagingAndSortingRepository<Team, Long>, Jpa
 
     Team findTopByOrderByCodeDesc();
     Team findByCodeAndIdIsNot(Integer code, Long id);
+    Team findByAuthorities(String authorities);
+    Team findByName(String code);
 }

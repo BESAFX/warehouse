@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -38,14 +39,13 @@ public class Team implements Serializable {
     @JsonView(Views.Summery.class)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch", "team"}, allowSetters = true)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @JsonView(Views.Summery.class)
-    private Person lastPerson;
+    private String authorities;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"team"}, allowSetters = true)
+    @OneToMany(mappedBy = "team")
+    @JsonIgnoreProperties(value = {"team", "branch"}, allowSetters = true)
     private List<Person> persons = new ArrayList<>();
 
     @JsonCreator

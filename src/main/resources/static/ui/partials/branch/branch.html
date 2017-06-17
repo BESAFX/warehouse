@@ -63,14 +63,14 @@
                             </span>
                         </li>
                         <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBranchCreateModel()"
-                            ng-if="contains(authorities, ['ROLE_BRANCH_CREATE'])">
+                            ng-if="contains(me.team.authorities, ['ROLE_BRANCH_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
                                 <span>انشاء فرع جديد</span>
                             </span>
                         </li>
                         <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBranchUpdateModel(selected)"
-                            ng-if="contains(authorities, ['ROLE_BRANCH_UPDATE']) && toggleList===1"
+                            ng-if="contains(me.team.authorities, ['ROLE_BRANCH_UPDATE']) && toggleList===1"
                             ng-hide="!branches || branches.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">edit</i>
@@ -78,7 +78,7 @@
                             </span>
                         </li>
                         <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                            ng-if="contains(authorities, ['ROLE_BRANCH_DELETE']) && toggleList===1"
+                            ng-if="contains(me.team.authorities, ['ROLE_BRANCH_DELETE']) && toggleList===1"
                             ng-hide="!branches || branches.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">delete</i>
@@ -258,7 +258,7 @@
                                     <button uib-tooltip="فرع جديد"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_BRANCH_CREATE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_BRANCH_CREATE'])"
                                             ng-click="ModalProvider.openBranchCreateModel();"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">add</i>
@@ -266,7 +266,7 @@
                                     <button uib-tooltip="تعديل"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_BRANCH_UPDATE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_BRANCH_UPDATE'])"
                                             ng-click="ModalProvider.openBranchUpdateModel(branch)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">edit</i>
@@ -274,7 +274,7 @@
                                     <button uib-tooltip="حذف"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_BRANCH_DELETE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_BRANCH_DELETE'])"
                                             ng-click="delete(branch)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">delete</i>

@@ -299,7 +299,7 @@
                             </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openAccountCreateModel()"
-                                ng-if="contains(authorities, ['ROLE_ACCOUNT_CREATE'])">
+                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CREATE'])">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">add</i>
                                     <span>انشاء تسجيل جديد</span>
@@ -307,7 +307,7 @@
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
                                 ng-click="ModalProvider.openAccountHeavyWorkModel()"
-                                ng-if="contains(authorities, ['ROLE_ACCOUNT_CREATE'])">
+                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CREATE'])">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">build</i>
                                     <span>تسجيل دفعة من الطلاب</span>
@@ -315,7 +315,7 @@
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
                                 ng-click="payment.account = selected;ModalProvider.openPaymentCreateModel(payment)"
-                                ng-if="contains(authorities, ['ROLE_PAYMENT_CREATE'])"
+                                ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
                                 ng-hide="!accounts || accounts.length==0">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">monetization_on</i>
@@ -324,7 +324,7 @@
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
                                 ng-click="ModalProvider.openAccountUpdateModel(selected)"
-                                ng-if="contains(authorities, ['ROLE_ACCOUNT_UPDATE'])"
+                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
                                 ng-hide="!accounts || accounts.length==0">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">edit</i>
@@ -332,7 +332,7 @@
                                 </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                                ng-if="contains(authorities, ['ROLE_ACCOUNT_DELETE'])"
+                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_DELETE'])"
                                 ng-hide="!accounts || accounts.length==0">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">delete</i>

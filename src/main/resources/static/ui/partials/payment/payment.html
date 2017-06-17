@@ -422,14 +422,14 @@
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
                                 ng-click="ModalProvider.openPaymentHeavyWorkModel()"
-                                ng-if="contains(authorities, ['ROLE_PAYMENT_CREATE'])">
+                                ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">build</i>
                                     <span>انشاء دفعة من السندات</span>
                                 </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                                ng-if="contains(authorities, ['ROLE_PAYMENT_DELETE'])"
+                                ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_DELETE'])"
                                 ng-hide="!payments || payments.length==0">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">delete</i>

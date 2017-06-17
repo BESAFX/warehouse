@@ -1,7 +1,8 @@
 package com.besafx.app.config;
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.PersonService;
-import com.besafx.app.service.RoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,20 +29,17 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private PersonService personService;
+    private final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     @Autowired
-    private RoleService roleService;
+    private PersonService personService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -50,21 +49,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/ui/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/company").access("hasRole('ROLE_COMPANY_CREATE') or hasRole('ROLE_COMPANY_UPDATE') or hasRole('ROLE_COMPANY_DELETE') or hasRole('ROLE_COMPANY_REPORT')")
-                .antMatchers("/branch").access("hasRole('ROLE_BRANCH_CREATE') or hasRole('ROLE_BRANCH_UPDATE') or hasRole('ROLE_BRANCH_DELETE') or hasRole('ROLE_BRANCH_REPORT')")
-                .antMatchers("/master").access("hasRole('ROLE_MASTER_CREATE') or hasRole('ROLE_MASTER_UPDATE') or hasRole('ROLE_MASTER_DELETE') or hasRole('ROLE_MASTER_REPORT')")
-                .antMatchers("/offer").access("hasRole('ROLE_OFFER_CREATE') or hasRole('ROLE_OFFER_UPDATE') or hasRole('ROLE_OFFER_DELETE') or hasRole('ROLE_OFFER_REPORT')")
-                .antMatchers("/course").access("hasRole('ROLE_COURSE_CREATE') or hasRole('ROLE_COURSE_UPDATE') or hasRole('ROLE_COURSE_DELETE') or hasRole('ROLE_COURSE_REPORT')")
-                .antMatchers("/student").access("hasRole('ROLE_STUDENT_CREATE') or hasRole('ROLE_STUDENT_UPDATE') or hasRole('ROLE_STUDENT_DELETE') or hasRole('ROLE_STUDENT_REPORT')")
-                .antMatchers("/account").access("hasRole('ROLE_ACCOUNT_CREATE') or hasRole('ROLE_ACCOUNT_UPDATE') or hasRole('ROLE_ACCOUNT_DELETE') or hasRole('ROLE_ACCOUNT_REPORT')")
-                .antMatchers("/payment").access("hasRole('ROLE_PAYMENT_CREATE') or hasRole('ROLE_PAYMENT_UPDATE') or hasRole('ROLE_PAYMENT_DELETE') or hasRole('ROLE_PAYMENT_REPORT')")
-                .antMatchers("/team").access("hasRole('ROLE_TEAM_CREATE') or hasRole('ROLE_TEAM_UPDATE') or hasRole('ROLE_TEAM_DELETE') or hasRole('ROLE_TEAM_REPORT')")
-                .antMatchers("/person").access("hasRole('ROLE_PERSON_CREATE') or hasRole('ROLE_PERSON_UPDATE') or hasRole('ROLE_PERSON_DELETE') or hasRole('ROLE_PERSON_REPORT')")
-                .antMatchers("/bank").access("hasRole('ROLE_BANK_CREATE') or hasRole('ROLE_BANK_UPDATE') or hasRole('ROLE_BANK_DELETE') or hasRole('ROLE_BANK_REPORT')")
-                .antMatchers("/deposit").access("hasRole('ROLE_DEPOSIT_CREATE') or hasRole('ROLE_DEPOSIT_UPDATE') or hasRole('ROLE_DEPOSIT_DELETE') or hasRole('ROLE_DEPOSIT_REPORT')")
-                .antMatchers("/withdraw").access("hasRole('ROLE_WITHDRAW_CREATE') or hasRole('ROLE_WITHDRAW_UPDATE') or hasRole('ROLE_WITHDRAW_DELETE') or hasRole('ROLE_WITHDRAW_REPORT')")
-                .antMatchers("/billBuy").access("hasRole('ROLE_BILL_BUY_CREATE') or hasRole('ROLE_BILL_BUY_UPDATE') or hasRole('ROLE_BILL_BUY_DELETE') or hasRole('ROLE_BILL_BUY_REPORT')")
-                .antMatchers("/billBuyType").access("hasRole('ROLE_BILL_BUY_TYPE_CREATE') or hasRole('ROLE_BILL_BUY_TYPE_UPDATE') or hasRole('ROLE_BILL_BUY_TYPE_DELETE') or hasRole('ROLE_BILL_BUY_TYPE_REPORT')")
+                .antMatchers("/company").access("hasRole('ROLE_COMPANY_UPDATE')")
+                .antMatchers("/branch").access("hasRole('ROLE_BRANCH_CREATE') or hasRole('ROLE_BRANCH_UPDATE') or hasRole('ROLE_BRANCH_DELETE')")
+                .antMatchers("/master").access("hasRole('ROLE_MASTER_CREATE') or hasRole('ROLE_MASTER_UPDATE') or hasRole('ROLE_MASTER_DELETE')")
+                .antMatchers("/offer").access("hasRole('ROLE_OFFER_CREATE') or hasRole('ROLE_OFFER_UPDATE') or hasRole('ROLE_OFFER_DELETE')")
+                .antMatchers("/course").access("hasRole('ROLE_COURSE_CREATE') or hasRole('ROLE_COURSE_UPDATE') or hasRole('ROLE_COURSE_DELETE')")
+                .antMatchers("/student").access("hasRole('ROLE_STUDENT_CREATE') or hasRole('ROLE_STUDENT_UPDATE') or hasRole('ROLE_STUDENT_DELETE')")
+                .antMatchers("/account").access("hasRole('ROLE_ACCOUNT_CREATE') or hasRole('ROLE_ACCOUNT_UPDATE') or hasRole('ROLE_ACCOUNT_DELETE')")
+                .antMatchers("/payment").access("hasRole('ROLE_PAYMENT_CREATE') or hasRole('ROLE_PAYMENT_UPDATE') or hasRole('ROLE_PAYMENT_DELETE')")
+                .antMatchers("/team").access("hasRole('ROLE_TEAM_CREATE') or hasRole('ROLE_TEAM_UPDATE') or hasRole('ROLE_TEAM_DELETE')")
+                .antMatchers("/person").access("hasRole('ROLE_PERSON_CREATE') or hasRole('ROLE_PERSON_UPDATE') or hasRole('ROLE_PERSON_DELETE')")
+                .antMatchers("/bank").access("hasRole('ROLE_BANK_CREATE') or hasRole('ROLE_BANK_UPDATE') or hasRole('ROLE_BANK_DELETE')")
+                .antMatchers("/deposit").access("hasRole('ROLE_DEPOSIT_CREATE') or hasRole('ROLE_DEPOSIT_UPDATE') or hasRole('ROLE_DEPOSIT_DELETE')")
+                .antMatchers("/withdraw").access("hasRole('ROLE_WITHDRAW_CREATE') or hasRole('ROLE_WITHDRAW_UPDATE') or hasRole('ROLE_WITHDRAW_DELETE')")
+                .antMatchers("/billBuy").access("hasRole('ROLE_BILL_BUY_CREATE') or hasRole('ROLE_BILL_BUY_UPDATE') or hasRole('ROLE_BILL_BUY_DELETE')")
+                .antMatchers("/billBuyType").access("hasRole('ROLE_BILL_BUY_TYPE_CREATE') or hasRole('ROLE_BILL_BUY_TYPE_UPDATE') or hasRole('ROLE_BILL_BUY_TYPE_DELETE')")
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/login")
@@ -93,14 +92,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
         return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher() {
             @Override
-            public void sessionCreated(HttpSessionEvent event) {
-                String ipAddr = ((ServletRequestAttributes) RequestContextHolder
-                        .currentRequestAttributes())
-                        .getRequest().getRemoteAddr();
-                super.sessionCreated(event);
-            }
-
-            @Override
             public void sessionDestroyed(HttpSessionEvent event) {
                 SecurityContextImpl securityContext = (SecurityContextImpl) event.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
                 if (securityContext != null) {
@@ -121,40 +112,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService((String email) -> {
                     Person person = personService.findByEmail(email);
                     List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                        log.info("فحص وجود المستخدم");
                         if (person == null) {
-                            throw new UsernameNotFoundException(email);
+                            log.info("هذا المستخدم غير موجود");
+                            throw new UsernameNotFoundException("هذا المستخدم غير موجود");
                         }
                         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-                        person.setActive(true);
                         person.setLastLoginDate(new Date());
+                        person.setActive(true);
                         person.setIpAddress(request.getRemoteAddr());
                         personService.save(person);
-                        authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));
-                        roleService.findByTeam(person.getTeam()).stream().forEach(role -> {
-                            if (role.getPermission().getCreateEntity()) {
-                                SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.getPermission().getScreen().getCode().name() + "_CREATE");
-                                authorities.add(simpleGrantedAuthority);
-                            }
-                            if (role.getPermission().getUpdateEntity()) {
-                                SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.getPermission().getScreen().getCode().name() + "_UPDATE");
-                                authorities.add(simpleGrantedAuthority);
-                            }
-                            if (role.getPermission().getDeleteEntity()) {
-                                SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.getPermission().getScreen().getCode().name() + "_DELETE");
-                                authorities.add(simpleGrantedAuthority);
-                            }
-                            if (role.getPermission().getReportEntity()) {
-                                SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.getPermission().getScreen().getCode().name() + "_REPORT");
-                                authorities.add(simpleGrantedAuthority);
-                            }
-                        });
-
+                        Optional.ofNullable(person.getTeam().getAuthorities()).ifPresent(value -> Arrays.asList(value.split(",")).stream().forEach(s -> authorities.add(new SimpleGrantedAuthority(s))));
                     }
-                    return new org.springframework.security.core.userdetails.User(person.getEmail(), person.getPassword(),
-                            person.getEnabled(), true, true, true, authorities);
+            return new User(person.getEmail(), person.getPassword(), person.getEnabled(), true, true, true, authorities);
                 }
         ).passwordEncoder(passwordEncoder);
-
     }
+
 }

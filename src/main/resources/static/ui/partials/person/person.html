@@ -66,7 +66,7 @@
                             </span>
                         </li>
                         <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openPersonCreateModel()"
-                            ng-if="contains(authorities, ['ROLE_PERSON_CREATE'])">
+                            ng-if="contains(me.team.authorities, ['ROLE_PERSON_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
                                 <span>انشاء مستخدم جديد</span>
@@ -74,7 +74,7 @@
                         </li>
                         <li class="mdl-menu__item mdl-list__item"
                             ng-click="ModalProvider.openPersonUpdateModel(selected)"
-                            ng-if="contains(authorities, ['ROLE_PERSON_UPDATE']) && toggleList===1"
+                            ng-if="contains(me.team.authorities, ['ROLE_PERSON_UPDATE']) && toggleList===1"
                             ng-hide="!persons || persons.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">edit</i>
@@ -82,7 +82,7 @@
                             </span>
                         </li>
                         <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                            ng-if="contains(authorities, ['ROLE_TEAM_DELETE']) && toggleList===1"
+                            ng-if="contains(me.team.authorities, ['ROLE_TEAM_DELETE']) && toggleList===1"
                             ng-hide="!persons || persons.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">delete</i>
@@ -239,7 +239,7 @@
                                     <button uib-tooltip="مستخدم جديد"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_PERSON_CREATE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_PERSON_CREATE'])"
                                             ng-click="ModalProvider.openPersonCreateModel();"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">add</i>
@@ -247,7 +247,7 @@
                                     <button uib-tooltip="تعديل"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_PERSON_UPDATE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_PERSON_UPDATE'])"
                                             ng-click="ModalProvider.openPersonUpdateModel(person)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">edit</i>
@@ -255,7 +255,7 @@
                                     <button uib-tooltip="حذف"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_PERSON_DELETE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_PERSON_DELETE'])"
                                             ng-click="delete(person)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">delete</i>

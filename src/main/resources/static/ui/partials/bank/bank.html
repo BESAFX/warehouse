@@ -213,7 +213,7 @@
                             </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBankCreateModel()"
-                                ng-if="contains(authorities, ['ROLE_BANK_CREATE'])">
+                                ng-if="contains(me.team.authorities, ['ROLE_BANK_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
                                 <span>انشاء حساب جديد</span>
@@ -221,7 +221,7 @@
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
                                 ng-click="ModalProvider.openBankUpdateModel(selected)"
-                                ng-if="contains(authorities, ['ROLE_BANK_UPDATE']) && toggleList===1"
+                                ng-if="contains(me.team.authorities, ['ROLE_BANK_UPDATE']) && toggleList===1"
                                 ng-hide="!banks || banks.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">edit</i>
@@ -229,7 +229,7 @@
                             </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                                ng-if="contains(authorities, ['ROLE_BANK_DELETE']) && toggleList===1"
+                                ng-if="contains(me.team.authorities, ['ROLE_BANK_DELETE']) && toggleList===1"
                                 ng-hide="!banks || banks.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">delete</i>
@@ -392,7 +392,7 @@
                                     <button uib-tooltip="حساب بنكي جديد"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_BANK_CREATE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_BANK_CREATE'])"
                                             ng-click="ModalProvider.openBankCreateModel();"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">add</i>
@@ -400,7 +400,7 @@
                                     <button uib-tooltip="تعديل"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_BANK_UPDATE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_BANK_UPDATE'])"
                                             ng-click="ModalProvider.openBankUpdateModel(bank)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">edit</i>
@@ -408,7 +408,7 @@
                                     <button uib-tooltip="حذف"
                                             tooltip-append-to-body="true"
                                             type="button"
-                                            ng-if="contains(authorities, ['ROLE_BANK_DELETE'])"
+                                            ng-if="contains(me.team.authorities, ['ROLE_BANK_DELETE'])"
                                             ng-click="delete(bank)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">delete</i>

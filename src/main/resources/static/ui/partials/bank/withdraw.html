@@ -307,16 +307,16 @@
                             <span>تصفية وعرض البيانات</span>
                         </li>
                         <li class="mdl-menu__item" ng-click="openCreateModel()"
-                            ng-if="contains(authorities, ['ROLE_OFFER_CREATE'])">
+                            ng-if="contains(me.team.authorities, ['ROLE_OFFER_CREATE'])">
                             <span>اضافة</span>
                         </li>
                         <li class="mdl-menu__item" ng-click="openUpdateModel()"
-                            ng-if="contains(authorities, ['ROLE_OFFER_UPDATE'])"
+                            ng-if="contains(me.team.authorities, ['ROLE_OFFER_UPDATE'])"
                             ng-hide="!offers || offers.length==0">
                             <span>تعديل</span>
                         </li>
                         <li class="mdl-menu__item" ng-click="remove()"
-                            ng-if="contains(authorities, ['ROLE_OFFER_DELETE'])"
+                            ng-if="contains(me.team.authorities, ['ROLE_OFFER_DELETE'])"
                             ng-hide="!offers || offers.length==0">
                             <span>حذف</span>
                         </li>

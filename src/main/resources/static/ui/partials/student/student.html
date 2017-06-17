@@ -4,7 +4,7 @@
             <div class="row">
 
                 <div class="form-group col-sm-2">
-                    <button ng-if="contains(authorities, ['ROLE_STUDENT_CREATE'])"
+                    <button ng-if="contains(me.team.authorities, ['ROLE_STUDENT_CREATE'])"
                             type="button"
                             style="width: 100%"
                             ng-click="openCreateModel()"
@@ -109,7 +109,7 @@
                                 <td>{{student.contact.nationality}}</td>
                                 <td>{{student.contact.mobile}}</td>
                                 <td>
-                                    <button ng-if="contains(authorities, ['ROLE_STUDENT_DELETE'])"
+                                    <button ng-if="contains(me.team.authorities, ['ROLE_STUDENT_DELETE'])"
                                             uib-tooltip="حذف"
                                             type="button"
                                             ng-click="delete(student)"
@@ -117,7 +117,7 @@
 
                                         <i class="fa fa-trash fa-lg"></i>
                                     </button>
-                                    <button ng-if="contains(authorities, ['ROLE_STUDENT_UPDATE'])"
+                                    <button ng-if="contains(me.team.authorities, ['ROLE_STUDENT_UPDATE'])"
                                             uib-tooltip="تعديل"
                                             type="button"
                                             ng-click="openUpdateModel(student)"
