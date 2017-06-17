@@ -16,13 +16,13 @@ app.controller("profileCtrl", ['PersonService', 'FileUploader', '$rootScope', '$
         });
         uploader.filters.push({
             name: 'syncFilter',
-            fn: function (item , options) {
+            fn: function (item, options) {
                 return this.queue.length < 10;
             }
         });
         uploader.filters.push({
             name: 'asyncFilter',
-            fn: function (item , options, deferred) {
+            fn: function (item, options, deferred) {
                 setTimeout(deferred.resolve, 1e3);
             }
         });

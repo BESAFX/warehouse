@@ -122,7 +122,8 @@
                 <div class="panel panel-body">
 
                     <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="billBuyTypes" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                        <table st-table="collection" st-safe-src="billBuyTypes"
+                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                             <thead>
                             <tr>
 
@@ -163,7 +164,9 @@
                                 <td st-select-row-custom="billBuyType">{{$index+1}}</td>
                                 <td st-select-row-custom="billBuyType">{{billBuyType.code}}</td>
                                 <td st-select-row-custom="billBuyType">{{billBuyType.name}}</td>
-                                <td st-select-row-custom="billBuyType">{{billBuyType.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
+                                <td st-select-row-custom="billBuyType">{{billBuyType.lastUpdate | kdate: 'yyyy-mm-dd' :
+                                    'ar' : 'ummalqura'}}
+                                </td>
                                 <td st-select-row-custom="billBuyType">
                                     {{billBuyType.lastPerson.contact.firstName}}
                                     {{billBuyType.lastPerson.contact.forthName}}

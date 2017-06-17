@@ -112,7 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService((String email) -> {
                     Person person = personService.findByEmail(email);
                     List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));
+                    authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         log.info("فحص وجود المستخدم");
                         if (person == null) {
@@ -126,7 +126,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         personService.save(person);
                         Optional.ofNullable(person.getTeam().getAuthorities()).ifPresent(value -> Arrays.asList(value.split(",")).stream().forEach(s -> authorities.add(new SimpleGrantedAuthority(s))));
                     }
-            return new User(person.getEmail(), person.getPassword(), person.getEnabled(), true, true, true, authorities);
+                    return new User(person.getEmail(), person.getPassword(), person.getEnabled(), true, true, true, authorities);
                 }
         ).passwordEncoder(passwordEncoder);
     }

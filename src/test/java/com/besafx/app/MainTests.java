@@ -47,23 +47,15 @@ public class MainTests {
     private ContactService contactService;
 
     @Autowired
-    private ScreenService screenService;
-
-    @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private TeamService teamService;
 
     @Autowired
     private ScheduledTasks scheduledTasks;
 
+    @Autowired
+    private StudentService studentService;
+
     @Test
-    public void contextLoads() throws Exception {
-        scheduledTasks.notifyBossAboutOffersToday();
-        Thread.sleep(20000000);
+    public void contextLoads() {
     }
 }
