@@ -61,10 +61,6 @@ public class Payment implements Serializable {
     @JsonView(Views.Summery.class)
     private Account account;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
-    private Date lastUpdate;
-
     @ManyToOne
     @JoinColumn(name = "last_person")
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)

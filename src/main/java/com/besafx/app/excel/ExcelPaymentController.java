@@ -381,7 +381,7 @@ public class ExcelPaymentController {
                             continue;
                         }
                         payment.setAccount(account);
-                        payment.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
+                        payment.setDate(DateConverter.getDateFromHijri(year, month, day));
                         payment.setLastPerson(person);
                         paymentList.add(payment);
                         paymentService.save(payment);
