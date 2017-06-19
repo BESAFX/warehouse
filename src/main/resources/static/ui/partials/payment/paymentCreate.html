@@ -30,58 +30,77 @@
                             <h3>البيانات الاساسية</h3>
                         </div>
                     </div>
-                    <div class="panel-body panel-body-table">
-                        <table class="table table-bordered">
-                            <tbody>
-                            <tr>
-                                <td>رقم الطالب</td>
-                                <td>
-                                    {{payment.account.code}}
-                                    -
-                                    {{payment.account.course.code}}
-                                    -
-                                    {{payment.account.course.master.code}}
-                                    -
-                                    {{payment.account.course.master.branch.code}}
-                                    -
-                                    {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>اسم الطالب</td>
-                                <td>
-                                    {{payment.account.student.contact.firstName}}
-                                    {{payment.account.student.contact.secondName}}
-                                    {{payment.account.student.contact.thirdName}}
-                                    {{payment.account.student.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>رقم البطاقة</td>
-                                <td>{{payment.account.student.contact.identityNumber}}</td>
-                            </tr>
-                            <tr>
-                                <td>رقم الجوال</td>
-                                <td>{{payment.account.student.contact.mobile}}</td>
-                            </tr>
-                            <tr>
-                                <td>تاريخ التسجيل</td>
-                                <td>{{payment.account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
-                            </tr>
-                            <tr>
-                                <td>المبلغ المطلوب</td>
-                                <td>{{buffer.requiredPrice | currency:'SAR':0}}</td>
-                            </tr>
-                            <tr>
-                                <td>المبلغ المدفوع</td>
-                                <td>{{buffer.paidPrice | currency:'SAR':0}}</td>
-                            </tr>
-                            <tr>
-                                <td>المبلغ المتبقي</td>
-                                <td>{{buffer.remainPrice | currency:'SAR':0}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="panel-body">
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="person" class="control-label">الطالب</label>
+                            <select id="person" data-placeholder="ابحث عن الطالب"
+                                    no-results-text="'لا توجد بيانات'"
+                                    placeholder-text-single="'اختر الطالب'"
+                                    class="form-control text-right"
+                                    chosen=""
+                                    ng-model="payment.account"
+                                    ng-change="fetchPrices()"
+                                    required="required"
+                                    disable-validation-message=""
+                                    ng-options="(account.student.contact.firstName + ' ' + account.student.contact.secondName + ' ' + account.student.contact.thirdName + ' ' + account.student.contact.forthName + '، التسلسل / ' + account.code + '، رقم الدورة / ' + account.course.code + '، رقم التخصص / ' + account.course.master.code + '، رقم الفرع / ' + account.course.master.branch.code + '، رقم العام / ' + (account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura')) group by account.course.master.branch.name for account in accounts | orderBy:'account.code' track by account.id">
+                            </select>
+                        </div>
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>رقم الطالب</td>
+                                    <td>
+                                        {{payment.account.code}}
+                                        -
+                                        {{payment.account.course.code}}
+                                        -
+                                        {{payment.account.course.master.code}}
+                                        -
+                                        {{payment.account.course.master.branch.code}}
+                                        -
+                                        {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>اسم الطالب</td>
+                                    <td>
+                                        {{payment.account.student.contact.firstName}}
+                                        {{payment.account.student.contact.secondName}}
+                                        {{payment.account.student.contact.thirdName}}
+                                        {{payment.account.student.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>رقم البطاقة</td>
+                                    <td>{{payment.account.student.contact.identityNumber}}</td>
+                                </tr>
+                                <tr>
+                                    <td>رقم الجوال</td>
+                                    <td>{{payment.account.student.contact.mobile}}</td>
+                                </tr>
+                                <tr>
+                                    <td>تاريخ التسجيل</td>
+                                    <td>{{payment.account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>المبلغ المطلوب</td>
+                                    <td>{{buffer.requiredPrice | currency:'SAR':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td>المبلغ المدفوع</td>
+                                    <td>{{buffer.paidPrice | currency:'SAR':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td>المبلغ المتبقي</td>
+                                    <td>{{buffer.remainPrice | currency:'SAR':0}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>

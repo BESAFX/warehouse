@@ -29,14 +29,14 @@ public class Account implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "accountSequenceGenerator")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Integer code;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Date registerDate;
 
     @JsonView(Views.Summery.class)
@@ -62,12 +62,12 @@ public class Account implements Serializable {
     @ManyToOne
     @JoinColumn(name = "course")
     @JsonIgnoreProperties(value = {"accounts"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "student")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Student student;
 
     @Temporal(TemporalType.TIMESTAMP)

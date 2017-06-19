@@ -33,7 +33,7 @@ public class Course implements Serializable {
     @JsonView(Views.Summery.class)
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Integer code;
 
     @JsonView(Views.Summery.class)
@@ -56,7 +56,7 @@ public class Course implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "master")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     @JsonIgnoreProperties(value = {"courses", "lastPerson", "lastUpdate"}, allowSetters = true)
     private Master master;
 

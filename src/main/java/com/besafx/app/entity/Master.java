@@ -33,7 +33,7 @@ public class Master implements Serializable {
     @JsonView(Views.Summery.class)
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Integer code;
 
     @JsonView(Views.Summery.class)
@@ -45,7 +45,7 @@ public class Master implements Serializable {
     @ManyToOne
     @JoinColumn(name = "branch")
     @JsonIgnoreProperties(value = {"manager", "masters", "banks"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Branch branch;
 
     @Temporal(TemporalType.TIMESTAMP)

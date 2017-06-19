@@ -5,6 +5,7 @@ import com.besafx.app.service.*;
 import com.besafx.app.util.WrapperUtil;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -231,6 +232,20 @@ public class AccountRest {
     public List<Account> fetchTableData(Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         return accountService.findByCourseMasterBranch(person.getBranch());
+    }
+
+    @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(Views.Summery.class)
+    public List<Account> fetchTableDataSummery(Principal principal) {
+        return fetchTableData(principal);
+    }
+
+    @RequestMapping(value = "fetchTableDataAccountComboBox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(Views.AccountComboBox.class)
+    public List<Account> fetchTableDataAccountComboBox(Principal principal) {
+        return fetchTableData(principal);
     }
 
     @RequestMapping(value = "fetchAccountsCountByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,5 +1,6 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,10 +26,12 @@ public class Student implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "studentSequenceGenerator")
+    @JsonView(Views.Summery.class)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "contact")
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Contact contact;
 
     @JsonCreator

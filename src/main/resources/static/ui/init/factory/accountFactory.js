@@ -61,6 +61,16 @@ app.factory("AccountService", ['$http', '$log',
                     return response.data;
                 });
             },
+            fetchTableDataSummery: function () {
+                return $http.get("/api/account/fetchTableDataSummery").then(function (response) {
+                    return response.data;
+                });
+            },
+            fetchTableDataAccountComboBox: function () {
+                return $http.get("/api/account/fetchTableDataAccountComboBox").then(function (response) {
+                    return response.data;
+                });
+            },
             fetchAccountsCountByBranch: function (id) {
                 return $http.get("/api/account/fetchAccountsCountByBranch/" + id).then(function (response) {
                     return response.data;

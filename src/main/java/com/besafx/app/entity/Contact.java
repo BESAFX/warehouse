@@ -31,22 +31,22 @@ public class Contact implements Serializable {
     @JsonView(Views.Summery.class)
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String firstName;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String secondName;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String thirdName;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String forthName;
 
     @JsonView(Views.Summery.class)
     private String address;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String mobile;
 
     @JsonView(Views.Summery.class)
@@ -55,7 +55,7 @@ public class Contact implements Serializable {
     @JsonView(Views.Summery.class)
     private String nationality;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String identityNumber;
 
     @JsonView(Views.Summery.class)

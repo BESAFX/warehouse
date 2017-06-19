@@ -8,6 +8,12 @@ app.controller('paymentCreateCtrl', ['AccountService', 'StudentService', 'Branch
         $scope.buffer = {};
 
         $timeout(function () {
+            AccountService.fetchTableDataAccountComboBox().then(function (data) {
+               $scope.accounts = data;
+            });
+        }, 1000);
+
+        $scope.fetchPrices = function () {
             AccountService.findRequiredPrice($scope.payment.account.id).then(function (data) {
                 $scope.buffer.requiredPrice = data;
                 AccountService.findRemainPrice($scope.payment.account.id).then(function (data) {
@@ -17,7 +23,7 @@ app.controller('paymentCreateCtrl', ['AccountService', 'StudentService', 'Branch
                     });
                 });
             });
-        }, 1000);
+        };
 
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {

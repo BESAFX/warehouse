@@ -33,7 +33,7 @@ public class Branch implements Serializable {
     @JsonView(Views.Summery.class)
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Integer code;
 
     @JsonView(Views.Summery.class)
