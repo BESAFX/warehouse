@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2017-06-28T22:18:27 -->
+<!-- 2017-07-02T18:51:55 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Payment" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="d667083a-5ee3-46f8-b604-36494df2d410">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -320,9 +320,9 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="62">
+		<band height="104">
 			<componentElement>
-				<reportElement x="8" y="11" width="539" height="40" uuid="2cd17ca2-fd9f-4e86-95bc-8d4260dba30a">
+				<reportElement x="8" y="13" width="539" height="79" uuid="2cd17ca2-fd9f-4e86-95bc-8d4260dba30a">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
 					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
@@ -511,7 +511,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 									<reportElement x="0" y="0" width="52" height="35" uuid="87bd3935-a687-4f51-9fe9-ac620db86487">
 										<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 									</reportElement>
-									<textField isStretchWithOverflow="true" pattern="#,##0.0##;(#,##0.0##-)" isBlankWhenNull="true">
+									<textField isStretchWithOverflow="true" pattern="#,##0.###" isBlankWhenNull="true">
 										<reportElement x="0" y="0" width="52" height="18" uuid="a269982c-ffde-4d20-a6d2-30fc1891265d"/>
 										<box>
 											<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -524,7 +524,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 										</textElement>
 										<textFieldExpression><![CDATA[$F{obj1}.getMasterCreditAmount()]]></textFieldExpression>
 									</textField>
-									<textField isStretchWithOverflow="true" pattern="#,##0.0##;(#,##0.0##-)" isBlankWhenNull="true">
+									<textField isStretchWithOverflow="true" pattern="#,##0.###" isBlankWhenNull="true">
 										<reportElement x="0" y="18" width="52" height="17" uuid="3f01f615-6ffe-489c-9f55-2f486414fd5f"/>
 										<box>
 											<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -578,7 +578,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 									<reportElement x="0" y="0" width="41" height="35" uuid="950a8870-1469-47ef-b7b7-61367138d483">
 										<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 									</reportElement>
-									<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<textField isStretchWithOverflow="true" pattern="#,##0.###" isBlankWhenNull="true">
 										<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="41" height="18" uuid="76edc245-c52b-44a3-a8f6-94c7d595d64d"/>
 										<box>
 											<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -591,7 +591,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 										</textElement>
 										<textFieldExpression><![CDATA[$F{obj1}.getMasterPrice()]]></textFieldExpression>
 									</textField>
-									<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<textField isStretchWithOverflow="true" pattern="#,##0.###" isBlankWhenNull="true">
 										<reportElement stretchType="RelativeToTallestObject" x="0" y="18" width="41" height="17" uuid="b4bfa7b4-5acb-4639-87da-1e12686e849a"/>
 										<box>
 											<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
