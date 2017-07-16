@@ -2,6 +2,7 @@ package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Views;
 import com.besafx.app.search.PaymentSearch;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.BranchService;
@@ -10,12 +11,14 @@ import com.besafx.app.service.PersonService;
 import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.View;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +48,7 @@ public class PaymentRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
+    @JsonView(Views.AccountComboBox.class)
     public Payment create(@RequestBody Payment payment, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         if (payment.getType().equals("مصروفات")) {

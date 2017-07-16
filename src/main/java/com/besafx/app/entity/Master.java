@@ -30,7 +30,7 @@ public class Master implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "masterSequenceGenerator")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Long id;
 
     @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
