@@ -1,8 +1,6 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Course;
-import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Views;
+import com.besafx.app.entity.*;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
@@ -42,6 +40,12 @@ public class CourseRest {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @Autowired
     private NotificationService notificationService;
@@ -102,11 +106,15 @@ public class CourseRest {
     public void delete(@PathVariable Long id, Principal principal) {
         Course object = courseService.findOne(id);
         if (object != null) {
-            courseService.delete(id);
+            List<Account> accounts = accountService.findByCourse(object);
+            List<Payment> payments = paymentService.findByAccountIn(accounts);
+            paymentService.delete(payments);
+            accountService.delete(accounts);
+            courseService.delete(object);
             notificationService.notifyOne(Notification
                     .builder()
                     .title("العمليات على الدورات")
-                    .message("تم حذف الدورة بنجاح")
+                    .message("تم حذف الدورة وكل ما يتعلق بها من طلاب وسندات بنجاح")
                     .type("success")
                     .icon("fa-trash")
                     .build(), principal.getName());
