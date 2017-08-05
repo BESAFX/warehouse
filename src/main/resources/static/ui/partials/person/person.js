@@ -17,13 +17,13 @@ app.controller("personCtrl", ['PersonService', 'ModalProvider', '$rootScope', '$
 
         $scope.enable = function () {
             PersonService.enable($scope.selected).then(function (data) {
-               $scope.selected = data;
+               $scope.selected.enabled = true;
             });
         };
 
         $scope.disable = function () {
             PersonService.disable($scope.selected).then(function (data) {
-                $scope.selected = data;
+                $scope.selected.enabled = false;
             });
         };
 

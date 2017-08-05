@@ -141,14 +141,14 @@ public class PersonRest {
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Person> findAll() {
-        return Lists.newArrayList(personService.findAll());
+        return Lists.newArrayList(personService.findByEnabledIsTrue());
     }
 
     @RequestMapping(value = "findAllSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @JsonView(Views.Summery.class)
     public List<Person> findAllSummery() {
-        return Lists.newArrayList(personService.findAll());
+        return findAll();
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

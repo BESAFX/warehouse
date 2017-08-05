@@ -4,6 +4,7 @@ import com.besafx.app.entity.Course;
 import com.besafx.app.entity.Master;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.rest.AccountRest;
+import com.besafx.app.rest.CompanyRest;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.util.WrapperUtil;
@@ -259,7 +260,7 @@ public class ReportPaymentController {
         paymentList.stream().forEach(row -> {
             WrapperUtil wrapperUtil = new WrapperUtil();
             Optional.ofNullable(row).ifPresent(payment -> wrapperUtil.setObj1(payment));
-            wrapperUtil.setObj2(DateConverter.getHijriStringFromDateRTL(row.getDate().getTime()));
+            Optional.ofNullable(row.getDate()).ifPresent(value -> wrapperUtil.setObj2(DateConverter.getHijriStringFromDateRTL(value.getTime())));
             wrapperUtil.setObj3(
                     DateConverter.getYearShortcut(row.getAccount().getRegisterDate())
                             + "-" + row.getAccount().getCourse().getMaster().getBranch().getCode()
@@ -272,9 +273,7 @@ public class ReportPaymentController {
             wrapperUtil.setObj6(accountRest.findRemainPrice(row.getAccount().getId()));
             list.add(wrapperUtil);
         });
-        Collections.sort(list, (WrapperUtil o1, WrapperUtil o2) -> {
-            return o1.getObj3().toString().compareTo(o2.getObj3().toString());
-        });
+        list.sort(Comparator.comparing(v -> v.getObj3().toString()));
         return list;
     }
 
