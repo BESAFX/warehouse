@@ -108,70 +108,88 @@ public class ExcelPaymentController {
         styleCellDate.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         //
         Cell cell = row.createCell(0);
-        cell.setCellValue("التسلسل");
+        cell.setCellValue("الاسم الأول");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(0, 20 * 256);
         //
         cell = row.createCell(1);
-        cell.setCellValue("رقم الدورة");
+        cell.setCellValue("الاسم الثاني");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(1, 20 * 256);
         //
         cell = row.createCell(2);
-        cell.setCellValue("رقم التخصص");
+        cell.setCellValue("الاسم الثالث");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(2, 20 * 256);
         //
         cell = row.createCell(3);
-        cell.setCellValue("رقم السند");
+        cell.setCellValue("الاسم الرابع");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(3, 20 * 256);
         //
         cell = row.createCell(4);
-        cell.setCellValue("نوع الايرادات");
+        cell.setCellValue("رقم الدورة");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(4, 20 * 256);
         //
         cell = row.createCell(5);
-        cell.setCellValue("قيمة السند");
+        cell.setCellValue("رقم التخصص");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(5, 20 * 256);
         //
         cell = row.createCell(6);
-        cell.setCellValue("البيان");
+        cell.setCellValue("رقم السند");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(6, 20 * 256);
         //
         cell = row.createCell(7);
-        cell.setCellValue("يوم تاريخ السند");
+        cell.setCellValue("نوع الايرادات");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(7, 20 * 256);
         //
         cell = row.createCell(8);
-        cell.setCellValue("شهر تاريخ السند");
+        cell.setCellValue("قيمة السند");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(8, 20 * 256);
         //
         cell = row.createCell(9);
-        cell.setCellValue("سنة تاريخ السند");
+        cell.setCellValue("البيان");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(9, 20 * 256);
+        //
+        cell = row.createCell(10);
+        cell.setCellValue("يوم تاريخ السند");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(10, 20 * 256);
+        //
+        cell = row.createCell(11);
+        cell.setCellValue("شهر تاريخ السند");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(11, 20 * 256);
+        //
+        cell = row.createCell(12);
+        cell.setCellValue("سنة تاريخ السند");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(12, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 9; j++) {
+            for (int j = 0; j <= 12; j++) {
                 cell = row.createCell(j);
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
@@ -181,7 +199,7 @@ public class ExcelPaymentController {
         //
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
         XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"ايرادات اساسية", "ايرادات اضافية"});
-        CellRangeAddressList addressList = new CellRangeAddressList(1, 9, 4, 4);
+        CellRangeAddressList addressList = new CellRangeAddressList(1, 12, 7, 7);
         XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
