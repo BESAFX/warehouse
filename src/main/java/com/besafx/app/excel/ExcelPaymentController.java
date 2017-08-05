@@ -42,6 +42,8 @@ public class ExcelPaymentController {
 
     private SecureRandom random;
 
+    private String firstName, secondName, thirdName, forthName;
+
     private Integer day = null, month = null, year = null, masterCode = null, courseCode = null, accountCode = null;
 
     @Autowired
@@ -251,14 +253,53 @@ public class ExcelPaymentController {
                             }
                             nextCell.setCellType(CellType.STRING);
                             try {
-                                accountCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                                firstName = (String) excelCellHelper.getCellValue(nextCell);
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
                             }
-                            log.info("Account Code: " + accountCode);
+                            log.info("First Name: " + firstName);
                             break;
                         case 1:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                secondName = (String) excelCellHelper.getCellValue(nextCell);
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            log.info("Second Name: " + secondName);
+                            break;
+                        case 2:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                thirdName = (String) excelCellHelper.getCellValue(nextCell);
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            log.info("Third Name: " + thirdName);
+                            break;
+                        case 3:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                forthName = (String) excelCellHelper.getCellValue(nextCell);
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            log.info("Forth Name: " + forthName);
+                            break;
+                        case 4:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -271,7 +312,7 @@ public class ExcelPaymentController {
                             }
                             log.info("Course Code: " + courseCode);
                             break;
-                        case 2:
+                        case 5:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -284,7 +325,7 @@ public class ExcelPaymentController {
                             }
                             log.info("Master Code: " + masterCode);
                             break;
-                        case 3:
+                        case 6:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -297,7 +338,7 @@ public class ExcelPaymentController {
                             }
                             log.info("Payment Code: " + payment.getCode());
                             break;
-                        case 4:
+                        case 7:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -310,7 +351,7 @@ public class ExcelPaymentController {
                             }
                             log.info("Payment Note: " + payment.getNote());
                             break;
-                        case 5:
+                        case 8:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -325,7 +366,7 @@ public class ExcelPaymentController {
                             log.info("Payment Amount Number: " + payment.getAmountNumber());
                             log.info("Payment Amount String: " + payment.getAmountString());
                             break;
-                        case 6:
+                        case 9:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -338,7 +379,7 @@ public class ExcelPaymentController {
                             }
                             log.info("Payment Note: " + payment.getNote());
                             break;
-                        case 7:
+                        case 10:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -351,7 +392,7 @@ public class ExcelPaymentController {
                             }
                             log.info((String) excelCellHelper.getCellValue(nextCell));
                             break;
-                        case 8:
+                        case 11:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -364,7 +405,7 @@ public class ExcelPaymentController {
                             }
                             log.info((String) excelCellHelper.getCellValue(nextCell));
                             break;
-                        case 9:
+                        case 12:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -382,7 +423,9 @@ public class ExcelPaymentController {
                 }
                 if (accept) {
                     try {
-                        Account account = accountService.findByCodeAndCourseCodeAndCourseMasterCodeAndCourseMasterBranchCode(accountCode, courseCode, masterCode, person.getBranch().getCode());
+                        Account account = accountService
+                                .findByStudentContactFirstNameAndStudentContactSecondNameAndStudentContactThirdNameAndStudentContactForthNameAndCourseCodeAndCourseMasterCodeAndCourseMasterBranchCode
+                                        (firstName, secondName, thirdName, forthName, courseCode, masterCode, person.getBranch().getCode());
                         if (account == null) {
                             continue;
                         }

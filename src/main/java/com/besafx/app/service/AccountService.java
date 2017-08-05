@@ -16,6 +16,8 @@ public interface AccountService extends PagingAndSortingRepository<Account, Long
 
     Account findTopByCourseMasterBranchOrderByCodeDesc(Branch branch);
     Account findByCodeAndCourseCodeAndCourseMasterCodeAndCourseMasterBranchCode(Integer code, Integer courseCode, Integer masterCode, Integer branchCode);
+    Account findByStudentContactFirstNameAndStudentContactSecondNameAndStudentContactThirdNameAndStudentContactForthNameAndCourseCodeAndCourseMasterCodeAndCourseMasterBranchCode
+            (String firstName, String secondName, String thirdName, String forthName, Integer courseCode, Integer masterCode, Integer branchCode);
     List<Account> findByStudent(Student student);
     List<Account> findByStudentContactIdentityNumber(String identityNumber);
     List<Account> findByCourse(Course course);
