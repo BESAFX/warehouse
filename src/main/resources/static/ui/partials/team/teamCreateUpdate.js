@@ -40,7 +40,9 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             {id: 36, name: 'حذف الصلاحيات', value: 'ROLE_TEAM_DELETE', selected: false},
             {id: 34, name: 'إنشاء المستخدمون', value: 'ROLE_PERSON_CREATE', selected: false},
             {id: 35, name: 'تعديل بيانات المستخدمون', value: 'ROLE_PERSON_UPDATE', selected: false},
-            {id: 36, name: 'حذف المستخدمون', value: 'ROLE_PERSON_DELETE', selected: false}
+            {id: 36, name: 'تفعيل المستخدمون', value: 'ROLE_PERSON_ENABLE', selected: false},
+            {id: 37, name: 'تعطيل المستخدمون', value: 'ROLE_PERSON_DISABLE', selected: false},
+            {id: 38, name: 'حذف المستخدمون', value: 'ROLE_PERSON_DELETE', selected: false}
         ];
 
 

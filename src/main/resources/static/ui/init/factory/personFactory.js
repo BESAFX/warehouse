@@ -29,6 +29,16 @@ app.factory("PersonService",
                     return response.data;
                 });
             },
+            enable: function (person) {
+                return $http.put("/api/person/enable", person).then(function (response) {
+                    return response.data;
+                });
+            },
+            disable: function (person) {
+                return $http.put("/api/person/disable", person).then(function (response) {
+                    return response.data;
+                });
+            },
             findByBranch: function (branchId) {
                 return $http.get("/api/person/findByBranch/" + branchId).then(function (response) {
                     return response.data;

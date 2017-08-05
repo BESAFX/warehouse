@@ -15,6 +15,18 @@ app.controller("personCtrl", ['PersonService', 'ModalProvider', '$rootScope', '$
             $scope.fetchTableData();
         }, 1500);
 
+        $scope.enable = function () {
+            PersonService.enable($scope.selected).then(function (data) {
+               $scope.selected = data;
+            });
+        };
+
+        $scope.disable = function () {
+            PersonService.disable($scope.selected).then(function (data) {
+                $scope.selected = data;
+            });
+        };
+
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.persons, function (person) {

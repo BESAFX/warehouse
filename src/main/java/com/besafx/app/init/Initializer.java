@@ -82,6 +82,8 @@ public class Initializer implements CommandLineRunner {
                 "ROLE_BILL_BUY_TYPE_DELETE",
                 "ROLE_PERSON_CREATE",
                 "ROLE_PERSON_UPDATE",
+                "ROLE_PERSON_ENABLE",
+                "ROLE_PERSON_DISABLE",
                 "ROLE_PERSON_DELETE",
                 "ROLE_PROFILE_UPDATE",
                 "ROLE_TEAM_CREATE",

@@ -86,6 +86,48 @@ public class PersonRest {
         }
     }
 
+    @RequestMapping(value = "enable", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PERSON_ENABLE')")
+    public Person enable(@RequestBody Person person, Principal principal) {
+        Person object = personService.findOne(person.getId());
+        if (object != null) {
+            person.setEnabled(true);
+            person = personService.save(person);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على المستخدمون")
+                    .message("تم تفعيل المستخدم بنجاح")
+                    .type("success")
+                    .icon("fa-edit")
+                    .build(), principal.getName());
+            return person;
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "disable", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PERSON_DISABLE')")
+    public Person disable(@RequestBody Person person, Principal principal) {
+        Person object = personService.findOne(person.getId());
+        if (object != null) {
+            person.setEnabled(false);
+            person = personService.save(person);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على المستخدمون")
+                    .message("تم تعطيل المستخدم بنجاح")
+                    .type("error")
+                    .icon("fa-edit")
+                    .build(), principal.getName());
+            return person;
+        } else {
+            return null;
+        }
+    }
+
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_DELETE')")
