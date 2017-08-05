@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var cssMin = require('gulp-css');
+var gutil = require('gulp-util')
 
 
 gulp.task('css', function () {
@@ -198,6 +199,7 @@ gulp.task('scripts', function () {
     ])
         .pipe(concat('app.js'))
         .pipe(uglify())
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
         .pipe(gulp.dest('./'))
 
 });

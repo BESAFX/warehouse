@@ -10,7 +10,9 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -79,6 +81,10 @@ public class Account implements Serializable {
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     @JsonView(Views.Summery.class)
     private Person lastPerson;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
+    private List<Payment> payments = new ArrayList<>();
 
     @JsonCreator
     public static Account Create(String jsonString) throws IOException {

@@ -58,6 +58,7 @@ public class Payment implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "account")
+    @JsonIgnoreProperties(value = {"payments"}, allowSetters = true)
     @JsonView(Views.Summery.class)
     private Account account;
 

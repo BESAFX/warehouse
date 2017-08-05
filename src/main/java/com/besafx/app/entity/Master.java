@@ -60,7 +60,12 @@ public class Master implements Serializable {
 
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"master"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private List<Course> courses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"master"}, allowSetters = true)
+    private List<Offer> offers = new ArrayList<>();
 
     @JsonCreator
     public static Master Create(String jsonString) throws IOException {

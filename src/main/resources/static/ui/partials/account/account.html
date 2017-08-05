@@ -436,17 +436,13 @@
                                     <span>التخصص</span>
                                 </th>
 
-                                <th st-sort="course.master.branch.name" class="text-right">
-                                    <span>الفرع</span>
-                                </th>
-
                                 <th st-sort="lastPerson.contact.id" class="text-right">
                                     <span>مدخل التسجيل</span>
                                 </th>
 
                             </tr>
                             <tr>
-                                <th colspan="14"><input st-search="" class="form-control"
+                                <th colspan="13"><input st-search="" class="form-control"
                                                         placeholder="بحث شامل وسريع..." type="text"/></th>
                             </tr>
                             </thead>
@@ -488,17 +484,13 @@
                                     {{account.course.master.name}}
                                 </td>
                                 <td st-select-row-custom="account">
-                                    [ {{account.course.master.branch.code}} ]
-                                    {{account.course.master.branch.name}}
-                                </td>
-                                <td st-select-row-custom="account">
                                     {{account.lastPerson.contact.firstName}}
                                     {{account.lastPerson.contact.forthName}}
                                 </td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">
-                                <td colspan="14">لا توجد بيانات</td>
+                                <td colspan="13">لا توجد بيانات</td>
                             </tr>
                             </tbody>
                         </table>

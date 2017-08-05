@@ -2,12 +2,14 @@ package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Views;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.CompanyService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,6 +143,7 @@ public class BranchRest {
 
     @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.Summery.class)
     public List<Branch> fetchTableDataSummery(Principal principal) {
         return fetchTableData(principal);
     }

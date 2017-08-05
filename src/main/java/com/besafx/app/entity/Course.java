@@ -57,7 +57,7 @@ public class Course implements Serializable {
     @ManyToOne
     @JoinColumn(name = "master")
     @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
-    @JsonIgnoreProperties(value = {"courses", "lastPerson", "lastUpdate"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"courses", "offers", "lastPerson", "lastUpdate"}, allowSetters = true)
     private Master master;
 
     @Temporal(TemporalType.TIMESTAMP)

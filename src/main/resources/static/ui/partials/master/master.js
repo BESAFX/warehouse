@@ -4,7 +4,7 @@ app.controller("masterCtrl", ['MasterService', 'BranchService', 'ModalProvider',
         $scope.selected = {};
 
         $scope.fetchTableData = function () {
-            MasterService.fetchTableData().then(function (data) {
+            MasterService.fetchTableDataSummery().then(function (data) {
                 $scope.masters = data;
                 $scope.setSelected(data[0]);
             });
@@ -27,14 +27,16 @@ app.controller("masterCtrl", ['MasterService', 'BranchService', 'ModalProvider',
             if (master) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التخصص فعلاً؟", "error", "fa-ban", function () {
                     MasterService.remove(master.id).then(function () {
-
+                        var index = $scope.masters.indexOf(master);
+                        $scope.masters.splice(index, 1);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التخصص فعلاً؟", "error", "fa-ban", function () {
                 MasterService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.masters.indexOf(master);
+                    $scope.masters.splice(index, 1);
                 });
             });
         };

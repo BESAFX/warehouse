@@ -1,13 +1,7 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Branch;
-import com.besafx.app.entity.Master;
-import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Views;
-import com.besafx.app.service.BranchService;
-import com.besafx.app.service.CompanyService;
-import com.besafx.app.service.MasterService;
-import com.besafx.app.service.PersonService;
+import com.besafx.app.entity.*;
+import com.besafx.app.service.*;
 import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -20,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.View;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +40,18 @@ public class MasterRest {
     private MasterService masterService;
 
     @Autowired
+    private OfferService offerService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
     private NotificationService notificationService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,7 +73,7 @@ public class MasterRest {
                 .title("العمليات على التخصصات")
                 .message("تم إنشاء تخصص جديد بنجاح")
                 .type("success")
-                .icon("fa-database")
+                .icon("fa-plus-square")
                 .build(), principal.getName());
         return master;
     }
@@ -74,6 +81,7 @@ public class MasterRest {
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_MASTER_UPDATE')")
+    @JsonView(Views.Summery.class)
     public Master update(@RequestBody Master master, Principal principal) {
         if (masterService.findByCodeAndBranchAndIdIsNot(master.getCode(), master.getBranch(), master.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
@@ -88,8 +96,8 @@ public class MasterRest {
                     .builder()
                     .title("العمليات على التخصصات")
                     .message("تم تعديل بيانات التخصص بنجاح")
-                    .type("success")
-                    .icon("fa-database")
+                    .type("warning")
+                    .icon("fa-edit")
                     .build(), principal.getName());
             return master;
         } else {
@@ -100,10 +108,27 @@ public class MasterRest {
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_MASTER_DELETE')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id, Principal principal) {
         Master object = masterService.findOne(id);
         if (object != null) {
+            log.info("Delete all offers...");
+            offerService.delete(object.getOffers());
+            log.info("Delete all payments...");
+            List<Account> accounts = object.getCourses().stream().flatMap(course -> course.getAccounts().stream()).collect(Collectors.toList());
+            paymentService.delete(accounts.stream().flatMap(account -> account.getPayments().stream()).collect(Collectors.toList()));
+            log.info("Delete all accounts...");
+            accountService.delete(accounts);
+            log.info("Delete all courses....");
+            courseService.delete(object.getCourses());
+            log.info("Finally delete master...");
             masterService.delete(id);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على التخصصات")
+                    .message("تم حذف التخصصات وكل ما يتعلق بها من عروض ودورات بنجاح")
+                    .type("error")
+                    .icon("fa-ban")
+                    .build(), principal.getName());
         }
     }
 

@@ -141,6 +141,10 @@
                                     <span> مدة التخصص</span>
                                 </th>
 
+                                <th st-sort="courses" class="text-right">
+                                    <span>عدد الدورات</span>
+                                </th>
+
                                 <th st-sort="branch.name" class="text-right">
                                     <span>الفرع</span>
                                 </th>
@@ -151,7 +155,7 @@
 
                             </tr>
                             <tr>
-                                <th colspan="6"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
+                                <th colspan="7"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
                                                        type="text"/></th>
                             </tr>
                             </thead>
@@ -167,6 +171,7 @@
                                 <td st-select-row-custom="master">{{master.code}}</td>
                                 <td st-select-row-custom="master">{{master.name}}</td>
                                 <td st-select-row-custom="master">{{master.period}}</td>
+                                <td st-select-row-custom="master">{{master.courses.length}}</td>
                                 <td st-select-row-custom="master">{{master.branch.name}}</td>
                                 <td st-select-row-custom="master">{{master.lastPerson.contact.firstName}}
                                     {{master.lastPerson.contact.forthName}}
@@ -174,7 +179,7 @@
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">
-                                <td colspan="6">لا توجد بيانات</td>
+                                <td colspan="7">لا توجد بيانات</td>
                             </tr>
                             </tbody>
                         </table>
