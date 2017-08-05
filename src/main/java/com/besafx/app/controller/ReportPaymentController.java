@@ -54,7 +54,7 @@ public class ReportPaymentController {
             return;
         }
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=Report.pdf");
+        response.setHeader("Content-Disposition", "inline; filename=PaymentByBranch.pdf");
         final OutputStream outStream = response.getOutputStream();
         /**
          * Insert Parameters
@@ -108,7 +108,7 @@ public class ReportPaymentController {
             return;
         }
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=Report.pdf");
+        response.setHeader("Content-Disposition", "inline; filename=PaymentByMaster.pdf");
         final OutputStream outStream = response.getOutputStream();
         /**
          * Insert Parameters
@@ -163,7 +163,7 @@ public class ReportPaymentController {
             return;
         }
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=Report.pdf");
+        response.setHeader("Content-Disposition", "inline; filename=PaymentByCourse.pdf");
         final OutputStream outStream = response.getOutputStream();
         /**
          * Insert Parameters
@@ -215,7 +215,7 @@ public class ReportPaymentController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=Report.pdf");
+        response.setHeader("Content-Disposition", "inline; filename=PaymentByAccountIn.pdf");
         final OutputStream outStream = response.getOutputStream();
         /**
          * Insert Parameters
@@ -248,6 +248,41 @@ public class ReportPaymentController {
                     .concat("التاريخ إلى: ")
                     .concat(DateConverter.getHijriStringFromDateLTR(endDate.longValue())));
         }
+        List<WrapperUtil> list = initDataList(paymentList);
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+    }
+
+    @RequestMapping(value = "/report/PaymentsByList", method = RequestMethod.GET, produces = "application/pdf")
+    @ResponseBody
+    public void printPaymentsByList(
+            @RequestParam("listId") List<Long> listId,
+            HttpServletResponse response) throws JRException, IOException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=PaymentsByList.pdf");
+        final OutputStream outStream = response.getOutputStream();
+        /**
+         * Insert Parameters
+         */
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder param1 = new StringBuilder();
+        param1.append("المملكة العربية السعودية");
+        param1.append("\n");
+        param1.append("المعهد الأهلي العالي للتدريب");
+        param1.append("\n");
+        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
+        StringBuilder param2 = new StringBuilder();
+        param2.append("قائمة سندات مخصصة");
+        map.put("param1", param1.toString());
+        map.put("param2", param2.toString());
+        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
+        /**
+         * Insert Data
+         */
+        List<Payment> paymentList = new ArrayList<>();
+        listId.stream().forEach(id -> paymentList.add(paymentService.findOne(id)));
         List<WrapperUtil> list = initDataList(paymentList);
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());

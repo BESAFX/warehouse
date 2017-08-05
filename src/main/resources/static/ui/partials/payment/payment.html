@@ -541,6 +541,7 @@
                             <tr class="text-right"
                                 ng-repeat="payment in collection"
                                 st-select-mode="single"
+                                context-menu="rowMenu"
                                 ng-click="setSelected(payment)"
                                 ng-right-click="setSelected(payment)"
                                 ng-class="{'mdl-color--brown-100':payment.isSelected}">

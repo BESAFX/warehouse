@@ -132,11 +132,6 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
                 search.push($scope.buffer.firstName);
                 search.push('&');
             }
-            if ($scope.buffer.firstName) {
-                search.push('firstName=');
-                search.push($scope.buffer.firstName);
-                search.push('&');
-            }
             if ($scope.buffer.secondName) {
                 search.push('secondName=');
                 search.push($scope.buffer.secondName);
@@ -300,5 +295,44 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
 
             window.open('/report/dynamic/payment?' + search.join(""));
         };
+
+        $scope.printList = function () {
+            var listId = [];
+            for (var i = 0; i < $scope.payments.length; i++) {
+                listId[i] = $scope.payments[i].id;
+            }
+            window.open('/report/PaymentsByList?'
+                + "listId=" + listId);
+        };
+
+        $scope.rowMenu = [
+            {
+                html: '<div class="drop-menu"> انشاء سند جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openPaymentCreateModel();
+                }
+            },
+            {
+                html: '<div class="drop-menu"> حذف السند <span class="fa fa-minus-square-o fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.delete($itemScope.payment);
+                }
+            },
+            {
+                html: '<div class="drop-menu">طباعة تقرير مخصص<span class="fa fa-print fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.printList();
+                }
+            }
+        ];
 
     }]);
