@@ -30,13 +30,13 @@ public class Branch implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "branchSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class})
     private Integer code;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class , Views.BranchMaster.class})
     private String name;
 
     @JsonView(Views.Summery.class)
@@ -79,6 +79,7 @@ public class Branch implements Serializable {
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
+    @JsonView(value = {Views.BranchMaster.class})
     private List<Master> masters = new ArrayList<>();
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)

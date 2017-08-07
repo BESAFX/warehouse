@@ -3,6 +3,7 @@ import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Views;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.MasterService;
 import com.besafx.app.service.OfferService;
@@ -10,6 +11,7 @@ import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,11 +104,11 @@ public class OfferRest {
         if (offerService.findByCodeAndMasterBranchAndIdIsNot(offer.getCode(), offer.getMaster().getBranch(), offer.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
-        Person person = personService.findByEmail(principal.getName());
         Offer object = offerService.findOne(offer.getId());
         if (object != null) {
-            offer.setLastUpdate(new Date());
-            offer.setLastPerson(person);
+            if(!object.getLastPerson().getEmail().equals(principal.getName())){
+                throw new CustomException("لا يمكنك التعديل على عرض لم تضيفه.");
+            }
             offer = offerService.save(offer);
             notificationService.notifyOne(Notification
                     .builder()
@@ -197,6 +199,7 @@ public class OfferRest {
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.Summery.class)
     public List<Offer> filter(
             @RequestParam(value = "codeFrom", required = false) final Long codeFrom,
             @RequestParam(value = "codeTo", required = false) final Long codeTo,

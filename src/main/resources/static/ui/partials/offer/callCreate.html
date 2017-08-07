@@ -1,0 +1,167 @@
+<form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
+      focus-group-head="loop" focus-group-tail="loop">
+
+    <div class="modal-header">
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">phone</i>
+                <strong>اتصال</strong>
+            </span>
+        </h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+            <div class="text-right col-xs-12 col-sm-6 col-md-12 col-lg-12" ng-show="form.$invalid && form.$submitted">
+                <div class="alert alert-danger" role="alert">
+                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
+                                <a href="" ng-click="refreshOffer()" tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث البيانات">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>البيانات الاساسية</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>رقم العرض</td>
+                                    <td>{{call.offer.code}}</td>
+                                </tr>
+                                <tr>
+                                    <td>تاريخ العرض</td>
+                                    <td>
+                                        {{call.offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
+                                        <span class="label label-success">{{call.offer.lastUpdate | date:'h:m a'}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>اسم العميل</td>
+                                    <td>{{call.offer.customerName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>رقم البطاقة</td>
+                                    <td>{{call.offer.customerIdentityNumber}}</td>
+                                </tr>
+                                <tr>
+                                    <td>رقم الجوال</td>
+                                    <td>{{call.offer.customerMobile}}</td>
+                                </tr>
+                                <tr>
+                                    <td>طريقة الدفع</td>
+                                    <td>{{call.offer.masterPaymentType}}</td>
+                                </tr>
+                                <tr>
+                                    <td>التخصص المطلوب</td>
+                                    <td>[ {{call.offer.master.code}} ] {{call.offer.master.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>سعر التخصص</td>
+                                    <td>{{call.offer.masterPrice | currency:'SAR':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td>قيمة الخصم</td>
+                                    <td>{{call.offer.masterDiscountAmount}} %</td>
+                                </tr>
+                                <tr>
+                                    <td>نسبة الفائدة</td>
+                                    <td>{{call.offer.masterProfitAmount}} %</td>
+                                </tr>
+                                <tr>
+                                    <td>قيمة القسط الشهري</td>
+                                    <td>{{call.offer.masterProfitAmount | currency:'SAR':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td>حالة التسجيل</td>
+                                    <td>
+                                        <span ng-if="call.offer.registered" class="label label-success">مسجل</span>
+                                        <span ng-if="!call.offer.registered" class="label label-danger">غير مسجل</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>مدخل العرض</td>
+                                    <td>
+                                            <span class="label label-success">
+                                                {{call.offer.lastPerson.contact.firstName}}
+                                                {{call.offer.lastPerson.contact.forthName}}
+                                            </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">البيانات المطلوبة</div>
+                    <div class="panel-body">
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="note" class="control-label">نتيجة الاتصال</label>
+                            <textarea id="note"
+                                      type="text"
+                                      msd-elastic="\n"
+                                      focus-autofocus="1"
+                                      class="form-control text-right"
+                                      placeholder="اذكر باختصار نتيجة اتصالك..."
+                                      ng-model="call.note">
+                            </textarea>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="row">
+            <button uib-tooltip="اضافة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">add</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="cancel()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

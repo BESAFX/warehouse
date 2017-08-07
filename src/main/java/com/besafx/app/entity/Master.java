@@ -30,13 +30,13 @@ public class Master implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "masterSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class})
     private Integer code;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.BranchMaster.class})
     private String name;
 
     @JsonView(Views.Summery.class)
@@ -64,7 +64,7 @@ public class Master implements Serializable {
     private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"master"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"master", "calls"}, allowSetters = true)
     private List<Offer> offers = new ArrayList<>();
 
     @JsonCreator

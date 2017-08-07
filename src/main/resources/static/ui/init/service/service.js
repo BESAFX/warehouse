@@ -436,6 +436,43 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openOfferDetailsModel = function (offer) {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/offer/offerDetails.html',
+            controller: 'offerDetailsCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                offer: function () {
+                    return offer;
+                }
+            }
+        });
+    };
+
+    this.openCallCreateModel = function (offer) {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/offer/callCreate.html',
+            controller: 'callCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                offer: function () {
+                    return offer;
+                }
+            }
+        });
+    };
+
+
     this.openOfferHeavyWorkModel = function () {
         $uibModal.open({
             animation: true,

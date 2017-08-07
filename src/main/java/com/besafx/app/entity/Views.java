@@ -8,4 +8,8 @@ public class Views {
     public interface AccountComboBox {
 
     }
+
+    public interface BranchMaster{
+
+    }
 }

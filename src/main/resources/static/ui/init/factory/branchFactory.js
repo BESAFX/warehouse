@@ -63,6 +63,11 @@ app.factory("BranchService",
                 return $http.get("/api/branch/fetchTableDataSummery").then(function (response) {
                     return response.data;
                 });
+            },
+            fetchBranchMaster: function () {
+                return $http.get("/api/branch/fetchBranchMaster").then(function (response) {
+                    return response.data;
+                });
             }
         };
     }]);
