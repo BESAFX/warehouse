@@ -7,7 +7,18 @@
         <h3 class="panel-title mdl-list__item pull-right">
             <span class="mdl-list__item-primary-content">
                 <i class="material-icons mdl-list__item-icon">add</i>
-                <strong>{{title}}</strong>
+                <strong>
+                    <span>دفعة سداد التسجيل رقم / </span>
+                    {{payment.account.code}}
+                    -
+                    {{payment.account.course.code}}
+                    -
+                    {{payment.account.course.master.code}}
+                    -
+                    {{payment.account.course.master.branch.code}}
+                    -
+                    {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                </strong>
             </span>
         </h3>
     </div>
