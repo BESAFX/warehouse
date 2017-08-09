@@ -169,6 +169,54 @@
                     <div class="panel-heading">
                         <ul class="panel-controls pull-left" style="margin-top: 2px;">
                             <li>
+                                <a href="" ng-click="refreshOffersByAccountMobile()" tooltip-append-to-body="true" uib-tooltip="تحديث">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>العروض حسب رقم الجوال</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collectionOffers" st-safe-src="offers" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th st-sort="code" class="text-center">رقم العرض</th>
+                                    <th st-sort="date" st-sort-default="reverse" class="text-center">تاريخ العرض</th>
+                                    <th st-sort="lastPerson" class="text-center">مدخل العرض</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="offer in collectionOffers">
+                                    <td>
+                                        {{offer.code}}
+                                    </td>
+                                    <td>
+                                        <span>{{offer.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span class="label label-success">{{offer.date | date:'h:m a'}}</span>
+                                    </td>
+                                    <td>
+                                        {{offer.lastPerson.contact.firstName}}
+                                        {{offer.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionOffers || collectionOffers.length ==0">
+                                    <td colspan="3">لا توجد عروض لهذا الرقم</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
                                 <a href="" ng-click="refreshAccountPayments()" tooltip-append-to-body="true" uib-tooltip="تحديث">
                                     <span class="fa fa-refresh"></span>
                                 </a>

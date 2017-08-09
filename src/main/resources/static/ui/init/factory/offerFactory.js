@@ -26,6 +26,11 @@ app.factory("OfferService",
                     return response.data;
                 });
             },
+            findByCustomerMobile: function (customerMobile) {
+                return $http.get("/api/offer/findByCustomerMobile/" + customerMobile).then(function (response) {
+                    return response.data;
+                });
+            },
             findByBranch: function (branch) {
                 return $http.get("/api/offer/findByBranch/" + branch.id).then(function (response) {
                     return response.data;

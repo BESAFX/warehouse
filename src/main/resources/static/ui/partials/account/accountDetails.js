@@ -1,5 +1,5 @@
-app.controller('accountDetailsCtrl', ['AccountService', 'PaymentService' ,'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'account',
-    function (AccountService, PaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, account) {
+app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'PaymentService' ,'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'account',
+    function (AccountService, OfferService, PaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, account) {
 
         $scope.account = account;
 
@@ -7,6 +7,12 @@ app.controller('accountDetailsCtrl', ['AccountService', 'PaymentService' ,'Modal
           AccountService.findOne($scope.account.id).then(function (data) {
               $scope.account = data;
           })
+        };
+
+        $scope.refreshOffersByAccountMobile = function () {
+            OfferService.findByCustomerMobile(account.student.contact.mobile).then(function (data) {
+                $scope.offers = data;
+            });
         };
 
         $scope.refreshAccountPayments = function () {

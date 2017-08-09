@@ -152,6 +152,12 @@ public class OfferRest {
         return offerService.findOne(id);
     }
 
+    @RequestMapping(value = "findByCustomerMobile/{customerMobile}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Offer> findByCustomerMobile(@PathVariable String customerMobile) {
+        return offerService.findByCustomerMobile(customerMobile);
+    }
+
     @RequestMapping(value = "findByBranch/{branchId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Offer> findByBranch(@PathVariable(value = "branchId") Long branchId) {
