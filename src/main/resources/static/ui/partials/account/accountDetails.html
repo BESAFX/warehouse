@@ -44,13 +44,19 @@
                                     <tr>
                                         <td>رقم الطالب</td>
                                         <td>
-                                            {{account.code}}
+                                            <span class="label label-default">تسلسل / {{account.code}}</span>
                                             -
-                                            {{account.course.code}}
+                                            <span class="label label-primary">دورة رقم / {{account.course.code}}</span>
                                             -
-                                            {{account.course.master.code}}
+                                            <span class="label label-success">
+                                                <span>تخصص رقم / </span>
+                                                [ {{account.course.master.code}} ] {{account.course.master.name}}
+                                            </span>
                                             -
-                                            {{account.course.master.branch.code}}
+                                            <span class="label label-warning">
+                                                <span>فرع رقم / </span>
+                                                [ {{account.course.master.branch.code}} ] {{account.course.master.branch.name}}
+                                            </span>
                                             -
                                             {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
                                         </td>
@@ -138,7 +144,7 @@
                                         <td>{{account.courseProfitAmount | currency:'SAR':0}}</td>
                                     </tr>
                                     <tr>
-                                        <td>المبلغ النهائي المطلوب</td>
+                                        <td class="fit">المبلغ النهائي المطلوب</td>
                                         <td>
                                             <span ng-if="account.coursePaymentType==='نقدي'">
                                                 {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:'SAR':0}}
