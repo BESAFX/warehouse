@@ -60,7 +60,7 @@ public class Master implements Serializable {
 
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"master"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.BranchMasterCourse.class})
     private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)

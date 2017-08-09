@@ -139,8 +139,6 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
-
-
         };
 
         $scope.clear = function () {
@@ -169,7 +167,7 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف العرض فعلاً؟", "error", "fa-ban", function () {
                 OfferService.remove($scope.selected.id).then(function () {
-                    var index = $scope.offers.indexOf(offer);
+                    var index = $scope.offers.indexOf($scope.selected);
                     $scope.offers.splice(index, 1);
                     $scope.setSelected($scope.offers[0]);
                 });

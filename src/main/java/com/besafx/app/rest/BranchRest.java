@@ -154,4 +154,11 @@ public class BranchRest {
     public List<Branch> fetchBranchMaster(Principal principal) {
         return fetchTableData(principal);
     }
+
+    @RequestMapping(value = "fetchBranchMasterCourse", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(Views.BranchMasterCourse.class)
+    public List<Branch> fetchBranchMasterCourse(Principal principal) {
+        return fetchTableData(principal);
+    }
 }

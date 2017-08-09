@@ -12,4 +12,8 @@ public class Views {
     public interface BranchMaster{
 
     }
+
+    public interface BranchMasterCourse extends BranchMaster{
+
+    }
 }

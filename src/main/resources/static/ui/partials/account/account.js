@@ -1,5 +1,5 @@
-app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService', 'CourseService', 'ModalProvider', '$rootScope', '$scope', '$timeout', '$log', '$state',
-    function (AccountService, BranchService, MasterService, CourseService, ModalProvider, $rootScope, $scope, $timeout, $log, $state) {
+app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService', 'CourseService', 'ModalProvider', '$rootScope', '$scope', '$timeout', '$log', '$state', '$uibModal',
+    function (AccountService, BranchService, MasterService, CourseService, ModalProvider, $rootScope, $scope, $timeout, $log, $state, $uibModal) {
 
         $scope.buffer = {};
 
@@ -10,8 +10,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
         //
 
         $timeout(function () {
-            $scope.sideOpacity = 1;
-            BranchService.fetchTableData().then(function (data) {
+            BranchService.fetchBranchMasterCourse().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
             });
@@ -44,120 +43,147 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
         };
 
         $scope.filter = function () {
-            var search = [];
-            if ($scope.buffer.firstName) {
-                search.push('firstName=');
-                search.push($scope.buffer.firstName);
-                search.push('&');
-            }
-            if ($scope.buffer.secondName) {
-                search.push('secondName=');
-                search.push($scope.buffer.secondName);
-                search.push('&');
-            }
-            if ($scope.buffer.thirdName) {
-                search.push('thirdName=');
-                search.push($scope.buffer.thirdName);
-                search.push('&');
-            }
-            if ($scope.buffer.forthName) {
-                search.push('forthName=');
-                search.push($scope.buffer.forthName);
-                search.push('&');
-            }
-            if ($scope.buffer.dateFrom) {
-                search.push('dateFrom=');
-                search.push(moment($scope.buffer.dateFrom).valueOf());
-                search.push('&');
-            }
-            if ($scope.buffer.dateTo) {
-                search.push('dateTo=');
-                search.push(moment($scope.buffer.dateTo).valueOf());
-                search.push('&');
-            }
-            if ($scope.buffer.studentIdentityNumber) {
-                search.push('studentIdentityNumber=');
-                search.push($scope.buffer.studentIdentityNumber);
-                search.push('&');
-            }
-            if ($scope.buffer.studentMobile) {
-                search.push('studentMobile=');
-                search.push($scope.buffer.studentMobile);
-                search.push('&');
-            }
-            if ($scope.buffer.coursePriceFrom) {
-                search.push('coursePriceFrom=');
-                search.push($scope.buffer.coursePriceFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.coursePriceTo) {
-                search.push('coursePriceTo=');
-                search.push($scope.buffer.coursePriceTo);
-                search.push('&');
-            }
-            if ($scope.buffer.branch) {
-                search.push('branch=');
-                search.push($scope.buffer.branch.id);
-                search.push('&');
-            }
-            if ($scope.buffer.master) {
-                search.push('master=');
-                search.push($scope.buffer.master.id);
-                search.push('&');
-            }
-            if ($scope.buffer.course) {
-                search.push('course=');
-                search.push($scope.buffer.course.id);
-                search.push('&');
-            }
-            AccountService.filter(search.join("")).then(function (data) {
-                $scope.accounts = data;
-                $scope.setSelected(data[0]);
-                angular.forEach($scope.accounts, function (account) {
-                    AccountService.findRemainPrice(account.id).then(function (data) {
-                        return account.remainPrice = data;
-                    });
-                });
-                $scope.items = [];
-                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
-                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
-                $scope.items.push({
-                    'id': 4,
-                    'type': 'title',
-                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
-                });
-                if ($scope.buffer.master) {
-                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
-                    $scope.items.push({
-                        'id': 6,
-                        'type': 'title',
-                        'name': ' [ ' + $scope.buffer.master.code + ' ] ' + $scope.buffer.master.name
-                    });
-                }
-                if ($scope.buffer.course) {
-                    $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
-                    $scope.items.push({
-                        'id': 8,
-                        'type': 'title',
-                        'name': ' [ ' + $scope.buffer.course.code + ' ] '
-                    });
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountFilter.html',
+                controller: 'accountFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'البحث فى التسجيل';
+                    }
                 }
             });
+
+            modalInstance.result.then(function (buffer) {
+
+                var search = [];
+                if (buffer.firstName) {
+                    search.push('firstName=');
+                    search.push(buffer.firstName);
+                    search.push('&');
+                }
+                if (buffer.secondName) {
+                    search.push('secondName=');
+                    search.push(buffer.secondName);
+                    search.push('&');
+                }
+                if (buffer.thirdName) {
+                    search.push('thirdName=');
+                    search.push(buffer.thirdName);
+                    search.push('&');
+                }
+                if (buffer.forthName) {
+                    search.push('forthName=');
+                    search.push(buffer.forthName);
+                    search.push('&');
+                }
+                if (buffer.dateFrom) {
+                    search.push('dateFrom=');
+                    search.push(moment(buffer.dateFrom).valueOf());
+                    search.push('&');
+                }
+                if (buffer.dateTo) {
+                    search.push('dateTo=');
+                    search.push(moment(buffer.dateTo).valueOf());
+                    search.push('&');
+                }
+                if (buffer.studentIdentityNumber) {
+                    search.push('studentIdentityNumber=');
+                    search.push(buffer.studentIdentityNumber);
+                    search.push('&');
+                }
+                if (buffer.studentMobile) {
+                    search.push('studentMobile=');
+                    search.push(buffer.studentMobile);
+                    search.push('&');
+                }
+                if (buffer.coursePriceFrom) {
+                    search.push('coursePriceFrom=');
+                    search.push(buffer.coursePriceFrom);
+                    search.push('&');
+                }
+                if (buffer.coursePriceTo) {
+                    search.push('coursePriceTo=');
+                    search.push(buffer.coursePriceTo);
+                    search.push('&');
+                }
+                if (buffer.branch) {
+                    search.push('branch=');
+                    search.push(buffer.branch.id);
+                    search.push('&');
+                }
+                if (buffer.master) {
+                    search.push('master=');
+                    search.push(buffer.master.id);
+                    search.push('&');
+                }
+                if (buffer.course) {
+                    search.push('course=');
+                    search.push(buffer.course.id);
+                    search.push('&');
+                }
+                AccountService.filter(search.join("")).then(function (data) {
+                    $scope.accounts = data;
+                    $scope.setSelected(data[0]);
+                    angular.forEach($scope.accounts, function (account) {
+                        AccountService.findRemainPrice(account.id).then(function (data) {
+                            return account.remainPrice = data;
+                        });
+                    });
+                    $scope.items = [];
+                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
+                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 4,
+                        'type': 'title',
+                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
+                    });
+                    if (buffer.master) {
+                        $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
+                        $scope.items.push({
+                            'id': 6,
+                            'type': 'title',
+                            'name': ' [ ' + buffer.master.code + ' ] ' + buffer.master.name
+                        });
+                    }
+                    if (buffer.course) {
+                        $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
+                        $scope.items.push({
+                            'id': 8,
+                            'type': 'title',
+                            'name': ' [ ' + buffer.course.code + ' ] '
+                        });
+                    }
+                });
+
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
         };
+
 
         $scope.delete = function (account) {
             if (account) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التسجيل فعلاً؟", "error", "fa-ban", function () {
                     AccountService.remove(account.id).then(function () {
-
+                        var index = $scope.accounts.indexOf(account);
+                        $scope.accounts.splice(index, 1);
+                        $scope.setSelected($scope.accounts[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التسجيل فعلاً؟", "error", "fa-ban", function () {
                 AccountService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.accounts.indexOf($scope.selected);
+                    $scope.accounts.splice(index, 1);
+                    $scope.setSelected($scope.accounts[0]);
                 });
             });
         };

@@ -30,13 +30,13 @@ public class Course implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "courseSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMasterCourse.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMasterCourse.class})
     private Integer code;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.BranchMasterCourse.class})
     private String instructor;
 
     @JsonView(Views.Summery.class)

@@ -68,6 +68,11 @@ app.factory("BranchService",
                 return $http.get("/api/branch/fetchBranchMaster").then(function (response) {
                     return response.data;
                 });
+            },
+            fetchBranchMasterCourse: function () {
+                return $http.get("/api/branch/fetchBranchMasterCourse").then(function (response) {
+                    return response.data;
+                });
             }
         };
     }]);
