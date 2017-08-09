@@ -88,6 +88,7 @@ public class Offer implements Serializable {
 
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"offer"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private List<Call> calls = new ArrayList<>();
 
     @JsonCreator

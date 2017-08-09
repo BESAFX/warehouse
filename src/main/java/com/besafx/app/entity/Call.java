@@ -1,9 +1,11 @@
 package com.besafx.app.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -27,8 +29,12 @@ public class Call implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "callSequenceGenerator")
+    @JsonView(Views.Summery.class)
     private Long id;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @JsonView(Views.Summery.class)
     private String note;
 
     @ManyToOne
@@ -37,11 +43,13 @@ public class Call implements Serializable {
     private Offer offer;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(Views.Summery.class)
     private Date date;
 
     @ManyToOne
     @JoinColumn(name = "person")
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private Person person;
 
     @JsonCreator

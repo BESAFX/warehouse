@@ -78,6 +78,17 @@
                                         <td>{{offer.masterProfitAmount | currency:'SAR':0}}</td>
                                     </tr>
                                     <tr>
+                                        <td>المبلغ النهائي المطلوب</td>
+                                        <td>
+                                            <span ng-if="offer.masterPaymentType==='نقدي'">
+                                                {{offer.masterPrice - (offer.masterPrice * offer.masterDiscountAmount / 100) | currency:'SAR':0}}
+                                            </span>
+                                            <span ng-if="offer.masterPaymentType!=='نقدي'">
+                                                {{offer.masterPrice + (offer.masterPrice * offer.masterProfitAmount / 100) | currency:'SAR':0}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>حالة التسجيل</td>
                                         <td>
                                             <span ng-if="offer.registered" class="label label-success">مسجل</span>
@@ -122,7 +133,6 @@
                                     <th st-sort="person.contact.firstName" class="text-center">المتصل</th>
                                     <th st-sort="date" st-sort-default="reverse" class="text-center fit">التاريخ والوقت</th>
                                     <th st-sort="note" class="text-center">تفاصيل الاتصال</th>
-                                    <th st-sort="date" class="text-center fit">الوقت المنقضي</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -130,25 +140,18 @@
                                     <td class="fit">
                                         {{call.person.contact.firstName}} {{call.person.contact.forthName}}
                                     </td>
-                                    <td>
+                                    <td class="fit">
                                         <span>{{call.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                         <span class="label label-success">{{call.date | date:'h:m a'}}</span>
                                     </td>
                                     <td>
                                         {{call.note}}
                                     </td>
-                                    <td class="fit">
-                                        <timer interval="60000" start-time="call.date"><span> {{(minutes < 1 && hours < 1 && days < 1 )? 'الآن' : 'منذ'}} </span>
-                                            {{days > 0 ? days : ''}} {{days > 0 ? 'يوم' : ''}} {{hours > 0 ? hours :
-                                            ''}} {{hours > 0 ? 'ساعة' : ''}} {{minutes > 0 ? minutes : ''}} {{minutes >
-                                            0 ? 'دقيقة' : ''}}
-                                        </timer>
-                                    </td>
                                 </tr>
                                 <tr class="blank_row"
                                     style="height: 10px !important; background-color: #FFFFFF;"
                                     ng-show="!collectionCalls || collectionCalls.length ==0">
-                                    <td colspan="4">لا توجد اتصالات</td>
+                                    <td colspan="3">لا توجد اتصالات</td>
                                 </tr>
                                 </tbody>
                             </table>

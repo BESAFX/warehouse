@@ -2,10 +2,12 @@ package com.besafx.app.rest;
 
 import com.besafx.app.entity.Call;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Views;
 import com.besafx.app.service.CallService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,7 @@ public class CallRest {
 
     @RequestMapping(value = "findByOffer/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.Summery.class)
     public List<Call> findByOffer(@PathVariable Long id) {
         return callService.findByOfferId(id);
     }
