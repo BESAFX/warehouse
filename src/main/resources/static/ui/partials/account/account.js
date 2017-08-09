@@ -215,6 +215,15 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 click: function ($itemScope, $event, value) {
                     $scope.delete($itemScope.account);
                 }
+            },
+            {
+                html: '<div class="drop-menu"> التفاصيل <span class="fa fa-info fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openAccountDetailsModel($itemScope.account);
+                }
             }
         ];
 

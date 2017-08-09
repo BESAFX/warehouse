@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.View;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -121,6 +120,7 @@ public class PaymentRest {
 
     @RequestMapping(value = "findByAccount/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.PaymentByAccount.class)
     public List<Payment> findByAccount(@PathVariable Long accountId) {
         return paymentService.findByAccount(accountService.findOne(accountId));
     }

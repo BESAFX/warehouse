@@ -52,6 +52,42 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openAccountDetailsModel = function (account) {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountDetails.html',
+            controller: 'accountDetailsCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                account: function () {
+                    return account;
+                }
+            }
+        });
+    };
+
+    this.openAccountPaymentModel = function (account) {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountPayment.html',
+            controller: 'accountPaymentCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                account: function () {
+                    return account;
+                }
+            }
+        });
+    };
+
     this.openAccountHeavyWorkModel = function () {
         $uibModal.open({
             animation: true,

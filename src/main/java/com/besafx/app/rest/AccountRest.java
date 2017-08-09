@@ -316,6 +316,7 @@ public class AccountRest {
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.Summery.class)
     public List<Account> filter(
             @RequestParam(value = "firstName", required = false) final String firstName,
             @RequestParam(value = "secondName", required = false) final String secondName,

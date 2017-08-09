@@ -28,10 +28,10 @@ public class Contact implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "contactSequenceGenerator")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PersonComboBox.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.PersonComboBox.class})
     private String firstName;
 
     @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
@@ -40,7 +40,7 @@ public class Contact implements Serializable {
     @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String thirdName;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.PersonComboBox.class})
     private String forthName;
 
     @JsonView(Views.Summery.class)

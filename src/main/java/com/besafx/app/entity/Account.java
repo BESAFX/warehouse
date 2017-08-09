@@ -84,6 +84,7 @@ public class Account implements Serializable {
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private List<Payment> payments = new ArrayList<>();
 
     @JsonCreator

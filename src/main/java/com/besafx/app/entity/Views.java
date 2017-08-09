@@ -16,4 +16,12 @@ public class Views {
     public interface BranchMasterCourse extends BranchMaster{
 
     }
+
+    public interface PersonComboBox {
+
+    }
+
+    public interface PaymentByAccount extends PersonComboBox{
+
+    }
 }

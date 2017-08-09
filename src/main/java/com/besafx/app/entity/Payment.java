@@ -29,23 +29,23 @@ public class Payment implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "paymentSequenceGenerator")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private Integer code;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private Date date;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private String amountString;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private Double amountNumber;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private String type;
 
     @JsonView(Views.Summery.class)
@@ -53,7 +53,7 @@ public class Payment implements Serializable {
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private String note;
 
     @ManyToOne
@@ -65,7 +65,7 @@ public class Payment implements Serializable {
     @ManyToOne
     @JoinColumn(name = "last_person")
     @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PaymentByAccount.class})
     private Person lastPerson;
 
     @JsonCreator

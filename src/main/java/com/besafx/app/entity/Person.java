@@ -29,10 +29,10 @@ public class Person implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "personSequenceGenerator")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PersonComboBox.class})
     private Long id;
 
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PersonComboBox.class})
     private String email;
 
     @JsonView(Views.Summery.class)
@@ -70,7 +70,7 @@ public class Person implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "contact")
-    @JsonView(Views.Summery.class)
+    @JsonView(value = {Views.Summery.class, Views.PersonComboBox.class})
     private Contact contact;
 
     @JsonCreator
