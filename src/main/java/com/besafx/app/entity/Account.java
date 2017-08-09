@@ -87,6 +87,11 @@ public class Account implements Serializable {
     @JsonView(Views.Summery.class)
     private List<Payment> payments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
+    private List<AccountAttach> accountAttaches = new ArrayList<>();
+
     @JsonCreator
     public static Account Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

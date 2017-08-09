@@ -103,7 +103,9 @@ gulp.task('scripts', function () {
         './angular-chart/angular-chart.js',
 
         './init/config/config.js',
+        './init/factory/accountAttachFactory.js',
         './init/factory/accountFactory.js',
+        './init/factory/attachTypeFactory.js',
         './init/factory/bankFactory.js',
         './init/factory/billBuyFactory.js',
         './init/factory/billBuyTypeFactory.js',

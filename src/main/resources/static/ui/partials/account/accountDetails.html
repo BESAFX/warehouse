@@ -169,6 +169,63 @@
                     <div class="panel-heading">
                         <ul class="panel-controls pull-left" style="margin-top: 2px;">
                             <li>
+                                <a href="" ng-click="refreshAccountAttaches()" tooltip-append-to-body="true" uib-tooltip="تحديث">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>مستندات وملفات الطالب</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collectionAccountAttaches" st-safe-src="account.accountAttaches" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th st-sort="attach.name" class="text-center">اسم الملف</th>
+                                    <th st-sort="attachType.name" class="text-center">نوع الملف</th>
+                                    <th st-sort="attach.size" class="text-center">حجم الملف</th>
+                                    <th st-sort="attach.link" class="text-center">الرابط</th>
+                                    <th st-sort="attach.date" st-sort-default="reverse" class="text-center">تاريخ الانشاء</th>
+                                    <th st-sort="attach.person" class="text-center">مدخل الملف</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="accountattach in collectionAccountAttaches">
+                                    <td>{{accountAttach.attach.name}}</td>
+                                    <td>{{accountAttach.attachType.name}}</td>
+                                    <td>{{accountAttach.attach.size/1024/1024|number:2}} MB</td>
+                                    <td>
+                                        <a ng-href="{{accountAttach.attach.link ? accountAttach.attach.link : ''}}" target="_blank">
+                                            <i class="fa fa-files-o"></i>
+                                            {{accountAttach.attach.name}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span>{{accountAttach.attach.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span class="label label-success">{{accountAttach.attach.date | date:'h:m a'}}</span>
+                                    </td>
+                                    <td>
+                                        {{accountAttach.attach.lastPerson.contact.firstName}}
+                                        {{accountAttach.attach.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionAccountAttaches || collectionAccountAttaches.length ==0">
+                                    <td colspan="6">لا توجد مستندات حالياً</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
                                 <a href="" ng-click="refreshOffersByAccountMobile()" tooltip-append-to-body="true" uib-tooltip="تحديث">
                                     <span class="fa fa-refresh"></span>
                                 </a>

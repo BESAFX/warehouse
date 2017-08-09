@@ -66,12 +66,12 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
                 }
                 if (buffer.dateFrom) {
                     search.push('dateFrom=');
-                    search.push(moment(buffer.dateFrom).valueOf());
+                    search.push(buffer.dateFrom.getTime());
                     search.push('&');
                 }
                 if (buffer.dateTo) {
                     search.push('dateTo=');
-                    search.push(moment(buffer.dateTo).valueOf());
+                    search.push(buffer.dateTo.getTime());
                     search.push('&');
                 }
                 if (buffer.customerName) {
