@@ -271,7 +271,10 @@
                                     {{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
                                 </td>
                                 <td st-select-row-custom="offer">{{offer.customerName}}</td>
-                                <td st-select-row-custom="offer">{{offer.customerMobile}}</td>
+                                <td st-select-row-custom="offer">
+                                    {{offer.customerMobile}}
+                                    <span class="label label-warning" ng-if="offer.calls.length > 0">{{offer.calls.length}} اتصال</span>
+                                </td>
                                 <td st-select-row-custom="offer">{{offer.masterPaymentType}}</td>
                                 <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
                                 <td st-select-row-custom="offer" ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
