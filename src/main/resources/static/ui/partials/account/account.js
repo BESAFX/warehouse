@@ -217,6 +217,15 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 }
             },
             {
+                html: '<div class="drop-menu">سند قبض<span class="fa fa-money fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openAccountPaymentModel($itemScope.account);
+                }
+            },
+            {
                 html: '<div class="drop-menu"> التفاصيل <span class="fa fa-info fa-lg"></span></div>',
                 enabled: function () {
                     return true

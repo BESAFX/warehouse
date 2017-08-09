@@ -232,6 +232,7 @@
             <button uib-tooltip="دفعة جديدة"
                     tooltip-append-to-body="true"
                     type="button"
+                    ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
                     ng-click="ModalProvider.openAccountPaymentModel(account)"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <i class="material-icons">attach_money</i>
