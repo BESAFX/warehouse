@@ -214,7 +214,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="accountattach in collectionAccountAttaches">
+                                <tr ng-repeat="accountAttach in collectionAccountAttaches">
                                     <td>{{accountAttach.attach.name}}</td>
                                     <td>{{accountAttach.attachType.name}}</td>
                                     <td>{{accountAttach.attach.size/1024/1024|number:2}} MB</td>
@@ -229,8 +229,8 @@
                                         <span class="label label-success">{{accountAttach.attach.date | date:'h:m a'}}</span>
                                     </td>
                                     <td>
-                                        {{accountAttach.attach.lastPerson.contact.firstName}}
-                                        {{accountAttach.attach.lastPerson.contact.forthName}}
+                                        {{accountAttach.attach.person.contact.firstName}}
+                                        {{accountAttach.attach.person.contact.forthName}}
                                     </td>
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionAccountAttaches || collectionAccountAttaches.length ==0">

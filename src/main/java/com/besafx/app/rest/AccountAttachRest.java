@@ -4,9 +4,11 @@ import com.besafx.app.config.DropboxManager;
 import com.besafx.app.entity.AccountAttach;
 import com.besafx.app.entity.Attach;
 import com.besafx.app.entity.AttachType;
+import com.besafx.app.entity.Views;
 import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,7 @@ public class AccountAttachRest {
     @ResponseBody
     public AccountAttach upload(@PathVariable(value = "accountId") Long accountId,
                                 @PathVariable(value = "attachTypeId") Long attachTypeId,
+                                @PathVariable(value = "fileName") String fileName,
                                 @RequestParam(value = "file") MultipartFile file,
                                 Principal principal)
             throws ExecutionException, InterruptedException {
@@ -61,14 +64,14 @@ public class AccountAttachRest {
         accountAttach.setAttachType(attachTypeService.findOne(attachTypeId));
 
         Attach attach = new Attach();
-        attach.setName(file.getName());
+        attach.setName(fileName);
         attach.setSize(file.getSize());
         attach.setDate(new DateTime().toDate());
         attach.setPerson(personService.findByEmail(principal.getName()));
 
-        Future<Boolean> uploadTask = dropboxManager.uploadFile(file, "/Smart Offer/Accounts/" + accountId + "/" + file.getName());
+        Future<Boolean> uploadTask = dropboxManager.uploadFile(file, "/Smart Offer/Accounts/" + accountId + "/" + fileName);
         if (uploadTask.get()) {
-            Future<String> shareTask = dropboxManager.shareFile("/Smart Offer/Accounts/" + accountId + "/" + file.getName());
+            Future<String> shareTask = dropboxManager.shareFile("/Smart Offer/Accounts/" + accountId + "/" + fileName);
             attach.setLink(shareTask.get());
             notificationService.notifyOne(Notification
                     .builder()
@@ -131,6 +134,7 @@ public class AccountAttachRest {
 
     @RequestMapping(value = "findByAccount/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.AttachByAccount.class)
     public List<AccountAttach> findByAccount(@PathVariable(value = "accountId") Long accountId) {
         return accountAttachService.findByAccountId(accountId);
     }

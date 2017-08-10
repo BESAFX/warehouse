@@ -22,7 +22,9 @@ app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'Payment
         };
 
         $scope.refreshAccountAttaches = function () {
-
+            AccountAttachService.findByAccount($scope.account).then(function (data) {
+                $scope.account.accountAttaches = data;
+            })
         };
 
         //////////////////////////File Manager///////////////////////////////////
@@ -62,9 +64,8 @@ app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'Payment
 
             modalInstance.result.then(function (wrappers) {
                 angular.forEach(wrappers, function (wrapper) {
-                    wrapper.src.name = wrapper.name;
-                    AccountAttachService.upload(account, wrapper.attachType, wrapper.src).then(function () {
-
+                    AccountAttachService.upload(account, wrapper.attachType, wrapper.name, wrapper.src).then(function () {
+                        $scope.refreshAccountAttaches();
                     });
                 });
             }, function () {
@@ -144,8 +145,8 @@ app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'Payment
                 angular.forEach(wrappers, function (wrapper) {
                     var blob = dataURItoBlob(wrapper.src);
                     var file = new File([blob], wrapper.name + '.jpg');
-                    AccountAttachService.upload(account, wrapper.attachType, file).then(function () {
-
+                    AccountAttachService.upload(account, wrapper.attachType, wrapper.name, file).then(function () {
+                        $scope.refreshAccountAttaches();
                     });
                 });
             }, function () {

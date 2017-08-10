@@ -24,4 +24,8 @@ public class Views {
     public interface PaymentByAccount extends PersonComboBox{
 
     }
+
+    public interface AttachByAccount extends PersonComboBox{
+
+    }
 }
