@@ -1,13 +1,11 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
+import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Views;
-import com.besafx.app.service.BranchService;
-import com.besafx.app.service.MasterService;
-import com.besafx.app.service.OfferService;
-import com.besafx.app.service.PersonService;
+import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -36,6 +34,9 @@ public class OfferRest {
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private BranchService branchService;
@@ -239,6 +240,16 @@ public class OfferRest {
             }
             List<Offer> list = Lists.newArrayList(offerService.findAll(result));
             list.sort(Comparator.comparing(offer -> offer.getMaster().getId()));
+            log.info("فحص العروض وتحديث حالات التسجيل");
+            list.stream().forEach(offer -> {
+                List<Account> accounts = accountService.findByStudentContactMobile(offer.getCustomerMobile());
+                if(accounts.isEmpty()){
+                    offer.setRegistered(false);
+                }else {
+                    offer.setRegistered(true);
+                }
+                offerService.save(offer);
+            });
             return list;
         } else {
             throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");

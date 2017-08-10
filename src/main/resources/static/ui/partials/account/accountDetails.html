@@ -273,8 +273,8 @@
                                         {{offer.code}}
                                     </td>
                                     <td>
-                                        <span>{{offer.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                        <span class="label label-success">{{offer.date | date:'h:m a'}}</span>
+                                        <span>{{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span class="label label-success">{{offer.lastUpdate | date:'h:m a'}}</span>
                                     </td>
                                     <td>
                                         {{offer.lastPerson.contact.firstName}}
