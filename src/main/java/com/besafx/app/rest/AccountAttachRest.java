@@ -54,7 +54,7 @@ public class AccountAttachRest {
     @ResponseBody
     public AccountAttach upload(@PathVariable(value = "accountId") Long accountId,
                                 @PathVariable(value = "attachTypeId") Long attachTypeId,
-                                @PathVariable(value = "fileName") String fileName,
+                                @RequestParam(value = "fileName") String fileName,
                                 @RequestParam(value = "file") MultipartFile file,
                                 Principal principal)
             throws ExecutionException, InterruptedException {

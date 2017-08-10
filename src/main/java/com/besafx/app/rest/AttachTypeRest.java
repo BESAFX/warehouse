@@ -2,8 +2,10 @@ package com.besafx.app.rest;
 
 import com.besafx.app.entity.AttachType;
 import com.besafx.app.entity.BillBuyType;
+import com.besafx.app.entity.Views;
 import com.besafx.app.service.AttachTypeService;
 import com.besafx.app.service.BillBuyTypeService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,13 +20,12 @@ import java.util.List;
 @RequestMapping(value = "/api/attachType/")
 public class AttachTypeRest {
 
-
-
     @Autowired
     private AttachTypeService attachTypeService;
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @JsonView(Views.Summery.class)
     public List<AttachType> findAll() {
         return Lists.newArrayList(attachTypeService.findAll());
     }

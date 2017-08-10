@@ -4,7 +4,7 @@ app.factory("AccountAttachService",
             upload: function (account, attachType, fileName, file) {
                 var fd = new FormData();
                 fd.append('file', file);
-                return $http.post("/api/accountAttach/upload/" + account.id + "/" + attachType.id + "/" + fileName,
+                return $http.post("/api/accountAttach/upload/" + account.id + "/" + attachType.id + "?fileName=" + fileName,
                     fd, {transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(function (response) {
                     return response.data;
                 });
