@@ -1,5 +1,5 @@
-app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'PaymentService' ,'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'account',
-    function (AccountService, OfferService, PaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, account) {
+app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'PaymentService', 'AccountAttachService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'account',
+    function (AccountService, OfferService, PaymentService, AccountAttachService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, account) {
 
         $scope.account = account;
 
@@ -20,6 +20,139 @@ app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'Payment
                 $scope.account.payments = data;
             });
         };
+
+        $scope.refreshAccountAttaches = function () {
+
+        };
+
+        //////////////////////////File Manager///////////////////////////////////
+        $scope.uploadFiles = function () {
+            document.getElementById('uploader').click();
+        };
+
+        $scope.uploadAll = function (files) {
+
+            var wrappers = [];
+
+            angular.forEach(files, function (file) {
+                var wrapper = {};
+                wrapper.src = file;
+                wrapper.name = file.name;
+                wrappers.push(wrapper);
+            });
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountAttachUpload.html',
+                controller: 'accountAttachUploadCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'رفع المستندات';
+                    },
+                    wrappers : function () {
+                        return wrappers;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (wrappers) {
+                angular.forEach(wrappers, function (wrapper) {
+                    wrapper.src.name = wrapper.name;
+                    AccountAttachService.upload(account, wrapper.attachType, wrapper.src).then(function () {
+
+                    });
+                });
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+
+        };
+        //////////////////////////File Manager///////////////////////////////////
+
+        //////////////////////////Scan Manager///////////////////////////////////
+        $scope.scanToJpg = function() {
+            scanner.scan(displayImagesOnPage,
+                {
+                    "output_settings" :
+                        [
+                            {
+                                "type": "return-base64",
+                                "format": "jpg"
+                            }
+                        ]
+                }
+            );
+        };
+
+        function dataURItoBlob(dataURI) {
+            // convert base64/URLEncoded data component to raw binary data held in a string
+            var byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = unescape(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to a typed array
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([ia], {type:mimeString});
+        }
+
+        /** Processes the scan result */
+        function displayImagesOnPage(successful, mesg, response) {
+            var scannedImages = scanner.getScannedImages(response, true, false); // returns an array of ScannedImage
+
+            var wrappers = [];
+
+            for(var i = 0; (scannedImages instanceof Array) && i < scannedImages.length; i++) {
+                var wrapper = {};
+                wrapper.src = scannedImages[i].src;
+                wrappers.push(wrapper);
+            }
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountAttachUpload.html',
+                controller: 'accountAttachUploadCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'رفع المستندات';
+                    },
+                    wrappers : function () {
+                        return wrappers;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (wrappers) {
+                angular.forEach(wrappers, function (wrapper) {
+                    var blob = dataURItoBlob(wrapper.src);
+                    var file = new File([blob], wrapper.name + '.jpg');
+                    AccountAttachService.upload(account, wrapper.attachType, file).then(function () {
+
+                    });
+                });
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+        //////////////////////////Scan Manager///////////////////////////////////
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');

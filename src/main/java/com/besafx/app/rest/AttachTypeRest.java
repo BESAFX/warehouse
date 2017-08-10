@@ -1,6 +1,8 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.entity.AttachType;
 import com.besafx.app.entity.BillBuyType;
+import com.besafx.app.service.AttachTypeService;
 import com.besafx.app.service.BillBuyTypeService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,11 @@ public class AttachTypeRest {
 
 
     @Autowired
-    private BillBuyTypeService attachTypeService;
+    private AttachTypeService attachTypeService;
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<BillBuyType> findAll() {
+    public List<AttachType> findAll() {
         return Lists.newArrayList(attachTypeService.findAll());
     }
 

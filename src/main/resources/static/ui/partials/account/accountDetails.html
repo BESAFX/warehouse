@@ -171,11 +171,27 @@
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <input id="uploader" style="display: none" type="file" onchange="angular.element(this).scope().uploadAll(this.files)" multiple/>
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <ul class="panel-controls pull-left" style="margin-top: 2px;">
                             <li>
-                                <a href="" ng-click="refreshAccountAttaches()" tooltip-append-to-body="true" uib-tooltip="تحديث">
+                                <a href=""
+                                   ng-click="uploadFiles()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="مرفق جديد">
+                                    <span class="fa fa-paperclip"></span>
+                                </a>
+                                <a href=""
+                                   ng-click="scanToJpg()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="فحص">
+                                    <span class="fa fa-file-image-o"></span>
+                                </a>
+                                <a href=""
+                                   ng-click="refreshAccountAttaches()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث">
                                     <span class="fa fa-refresh"></span>
                                 </a>
                             </li>

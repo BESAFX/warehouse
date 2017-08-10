@@ -156,6 +156,7 @@ gulp.task('scripts', function () {
         './partials/account/accountHeavyWork.js',
         './partials/account/accountDetails.js',
         './partials/account/accountPayment.js',
+        './partials/account/accountAttachUpload.js',
         './partials/payment/payment.js',
         './partials/payment/paymentCreate.js',
         './partials/payment/paymentHeavyWork.js',
