@@ -49,6 +49,12 @@ public class AccountRest {
     private PaymentService paymentService;
 
     @Autowired
+    private AccountAttachService accountAttachService;
+
+    @Autowired
+    private AccountConditionService accountConditionService;
+
+    @Autowired
     private NotificationService notificationService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -148,11 +154,18 @@ public class AccountRest {
         if (!accounts.isEmpty()) {
             List<Payment> payments = paymentService.findByAccountIn(accounts);
             paymentService.delete(payments);
+
+            List<AccountAttach> accountAttaches = accountAttachService.findByAccountIn(accounts);
+            accountAttachService.delete(accountAttaches);
+
+            List<AccountCondition> accountConditions = accountConditionService.findByAccountIn(accounts);
+            accountConditionService.delete(accountConditions);
+
             accountService.delete(accounts);
             notificationService.notifyOne(Notification
                     .builder()
                     .title("العمليات على تسجيل الطلاب")
-                    .message("تم حذف الاشتراكات وكل ما يتعلق بها من سندات وحسابات بنجاح")
+                    .message("تم حذف الطلاب وكل ما يتعلق بهم من سندات وحسابات بنجاح")
                     .type("success")
                     .icon("fa-trash")
                     .build(), principal.getName());

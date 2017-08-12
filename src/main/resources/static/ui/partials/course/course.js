@@ -82,6 +82,15 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                 click: function ($itemScope, $event, value) {
                     $scope.delete($itemScope.course);
                 }
+            },
+            {
+                html: '<div class="drop-menu">حذف طلاب الدورة<span class="fa fa-trash fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.deleteAccounts($itemScope.course);
+                }
             }
         ];
 
