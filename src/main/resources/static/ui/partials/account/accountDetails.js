@@ -1,5 +1,5 @@
-app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'PaymentService', 'AccountAttachService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'account',
-    function (AccountService, OfferService, PaymentService, AccountAttachService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, account) {
+app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountService', 'OfferService', 'PaymentService', 'AccountAttachService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'account',
+    function (AccountConditionService, AccountService, OfferService, PaymentService, AccountAttachService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, account) {
 
         $scope.account = account;
 
@@ -25,6 +25,36 @@ app.controller('accountDetailsCtrl', ['AccountService', 'OfferService', 'Payment
             AccountAttachService.findByAccount($scope.account).then(function (data) {
                 $scope.account.accountAttaches = data;
             })
+        };
+
+        $scope.findConditionByAccount = function () {
+            AccountConditionService.findByAccount($scope.account).then(function (data) {
+                $scope.account.accountConditions = data;
+            })
+        };
+
+        $scope.openAccountConditionCreate = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountConditionCreate.html',
+                controller: 'accountConditionCreateCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    account: function () {
+                        return $scope.account;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (account) {
+                $scope.account = account;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
         };
 
         //////////////////////////File Manager///////////////////////////////////

@@ -44,114 +44,34 @@
                                     <tr>
                                         <td>رقم الطالب</td>
                                         <td>
-                                            <span class="label label-default">تسلسل / {{account.code}}</span>
+                                            {{account.code}}
                                             -
-                                            <span class="label label-primary">دورة رقم / {{account.course.code}}</span>
+                                            {{account.course.code}}
                                             -
-                                            <span class="label label-success">
-                                                <span>تخصص رقم / </span>
-                                                [ {{account.course.master.code}} ] {{account.course.master.name}}
-                                            </span>
+                                            {{account.course.master.code}}
                                             -
-                                            <span class="label label-warning">
-                                                <span>فرع رقم / </span>
-                                                [ {{account.course.master.branch.code}} ] {{account.course.master.branch.name}}
-                                            </span>
+                                            {{account.course.master.branch.code}}
                                             -
                                             {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td>الفرع</td>
+                                        <td>[ {{account.course.master.branch.code}} ] {{account.course.master.branch.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>التخصص</td>
+                                        <td>[ {{account.course.master.code}} ] {{account.course.master.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>رقم الدورة</td>
+                                        <td>{{account.course.code}}</td>
                                     </tr>
                                     <tr>
                                         <td>تاريخ التسجيل</td>
                                         <td>
                                             {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
                                             <span class="label label-success">{{account.registerDate | date:'h:m a'}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>اسم الطالب</td>
-                                        <td>
-                                            {{account.student.contact.firstName}}
-                                            {{account.student.contact.secondName}}
-                                            {{account.student.contact.thirdName}}
-                                            {{account.student.contact.forthName}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>رقم البطاقة</td>
-                                        <td>{{account.student.contact.identityNumber}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>مكان الاصدار</td>
-                                        <td>{{account.student.contact.identityLocation}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>تاريخ الاصدار</td>
-                                        <td>
-                                            {{account.student.contact.identityStartDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                            <span class="label label-success">{{account.student.contact.identityStartDate | date:'h:m a'}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>المؤهل</td>
-                                        <td>{{account.student.contact.qualification}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>مكان الميلاد</td>
-                                        <td>{{account.student.contact.birthLocation}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>تاريخ الميلاد</td>
-                                        <td>
-                                            {{account.student.contact.birthDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                            <span class="label label-success">{{account.student.contact.birthDate | date:'h:m a'}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>الجنسية</td>
-                                        <td>{{account.student.contact.nationality}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>رقم الجوال</td>
-                                        <td>{{account.student.contact.mobile}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>العنوان</td>
-                                        <td>{{account.student.contact.address}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>ملاحظات</td>
-                                        <td>{{account.note}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>طريقة الدفع</td>
-                                        <td>{{account.coursePaymentType}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>سعر الدورة</td>
-                                        <td>{{account.coursePrice | currency:'SAR':0}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>قيمة الخصم</td>
-                                        <td>{{account.courseDiscountAmount}} %</td>
-                                    </tr>
-                                    <tr>
-                                        <td>نسبة الفائدة</td>
-                                        <td>{{account.courseProfitAmount}} %</td>
-                                    </tr>
-                                    <tr>
-                                        <td>قيمة القسط الشهري</td>
-                                        <td>{{account.courseProfitAmount | currency:'SAR':0}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fit">المبلغ النهائي المطلوب</td>
-                                        <td>
-                                            <span ng-if="account.coursePaymentType==='نقدي'">
-                                                {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:'SAR':0}}
-                                            </span>
-                                            <span ng-if="account.coursePaymentType!=='نقدي'">
-                                                {{account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100) | currency:'SAR':0}}
-                                            </span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -163,6 +83,151 @@
                                             </span>
                                         </td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
+                                <a href="" ng-click="refreshAccount()" tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث البيانات">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                                <a href=""
+                                   ng-click="ModalProvider.openAccountUpdateModel(account)"
+                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تعديل البيانات">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>بيانات الطالب</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>اسم الطالب</td>
+                                    <td>
+                                        {{account.student.contact.firstName}}
+                                        {{account.student.contact.secondName}}
+                                        {{account.student.contact.thirdName}}
+                                        {{account.student.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>رقم البطاقة</td>
+                                    <td>{{account.student.contact.identityNumber}}</td>
+                                </tr>
+                                <tr>
+                                    <td>مكان الاصدار</td>
+                                    <td>{{account.student.contact.identityLocation}}</td>
+                                </tr>
+                                <tr>
+                                    <td>تاريخ الاصدار</td>
+                                    <td>
+                                        {{account.student.contact.identityStartDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                        <span class="label label-success">{{account.student.contact.identityStartDate | date:'h:m a'}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>المؤهل</td>
+                                    <td>{{account.student.contact.qualification}}</td>
+                                </tr>
+                                <tr>
+                                    <td>مكان الميلاد</td>
+                                    <td>{{account.student.contact.birthLocation}}</td>
+                                </tr>
+                                <tr>
+                                    <td>تاريخ الميلاد</td>
+                                    <td>
+                                        {{account.student.contact.birthDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                        <span class="label label-success">{{account.student.contact.birthDate | date:'h:m a'}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>الجنسية</td>
+                                    <td>{{account.student.contact.nationality}}</td>
+                                </tr>
+                                <tr>
+                                    <td>رقم الجوال</td>
+                                    <td>{{account.student.contact.mobile}}</td>
+                                </tr>
+                                <tr>
+                                    <td>العنوان</td>
+                                    <td>{{account.student.contact.address}}</td>
+                                </tr>
+                                <tr>
+                                    <td>ملاحظات</td>
+                                    <td>{{account.note}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
+                                <a href="" ng-click="refreshAccount()" tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث البيانات">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>بيانات سعر الدورة</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>طريقة الدفع</td>
+                                    <td>{{account.coursePaymentType}}</td>
+                                </tr>
+                                <tr>
+                                    <td>سعر الدورة</td>
+                                    <td>{{account.coursePrice | currency:'SAR':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td>قيمة الخصم</td>
+                                    <td>{{account.courseDiscountAmount}} %</td>
+                                </tr>
+                                <tr>
+                                    <td>نسبة الفائدة</td>
+                                    <td>{{account.courseProfitAmount}} %</td>
+                                </tr>
+                                <tr>
+                                    <td>قيمة القسط الشهري</td>
+                                    <td>{{account.courseProfitAmount | currency:'SAR':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fit">المبلغ النهائي المطلوب</td>
+                                    <td>
+                                            <span ng-if="account.coursePaymentType==='نقدي'">
+                                                {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:'SAR':0}}
+                                            </span>
+                                        <span ng-if="account.coursePaymentType!=='نقدي'">
+                                                {{account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100) | currency:'SAR':0}}
+                                            </span>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -248,6 +313,59 @@
                     <div class="panel-heading">
                         <ul class="panel-controls pull-left" style="margin-top: 2px;">
                             <li>
+                                <a href="" ng-click="findConditionByAccount()"
+                                   tooltip-append-to-body="true" uib-tooltip="تحديث">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                                <a href="" ng-click="openAccountConditionCreate()"
+                                   tooltip-append-to-body="true" uib-tooltip="انشاء حالة">
+                                    <span class="fa fa-bookmark"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>حالة الطالب</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collectionCondition" st-safe-src="account.accountConditions" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th st-sort="condition" class="text-center">الحالة</th>
+                                    <th st-sort="date" st-sort-default="reverse" class="text-center">تاريخ الحالة</th>
+                                    <th st-sort="person" class="text-center">مدخل الحالة</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="condition in collectionCondition">
+                                    <td>
+                                        {{condition.studentCondition}}
+                                    </td>
+                                    <td>
+                                        <span>{{condition.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span class="label label-success">{{condition.date | date:'h:m a'}}</span>
+                                    </td>
+                                    <td>
+                                        {{condition.person.contact.firstName}}
+                                        {{condition.person.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionCondition || collectionCondition.length ==0">
+                                    <td colspan="3">لا توجد عروض لهذا الرقم</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
                                 <a href="" ng-click="refreshOffersByAccountMobile()" tooltip-append-to-body="true" uib-tooltip="تحديث">
                                     <span class="fa fa-refresh"></span>
                                 </a>
@@ -296,8 +414,18 @@
                     <div class="panel-heading">
                         <ul class="panel-controls pull-left" style="margin-top: 2px;">
                             <li>
-                                <a href="" ng-click="refreshAccountPayments()" tooltip-append-to-body="true" uib-tooltip="تحديث">
+                                <a href=""
+                                   ng-click="refreshAccountPayments()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث">
                                     <span class="fa fa-refresh"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
+                                   ng-click="ModalProvider.openAccountPaymentModel(account)"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="دفعة جديدة">
+                                    <span class="fa fa-money"></span>
                                 </a>
                             </li>
                         </ul>
@@ -356,19 +484,27 @@
     <div class="modal-footer">
 
         <div class="row">
+            <button uib-tooltip="تعديل بيانات الطالب"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
+                    ng-click="ModalProvider.openAccountUpdateModel(account)"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <i class="material-icons">contact_phone</i>
+            </button>
             <button uib-tooltip="دفعة جديدة"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
                     ng-click="ModalProvider.openAccountPaymentModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
                 <i class="material-icons">attach_money</i>
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
                 <i class="material-icons">power_settings_new</i>
             </button>
         </div>

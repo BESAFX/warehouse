@@ -104,6 +104,7 @@ gulp.task('scripts', function () {
 
         './init/config/config.js',
         './init/factory/accountAttachFactory.js',
+        './init/factory/accountConditionFactory.js',
         './init/factory/accountFactory.js',
         './init/factory/attachTypeFactory.js',
         './init/factory/bankFactory.js',
@@ -157,6 +158,7 @@ gulp.task('scripts', function () {
         './partials/account/accountDetails.js',
         './partials/account/accountPayment.js',
         './partials/account/accountAttachUpload.js',
+        './partials/account/accountConditionCreate.js',
         './partials/payment/payment.js',
         './partials/payment/paymentCreate.js',
         './partials/payment/paymentHeavyWork.js',
@@ -171,6 +173,7 @@ gulp.task('scripts', function () {
         './partials/billBuyType/billBuyType.js',
         './partials/billBuyType/billBuyTypeCreateUpdate.js',
         './partials/billBuy/billBuy.js',
+        './partials/billBuy/billBuyFilter.js',
         './partials/billBuy/billBuyCreate.js',
         './partials/report/report.js',
         './partials/report/offer/js/offerByBranch.js',
