@@ -71,7 +71,8 @@ public class Course implements Serializable {
     private Person lastPerson;
 
     @OneToMany(mappedBy = "course")
-    @JsonIgnoreProperties(value = {"course", "student", "lastPerson", "lastUpdate", "registerDate"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"course", "student", "lastPerson", "lastUpdate", "registerDate", "payments", "accountAttaches", "accountConditions"}, allowSetters = true)
+    @JsonView(Views.Summery.class)
     private List<Account> accounts = new ArrayList<>();
 
     @JsonCreator

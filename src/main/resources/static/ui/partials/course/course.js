@@ -27,14 +27,22 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             if (course) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                     CourseService.remove(course.id).then(function () {
-
+                        angular.forEach($scope.courses, function (row) {
+                            if(row.id === course.id){
+                                return row.accounts = [];
+                            }
+                        })
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                 CourseService.remove($scope.selected.id).then(function () {
-
+                    angular.forEach($scope.courses, function (row) {
+                        if(row.id === selected.id){
+                            return row.accounts = [];
+                        }
+                    })
                 });
             });
         };

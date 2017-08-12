@@ -48,7 +48,7 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
 
             $scope.sideOpacity = 1;
 
-            BranchService.fetchTableData().then(function (data) {
+            BranchService.fetchBranchMasterCourse().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
                 $scope.buffer.type = 'ايرادات اساسية';
