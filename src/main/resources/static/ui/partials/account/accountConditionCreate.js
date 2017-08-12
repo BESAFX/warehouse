@@ -6,7 +6,7 @@ app.controller('accountConditionCreateCtrl', ['AccountConditionService', 'ModalP
 
         $scope.submit = function () {
             AccountConditionService.create($scope.accountCondition).then(function (data) {
-                $uibModalInstance.close(data.account);
+                $uibModalInstance.close(data);
             });
         };
 

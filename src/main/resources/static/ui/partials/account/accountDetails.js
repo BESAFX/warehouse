@@ -50,8 +50,8 @@ app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountService
                 }
             });
 
-            modalInstance.result.then(function (account) {
-                $scope.account = account;
+            modalInstance.result.then(function (condition) {
+                $scope.account.accountConditions.push(condition);
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });

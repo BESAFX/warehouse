@@ -1,9 +1,9 @@
 package com.besafx.app.entity.enums;
 public enum StudentCondition {
-    Fire("مفصول"),
-    Delay("مؤجل"),
+    Fire("فصل"),
+    Delay("تأجيل"),
     Restore("استعادة دورة"),
-    Pause("منقطع");
+    Pause("إنقطاع");
     private String name;
     StudentCondition(String name){
         this.name = name;

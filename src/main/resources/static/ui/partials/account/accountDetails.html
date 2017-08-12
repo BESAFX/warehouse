@@ -317,7 +317,9 @@
                                    tooltip-append-to-body="true" uib-tooltip="تحديث">
                                     <span class="fa fa-refresh"></span>
                                 </a>
-                                <a href="" ng-click="openAccountConditionCreate()"
+                                <a href=""
+                                   ng-click="openAccountConditionCreate()"
+                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CONDITION_CREATE'])"
                                    tooltip-append-to-body="true" uib-tooltip="انشاء حالة">
                                     <span class="fa fa-bookmark"></span>
                                 </a>
@@ -340,7 +342,13 @@
                                 <tbody>
                                 <tr ng-repeat="condition in collectionCondition">
                                     <td>
-                                        {{condition.studentCondition}}
+                                        <span ng-if="condition.studentCondition==='Fire'">فصل</span>
+                                        <span ng-if="condition.studentCondition==='Delay'">تأجيل</span>
+                                        <span ng-if="condition.studentCondition==='Restore'">استعادة دورة</span>
+                                        <span ng-if="condition.studentCondition==='Pause'">إنقطاع</span>
+                                        <span class="fa fa-info-circle"
+                                              tooltip-append-to-body="true"
+                                              uib-tooltip="{{condition.note}}"></span>
                                     </td>
                                     <td>
                                         <span>{{condition.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
@@ -489,22 +497,30 @@
                     type="button"
                     ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
                     ng-click="ModalProvider.openAccountUpdateModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <i class="material-icons">contact_phone</i>
+            </button>
+            <button uib-tooltip="تغير حالة الطالب"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="openAccountConditionCreate()"
+                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CONDITION_CREATE'])"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <i class="material-icons">bookmark</i>
             </button>
             <button uib-tooltip="دفعة جديدة"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
                     ng-click="ModalProvider.openAccountPaymentModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <i class="material-icons">attach_money</i>
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <i class="material-icons">power_settings_new</i>
             </button>
         </div>
