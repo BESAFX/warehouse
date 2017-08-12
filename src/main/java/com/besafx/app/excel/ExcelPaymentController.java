@@ -1,13 +1,9 @@
 package com.besafx.app.excel;
-import com.besafx.app.entity.Account;
+
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
-import com.besafx.app.rest.AccountRest;
-import com.besafx.app.service.AccountService;
-import com.besafx.app.service.PaymentService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.ArabicLiteralNumberParser;
-import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import org.apache.commons.io.FileUtils;
@@ -24,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.html.Option;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +31,9 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @RestController
 public class ExcelPaymentController {
@@ -47,15 +47,6 @@ public class ExcelPaymentController {
     private Integer day = null, month = null, year = null, masterCode = null, courseCode = null, accountCode = null;
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private AccountRest accountRest;
-
-    @Autowired
-    private PaymentService paymentService;
-
-    @Autowired
     private PersonService personService;
 
     @Autowired
@@ -63,6 +54,9 @@ public class ExcelPaymentController {
 
     @Autowired
     private ExcelCellHelper excelCellHelper;
+
+    @Autowired
+    private PaymentReadRow paymentReadRow;
 
     @PostConstruct
     public void init() {
@@ -422,32 +416,14 @@ public class ExcelPaymentController {
 
                 }
                 if (accept) {
+                    Future<Payment> task = paymentReadRow.readRow(person, payment, firstName, secondName, thirdName, forthName, courseCode, masterCode, day, month, year);
                     try {
-                        Account account = accountService
-                                .findByStudentContactFirstNameAndStudentContactSecondNameAndStudentContactThirdNameAndStudentContactForthNameAndCourseCodeAndCourseMasterCodeAndCourseMasterBranchCode
-                                        (firstName, secondName, thirdName, forthName, courseCode, masterCode, person.getBranch().getCode());
-                        if (account == null) {
-                            continue;
-                        }
-                        log.info("تم إيجاد التسجيل بنجاح...");
-                        log.info("فحص هل تبقي مبالغ لم تسدد لهذا الحساب");
-                        if (payment.getType().equals("ايرادات اساسية")) {
-                            if (accountRest.findRemainPrice(account.getId()) < payment.getAmountNumber()) {
-                                log.info("لا يمكن قبول قيمة اكبر من الباقي من التسجيل");
-                                continue;
-                            }
-                        }
-                        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), person.getBranch()) != null) {
-                            log.info("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
-                            continue;
-                        }
-                        payment.setAccount(account);
-                        payment.setDate(DateConverter.getDateFromHijri(year, month, day));
-                        payment.setLastPerson(person);
-                        paymentList.add(payment);
-                        paymentService.save(payment);
-                    } catch (Exception ex) {
-                        log.info(ex.getMessage());
+                        paymentList.add(task.get());
+                        log.info("تمت العملية بنجاح");
+                    } catch (InterruptedException e) {
+                        log.error(e.getMessage());
+                    } catch (ExecutionException e) {
+                        log.error(e.getMessage());
                     }
                 }
             }
@@ -464,5 +440,6 @@ public class ExcelPaymentController {
             e.printStackTrace();
         }
     }
+
 
 }

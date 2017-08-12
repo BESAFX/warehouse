@@ -1,5 +1,5 @@
-app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService', 'AccountService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state',
-    function (CourseService, MasterService, BranchService, AccountService, ModalProvider, $rootScope, $scope, $log, $timeout, $state) {
+app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService', 'AccountService', 'PaymentService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state',
+    function (CourseService, MasterService, BranchService, AccountService, PaymentService, ModalProvider, $rootScope, $scope, $log, $timeout, $state) {
 
         $scope.selected = {};
 
@@ -27,22 +27,14 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             if (course) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                     CourseService.remove(course.id).then(function () {
-                        angular.forEach($scope.courses, function (row) {
-                            if(row.id === course.id){
-                                return row.accounts = [];
-                            }
-                        })
+
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                 CourseService.remove($scope.selected.id).then(function () {
-                    angular.forEach($scope.courses, function (row) {
-                        if(row.id === selected.id){
-                            return row.accounts = [];
-                        }
-                    })
+
                 });
             });
         };
@@ -58,6 +50,22 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
                 AccountService.removeByCourse($scope.selected.id).then(function () {
+
+                });
+            });
+        };
+
+        $scope.deletePayments = function (course) {
+            if (course) {
+                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف جميع سندات طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
+                    PaymentService.removeByCourse(course.id).then(function () {
+
+                    });
+                });
+                return;
+            }
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف جميع سندات طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
+                PaymentService.removeByCourse($scope.selected.id).then(function () {
 
                 });
             });
@@ -98,6 +106,15 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.deleteAccounts($itemScope.course);
+                }
+            },
+            {
+                html: '<div class="drop-menu">حذف جميع سندات طلاب الدورة<span class="fa fa-trash fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.deletePayments($itemScope.course);
                 }
             }
         ];

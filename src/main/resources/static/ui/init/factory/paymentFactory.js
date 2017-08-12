@@ -21,6 +21,11 @@ app.factory("PaymentService",
                     return response.data;
                 });
             },
+            removeByCourse: function (courseId) {
+                return $http.delete("/api/payment/deleteByCourse/" + courseId).then(function (response) {
+                    return response.data;
+                });
+            },
             update: function (payment) {
                 return $http.put("/api/payment/update", payment).then(function (response) {
                     return response.data;

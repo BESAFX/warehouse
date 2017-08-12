@@ -1,8 +1,6 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Payment;
-import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Views;
+import com.besafx.app.entity.*;
 import com.besafx.app.search.PaymentSearch;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.BranchService;
@@ -100,6 +98,24 @@ public class PaymentRest {
                     .builder()
                     .title("العمليات على سندات القبض")
                     .message("تم حذف سند القبض رقم " + object.getCode() + " بنجاح")
+                    .type("success")
+                    .icon("fa-trash")
+                    .build(), principal.getName());
+        }
+    }
+
+    @RequestMapping(value = "deleteByCourse/{courseId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PAYMENT_DELETE')")
+    public void deleteByCourse(@PathVariable Long courseId, Principal principal) {
+        List<Account> accounts = accountService.findByCourseId(courseId);
+        if (!accounts.isEmpty()) {
+            List<Payment> payments = paymentService.findByAccountIn(accounts);
+            paymentService.delete(payments);
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على الدورات")
+                    .message("تم حذف سندات كل طلاب الدورة بنجاح")
                     .type("success")
                     .icon("fa-trash")
                     .build(), principal.getName());

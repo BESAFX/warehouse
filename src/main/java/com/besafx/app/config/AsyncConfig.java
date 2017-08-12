@@ -38,6 +38,12 @@ public class AsyncConfig {
         return initThreadPool(1, 1, 500, "FilePDFGenerate-");
     }
 
+    @Bean(name = "threadPoolPaymentExcel")
+    public Executor threadPoolPaymentExcel() {
+        log.info("Prepare threadPoolPaymentExcel...");
+        return initThreadPool(1, 1, 500, "PaymentExcel-");
+    }
+
     private ThreadPoolTaskExecutor initThreadPool(int corePoolSize, int maxPoolSize, int queueCapacity, String prefix) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
