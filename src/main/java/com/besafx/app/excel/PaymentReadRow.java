@@ -57,7 +57,7 @@ public class PaymentReadRow {
                 return new AsyncResult<>(null);
             }
             log.info("عدد التسجيلات الموجودة = " + accounts.size());
-            accounts.stream().findAny().ifPresent(value -> account = value);
+            accounts.stream().findFirst().ifPresent(value -> account = value);
             log.info("تم إيجاد التسجيل بنجاح...");
             log.info("معرف التسجيل = " + account.getId());
             log.info("فحص هل تبقي مبالغ لم تسدد لهذا الحساب");
