@@ -4,6 +4,7 @@ import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
 import com.besafx.app.rest.AccountRest;
+import com.besafx.app.search.AccountSearch;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.PaymentService;
 import com.besafx.app.util.DateConverter;
@@ -16,6 +17,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Future;
 
 @Service
@@ -23,17 +26,16 @@ public class PaymentReadRow {
 
     private final static Logger log = LoggerFactory.getLogger(PaymentReadRow.class);
 
+    private Account account;
+
     @Autowired
-    private AccountService accountService;
+    private AccountSearch accountSearch;
 
     @Autowired
     private AccountRest accountRest;
 
     @Autowired
     private PaymentService paymentService;
-
-    @Autowired
-    private NotificationService notificationService;
 
     @Async("threadPoolPaymentExcel")
     public Future<Payment> readRow(Person person,
@@ -48,14 +50,16 @@ public class PaymentReadRow {
                                    Integer month,
                                    Integer year) {
         try {
+            log.info("////////////////////////////////بداية العملية/////////////////////////////////");
+            List<Account> accounts = accountSearch.search(firstName, secondName, thirdName, forthName, null, null, null, null, null, null, courseCode, masterCode, person.getBranch().getCode());
             Thread.sleep(1000);
-            Account account = accountService
-                    .findByStudentContactFirstNameAndStudentContactSecondNameAndStudentContactThirdNameAndStudentContactForthNameAndCourseCodeAndCourseMasterCodeAndCourseMasterBranchCode
-                            (firstName, secondName, thirdName, forthName, courseCode, masterCode, person.getBranch().getCode());
-            if (account == null) {
+            if (accounts.isEmpty()) {
                 return new AsyncResult<>(null);
             }
+            log.info("عدد التسجيلات الموجودة = " + accounts.size());
+            accounts.stream().findAny().ifPresent(value -> account = value);
             log.info("تم إيجاد التسجيل بنجاح...");
+            log.info("معرف التسجيل = " + account.getId());
             log.info("فحص هل تبقي مبالغ لم تسدد لهذا الحساب");
             if (payment.getType().equals("ايرادات اساسية")) {
                 if (accountRest.findRemainPrice(account.getId()) < payment.getAmountNumber()) {
@@ -63,6 +67,7 @@ public class PaymentReadRow {
                     return new AsyncResult<>(null);
                 }
             }
+            Thread.sleep(1000);
             Payment tempPayment = paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), person.getBranch());
             if (tempPayment != null) {
                 log.info("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
@@ -70,13 +75,18 @@ public class PaymentReadRow {
                 log.info("رقم السند المكرر = " + tempPayment.getCode());
                 return new AsyncResult<>(null);
             }
+            Thread.sleep(1000);
             payment.setAccount(account);
-            payment.setDate(DateConverter.getDateFromHijri(year, month, day));
+            Date date = DateConverter.getDateFromHijri(year, month, day);
+            log.info("تاريخ السند المدخل : " + date.toString());
+            payment.setDate(date);
             payment.setLastPerson(person);
             payment = paymentService.save(payment);
+            log.info("تم إنشاء سند جديد بتعريف رقم : " + payment.getId());
+            log.info("////////////////////////////////نهاية العملية/////////////////////////////////");
             return new AsyncResult<>(payment);
         } catch (Exception ex) {
-            log.error(ex.getMessage());
+            ex.printStackTrace();
             return new AsyncResult<>(null);
         }
     }

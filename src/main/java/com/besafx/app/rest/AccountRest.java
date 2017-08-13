@@ -1,6 +1,7 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
+import com.besafx.app.search.AccountSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.util.WrapperUtil;
 import com.besafx.app.ws.Notification;
@@ -53,6 +54,9 @@ public class AccountRest {
 
     @Autowired
     private AccountConditionService accountConditionService;
+
+    @Autowired
+    private AccountSearch accountSearch;
 
     @Autowired
     private NotificationService notificationService;
@@ -344,31 +348,6 @@ public class AccountRest {
             @RequestParam(value = "course", required = false) final Long course,
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "branch", required = false) final Long branch) {
-        List<Specification> predicates = new ArrayList<>();
-        Optional.ofNullable(firstName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("firstName"), "%" + value + "%")));
-        Optional.ofNullable(secondName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("secondName"), "%" + value + "%")));
-        Optional.ofNullable(thirdName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("thirdName"), "%" + value + "%")));
-        Optional.ofNullable(forthName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("forthName"), "%" + value + "%")));
-        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"), new Date(value))));
-        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new Date(value))));
-        Optional.ofNullable(studentIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("identityNumber"), "%" + value + "%")));
-        Optional.ofNullable(studentMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("mobile"), "%" + value + "%")));
-        Optional.ofNullable(coursePriceFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("coursePrice"), value)));
-        Optional.ofNullable(coursePriceTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("coursePrice"), value)));
-        Optional.ofNullable(course).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("course").get("id"), value)));
-        Optional.ofNullable(master).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("course").get("master").get("id"), value)));
-        Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("course").get("master").get("branch").get("id"), value)));
-        if (!predicates.isEmpty()) {
-            Specification result = predicates.get(0);
-            for (int i = 1; i < predicates.size(); i++) {
-                result = Specifications.where(result).and(predicates.get(i));
-            }
-            List<Account> list = Lists.newArrayList(accountService.findAll(result));
-            Comparator<Account> comparator = Comparator.comparing(account -> account.getCourse().getId());
-            list.sort(comparator);
-            return list;
-        } else {
-            throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");
-        }
+        return accountSearch.search(firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch);
     }
 }

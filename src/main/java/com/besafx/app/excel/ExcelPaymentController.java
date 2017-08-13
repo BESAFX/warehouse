@@ -420,10 +420,8 @@ public class ExcelPaymentController {
                     try {
                         paymentList.add(task.get());
                         log.info("تمت العملية بنجاح");
-                    } catch (InterruptedException e) {
-                        log.error(e.getMessage());
-                    } catch (ExecutionException e) {
-                        log.error(e.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
