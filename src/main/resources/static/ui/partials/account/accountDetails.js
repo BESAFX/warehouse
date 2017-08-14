@@ -1,5 +1,5 @@
-app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountService', 'OfferService', 'PaymentService', 'AccountAttachService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'account',
-    function (AccountConditionService, AccountService, OfferService, PaymentService, AccountAttachService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, account) {
+app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountNoteService', 'AccountService', 'OfferService', 'PaymentService', 'AccountAttachService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'account',
+    function (AccountConditionService, AccountNoteService, AccountService, OfferService, PaymentService, AccountAttachService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, account) {
 
         $scope.account = account;
 
@@ -30,7 +30,13 @@ app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountService
         $scope.findConditionByAccount = function () {
             AccountConditionService.findByAccount($scope.account).then(function (data) {
                 $scope.account.accountConditions = data;
-            })
+            });
+        };
+
+        $scope.findNotesByAccount = function () {
+            AccountNoteService.findByAccount($scope.account).then(function (data) {
+                $scope.account.accountNotes = data;
+            });
         };
 
         $scope.openAccountConditionCreate = function () {
@@ -54,6 +60,45 @@ app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountService
                 $scope.account.accountConditions.push(condition);
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.openAccountNoteCreate = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountNoteCreate.html',
+                controller: 'accountNoteCreateCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    account: function () {
+                        return $scope.account;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (accountNote) {
+                $scope.account.accountNotes.push(accountNote);
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.deleteFile = function (accountAttach) {
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف المستند فعلاً؟", "error", "fa-ban", function () {
+                AccountAttachService.remove(accountAttach).then(function (data) {
+                    if(data){
+                        var index = $scope.account.accountAttaches.indexOf(accountAttach);
+                        $scope.account.accountAttaches.splice(index, 1);
+                    }else{
+                        $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف المستند نهائياً؟", "error", "fa-ban", function () {
+                            AccountAttachService.removeWhatever(accountAttach);
+                        });
+                    }
+                });
             });
         };
 

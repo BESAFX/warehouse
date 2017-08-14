@@ -242,12 +242,14 @@
                         <ul class="panel-controls pull-left" style="margin-top: 2px;">
                             <li>
                                 <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_CREATE'])"
                                    ng-click="uploadFiles()"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="مرفق جديد">
                                     <span class="fa fa-paperclip"></span>
                                 </a>
                                 <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_CREATE'])"
                                    ng-click="scanToJpg()"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="فحص">
@@ -273,9 +275,9 @@
                                     <th st-sort="attach.name" class="text-center">اسم الملف</th>
                                     <th st-sort="attachType.name" class="text-center">نوع الملف</th>
                                     <th st-sort="attach.size" class="text-center">حجم الملف</th>
-                                    <th st-sort="attach.link" class="text-center">الرابط</th>
                                     <th st-sort="attach.date" st-sort-default="reverse" class="text-center">تاريخ الانشاء</th>
                                     <th st-sort="attach.person" class="text-center">مدخل الملف</th>
+                                    <th class="text-center">العمليات</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -284,18 +286,33 @@
                                     <td>{{accountAttach.attachType.name}}</td>
                                     <td>{{accountAttach.attach.size/1024/1024|number:2}} MB</td>
                                     <td>
-                                        <a ng-href="{{accountAttach.attach.link ? accountAttach.attach.link : ''}}" target="_blank">
-                                            <i class="fa fa-files-o"></i>
-                                            <span>اضغط هنا</span>
-                                        </a>
-                                    </td>
-                                    <td>
                                         <span>{{accountAttach.attach.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                         <span class="label label-success">{{accountAttach.attach.date | date:'h:m a'}}</span>
                                     </td>
                                     <td>
                                         {{accountAttach.attach.person.contact.firstName}}
                                         {{accountAttach.attach.person.contact.forthName}}
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <a uib-tooltip="عرض"
+                                                tooltip-append-to-body="true"
+                                                type="button"
+                                                ng-href="{{accountAttach.attach.link ? accountAttach.attach.link : ''}}"
+                                                target="_blank"
+                                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <i class="material-icons md-18">visibility</i>
+                                            </a>
+                                            <a uib-tooltip="حذف"
+                                                tooltip-append-to-body="true"
+                                                type="button"
+                                                href=""
+                                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_DELETE'])"
+                                                ng-click="deleteFile(accountAttach);"
+                                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <i class="material-icons md-18">delete</i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionAccountAttaches || collectionAccountAttaches.length ==0">
@@ -360,7 +377,7 @@
                                     </td>
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionCondition || collectionCondition.length ==0">
-                                    <td colspan="3">لا توجد عروض لهذا الرقم</td>
+                                    <td colspan="3">لا توجد بيانات</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -477,6 +494,69 @@
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionPayments || collectionPayments.length ==0">
                                     <td colspan="5">لا توجد دفعات حتى الآن</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="findNotesByAccount()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                                <a href=""
+                                   ng-click="openAccountNoteCreate()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء">
+                                    <span class="fa fa-sticky-note"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>الملاحظات</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collectionAccountNotes" st-safe-src="account.accountNotes" class="table table-bordered">
+                                <tbody>
+                                <tr ng-repeat="accountNote in collectionAccountNotes">
+                                    <td>
+                                        <table width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="1" class="text-right">
+                                                    <span class="label label-danger">{{accountNote.person.contact.firstName}} {{accountNote.person.contact.forthName}}</span>
+                                                </td>
+                                                <td colspan="1" class="text-left">
+                                        <span class="label label-success">
+                                            <timer interval="60000" start-time="accountNote.date"><span> {{(minutes < 1 && hours < 1 && days < 1 )? 'الآن' : 'منذ'}} </span> {{days > 0 ? days : ''}} {{days > 0 ? 'يوم' : ''}} {{hours > 0 ? hours : ''}} {{hours > 0 ? 'ساعة' : ''}} {{minutes > 0 ? minutes : ''}} {{minutes > 0 ? 'دقيقة' : ''}}</timer>
+                                        </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="text-right"
+                                                    style="padding: 5px;">
+                                                    <span>{{accountNote.note}}</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr class="blank_row"
+                                    style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collectionAccountNotes || collectionAccountNotes.length ==0">
+                                    <td colspan="1">لا توجد ملاحظات</td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -22,7 +22,8 @@ var app = angular.module('Application',
         'pageslide-directive',
         'ui.bootstrap.contextMenu',
         'kdate',
-        'ui.sortable'
+        'ui.sortable',
+        'timer'
     ]);
 
 app.factory('errorInterceptor', ['$q', '$rootScope', '$location', '$log',

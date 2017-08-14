@@ -14,8 +14,8 @@ app.factory("AccountAttachService",
                     return response.data;
                 });
             },
-            removeWhatever: function (attach) {
-                return $http.delete("/api/accountAttach/deleteWhatever/" + attach.id);
+            removeWhatever: function (accountAttach) {
+                return $http.delete("/api/accountAttach/deleteWhatever/" + accountAttach.id);
             },
             findByAccount: function (account) {
                 return $http.get("/api/accountAttach/findByAccount/" + account.id).then(function (response) {

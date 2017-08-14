@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +53,7 @@ public class AccountAttachRest {
 
     @RequestMapping(value = "upload/{accountId}/{attachTypeId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ACCOUNT_ATTACH_CREATE')")
     public AccountAttach upload(@PathVariable(value = "accountId") Long accountId,
                                 @PathVariable(value = "attachTypeId") Long attachTypeId,
                                 @RequestParam(value = "fileName") String fileName,
@@ -89,9 +91,10 @@ public class AccountAttachRest {
         }
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void delete(@PathVariable Long id, Principal principal) throws ExecutionException, InterruptedException {
+    @PreAuthorize("hasRole('ROLE_ACCOUNT_ATTACH_DELETE')")
+    public Boolean delete(@PathVariable Long id, Principal principal) throws ExecutionException, InterruptedException {
         AccountAttach accountAttach = accountAttachService.findOne(id);
         if (accountAttach != null) {
             Future<Boolean> deleteTask = dropboxManager.deleteFile("/Smart Offer/Accounts/" + accountAttach.getAccount().getId() + "/" + accountAttach.getAttach().getName());
@@ -104,6 +107,7 @@ public class AccountAttachRest {
                         .type("success")
                         .icon("fa-trash")
                         .build(), principal.getName());
+                return true;
             } else {
                 notificationService.notifyOne(Notification
                         .builder()
@@ -112,12 +116,16 @@ public class AccountAttachRest {
                         .type("error")
                         .icon("fa-trash")
                         .build(), principal.getName());
+                return false;
             }
+        }else{
+            return false;
         }
     }
 
     @RequestMapping(value = "deleteWhatever/{id}", method = RequestMethod.DELETE)
     @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ACCOUNT_ATTACH_DELETE')")
     public void deleteWhatever(@PathVariable Long id, Principal principal) throws ExecutionException, InterruptedException {
         AccountAttach accountAttach = accountAttachService.findOne(id);
         if (accountAttach != null) {
