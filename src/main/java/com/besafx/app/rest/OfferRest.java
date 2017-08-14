@@ -75,22 +75,22 @@ public class OfferRest {
                     .type("success")
                     .icon("fa-plus-square")
                     .build(), principal.getName());
-            ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
-            String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
-            message = message.replaceAll("OFFER_PERSON", offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName());
-            message = message.replaceAll("OFFER_CODE", offer.getCode().toString());
-            message = message.replaceAll("OFFER_DATE", DateConverter.getHijriStringFromDateRTLWithTime(offer.getLastUpdate()));
-            message = message.replaceAll("OFFER_CUSTOMER_NAME", offer.getCustomerName());
-            message = message.replaceAll("OFFER_CUSTOMER_MOBILE", offer.getCustomerMobile());
-            message = message.replaceAll("OFFER_PAYMENT_TYPE", offer.getMasterPaymentType());
-            message = message.replaceAll("OFFER_MASTER_PRICE", offer.getMasterPrice().toString() + " ريال سعودي ");
-            message = message.replaceAll("OFFER_MASTER_NAME", offer.getMaster().getName());
-            message = message.replaceAll("OFFER_BRANCH_NAME", offer.getMaster().getBranch().getName());
-            log.info("إرسال رسالة إلى مدير الشركة ومدير الفرع");
-            emailSender.send(
-                    "عرض جديد بواسطة الموظف /  " + offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName(),
-                    message,
-                    Lists.newArrayList(offer.getLastPerson().getBranch().getManager().getEmail(), offer.getLastPerson().getBranch().getCompany().getManager().getEmail()));
+//            ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
+//            String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
+//            message = message.replaceAll("OFFER_PERSON", offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName());
+//            message = message.replaceAll("OFFER_CODE", offer.getCode().toString());
+//            message = message.replaceAll("OFFER_DATE", DateConverter.getHijriStringFromDateRTLWithTime(offer.getLastUpdate()));
+//            message = message.replaceAll("OFFER_CUSTOMER_NAME", offer.getCustomerName());
+//            message = message.replaceAll("OFFER_CUSTOMER_MOBILE", offer.getCustomerMobile());
+//            message = message.replaceAll("OFFER_PAYMENT_TYPE", offer.getMasterPaymentType());
+//            message = message.replaceAll("OFFER_MASTER_PRICE", offer.getMasterPrice().toString() + " ريال سعودي ");
+//            message = message.replaceAll("OFFER_MASTER_NAME", offer.getMaster().getName());
+//            message = message.replaceAll("OFFER_BRANCH_NAME", offer.getMaster().getBranch().getName());
+//            log.info("إرسال رسالة إلى مدير الشركة ومدير الفرع");
+//            emailSender.send(
+//                    "عرض جديد بواسطة الموظف /  " + offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName(),
+//                    message,
+//                    Lists.newArrayList(offer.getLastPerson().getBranch().getManager().getEmail(), offer.getLastPerson().getBranch().getCompany().getManager().getEmail()));
             return offer;
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
