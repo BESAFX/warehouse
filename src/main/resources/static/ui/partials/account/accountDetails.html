@@ -514,6 +514,7 @@
                                     <span class="fa fa-refresh"></span>
                                 </a>
                                 <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_NOTE_CREATE'])"
                                    ng-click="openAccountNoteCreate()"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="انشاء">
@@ -577,15 +578,23 @@
                     type="button"
                     ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
                     ng-click="ModalProvider.openAccountUpdateModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
                 <i class="material-icons">contact_phone</i>
+            </button>
+            <button uib-tooltip="ملاحظة جديدة"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="openAccountNoteCreate()"
+                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_NOTE_CREATE'])"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
+                <i class="material-icons">note</i>
             </button>
             <button uib-tooltip="تغير حالة الطالب"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="openAccountConditionCreate()"
                     ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CONDITION_CREATE'])"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
                 <i class="material-icons">bookmark</i>
             </button>
             <button uib-tooltip="دفعة جديدة"
@@ -593,14 +602,14 @@
                     type="button"
                     ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
                     ng-click="ModalProvider.openAccountPaymentModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-2 col-md-2 col-lg-2">
                 <i class="material-icons">attach_money</i>
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
                 <i class="material-icons">power_settings_new</i>
             </button>
         </div>
