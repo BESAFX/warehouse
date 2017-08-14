@@ -1,7 +1,8 @@
 package com.besafx.app;
+
 import com.besafx.app.component.ScheduledTasks;
 import com.besafx.app.config.EmailSender;
-import com.besafx.app.entity.Account;
+import com.besafx.app.controller.ReportOfferController;
 import com.besafx.app.search.AccountSearch;
 import com.besafx.app.service.*;
 import org.junit.Test;
@@ -12,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -62,9 +61,11 @@ public class MainTests {
     @Autowired
     private AccountSearch accountSearch;
 
+    @Autowired
+    private ReportOfferController reportOfferController;
+
     @Test
     public void contextLoads() {
-        List<Account> accounts = accountSearch.search2("محمد", "عقيل", "دواي", "المطرفي", null, null, null, null, null, null, null, null, null);
-        log.info(accounts.size() + " Row");
+
     }
 }

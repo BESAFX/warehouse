@@ -32,7 +32,7 @@ public class ScheduledTasks {
     public void notifyBossAboutOffersToday() {
         try {
             log.info("");
-            Future<byte[]> work = reportOfferController.ReportOffersToday();
+            Future<byte[]> work = reportOfferController.reportOffersToday();
             byte[] fileBytes = work.get();
             if (fileBytes != null) {
                 log.info("جاري إنشاء ملف التقرير: " + "OffersToday");
