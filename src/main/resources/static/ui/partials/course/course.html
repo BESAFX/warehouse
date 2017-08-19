@@ -184,9 +184,13 @@
                                     <span>الفرع</span>
                                 </th>
 
+                                <th st-sort="lastPerson.contact.firstName" class="text-right">
+                                    <span>مدخل التخصص</span>
+                                </th>
+
                             </tr>
                             <tr>
-                                <th colspan="9"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
+                                <th colspan="10"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
                                                        type="text"/></th>
                             </tr>
                             </thead>
@@ -219,10 +223,13 @@
                                     [ {{course.master.branch.code}} ]
                                     {{course.master.branch.name}}
                                 </td>
+                                <td st-select-row-custom="course">
+                                    {{course.lastPerson.contact.firstName}} {{course.lastPerson.contact.forthName}}
+                                </td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">
-                                <td colspan="9">لا توجد بيانات</td>
+                                <td colspan="10">لا توجد بيانات</td>
                             </tr>
                             </tbody>
                         </table>

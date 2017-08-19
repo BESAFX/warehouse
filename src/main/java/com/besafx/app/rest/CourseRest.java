@@ -53,6 +53,7 @@ public class CourseRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_CREATE')")
+    @JsonView(Views.CourseTable.class)
     public Course create(@RequestBody Course course, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         Course topCourse = courseService.findTopByMasterOrderByCodeDesc(course.getMaster());
@@ -77,6 +78,7 @@ public class CourseRest {
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_UPDATE')")
+    @JsonView(Views.CourseTable.class)
     public Course update(@RequestBody Course course, Principal principal) {
         if (courseService.findByCodeAndMasterAndIdIsNot(course.getCode(), course.getMaster(), course.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
@@ -173,6 +175,13 @@ public class CourseRest {
     @ResponseBody
     @JsonView(Views.Summery.class)
     public List<Course> fetchTableDataSummery(Principal principal) {
+        return fetchTableData(principal);
+    }
+
+    @RequestMapping(value = "fetchTable", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(Views.CourseTable.class)
+    public List<Course> fetchTable(Principal principal) {
         return fetchTableData(principal);
     }
 

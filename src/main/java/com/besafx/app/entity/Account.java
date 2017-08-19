@@ -31,7 +31,7 @@ public class Account implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "accountSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.CourseTable.class})
     private Long id;
 
     @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})

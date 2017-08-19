@@ -2,7 +2,7 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
     function (MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, course) {
 
         $timeout(function () {
-            MasterService.fetchTableDataSummery().then(function (data) {
+            MasterService.fetchComoBox().then(function (data) {
                 $scope.masters = data;
             })
         }, 2000);

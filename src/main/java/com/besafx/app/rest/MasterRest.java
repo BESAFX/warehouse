@@ -212,4 +212,11 @@ public class MasterRest {
         return fetchTableData(principal);
     }
 
+    @RequestMapping(value = "fetchComboBox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @JsonView(Views.MasterComoBox.class)
+    public List<Master> fetchComboBox(Principal principal) {
+        return fetchTableData(principal);
+    }
+
 }

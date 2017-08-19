@@ -28,4 +28,12 @@ public class Views {
     public interface AttachByAccount extends PersonComboBox{
 
     }
+
+    public interface MasterComoBox{
+
+    }
+
+    public interface CourseTable extends PersonComboBox{
+
+    }
 }

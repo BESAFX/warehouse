@@ -30,13 +30,13 @@ public class Master implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "masterSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class, Views.MasterComoBox.class, Views.CourseTable.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class, Views.MasterComoBox.class, Views.CourseTable.class})
     private Integer code;
 
-    @JsonView(value = {Views.Summery.class, Views.BranchMaster.class})
+    @JsonView(value = {Views.Summery.class, Views.BranchMaster.class, Views.MasterComoBox.class, Views.CourseTable.class})
     private String name;
 
     @JsonView(Views.Summery.class)
@@ -45,7 +45,7 @@ public class Master implements Serializable {
     @ManyToOne
     @JoinColumn(name = "branch")
     @JsonIgnoreProperties(value = {"manager", "masters", "banks"}, allowSetters = true)
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
+    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.CourseTable.class})
     private Branch branch;
 
     @Temporal(TemporalType.TIMESTAMP)

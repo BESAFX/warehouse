@@ -45,6 +45,11 @@ app.factory("MasterService",
                 return $http.get("/api/master/fetchTableDataSummery").then(function (response) {
                     return response.data;
                 });
+            },
+            fetchComoBox: function () {
+                return $http.get("/api/master/fetchComboBox").then(function (response) {
+                    return response.data;
+                });
             }
         };
     }]);
