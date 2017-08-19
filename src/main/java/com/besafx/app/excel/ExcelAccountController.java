@@ -65,7 +65,9 @@ public class ExcelAccountController {
     }
 
     @RequestMapping(value = "/api/heavy-work/account/write/{rowCount}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void writeExcelFile(@PathVariable(value = "rowCount") Integer rowCount, HttpServletResponse response, Principal principal) {
+    public void writeExcelFile(@PathVariable(value = "rowCount") Integer rowCount,
+                               HttpServletResponse response,
+                               Principal principal) {
         log.info("فحص المستخدم");
         Person person = personService.findByEmail(principal.getName());
         //

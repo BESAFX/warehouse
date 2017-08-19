@@ -66,7 +66,7 @@ public class AccountRest {
     @PreAuthorize("hasRole('ROLE_ACCOUNT_CREATE')")
     public Account create(@RequestBody Account account, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
-        Account topAccount = accountService.findTopByCourseMasterBranchOrderByCodeDesc(account.getCourse().getMaster().getBranch());
+        Account topAccount = accountService.findTopByCourseOrderByCodeDesc(account.getCourse());
         if (topAccount == null) {
             account.setCode(1);
         } else {
