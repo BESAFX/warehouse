@@ -14,6 +14,7 @@ import java.util.List;
 public interface CourseService extends PagingAndSortingRepository<Course, Long>, JpaSpecificationExecutor<Course> {
 
     Course findTopByMasterOrderByCodeDesc(Master master);
+    Course findByCodeAndMaster(Integer code, Master master);
     Course findByCodeAndMasterAndIdIsNot(Integer code, Master master, Long id);
     Course findByCodeAndMasterCodeAndMasterBranch(Integer courseCode, Integer masterCode, Branch branch);
     Long countByMaster(Master master);

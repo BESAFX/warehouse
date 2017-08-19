@@ -323,7 +323,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openCourseCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',

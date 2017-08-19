@@ -24,13 +24,12 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                 ng-show="action==='update'">
-                <label for="code" class="control-label">رقم التخصص</label>
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="code" class="control-label">رقم الدورة</label>
                 <input id="code"
                        type="text"
                        focus-autofocus="1"
-                       ng-required="action==='update'"
+                       required="required"
                        disable-validation-message=""
                        class="form-control text-right"
                        placeholder="رقم الدورة الغير مكرر على مستوى التخصص الواحد"
@@ -48,7 +47,6 @@
                         ng-change="setUpCoursesList()"
                         ng-model="course.master"
                         required="required"
-                        focus-autofocus="2"
                         disable-validation-message=""
                         ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>

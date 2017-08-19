@@ -23,18 +23,30 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             });
         };
 
+        $scope.create = function () {
+            ModalProvider.openCourseCreateModel().result.then(function (course) {
+                $scope.courses.splice(0,0,course);
+            }, function () {
+                $log.info('CourseCreateModel Closed.');
+            });
+        };
+
         $scope.delete = function (course) {
             if (course) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                     CourseService.remove(course.id).then(function () {
-
+                        var index = $scope.courses.indexOf(course);
+                        $scope.courses.splice(index, 1);
+                        $scope.setSelected($scope.courses[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                 CourseService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.courses.indexOf(selected);
+                    $scope.courses.splice(index, 1);
+                    $scope.setSelected($scope.courses[0]);
                 });
             });
         };
@@ -43,14 +55,12 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             if (course) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
                     AccountService.removeByCourse(course.id).then(function () {
-
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف طلاب الدورة فعلاً؟", "error", "fa-ban", function () {
                 AccountService.removeByCourse($scope.selected.id).then(function () {
-
                 });
             });
         };

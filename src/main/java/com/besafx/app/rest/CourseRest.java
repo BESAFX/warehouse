@@ -55,13 +55,10 @@ public class CourseRest {
     @PreAuthorize("hasRole('ROLE_COURSE_CREATE')")
     @JsonView(Views.CourseTable.class)
     public Course create(@RequestBody Course course, Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        Course topCourse = courseService.findTopByMasterOrderByCodeDesc(course.getMaster());
-        if (topCourse == null) {
-            course.setCode(1);
-        } else {
-            course.setCode(topCourse.getCode() + 1);
+        if (courseService.findByCodeAndMaster(course.getCode(), course.getMaster()) != null) {
+            throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
+        Person person = personService.findByEmail(principal.getName());
         course.setLastUpdate(new Date());
         course.setLastPerson(person);
         course = courseService.save(course);

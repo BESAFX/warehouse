@@ -21,8 +21,7 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
             switch ($scope.action) {
                 case 'create' :
                     CourseService.create($scope.course).then(function (data) {
-                        $scope.course = {};
-                        $scope.form.$setPristine();
+                        $uibModalInstance.close(data);
                     });
                     break;
                 case 'update' :
