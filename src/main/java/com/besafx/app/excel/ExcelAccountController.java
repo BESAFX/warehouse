@@ -489,7 +489,7 @@ public class ExcelAccountController {
                         }
                         log.info("تم إيجاد الدورة تحت إشراف المدرب / " + course.getInstructor());
                         account.setCourse(course);
-                        Account topAccount = accountService.findTopByCourseMasterBranchOrderByCodeDesc(person.getBranch());
+                        Account topAccount = accountService.findTopByCourseOrderByCodeDesc(course);
                         if (topAccount == null) {
                             account.setCode(1);
                         } else {
