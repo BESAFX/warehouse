@@ -17,7 +17,6 @@
                         placeholder-text-single="'اختر التخصص'"
                         class="form-control text-right"
                         chosen=""
-                        ng-change="setUpCoursesList()"
                         ng-model="buffer.master"
                         ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>
@@ -32,7 +31,7 @@
                         class="form-control text-right"
                         chosen=""
                         ng-model="buffer.course"
-                        ng-options="course.code for course in courses track by course.id">
+                        ng-options="course.code for course in buffer.master.courses track by course.id">
                 </select>
             </div>
 

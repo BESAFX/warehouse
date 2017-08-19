@@ -4,7 +4,7 @@ app.controller('paymentByCourseCtrl', ['MasterService', 'CourseService', '$scope
             $scope.buffer = {};
             $scope.masters = [];
             $scope.courses = [];
-            MasterService.fetchTableData().then(function (data) {
+            MasterService.fetchTableDataSummery().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);
