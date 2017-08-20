@@ -46,8 +46,13 @@ app.factory("MasterService",
                     return response.data;
                 });
             },
-            fetchComoBox: function () {
-                return $http.get("/api/master/fetchComboBox").then(function (response) {
+            fetchMasterCombo: function () {
+                return $http.get("/api/master/fetchMasterCombo").then(function (response) {
+                    return response.data;
+                });
+            },
+            fetchMasterCourseCombo: function () {
+                return $http.get("/api/master/fetchMasterCourseCombo").then(function (response) {
                     return response.data;
                 });
             }

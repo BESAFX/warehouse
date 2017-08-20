@@ -1,4 +1,5 @@
 package com.besafx.app.entity;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -30,13 +31,24 @@ public class Branch implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "branchSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class, Views.CourseTable.class})
+    @JsonView(value = {
+            Views.Summery.class,
+            Views.AccountComboBox.class,
+            Views.BranchMaster.class,
+            Views.CourseTable.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class, Views.CourseTable.class})
+    @JsonView(value = {
+            Views.Summery.class,
+            Views.AccountComboBox.class,
+            Views.BranchMaster.class,
+            Views.CourseTable.class})
     private Integer code;
 
-    @JsonView(value = {Views.Summery.class , Views.BranchMaster.class, Views.CourseTable.class})
+    @JsonView(value = {
+            Views.Summery.class ,
+            Views.BranchMaster.class,
+            Views.CourseTable.class})
     private String name;
 
     @JsonView(Views.Summery.class)

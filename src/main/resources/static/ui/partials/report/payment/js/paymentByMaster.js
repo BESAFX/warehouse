@@ -3,7 +3,7 @@ app.controller('paymentByMasterCtrl', ['MasterService', '$scope', '$rootScope', 
         $timeout(function () {
             $scope.buffer = {};
             $scope.masters = [];
-            MasterService.fetchTableDataSummery().then(function (data) {
+            MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);

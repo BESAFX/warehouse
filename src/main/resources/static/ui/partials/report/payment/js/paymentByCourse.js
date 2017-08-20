@@ -4,16 +4,10 @@ app.controller('paymentByCourseCtrl', ['MasterService', 'CourseService', '$scope
             $scope.buffer = {};
             $scope.masters = [];
             $scope.courses = [];
-            MasterService.fetchTableDataSummery().then(function (data) {
+            MasterService.fetchMasterCourseCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);
-
-        $scope.setUpCoursesList = function () {
-            CourseService.findByMaster($scope.buffer.master.id).then(function (data) {
-                $scope.courses = data;
-            });
-        };
 
         $scope.submit = function () {
             if ($scope.buffer.startDate && $scope.buffer.endDate) {

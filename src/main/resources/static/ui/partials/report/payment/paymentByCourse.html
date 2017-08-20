@@ -9,7 +9,7 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
                 <select id="master"
                         data-placeholder="ابحث عن التخصص"
@@ -18,11 +18,13 @@
                         class="form-control text-right"
                         chosen=""
                         ng-model="buffer.master"
+                        required="required"
+                        disable-validation-message=""
                         ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>
             </div>
 
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="course" class="control-label">رقم الدورة</label>
                 <select id="course"
                         data-placeholder="ابحث عن رقم الدورة المتاحة"
@@ -31,19 +33,21 @@
                         class="form-control text-right"
                         chosen=""
                         ng-model="buffer.course"
+                        required="required"
+                        disable-validation-message=""
                         ng-options="course.code for course in buffer.master.courses track by course.id">
                 </select>
             </div>
 
-            <div class="form-group text-right col-sm-6">
-                <label for="endDate" class="control-label">التاريخ إلى</label>
+            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <label for="startDate" class="control-label">التاريخ من</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
-                           id="endDate"
+                           id="startDate"
                            type="text"
-                           focus-index="3"
+                           focus-index="4"
                            class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.endDate"
+                           ng-model="buffer.startDate"
                            calendarType="ummalqura"
                            language="en"
                            dateFormat="yyyy/mm/dd"
@@ -53,15 +57,15 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-sm-6">
-                <label for="startDate" class="control-label">التاريخ من</label>
+            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <label for="endDate" class="control-label">التاريخ إلى</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
-                           id="startDate"
+                           id="endDate"
                            type="text"
-                           focus-index="4"
+                           focus-index="3"
                            class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.startDate"
+                           ng-model="buffer.endDate"
                            calendarType="ummalqura"
                            language="en"
                            dateFormat="yyyy/mm/dd"

@@ -2,7 +2,7 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
     function (MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, course) {
 
         $timeout(function () {
-            MasterService.fetchComoBox().then(function (data) {
+            MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 2000);

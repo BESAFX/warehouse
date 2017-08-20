@@ -3,7 +3,7 @@ app.controller('accountByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
 
         $timeout(function () {
             $scope.buffer = {};
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);

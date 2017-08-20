@@ -3,7 +3,7 @@ app.controller('paymentByAccountInCtrl', ['BranchService', 'AccountService', '$s
         $timeout(function () {
             $scope.buffer = {};
             $scope.accounts = [];
-            BranchService.fetchTableData().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);

@@ -26,7 +26,7 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
         } else {
             $scope.clear();
             $timeout(function () {
-                BranchService.fetchTableData().then(function (data) {
+                BranchService.fetchBranchMasterCourse().then(function (data) {
                     $scope.branches = data;
                 });
             }, 2000);

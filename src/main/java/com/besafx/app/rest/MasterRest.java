@@ -6,6 +6,9 @@ import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +29,11 @@ import java.util.stream.Collectors;
 public class MasterRest {
 
     private final static Logger log = LoggerFactory.getLogger(MasterRest.class);
+
+    private final String FILTER_ALL = "**";
+    private final String FILTER_TABLE = "id,code,name,period,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]],courses[id,code,instructor]";
+    private final String FILTER_MASTER_COMBO = "id,code,name";
+    private final String FILTER_MASTER_COURSE_COMBO = "id,code,name,courses[id,code,instructor]";
 
     @Autowired
     private PersonService personService;
@@ -57,7 +65,7 @@ public class MasterRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_MASTER_CREATE')")
-    public Master create(@RequestBody Master master, Principal principal) {
+    public String create(@RequestBody Master master, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         Integer lastCode = findLastCodeByBranch(master.getBranch().getId());
         if (lastCode == null) {
@@ -75,14 +83,13 @@ public class MasterRest {
                 .type("success")
                 .icon("fa-plus-square")
                 .build(), principal.getName());
-        return master;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), master);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_MASTER_UPDATE')")
-    @JsonView(Views.Summery.class)
-    public Master update(@RequestBody Master master, Principal principal) {
+    public String update(@RequestBody Master master, Principal principal) {
         if (masterService.findByCodeAndBranchAndIdIsNot(master.getCode(), master.getBranch(), master.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
@@ -99,7 +106,7 @@ public class MasterRest {
                     .type("warning")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return master;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), master);
         } else {
             return null;
         }
@@ -207,16 +214,20 @@ public class MasterRest {
 
     @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Master> fetchTableDataSummery(Principal principal) {
-        return fetchTableData(principal);
+    public String fetchTableDataSummery(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), fetchTableData(principal));
     }
 
-    @RequestMapping(value = "fetchComboBox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "fetchMasterCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.MasterComoBox.class)
-    public List<Master> fetchComboBox(Principal principal) {
-        return fetchTableData(principal);
+    public String fetchMasterCombo(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COMBO), fetchTableData(principal));
+    }
+
+    @RequestMapping(value = "fetchMasterCourseCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String fetchMasterCourseCombo(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO), fetchTableData(principal));
     }
 
 }

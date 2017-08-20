@@ -2,7 +2,7 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
     function (BranchService, $scope, $rootScope, $timeout, $uibModalInstance) {
         $scope.buffer = {};
         $timeout(function () {
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);

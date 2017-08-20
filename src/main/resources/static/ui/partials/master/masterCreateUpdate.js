@@ -2,7 +2,7 @@ app.controller('masterCreateUpdateCtrl', ['BranchService', 'MasterService', '$sc
     function (BranchService, MasterService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, master) {
 
         $timeout(function () {
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);

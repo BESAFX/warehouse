@@ -2,7 +2,7 @@ app.controller('masterDetailsCtrl', ['MasterService', '$scope', '$rootScope', '$
     function (MasterService, $scope, $rootScope, $timeout, $uibModalInstance) {
         $scope.buffer = {};
         $timeout(function () {
-            MasterService.fetchTableDataSummery().then(function (data) {
+            MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);

@@ -64,6 +64,11 @@ app.factory("BranchService",
                     return response.data;
                 });
             },
+            fetchBranchCombo: function () {
+                return $http.get("/api/branch/fetchBranchCombo").then(function (response) {
+                    return response.data;
+                });
+            },
             fetchBranchMaster: function () {
                 return $http.get("/api/branch/fetchBranchMaster").then(function (response) {
                     return response.data;

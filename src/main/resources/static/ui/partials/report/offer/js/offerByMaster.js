@@ -3,7 +3,7 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
         $timeout(function () {
             $scope.buffer = {};
             $scope.masters = [];
-            MasterService.fetchTableData().then(function (data) {
+            MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);

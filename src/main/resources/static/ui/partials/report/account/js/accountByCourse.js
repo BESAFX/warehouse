@@ -4,7 +4,7 @@ app.controller('accountByCourseCtrl', ['MasterService', 'CourseService', '$scope
         $scope.buffer = {};
 
         $timeout(function () {
-            MasterService.fetchTableData().then(function (data) {
+            MasterService.fetchMasterCourseCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);
