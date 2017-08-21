@@ -10,6 +10,9 @@ import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,9 @@ public class OfferRest {
 
     private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
 
+    public static final String FILTER_ALL = "**";
+    public static final String FILTER_TABLE = "**,master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
+
     @Autowired
     private PersonService personService;
 
@@ -50,13 +56,10 @@ public class OfferRest {
     @Autowired
     private NotificationService notificationService;
 
-    @Autowired
-    private EmailSender emailSender;
-
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
-    public Offer create(@RequestBody Offer offer, Principal principal) {
+    public String create(@RequestBody Offer offer, Principal principal) {
         try {
             Person person = personService.findByEmail(principal.getName());
             Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(offer.getMaster().getBranch());
@@ -75,23 +78,7 @@ public class OfferRest {
                     .type("success")
                     .icon("fa-plus-square")
                     .build(), principal.getName());
-//            ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
-//            String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
-//            message = message.replaceAll("OFFER_PERSON", offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName());
-//            message = message.replaceAll("OFFER_CODE", offer.getCode().toString());
-//            message = message.replaceAll("OFFER_DATE", DateConverter.getHijriStringFromDateRTLWithTime(offer.getLastUpdate()));
-//            message = message.replaceAll("OFFER_CUSTOMER_NAME", offer.getCustomerName());
-//            message = message.replaceAll("OFFER_CUSTOMER_MOBILE", offer.getCustomerMobile());
-//            message = message.replaceAll("OFFER_PAYMENT_TYPE", offer.getMasterPaymentType());
-//            message = message.replaceAll("OFFER_MASTER_PRICE", offer.getMasterPrice().toString() + " ريال سعودي ");
-//            message = message.replaceAll("OFFER_MASTER_NAME", offer.getMaster().getName());
-//            message = message.replaceAll("OFFER_BRANCH_NAME", offer.getMaster().getBranch().getName());
-//            log.info("إرسال رسالة إلى مدير الشركة ومدير الفرع");
-//            emailSender.send(
-//                    "عرض جديد بواسطة الموظف /  " + offer.getLastPerson().getContact().getFirstName() + " " + offer.getLastPerson().getContact().getForthName(),
-//                    message,
-//                    Lists.newArrayList(offer.getLastPerson().getBranch().getManager().getEmail(), offer.getLastPerson().getBranch().getCompany().getManager().getEmail()));
-            return offer;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             return null;
@@ -101,15 +88,12 @@ public class OfferRest {
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_UPDATE')")
-    public Offer update(@RequestBody Offer offer, Principal principal) {
+    public String update(@RequestBody Offer offer, Principal principal) {
         if (offerService.findByCodeAndMasterBranchAndIdIsNot(offer.getCode(), offer.getMaster().getBranch(), offer.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
         Offer object = offerService.findOne(offer.getId());
         if (object != null) {
-            if(!object.getLastPerson().getEmail().equals(principal.getName())){
-                throw new CustomException("لا يمكنك التعديل على عرض لم تضيفه.");
-            }
             offer = offerService.save(offer);
             notificationService.notifyOne(Notification
                     .builder()
@@ -118,7 +102,7 @@ public class OfferRest {
                     .type("success")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return offer;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } else {
             return null;
         }
@@ -206,8 +190,7 @@ public class OfferRest {
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Offer> filter(
+    public String filter(
             @RequestParam(value = "codeFrom", required = false) final Long codeFrom,
             @RequestParam(value = "codeTo", required = false) final Long codeTo,
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
@@ -239,7 +222,7 @@ public class OfferRest {
                 result = Specifications.where(result).and(predicates.get(i));
             }
             List<Offer> list = Lists.newArrayList(offerService.findAll(result));
-            list.sort(Comparator.comparing(offer -> offer.getMaster().getId()));
+            list.sort(Comparator.comparing(Offer::getCustomerName));
             log.info("فحص العروض وتحديث حالات التسجيل");
             list.stream().forEach(offer -> {
                 List<Account> accounts = accountService.findByStudentContactMobile(offer.getCustomerMobile());
@@ -250,7 +233,7 @@ public class OfferRest {
                 }
                 offerService.save(offer);
             });
-            return list;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
         } else {
             throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");
         }

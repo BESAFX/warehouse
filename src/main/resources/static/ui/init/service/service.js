@@ -799,6 +799,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.CallByPerson                                        *
+     *                                                            *
+     *************************************************************/
+    this.openReportCallByPersonModel = function () {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/call/callByPerson.html",
+            controller: "callByPersonCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.OfferById                                           *
      *                                                            *
      *************************************************************/

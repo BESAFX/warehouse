@@ -8,18 +8,27 @@ import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/call/")
 public class CallRest {
+
+    private final static Logger log = LoggerFactory.getLogger(CallRest.class);
+
+    public static final String FILTER_ALL = "**";
+    public static final String FILTER_TABLE = "**,person[id,contact[id,firstName,lastName]],offer[id]";
 
     @Autowired
     private CallService callService;
@@ -32,7 +41,7 @@ public class CallRest {
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Call create(@RequestBody Call call, Principal principal) {
+    public String create(@RequestBody Call call, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         call.setPerson(person);
         call.setDate(new DateTime().toDate());
@@ -44,26 +53,26 @@ public class CallRest {
                 .type("success")
                 .icon("fa-plus-square")
                 .build(), principal.getName());
-        return call;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), call);
     }
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Call> findAll() {
-        return Lists.newArrayList(callService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(callService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Call findOne(@PathVariable Long id) {
-        return callService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), callService.findOne(id));
     }
 
     @RequestMapping(value = "findByOffer/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @JsonView(Views.Summery.class)
-    public List<Call> findByOffer(@PathVariable Long id) {
-        return callService.findByOfferId(id);
+    public String findByOffer(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), callService.findByOfferId(id));
     }
 
 }

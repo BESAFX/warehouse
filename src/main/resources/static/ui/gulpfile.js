@@ -183,6 +183,7 @@ gulp.task('scripts', function () {
         './partials/report/offer/js/offerByMaster.js',
         './partials/report/offer/js/offerById.js',
         './partials/report/offer/js/offerByPerson.js',
+        './partials/report/call/js/callByPerson.js',
         './partials/report/account/js/accountByBranch.js',
         './partials/report/account/js/accountByCourse.js',
         './partials/report/account/js/accountByMaster.js',
