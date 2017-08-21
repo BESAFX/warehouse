@@ -490,7 +490,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openCallCreateModel = function (offer) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',

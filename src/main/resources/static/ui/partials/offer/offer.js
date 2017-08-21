@@ -174,6 +174,22 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
             });
         };
 
+        $scope.call = function (offer) {
+            if(offer){
+                ModalProvider.openCallCreateModel(offer).result.then(function (call) {
+                   offer.calls.push(call);
+                }, function () {
+                    $log.info('CallCreateModel Closed.');
+                });
+            }else{
+                ModalProvider.openCallCreateModel($scope.selected).result.then(function (call) {
+                    $scope.selected.calls.push(call);
+                }, function () {
+                    $log.info('CallCreateModel Closed.');
+                });
+            }
+        };
+
         $scope.rowMenu = [
             {
                 html: '<div class="drop-menu"> انشاء عرض جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
@@ -209,6 +225,15 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
                 },
                 click: function ($itemScope, $event, value) {
                     ModalProvider.openOfferDetailsModel($itemScope.offer);
+                }
+            },
+            {
+                html: '<div class="drop-menu"> اجراء اتصال <span class="fa fa-phone fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.call($itemScope.offer);
                 }
             }
         ];

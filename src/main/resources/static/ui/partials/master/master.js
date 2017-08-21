@@ -29,14 +29,16 @@ app.controller("masterCtrl", ['MasterService', 'BranchService', 'ModalProvider',
                     MasterService.remove(master.id).then(function () {
                         var index = $scope.masters.indexOf(master);
                         $scope.masters.splice(index, 1);
+                        $scope.setSelected($scope.masters[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التخصص فعلاً؟", "error", "fa-ban", function () {
                 MasterService.remove($scope.selected.id).then(function () {
-                    var index = $scope.masters.indexOf(master);
+                    var index = $scope.masters.indexOf(selected);
                     $scope.masters.splice(index, 1);
+                    $scope.setSelected($scope.masters[0]);
                 });
             });
         };

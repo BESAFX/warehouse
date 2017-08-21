@@ -52,6 +52,7 @@ public class ReportOfferController {
             @PathVariable(value = "id") Long id,
             @RequestParam(value = "exportType") ExportType exportType,
             HttpServletResponse response) throws Exception {
+        log.info("CALL");
         Offer offer = offerService.findOne(id);
         if (offer == null) {
             return;

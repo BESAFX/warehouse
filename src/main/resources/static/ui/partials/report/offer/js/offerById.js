@@ -4,7 +4,7 @@ app.controller('offerByIdCtrl', ['MasterService', 'OfferService', '$scope', '$ro
             $scope.buffer = {};
             $scope.masters = [];
             $scope.courses = [];
-            MasterService.fetchTableData().then(function (data) {
+            MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);

@@ -6,9 +6,7 @@ app.controller('callCreateCtrl', ['CallService', 'ModalProvider', '$scope', '$ro
 
         $scope.submit = function () {
             CallService.create($scope.call).then(function (data) {
-                $scope.call = {};
-                $scope.call.offer = offer;
-                $scope.form.$setPristine();
+                $uibModalInstance.close(data);
             });
         };
 
