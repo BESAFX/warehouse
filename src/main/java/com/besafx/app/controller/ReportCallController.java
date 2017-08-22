@@ -98,6 +98,7 @@ public class ReportCallController {
             wrapperUtil.setObj1(call);
             list.add(wrapperUtil);
         }
+        list.sort(Comparator.comparing(wrapperUtil -> ((Call)wrapperUtil.getObj1()).getOffer().getCustomerName()));
         return list;
     }
 
