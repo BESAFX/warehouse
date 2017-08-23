@@ -50,6 +50,9 @@ public class Course implements Serializable {
             Views.CourseTable.class})
     private String instructor;
 
+    @JsonView(Views.Summery.class)
+    private String companyName;
+
     @Column(columnDefinition = "int default 1", nullable = false)
     @JsonView(value = {
             Views.Summery.class,
