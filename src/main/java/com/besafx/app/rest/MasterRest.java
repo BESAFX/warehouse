@@ -33,6 +33,7 @@ public class MasterRest {
     private final String FILTER_ALL = "**";
     private final String FILTER_TABLE = "id,code,name,period,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]],courses[id,code,instructor]";
     private final String FILTER_MASTER_COMBO = "id,code,name";
+    private final String FILTER_MASTER_BRANCH_COMBO = "id,code,name,branch[id,code,name]";
     private final String FILTER_MASTER_COURSE_COMBO = "id,code,name,courses[id,code,instructor]";
 
     @Autowired
@@ -228,6 +229,12 @@ public class MasterRest {
     @ResponseBody
     public String fetchMasterCourseCombo(Principal principal) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO), fetchTableData(principal));
+    }
+
+    @RequestMapping(value = "fetchMasterBranchCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String fetchMasterBranchCombo(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO), fetchTableData(principal));
     }
 
 }

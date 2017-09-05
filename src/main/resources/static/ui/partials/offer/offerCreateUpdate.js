@@ -6,7 +6,7 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
         $scope.action = action;
 
         $timeout(function () {
-            MasterService.fetchMasterCombo().then(function (data) {
+            MasterService.fetchMasterBranchCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 2000);

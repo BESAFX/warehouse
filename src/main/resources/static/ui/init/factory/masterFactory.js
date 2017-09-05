@@ -55,6 +55,11 @@ app.factory("MasterService",
                 return $http.get("/api/master/fetchMasterCourseCombo").then(function (response) {
                     return response.data;
                 });
+            },
+            fetchMasterBranchCombo: function () {
+                return $http.get("/api/master/fetchMasterBranchCombo").then(function (response) {
+                    return response.data;
+                });
             }
         };
     }]);
