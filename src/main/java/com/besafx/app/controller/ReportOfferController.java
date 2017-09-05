@@ -293,15 +293,7 @@ public class ReportOfferController {
             wrapperUtil.setObj1(offer);
             list.add(wrapperUtil);
         }
-        list.sort((o1, o2) -> {
-            Offer offer1 = (Offer) o1.getObj1();
-            Offer offer2 = (Offer) o2.getObj1();
-            int compare = Integer.compare(offer1.getCode(), offer2.getCode());
-            if (compare == 0) {
-                compare = offer1.getLastUpdate().compareTo(offer2.getLastUpdate());
-            }
-            return compare;
-        });
+        list.sort(Comparator.comparing(o -> ((Offer) o.getObj1()).getLastUpdate()));
         return list;
     }
 
