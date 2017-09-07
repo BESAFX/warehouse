@@ -35,7 +35,6 @@ public class BranchRest {
 
     private final static Logger log = LoggerFactory.getLogger(BranchRest.class);
 
-    private final String FILTER_ALL = "**";
     private final String FILTER_TABLE = "id,code,name,address,phone,mobile,fax,email,website,commericalRegisteration,logo,company[id,code,name],manager[id,contact[id,firstName,forthName]]";
     private final String FILTER_BRANCH_COMBO = "id,code,name";
     private final String FILTER_BRANCH_MASTER_COMBO = "id,code,name,masters[id,code,name]";

@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/student").access("hasRole('ROLE_STUDENT_CREATE') or hasRole('ROLE_STUDENT_UPDATE') or hasRole('ROLE_STUDENT_DELETE')")
                 .antMatchers("/account").access("hasRole('ROLE_ACCOUNT_CREATE') or hasRole('ROLE_ACCOUNT_UPDATE') or hasRole('ROLE_ACCOUNT_DELETE')")
                 .antMatchers("/payment").access("hasRole('ROLE_PAYMENT_CREATE') or hasRole('ROLE_PAYMENT_UPDATE') or hasRole('ROLE_PAYMENT_DELETE')")
+                .antMatchers("/paymentOut").access("hasRole('ROLE_PAYMENT_OUT_CREATE') or hasRole('ROLE_PAYMENT_OUT_UPDATE') or hasRole('ROLE_PAYMENT_OUT_DELETE')")
                 .antMatchers("/team").access("hasRole('ROLE_TEAM_CREATE') or hasRole('ROLE_TEAM_UPDATE') or hasRole('ROLE_TEAM_DELETE')")
                 .antMatchers("/person").access("hasRole('ROLE_PERSON_CREATE') or hasRole('ROLE_PERSON_UPDATE') or hasRole('ROLE_PERSON_DELETE')")
                 .antMatchers("/bank").access("hasRole('ROLE_BANK_CREATE') or hasRole('ROLE_BANK_UPDATE') or hasRole('ROLE_BANK_DELETE')")

@@ -1,209 +1,162 @@
-app.controller("paymentOutCtrl", ['PaymentService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$timeout', '$log', '$state',
-    function (PaymentService, BranchService, ModalProvider, $rootScope, $scope, $timeout, $log, $state) {
+app.controller("paymentOutCtrl", ['PaymentOutService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$uibModal', '$timeout', '$log', '$state',
+    function (PaymentOutService, BranchService, ModalProvider, $rootScope, $scope, $uibModal, $timeout, $log, $state) {
 
         //
         $scope.items = [];
         $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-        $scope.items.push({'id': 2, 'type': 'title', 'name': 'السندات'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'سندات الصرف'});
         //
 
         $scope.buffer = {};
 
-        $scope.buffer.exportType = 'PDF';
-
-        $scope.buffer.orientation = 'Portrait';
-
-        $scope.buffer.reportTitle = 'كشف سندات الصرف';
-
-        $scope.payments = [];
-
         $scope.selected = {};
 
-        $scope.columns = [
-            {'name': 'رقم السند', 'view': false, 'groupBy': false, 'sortBy': false},
-            {'name': 'تاريخ السند', 'view': false, 'groupBy': false, 'sortBy': false},
-            {'name': 'قيمة السند', 'view': false, 'groupBy': false, 'sortBy': false},
-            {'name': 'وجهة الصرف', 'view': false, 'groupBy': false, 'sortBy': false},
-            {'name': 'بيان السند', 'view': false, 'groupBy': false, 'sortBy': false},
-            {'name': 'مدخل السند', 'view': false, 'groupBy': false, 'sortBy': false}
-        ];
-
-        $scope.variables = [
-            {'name': 'المتوسط الحسابي للسندات', 'expression': 'amountNumber', 'operation': 'Average'},
-            {'name': 'المجموع الكلي للسندات', 'expression': 'amountNumber', 'operation': 'Sum'},
-            {'name': 'أكبر قيمة للسندات', 'expression': 'amountNumber', 'operation': 'Highest'},
-            {'name': 'أقل قيمة للسندات', 'expression': 'amountNumber', 'operation': 'Lowest'}
-        ];
-
-        $scope.buffer.groupVariables = [];
-
-        $scope.buffer.tableVariables = [];
-
         $timeout(function () {
-            $scope.sideOpacity = 1;
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
-                $scope.buffer.type = 'ايرادات اساسية';
             });
         }, 2000);
 
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
-
         $scope.setSelected = function (object) {
             if (object) {
-                angular.forEach($scope.payments, function (payment) {
-                    if (object.id == payment.id) {
-                        $scope.selected = payment;
-                        return payment.isSelected = true;
+                angular.forEach($scope.paymentOuts, function (paymentOut) {
+                    if (object.id == paymentOut.id) {
+                        $scope.selected = paymentOut;
+                        return paymentOut.isSelected = true;
                     } else {
-                        return payment.isSelected = false;
+                        return paymentOut.isSelected = false;
                     }
                 });
             }
         };
 
-        $scope.clear = function () {
-            $scope.buffer = {};
+        $scope.newPaymentOut = function () {
+            ModalProvider.openPaymentOutCreateModel().result.then(function (data) {
+
+            }, function () {
+                console.info('PaymentOutCreateModel Closed.');
+            });
         };
 
-        $scope.delete = function (payment) {
-            if (payment) {
+        $scope.delete = function (paymentOut) {
+            if (paymentOut) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
-                    PaymentService.remove(payment.id).then(function () {
-
+                    PaymentOutService.remove(paymentOut.id).then(function () {
+                        var index = $scope.paymentOuts.indexOf(paymentOut);
+                        $scope.paymentOuts.splice(index, 1);
+                        $scope.setSelected($scope.paymentOuts[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
-                PaymentService.remove($scope.selected.id).then(function () {
-
+                PaymentOutService.remove($scope.selected.id).then(function () {
+                    var index = $scope.paymentOuts.indexOf(selected);
+                    $scope.paymentOuts.splice(index, 1);
+                    $scope.setSelected($scope.paymentOuts[0]);
                 });
             });
         };
 
         $scope.filter = function () {
-            var search = [];
-            if ($scope.buffer.paymentCodeFrom) {
-                search.push('paymentCodeFrom=');
-                search.push($scope.buffer.paymentCodeFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.paymentCodeTo) {
-                search.push('paymentCodeTo=');
-                search.push($scope.buffer.paymentCodeTo);
-                search.push('&');
-            }
-            if ($scope.buffer.paymentDateFrom) {
-                search.push('paymentDateFrom=');
-                search.push(moment($scope.buffer.paymentDateFrom).valueOf());
-                search.push('&');
-            }
-            if ($scope.buffer.paymentDateTo) {
-                search.push('paymentDateTo=');
-                search.push(moment($scope.buffer.paymentDateTo).valueOf());
-                search.push('&');
-            }
-            if ($scope.buffer.amountFrom) {
-                search.push('amountFrom=');
-                search.push($scope.buffer.amountFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.amountTo) {
-                search.push('amountTo=');
-                search.push($scope.buffer.amountTo);
-                search.push('&');
-            }
-            if ($scope.buffer.branch) {
-                search.push('personBranch=');
-                search.push($scope.buffer.branch.id);
-                search.push('&');
-            }
-            search.push('type=');
-            search.push('مصروفات');
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/paymentOut/paymentOutFilter.html',
+                controller: 'paymentOutFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'البحث فى سندات الصرف';
+                    }
+                }
+            });
 
-            PaymentService.filter(search.join("")).then(function (data) {
-                $scope.payments = data;
-                $scope.setSelected(data[0]);
-                $scope.items = [];
-                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                $scope.items.push({'id': 2, 'type': 'title', 'name': 'السندات', 'style': 'font-weight:bold'});
-                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
-                $scope.items.push({
-                    'id': 4,
-                    'type': 'title',
-                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+            modalInstance.result.then(function (buffer) {
+
+                var search = [];
+                if (buffer.codeFrom) {
+                    search.push('codeFrom=');
+                    search.push(buffer.codeFrom);
+                    search.push('&');
+                }
+                if (buffer.codeTo) {
+                    search.push('codeTo=');
+                    search.push(buffer.codeTo);
+                    search.push('&');
+                }
+                if (buffer.dateFrom) {
+                    search.push('dateFrom=');
+                    search.push(moment(buffer.dateFrom).valueOf());
+                    search.push('&');
+                }
+                if (buffer.dateTo) {
+                    search.push('dateTo=');
+                    search.push(moment(buffer.dateTo).valueOf());
+                    search.push('&');
+                }
+                if (buffer.amountFrom) {
+                    search.push('amountFrom=');
+                    search.push(buffer.amountFrom);
+                    search.push('&');
+                }
+                if (buffer.amountTo) {
+                    search.push('amountTo=');
+                    search.push(buffer.amountTo);
+                    search.push('&');
+                }
+                if (buffer.branch) {
+                    search.push('branchId=');
+                    search.push(buffer.branch.id);
+                    search.push('&');
+                }
+
+                PaymentOutService.filter(search.join("")).then(function (data) {
+                    $scope.paymentOuts = data;
+                    $scope.setSelected(data[0]);
+                    $scope.items = [];
+                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'السندات', 'style': 'font-weight:bold'});
+                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 4,
+                        'type': 'title',
+                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
+                    });
                 });
+
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
             });
         };
 
-        $scope.print = function () {
-            var search = [];
-            if ($scope.buffer.paymentCodeFrom) {
-                search.push('paymentCodeFrom=');
-                search.push($scope.buffer.paymentCodeFrom);
-                search.push('&');
+        $scope.rowMenu = [
+            {
+                html: '<div class="drop-menu">انشاء سند جديد<span class="fa fa-pencil fa-lg"></span></div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_PAYMENT_OUT_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.newPaymentOut();
+                }
+            },
+            {
+                html: '<div class="drop-menu">حذف السند<span class="fa fa-trash fa-lg"></span></div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_PAYMENT_OUT_DELETE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.delete($itemScope.paymentOut);
+                }
             }
-            if ($scope.buffer.paymentCodeTo) {
-                search.push('paymentCodeTo=');
-                search.push($scope.buffer.paymentCodeTo);
-                search.push('&');
-            }
-            if ($scope.buffer.paymentDateFrom) {
-                search.push('paymentDateFrom=');
-                search.push(moment($scope.buffer.paymentDateFrom).valueOf());
-                search.push('&');
-            }
-            if ($scope.buffer.paymentDateTo) {
-                search.push('paymentDateTo=');
-                search.push(moment($scope.buffer.paymentDateTo).valueOf());
-                search.push('&');
-            }
-            if ($scope.buffer.amountFrom) {
-                search.push('amountFrom=');
-                search.push($scope.buffer.amountFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.amountTo) {
-                search.push('amountTo=');
-                search.push($scope.buffer.amountTo);
-                search.push('&');
-            }
-            search.push('type=');
-            search.push('مصروفات');
-            search.push('&');
-            if ($scope.buffer.exportType) {
-                search.push('exportType=');
-                search.push($scope.buffer.exportType);
-                search.push('&');
-            }
-            if ($scope.buffer.reportTitle) {
-                search.push('reportTitle=');
-                search.push($scope.buffer.reportTitle);
-                search.push('&');
-            }
-            if ($scope.buffer.orientation) {
-                search.push('orientation=');
-                search.push($scope.buffer.orientation);
-                search.push('&');
-            }
-            if ($scope.buffer.groupVariables) {
-                search.push('groupVariables=');
-                search.push(JSON.stringify($scope.buffer.groupVariables));
-                search.push('&');
-            }
-            if ($scope.buffer.tableVariables) {
-                search.push('tableVariables=');
-                search.push(JSON.stringify($scope.buffer.tableVariables));
-                search.push('&');
-            }
-            search.push('columns=');
-            search.push(JSON.stringify($scope.columns));
+        ];
 
-            window.open('/report/dynamic/payment?' + search.join(""));
-        };
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
 
     }]);

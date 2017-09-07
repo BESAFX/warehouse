@@ -389,9 +389,9 @@ WebKit inertia scrolling is being added here for any present/future devices that
 }
 
 .drop-menu {
-    cursor: pointer;
     padding: 10px;
     text-align: right;
+    cursor: pointer;
 }
 
 .drop-menu .fa {
@@ -400,4 +400,9 @@ WebKit inertia scrolling is being added here for any present/future devices that
 
 .drop-menu:hover {
     background-color: lightgrey;
+}
+
+.disabled > .drop-menu {
+    opacity: 0.5 !important;
+    cursor: not-allowed;
 }

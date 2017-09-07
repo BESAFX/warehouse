@@ -121,6 +121,7 @@ gulp.task('scripts', function () {
         './init/factory/offerFactory.js',
         './init/factory/callFactory.js',
         './init/factory/paymentFactory.js',
+        './init/factory/paymentOutFactory.js',
         './init/factory/permissionFactory.js',
         './init/factory/personFactory.js',
         './init/factory/roleFactory.js',
@@ -167,6 +168,7 @@ gulp.task('scripts', function () {
         './partials/payment/paymentHeavyWork.js',
         './partials/paymentOut/paymentOut.js',
         './partials/paymentOut/paymentOutCreate.js',
+        './partials/paymentOut/paymentOutFilter.js',
         './partials/bank/bank.js',
         './partials/bank/bankCreateUpdate.js',
         './partials/bank/deposit.js',
@@ -191,6 +193,9 @@ gulp.task('scripts', function () {
         './partials/report/payment/js/paymentByCourse.js',
         './partials/report/payment/js/paymentByMaster.js',
         './partials/report/payment/js/paymentByAccountIn.js',
+
+        './partials/report/paymentOut/js/paymentOutByBranch.js',
+        './partials/report/paymentOut/js/paymentOutByPerson.js',
 
         './partials/report/chart/js/offersCountAverageByBranch.js',
         './partials/report/chart/js/offersCountAverageByMaster.js',

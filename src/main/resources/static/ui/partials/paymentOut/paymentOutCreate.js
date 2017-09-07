@@ -1,15 +1,20 @@
-app.controller('paymentOutCreateCtrl', ['PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
-    function (PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
+app.controller('paymentOutCreateCtrl', ['BranchService', 'PaymentOutService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
+    function (BranchService, PaymentOutService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
 
         $scope.title = title;
 
-        $scope.buffer = {};
+        $scope.paymentOut = {};
+
+        $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+                $scope.paymentOut.branch = $scope.branches[0];
+            });
+        }, 2000);
 
         $scope.submit = function () {
-            $scope.payment.type = 'مصروفات';
-            PaymentService.create($scope.payment).then(function (data) {
-                $scope.payment = {};
-                $scope.form.$setPristine();
+            PaymentOutService.create($scope.paymentOut).then(function (data) {
+                $uibModalInstance.close(data);
             });
         };
 

@@ -5,7 +5,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openAccountCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -29,7 +29,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openAccountUpdateModel = function (account) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -573,7 +573,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openPaymentOutCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -595,7 +595,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openPersonCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -619,7 +619,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openPersonUpdateModel = function (person) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -647,7 +647,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openStudentCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -671,7 +671,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openStudentUpdateModel = function (student) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -699,7 +699,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openTeamCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -723,7 +723,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openTeamUpdateModel = function (team) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -755,7 +755,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportOfferByBranchModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -771,7 +771,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportOfferByMasterModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -787,7 +787,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportOfferByPersonModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -803,7 +803,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportCallByPersonModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -819,7 +819,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportOfferByIdModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -835,7 +835,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportAccountByBranchModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -851,7 +851,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportAccountByMasterModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -867,7 +867,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportAccountByCourseModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -883,7 +883,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportPaymentByBranchModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -899,7 +899,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportPaymentByMasterModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -915,7 +915,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportPaymentByCourseModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -931,7 +931,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportPaymentByAccountInModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -943,11 +943,43 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.PaymentOutByBranch                                  *
+     *                                                            *
+     *************************************************************/
+    this.openReportPaymentOutByBranchModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/paymentOut/paymentOutByBranch.html",
+            controller: "paymentOutByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
+     * Report.PaymentOutByPerson                                  *
+     *                                                            *
+     *************************************************************/
+    this.openReportPaymentOutByPersonModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/paymentOut/paymentOutByPerson.html",
+            controller: "paymentOutByPersonCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.ChartOffersCountAverageByBranch                     *
      *                                                            *
      *************************************************************/
     this.openReportChartOffersCountAverageByBranchModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -963,7 +995,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportChartOffersCountAverageByMasterModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -979,7 +1011,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportChartOffersPriceAverageByBranchModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -995,7 +1027,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportChartOffersPriceAverageByMasterModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -1011,7 +1043,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportBranchDetailsModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -1027,7 +1059,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportMasterDetailsModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -1043,7 +1075,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportCourseDetailsModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -1059,7 +1091,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportUnRegisteredStudentDetailsByBranchModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -1075,7 +1107,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
      *                                                            *
      *************************************************************/
     this.openReportUnRegisteredStudentDetailsByMasterModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
