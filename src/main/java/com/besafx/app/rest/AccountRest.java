@@ -1,5 +1,5 @@
 package com.besafx.app.rest;
-import com.besafx.app.config.CustomException;
+
 import com.besafx.app.entity.*;
 import com.besafx.app.search.AccountSearch;
 import com.besafx.app.service.*;
@@ -7,10 +7,13 @@ import com.besafx.app.util.WrapperUtil;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +22,19 @@ import java.security.Principal;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "/api/account/")
 public class AccountRest {
+
+    private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
+
+    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]],payments[**,lastPerson[id,contact[id,firstName,forthName]],-account],accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account],accountConditions[**,-account,person[id,contact[id,firstName,forthName]]],accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
+    public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
 
     @Autowired
     private PersonService personService;
@@ -217,9 +228,9 @@ public class AccountRest {
 
     @RequestMapping(value = "findByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Account> findByBranch(@PathVariable Long branchId) {
+    public String findByBranch(@PathVariable Long branchId) {
         List<Account> list = accountService.findByCourseMasterBranch(branchService.findOne(branchId));
-        return list;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO), list);
     }
 
     @RequestMapping(value = "findRequiredPrice/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -333,8 +344,7 @@ public class AccountRest {
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Account> filter(
+    public String filter(
             @RequestParam(value = "firstName", required = false) final String firstName,
             @RequestParam(value = "secondName", required = false) final String secondName,
             @RequestParam(value = "thirdName", required = false) final String thirdName,
@@ -348,6 +358,7 @@ public class AccountRest {
             @RequestParam(value = "course", required = false) final Long course,
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "branch", required = false) final Long branch) {
-        return accountSearch.search1(firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch);
+        List<Account> list = accountSearch.search1(firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
     }
 }

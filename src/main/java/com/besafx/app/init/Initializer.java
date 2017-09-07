@@ -115,7 +115,6 @@ public class Initializer implements CommandLineRunner {
         personService.save(person);
         log.info("انشاء الشركة");
         Company company = new Company();
-        company.setCode(1);
         company.setName("المعهد الأهلي للتدريب");
         company.setPhone("0138099353");
         company.setFax("0138099352");

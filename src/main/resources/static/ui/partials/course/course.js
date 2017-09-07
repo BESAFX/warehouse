@@ -17,7 +17,7 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
         };
 
         $scope.fetchTableData = function () {
-            CourseService.fetchTable().then(function (data) {
+            CourseService.fetchTableData().then(function (data) {
                 $scope.courses = data;
                 $scope.setSelected(data[0]);
             });

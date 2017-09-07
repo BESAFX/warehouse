@@ -37,7 +37,7 @@ app.controller("companyCtrl", ['CompanyService', 'PersonService', 'ModalProvider
         };
 
         $timeout(function () {
-            CompanyService.fetchTableData().then(function (data) {
+            CompanyService.findAll().then(function (data) {
                 $scope.selected = data[0];
             });
             PersonService.findAllSummery().then(function (data) {

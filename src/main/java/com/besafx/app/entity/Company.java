@@ -32,9 +32,6 @@ public class Company implements Serializable {
     private Long id;
 
     @JsonView(Views.Summery.class)
-    private Integer code;
-
-    @JsonView(Views.Summery.class)
     private String name;
 
     @JsonView(Views.Summery.class)

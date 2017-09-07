@@ -6,6 +6,9 @@ import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 public class CourseRest {
 
     private final static Logger log = LoggerFactory.getLogger(CourseRest.class);
+
+    private final String FILTER_TABLE = "**,master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],accounts[id]";
 
     @Autowired
     private CompanyService companyService;
@@ -53,8 +58,7 @@ public class CourseRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_CREATE')")
-    @JsonView(Views.CourseTable.class)
-    public Course create(@RequestBody Course course, Principal principal) {
+    public String create(@RequestBody Course course, Principal principal) {
         if (courseService.findByCodeAndMaster(course.getCode(), course.getMaster()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
@@ -69,14 +73,13 @@ public class CourseRest {
                 .type("success")
                 .icon("fa-plus-square")
                 .build(), principal.getName());
-        return course;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), course);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COURSE_UPDATE')")
-    @JsonView(Views.CourseTable.class)
-    public Course update(@RequestBody Course course, Principal principal) {
+    public String update(@RequestBody Course course, Principal principal) {
         if (courseService.findByCodeAndMasterAndIdIsNot(course.getCode(), course.getMaster(), course.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
@@ -93,7 +96,7 @@ public class CourseRest {
                     .type("success")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return course;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), course);
         } else {
             return null;
         }
@@ -122,14 +125,14 @@ public class CourseRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Course> findAll() {
-        return Lists.newArrayList(courseService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(courseService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Course findOne(@PathVariable Long id) {
-        return courseService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), courseService.findOne(id));
     }
 
     @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -138,13 +141,14 @@ public class CourseRest {
     }
 
     @RequestMapping(value = "findByMaster/{masterId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Course> findByMaster(@PathVariable(value = "masterId") Long masterId) {
-        return courseService.findByMaster(masterService.findOne(masterId));
+    @ResponseBody
+    public String findByMaster(@PathVariable(value = "masterId") Long masterId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), courseService.findByMaster(masterService.findOne(masterId)));
     }
 
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Course> fetchTableData(Principal principal) {
+    public String fetchTableData(Principal principal) {
         try {
             Person person = personService.findByEmail(principal.getName());
             List<Course> list = new ArrayList<>();
@@ -161,25 +165,11 @@ public class CourseRest {
             masterService.findByBranch(person.getBranch()).stream().forEach(master ->
                     list.addAll(courseService.findByMaster(master)));
             ///
-            return list.stream().filter(DistinctFilter.distinctByKey(Course::getId)).collect(Collectors.toList());
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list.stream().filter(DistinctFilter.distinctByKey(Course::getId)).collect(Collectors.toList()));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             return null;
         }
-    }
-
-    @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Course> fetchTableDataSummery(Principal principal) {
-        return fetchTableData(principal);
-    }
-
-    @RequestMapping(value = "fetchTable", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(Views.CourseTable.class)
-    public List<Course> fetchTable(Principal principal) {
-        return fetchTableData(principal);
     }
 
 }

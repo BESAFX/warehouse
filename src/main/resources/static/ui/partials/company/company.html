@@ -55,23 +55,41 @@
 
         <div dir="rtl" class="row" style="margin-top: 10px">
 
-            <form dir="rtl" name="from" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
+            <form name="from" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
                   focus-group-head="loop" focus-group-tail="loop">
 
-                <div class="col-xs-12 col-sm-12 col-sm-12">
+                <div class="form-group col-xs-12 col-sm-12 col-sm-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
 
                             <div class="row">
 
-                                <div class="text-right col-xs-12 col-sm-6 col-md-12 col-lg-12"
+                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12"
                                      ng-show="form.$invalid && form.$submitted">
                                     <div class="alert alert-danger" role="alert">
                                         <strong>فضلاً اكمل الحقول المطلوبة</strong>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">الشعار الرسمي</div>
+                                        <div class="panel-body">
+                                            <input type="file" nv-file-select="" uploader="uploader" accept="image/*"/>
+                                            <img ng-src="{{selected.logo}}" style="width: 100%; height: 100%"/>
+                                            <div ng-show="uploader.queue.length > 0"
+                                                 ng-hide="uploader.queue[0].isSuccess">
+                                                <div class="progress" style="margin-bottom: 0;">
+                                                    <div class="progress-bar progress-bar-striped active"
+                                                         role="progressbar"
+                                                         ng-style="{ 'width': uploader.queue[0].progress + '%' }"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="panel panel-info">
                                         <div class="panel-heading">البيانات الاساسية</div>
                                         <div class="panel-body">
@@ -184,30 +202,12 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">الشعار الرسمي</div>
-                                        <div class="panel-body">
-                                            <input type="file" nv-file-select="" uploader="uploader" accept="image/*"/>
-                                            <img ng-src="{{selected.logo}}" style="width: 100%; height: 100%"/>
-                                            <div ng-show="uploader.queue.length > 0"
-                                                 ng-hide="uploader.queue[0].isSuccess">
-                                                <div class="progress" style="margin-bottom: 0;">
-                                                    <div class="progress-bar progress-bar-striped active"
-                                                         role="progressbar"
-                                                         ng-style="{ 'width': uploader.queue[0].progress + '%' }"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
                         </div>
                         <div class="panel-footer">
 
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                                 <button uib-tooltip="حفظ"
                                         tooltip-append-to-body="true"
