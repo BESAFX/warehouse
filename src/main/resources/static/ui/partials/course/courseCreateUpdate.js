@@ -1,10 +1,10 @@
-app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'course',
-    function (MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, course) {
+app.controller('courseCreateUpdateCtrl', ['BranchService', 'CourseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'course',
+    function (BranchService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, course) {
 
         $timeout(function () {
-            MasterService.fetchMasterCombo().then(function (data) {
-                $scope.masters = data;
-            })
+            BranchService.fetchBranchMaster().then(function (data) {
+                $scope.branches = data;
+            });
         }, 2000);
 
         $scope.course = course;

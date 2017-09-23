@@ -144,52 +144,46 @@ public class ExcelPaymentController {
         sheet.setColumnWidth(5, 20 * 256);
         //
         cell = row.createCell(6);
-        cell.setCellValue("رقم السند");
+        cell.setCellValue("رقم الفرع");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(6, 20 * 256);
         //
         cell = row.createCell(7);
-        cell.setCellValue("نوع الايرادات");
+        cell.setCellValue("رقم السند");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(7, 20 * 256);
         //
         cell = row.createCell(8);
-        cell.setCellValue("قيمة السند");
+        cell.setCellValue("نوع الايرادات");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(8, 20 * 256);
         //
         cell = row.createCell(9);
-        cell.setCellValue("البيان");
+        cell.setCellValue("قيمة السند");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(9, 20 * 256);
         //
         cell = row.createCell(10);
-        cell.setCellValue("يوم تاريخ السند");
+        cell.setCellValue("البيان");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(10, 20 * 256);
         //
         cell = row.createCell(11);
-        cell.setCellValue("شهر تاريخ السند");
+        cell.setCellValue("تاريخ السند");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(11, 20 * 256);
-        //
-        cell = row.createCell(12);
-        cell.setCellValue("سنة تاريخ السند");
-        cell.setCellType(CellType.STRING);
-        cell.setCellStyle(styleColumnHeader);
-        sheet.setColumnWidth(12, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 12; j++) {
+            for (int j = 0; j <= 11; j++) {
                 cell = row.createCell(j);
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
@@ -240,6 +234,7 @@ public class ExcelPaymentController {
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
                 Payment payment = new Payment();
+                Integer courseCode = null, masterCode = null, branchCode = null;
                 boolean accept = true;
                 while (cellIterator.hasNext()) {
                     Cell nextCell = cellIterator.next();
@@ -256,7 +251,6 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("First Name: " + firstName);
                             break;
                         case 1:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
@@ -269,7 +263,6 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Second Name: " + secondName);
                             break;
                         case 2:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
@@ -282,7 +275,6 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Third Name: " + thirdName);
                             break;
                         case 3:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
@@ -295,7 +287,6 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Forth Name: " + forthName);
                             break;
                         case 4:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
@@ -308,7 +299,6 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Course Code: " + courseCode);
                             break;
                         case 5:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
@@ -321,9 +311,20 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Master Code: " + masterCode);
                             break;
                         case 6:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                branchCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            break;
+                        case 7:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -334,9 +335,8 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Payment Code: " + payment.getCode());
                             break;
-                        case 7:
+                        case 8:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -347,9 +347,8 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Payment Note: " + payment.getNote());
                             break;
-                        case 8:
+                        case 9:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -361,10 +360,8 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Payment Amount Number: " + payment.getAmountNumber());
-//                            log.info("Payment Amount String: " + payment.getAmountString());
                             break;
-                        case 9:
+                        case 10:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -375,52 +372,26 @@ public class ExcelPaymentController {
                                 accept = false;
                                 break;
                             }
-//                            log.info("Payment Note: " + payment.getNote());
-                            break;
-                        case 10:
-                            if (excelCellHelper.getCellValue(nextCell) == null) {
-                                accept = false;
-                            }
-                            nextCell.setCellType(CellType.STRING);
-                            try {
-                                day = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-                            } catch (Exception ex) {
-                                accept = false;
-                                break;
-                            }
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
                             break;
                         case 11:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
                             nextCell.setCellType(CellType.STRING);
+                            Date endDate;
                             try {
-                                month = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                                endDate = DateConverter.parseHijriDateStringWithFormat((String) excelCellHelper.getCellValue(nextCell), "dd/MM/yyyy");
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
                             }
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-                            break;
-                        case 12:
-                            if (excelCellHelper.getCellValue(nextCell) == null) {
-                                accept = false;
-                            }
-                            nextCell.setCellType(CellType.STRING);
-                            try {
-                                year = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-                            } catch (Exception ex) {
-                                accept = false;
-                                break;
-                            }
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
+                            payment.setDate(endDate);
                             break;
                     }
 
                 }
                 if (accept) {
-                    List<Account> accounts = accountSearch.search2(firstName, secondName, thirdName, forthName, null, null, null, null, null, null, courseCode, masterCode, person.getBranch().getCode());
+                    List<Account> accounts = accountSearch.search2(firstName, secondName, thirdName, forthName, null, null, null, null, null, null, courseCode, masterCode, branchCode);
                     if (accounts.isEmpty()) {
                         log.info("لا توجد تسجيلات لهذا الصف");
                         continue;
