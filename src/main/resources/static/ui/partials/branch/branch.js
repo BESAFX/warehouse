@@ -3,6 +3,8 @@ app.controller("branchCtrl", ['BranchService', 'PersonService', 'ModalProvider',
 
         $scope.selected = {};
 
+        $scope.branches = [];
+
         $scope.fetchTableData = function () {
             BranchService.fetchTableData().then(function (data) {
                 $scope.branches = data;
@@ -23,18 +25,30 @@ app.controller("branchCtrl", ['BranchService', 'PersonService', 'ModalProvider',
             }
         };
 
+        $scope.newBranch = function () {
+            ModalProvider.openBranchCreateModel().result.then(function (data) {
+                $scope.branches.splice(0, 0, data);
+            }, function () {
+                console.info('BranchCreateModel Closed.');
+            });
+        };
+
         $scope.delete = function (branch) {
             if (branch) {
-                $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الفرع فعلاً؟", "error", "fa-ban", function () {
+                $rootScope.showConfirmNotify("الفروع", "هل تود حذف الفرع فعلاً؟", "error", "fa-ban", function () {
                     BranchService.remove(branch.id).then(function () {
-
+                        var index = $scope.branches.indexOf(branch);
+                        $scope.branches.splice(index, 1);
+                        $scope.setSelected($scope.branches[0]);
                     });
                 });
                 return;
             }
-            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الفرع فعلاً؟", "error", "fa-ban", function () {
+            $rootScope.showConfirmNotify("الفروع", "هل تود حذف الفرع فعلاً؟", "error", "fa-ban", function () {
                 BranchService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.branches.indexOf($scope.selected);
+                    $scope.branches.splice(index, 1);
+                    $scope.setSelected($scope.branches[0]);
                 });
             });
         };
@@ -46,7 +60,7 @@ app.controller("branchCtrl", ['BranchService', 'PersonService', 'ModalProvider',
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openBranchCreateModel();
+                    $scope.newBranch();
                 }
             },
             {

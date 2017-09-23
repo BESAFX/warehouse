@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -137,24 +138,44 @@ public class BranchRest {
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchTableData(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(personService.findByEmail(principal.getName()).getBranch()));
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(branchService.findAll()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(person.getBranch()));
+        }
     }
 
     @RequestMapping(value = "fetchBranchMaster", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchBranchMaster(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COMBO), Lists.newArrayList(personService.findByEmail(principal.getName()).getBranch()));
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COMBO), Lists.newArrayList(branchService.findAll()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COMBO), Lists.newArrayList(person.getBranch()));
+        }
     }
 
     @RequestMapping(value = "fetchBranchMasterCourse", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchBranchMasterCourse(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO), Lists.newArrayList(personService.findByEmail(principal.getName()).getBranch()));
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO), Lists.newArrayList(branchService.findAll()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO), Lists.newArrayList(person.getBranch()));
+        }
     }
 
     @RequestMapping(value = "fetchBranchCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchBranchCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_COMBO), Lists.newArrayList(personService.findByEmail(principal.getName()).getBranch()));
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_COMBO), Lists.newArrayList(branchService.findAll()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_COMBO), Lists.newArrayList(person.getBranch()));
+        }
     }
 }

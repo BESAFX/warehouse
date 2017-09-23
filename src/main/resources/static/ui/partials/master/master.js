@@ -1,25 +1,30 @@
-app.controller("masterCtrl", ['MasterCategoryService', 'MasterService', 'BranchService', 'ModalProvider', '$scope', '$rootScope', '$log', '$state', '$timeout',
-    function (MasterCategoryService ,MasterService, BranchService, ModalProvider, $scope, $rootScope, $log, $state, $timeout) {
+app.controller("masterCtrl", ['MasterCategoryService', 'MasterService', 'BranchService', 'ModalProvider', '$scope', '$rootScope', '$log', '$state', '$timeout', '$uibModal',
+    function (MasterCategoryService ,MasterService, BranchService, ModalProvider, $scope, $rootScope, $log, $state, $timeout, $uibModal) {
 
-        $scope.fetchTableData = function () {
-            $scope.refreshMasterCategory();
-            $scope.refreshMaster();
-        };
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'التخصصات'});
+        //
 
         $scope.selected = {};
 
+        $scope.branches = [];
+
         $scope.masters = [];
+
+        $scope.masterCategories = [];
+
+        $scope.fetchTableData = function () {
+            $scope.refreshMasterCategory();
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            })
+        };
 
         $scope.refreshMasterCategory = function () {
             MasterCategoryService.findAll().then(function (data) {
                 $scope.masterCategories = data;
-            });
-        };
-
-        $scope.refreshMaster = function () {
-            MasterService.fetchTableData().then(function (data) {
-                $scope.masters = data;
-                $scope.setSelected(data[0]);
             });
         };
 
@@ -46,9 +51,7 @@ app.controller("masterCtrl", ['MasterCategoryService', 'MasterService', 'BranchS
 
         $scope.newMasterCategory = function () {
             ModalProvider.openMasterCategoryCreateModel().result.then(function (data) {
-                if ($scope.masterCategories) {
-                    $scope.masterCategories.splice(0, 0, data);
-                }
+                $scope.masterCategories.splice(0, 0, data);
             }, function () {
                 console.info('MasterCategoryCreateModel Closed.');
             });
@@ -80,6 +83,65 @@ app.controller("masterCtrl", ['MasterCategoryService', 'MasterService', 'BranchS
                     $scope.masters.splice(index, 1);
                     $scope.setSelected($scope.masters[0]);
                 });
+            });
+        };
+
+        $scope.filter = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/master/masterFilter.html',
+                controller: 'masterFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'البحث فى التخصصات';
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (buffer) {
+                var search = [];
+                if (buffer.name) {
+                    search.push('name=');
+                    search.push(buffer.name);
+                    search.push('&');
+                }
+                if (buffer.codeFrom) {
+                    search.push('codeFrom=');
+                    search.push(buffer.codeFrom);
+                    search.push('&');
+                }
+                if (buffer.codeTo) {
+                    search.push('codeTo=');
+                    search.push(buffer.codeTo);
+                    search.push('&');
+                }
+                if (buffer.branch) {
+                    search.push('branchId=');
+                    search.push(buffer.branch.id);
+                    search.push('&');
+                }
+
+                MasterService.filter(search.join("")).then(function (data) {
+                    $scope.masters = data;
+                    $scope.setSelected(data[0]);
+                    $scope.items = [];
+                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'التخصصات', 'style': 'font-weight:bold'});
+                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 4,
+                        'type': 'title',
+                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
+                    });
+                });
+
+            }, function () {
+                console.info('MasterFilterModel Closed.');
             });
         };
 

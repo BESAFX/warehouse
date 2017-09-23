@@ -52,55 +52,64 @@
         <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
             <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
 
-                <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
-                    <button id="branch-menu-lower-right" style="width: 100%;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                        <span>العمليات</span>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="branch-menu-lower-right">
-                        <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
-                            ng-click="refreshMaster()">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">visibility</i>
-                                <span>عرض بيانات التخصصات</span>
-                            </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="newMasterCategory()"
-                            ng-if="contains(me.team.authorities, ['ROLE_MASTER_CATEGORY_CREATE'])">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">add</i>
-                                <span>انشاء تصنيف جديد</span>
-                            </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="newMaster()"
-                            ng-if="contains(me.team.authorities, ['ROLE_MASTER_CREATE'])">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">add</i>
-                                <span>انشاء تخصص جديد</span>
-                            </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-click="ModalProvider.openMasterUpdateModel(selected)"
-                            ng-if="contains(me.team.authorities, ['ROLE_MASTER_UPDATE']) && toggleList===1"
-                            ng-hide="!masters || masters.length==0">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">edit</i>
-                                <span>تعديل بيانات التخصص</span>
-                            </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                            ng-if="contains(me.team.authorities, ['ROLE_MASTER_DELETE']) && toggleList===1"
-                            ng-hide="!masters || masters.length==0">
-                            <span class="mdl-list__item-primary-content">
-                                <i class="material-icons mdl-list__item-icon">delete</i>
-                                <span>حذف التخصص</span>
-                            </span>
+                <div class="row">
+                    <ul dir="rtl" class="breadcrumb">
+                        <li ng-repeat="item in items | orderBy:'id' track by item.id">
+                            <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
+                            <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
                         </li>
                     </ul>
                 </div>
 
-                <div class="pull-left" ng-init="toggleList=1">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button id="branch-menu-lower-right" style="width: 100%;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>العمليات</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="branch-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="filter()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">visibility</i>
+                                    <span>عرض بيانات التخصصات</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="newMasterCategory()"
+                                ng-if="contains(me.team.authorities, ['ROLE_MASTER_CATEGORY_CREATE'])">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">add</i>
+                                    <span>انشاء تصنيف جديد</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="newMaster()"
+                                ng-if="contains(me.team.authorities, ['ROLE_MASTER_CREATE'])">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">add</i>
+                                    <span>انشاء تخصص جديد</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openMasterUpdateModel(selected)"
+                                ng-if="contains(me.team.authorities, ['ROLE_MASTER_UPDATE']) && toggleList===1"
+                                ng-hide="!masters || masters.length==0">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">edit</i>
+                                    <span>تعديل بيانات التخصص</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
+                                ng-if="contains(me.team.authorities, ['ROLE_MASTER_DELETE']) && toggleList===1"
+                                ng-hide="!masters || masters.length==0">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">delete</i>
+                                    <span>حذف التخصص</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-left" ng-init="toggleList=1">
                     <div class="btn-toolbar">
                         <div class="btn-group" data-toggle="buttons">
                             <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
@@ -117,6 +126,7 @@
                             </button>
                         </div>
                     </div>
+                </div>
                 </div>
 
             </div>
@@ -238,7 +248,7 @@
                             style="margin-top: 2px;">
                             <li>
                                 <a href=""
-                                   ng-click="fetchTableData()"
+                                   ng-click="filter()"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="تحديث البيانات">
                                     <span class="fa fa-refresh"></span>
@@ -296,8 +306,12 @@
 
                                 </tr>
                                 <tr>
-                                    <th colspan="8"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                           type="text"/></th>
+                                    <th colspan="8">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>

@@ -1,6 +1,7 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
+import com.besafx.app.search.MasterSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
@@ -43,6 +44,9 @@ public class MasterRest {
 
     @Autowired
     private MasterService masterService;
+
+    @Autowired
+    private MasterSearch masterSearch;
 
     @Autowired
     private OfferService offerService;
@@ -198,6 +202,17 @@ public class MasterRest {
     @ResponseBody
     public String fetchMasterBranchCombo(Principal principal) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
+    }
+
+    @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String filter(
+            @RequestParam(value = "name", required = false) final String name,
+            @RequestParam(value = "codeFrom", required = false) final Long codeFrom,
+            @RequestParam(value = "codeTo", required = false) final Long codeTo,
+            @RequestParam(value = "branchId", required = false) final Long branchId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                masterSearch.search(name, codeFrom, codeTo, branchId));
     }
 
 }

@@ -144,6 +144,7 @@ gulp.task('scripts', function () {
         './partials/master/master.js',
         './partials/master/masterCreateUpdate.js',
         './partials/master/masterCategoryCreateUpdate.js',
+        './partials/master/masterFilter.js',
         './partials/offer/offer.js',
         './partials/offer/offerFilter.js',
         './partials/offer/offerCreateUpdate.js',
