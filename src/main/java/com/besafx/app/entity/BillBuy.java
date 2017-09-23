@@ -49,7 +49,6 @@ public class BillBuy implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "branch")
-    @JsonIgnoreProperties(value = {"manager", "masters", "banks"}, allowSetters = true)
     private Branch branch;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -57,7 +56,6 @@ public class BillBuy implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     private Person lastPerson;
 
     @JsonCreator

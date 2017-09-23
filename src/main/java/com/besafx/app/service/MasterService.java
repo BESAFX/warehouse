@@ -14,8 +14,7 @@ import java.util.List;
 @Transactional
 public interface MasterService extends PagingAndSortingRepository<Master, Long>, JpaSpecificationExecutor<Master> {
 
-    @Query("select max(code) from Master m where (m.branch.id) = (:id)")
-    Integer findLastCodeByBranch(@Param("id") Long id);
+    Master findTopByBranchOrderByCodeDesc(Branch branch);
     Master findByCodeAndBranchAndIdIsNot(Integer code, Branch branch, Long id);
     List<Master> findByBranch(Branch branch);
     Master findByCodeAndBranch(Integer Code, Branch branch);

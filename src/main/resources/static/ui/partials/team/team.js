@@ -23,18 +23,28 @@ app.controller("teamCtrl", ['TeamService', 'ModalProvider', '$rootScope', '$scop
             }
         };
 
+        $scope.newTeam = function () {
+            ModalProvider.openTeamCreateModel().result.then(function (data) {
+                $scope.teams.splice(0, 0, data);
+            });
+        };
+
         $scope.delete = function (team) {
             if (team) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف المجموعة فعلاً؟", "error", "fa-trash", function () {
                     TeamService.remove(team.id).then(function () {
-
+                        var index = $scope.teams.indexOf(team);
+                        $scope.teams.splice(index, 1);
+                        $scope.setSelected($scope.teams[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف المجموعة فعلاً؟", "error", "fa-trash", function () {
                 TeamService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.teams.indexOf($scope.selected);
+                    $scope.teams.splice(index, 1);
+                    $scope.setSelected($scope.teams[0]);
                 });
             });
         };
@@ -43,16 +53,16 @@ app.controller("teamCtrl", ['TeamService', 'ModalProvider', '$rootScope', '$scop
             {
                 html: '<div class="drop-menu">انشاء مجموعة جديدة<span class="fa fa-pencil fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_TEAM_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openTeamCreateModel();
+                    $scope.newTeam();
                 }
             },
             {
                 html: '<div class="drop-menu">تعديل بيانات المجموعة<span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_TEAM_UPDATE']);
                 },
                 click: function ($itemScope, $event, value) {
                     ModalProvider.openTeamUpdateModel($itemScope.team);
@@ -61,7 +71,7 @@ app.controller("teamCtrl", ['TeamService', 'ModalProvider', '$rootScope', '$scop
             {
                 html: '<div class="drop-menu">حذف المجموعة<span class="fa fa-trash fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_TEAM_DELETE']);
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.delete($itemScope.team);

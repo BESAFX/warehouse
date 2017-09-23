@@ -23,7 +23,8 @@ public class CompanyRest {
 
     private final static Logger log = LoggerFactory.getLogger(CompanyRest.class);
 
-    public static final String FILTER_TABLE = "**,manager[id,contact[id,firstName,forthName]]";
+    public static final String FILTER_TABLE = "**,branches[id]";
+    public static final String FILTER_COMPANY_COMBO = "id,name";
 
     @Autowired
     private CompanyService companyService;
@@ -55,6 +56,12 @@ public class CompanyRest {
     @ResponseBody
     public String findAll() {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(companyService.findAll()));
+    }
+
+    @RequestMapping(value = "findAllCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findAllCombo() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_COMPANY_COMBO), Lists.newArrayList(companyService.findAll()));
     }
 
 }

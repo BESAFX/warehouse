@@ -30,41 +30,33 @@ public class Master implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "masterSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class, Views.MasterComoBox.class, Views.CourseTable.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.BranchMaster.class, Views.MasterComoBox.class, Views.CourseTable.class})
     private Integer code;
 
-    @JsonView(value = {Views.Summery.class, Views.BranchMaster.class, Views.MasterComoBox.class, Views.CourseTable.class})
     private String name;
 
-    @JsonView(Views.Summery.class)
     private String period;
 
     @ManyToOne
     @JoinColumn(name = "branch")
-    @JsonIgnoreProperties(value = {"manager", "masters", "banks"}, allowSetters = true)
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.CourseTable.class})
     private Branch branch;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
     private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private Person lastPerson;
 
+    @JoinColumn(name = "masterCategory")
+    @ManyToOne
+    private MasterCategory masterCategory;
+
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"master"}, allowSetters = true)
-    @JsonView(value = {Views.Summery.class, Views.BranchMasterCourse.class})
     private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"master", "calls"}, allowSetters = true)
     private List<Offer> offers = new ArrayList<>();
 
     @JsonCreator

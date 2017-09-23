@@ -10,6 +10,8 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,43 +30,30 @@ public class Company implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "companySequenceGenerator")
-    @JsonView(Views.Summery.class)
     private Long id;
 
-    @JsonView(Views.Summery.class)
     private String name;
 
-    @JsonView(Views.Summery.class)
     private String address;
 
-    @JsonView(Views.Summery.class)
     private String phone;
 
-    @JsonView(Views.Summery.class)
     private String mobile;
 
-    @JsonView(Views.Summery.class)
     private String fax;
 
-    @JsonView(Views.Summery.class)
     private String email;
 
-    @JsonView(Views.Summery.class)
     private String website;
 
-    @JsonView(Views.Summery.class)
     private String commericalRegisteration;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
     private String logo;
 
-    @ManyToOne
-    @JoinColumn(name = "manager")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
-    private Person manager;
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    private List<Branch> branches = new ArrayList<>();
 
     @JsonCreator
     public static Company Create(String jsonString) throws IOException {

@@ -28,23 +28,18 @@ public class AccountAttach implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "accountAttachSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "account")
-    @JsonIgnoreProperties(value = {"payments", "accountAttaches"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private Account account;
 
     @ManyToOne
     @JoinColumn(name = "attach")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Attach attach;
 
     @ManyToOne
     @JoinColumn(name = "attachType")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private AttachType attachType;
 
     @JsonCreator

@@ -1,12 +1,15 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Team;
-import com.besafx.app.entity.Views;
 import com.besafx.app.service.TeamService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +22,10 @@ import java.util.List;
 @RequestMapping(value = "/api/team/")
 public class TeamRest {
 
+    private final static Logger log = LoggerFactory.getLogger(BranchRest.class);
+
+    private final String FILTER_TABLE = "**,persons[id]";
+
     @Autowired
     private TeamService teamService;
 
@@ -28,10 +35,7 @@ public class TeamRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_CREATE')")
-    public Team create(@RequestBody Team team, Principal principal) {
-        if (teamService.findByAuthorities(team.getAuthorities()) != null) {
-            throw new CustomException("هذة المجموعة موجودة بالفعل.");
-        }
+    public String create(@RequestBody Team team, Principal principal) {
         Team topTeam = teamService.findTopByOrderByCodeDesc();
         if (topTeam == null) {
             team.setCode(1);
@@ -46,13 +50,13 @@ public class TeamRest {
                 .type("success")
                 .icon("fa-plus-circle")
                 .build(), principal.getName());
-        return team;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_UPDATE')")
-    public Team update(@RequestBody Team team, Principal principal) {
+    public String update(@RequestBody Team team, Principal principal) {
         if (teamService.findByCodeAndIdIsNot(team.getCode(), team.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
@@ -66,7 +70,7 @@ public class TeamRest {
                     .type("success")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return team;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
         } else {
             return null;
         }
@@ -94,20 +98,13 @@ public class TeamRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Team> findAll() {
-        return Lists.newArrayList(teamService.findAll());
-    }
-
-    @RequestMapping(value = "findAllSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Team> findAllSummery() {
-        return findAll();
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(teamService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Team findOne(@PathVariable Long id) {
-        return teamService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), teamService.findOne(id));
     }
 }

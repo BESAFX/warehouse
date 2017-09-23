@@ -32,35 +32,27 @@ public class AccountCondition implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "accountConditionSequenceGenerator")
-    @JsonView(value = {Views.Summery.class})
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(value = {Views.Summery.class})
     private Date date;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(value = {Views.Summery.class})
     private String note;
 
     @Enumerated(EnumType.STRING)
-    @JsonView(value = {Views.Summery.class})
     private StudentCondition studentCondition;
 
     @ManyToOne
     @JoinColumn(name = "account")
-    @JsonView(value = {Views.Summery.class})
     private Account account;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(value = {Views.Summery.class})
     private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name = "person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(value = {Views.Summery.class})
     private Person person;
 
     @JsonCreator

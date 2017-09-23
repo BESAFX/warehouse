@@ -31,71 +31,38 @@ public class Branch implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "branchSequenceGenerator")
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.AccountComboBox.class,
-            Views.BranchMaster.class,
-            Views.CourseTable.class})
     private Long id;
 
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.AccountComboBox.class,
-            Views.BranchMaster.class,
-            Views.CourseTable.class})
     private Integer code;
 
-    @JsonView(value = {
-            Views.Summery.class ,
-            Views.BranchMaster.class,
-            Views.CourseTable.class})
     private String name;
 
-    @JsonView(Views.Summery.class)
     private String address;
 
-    @JsonView(Views.Summery.class)
     private String phone;
 
-    @JsonView(Views.Summery.class)
     private String mobile;
 
-    @JsonView(Views.Summery.class)
     private String fax;
 
-    @JsonView(Views.Summery.class)
     private String email;
 
-    @JsonView(Views.Summery.class)
     private String website;
 
-    @JsonView(Views.Summery.class)
     private String commericalRegisteration;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
     private String logo;
 
     @ManyToOne
     @JoinColumn(name = "company")
-    @JsonIgnoreProperties(value = {"manager"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private Company company;
 
-    @ManyToOne
-    @JoinColumn(name = "manager")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
-    private Person manager;
-
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(value = {Views.BranchMaster.class})
     private List<Master> masters = new ArrayList<>();
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     private List<Bank> banks = new ArrayList<>();
 
     @JsonCreator

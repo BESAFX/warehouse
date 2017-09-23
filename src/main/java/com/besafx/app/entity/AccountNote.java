@@ -29,27 +29,21 @@ public class AccountNote implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "accountNoteSequenceGenerator")
-    @JsonView(Views.Summery.class)
     private Long id;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
     private String note;
 
     @ManyToOne
     @JoinColumn(name = "account")
-    @JsonIgnoreProperties(value = {"payments", "accountAttaches", "accountConditions", "accountNotes"}, allowSetters = true)
     private Account account;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
     private Date date;
 
     @ManyToOne
     @JoinColumn(name = "person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private Person person;
 
     @JsonCreator

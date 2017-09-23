@@ -65,7 +65,7 @@
                                 <span>عرض بيانات الفواتير</span>
                             </span>
                         </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openBillBuyCreateModel()"
+                        <li class="mdl-menu__item mdl-list__item" ng-click="newBillBuy()"
                             ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
@@ -110,83 +110,119 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
-                <div class="panel panel-body">
 
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="billBuys"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-
-                                <th class="text-center">
-                                    <span>م</span>
-                                </th>
-
-                                <th st-sort="code" class="text-right">
-                                    <span> رقم الفاتورة</span>
-                                </th>
-
-                                <th st-sort="date" class="text-right">
-                                    <span> تاريخ الفاتورة</span>
-                                </th>
-
-                                <th st-sort="amount" class="text-right">
-                                    <span>قيمة الفاتورة</span>
-                                </th>
-
-                                <th st-sort="billBuyType.name" class="text-right">
-                                    <span>نوع الحساب</span>
-                                </th>
-
-                                <th st-sort="fromName" class="text-right">
-                                    <span>مصدر الفاتورة</span>
-                                </th>
-
-                                <th st-sort="lastPerson.contact.firstName" class="text-right">
-                                    <span> مدخل الفاتورة</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="7"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                       type="text"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="billBuy in collection"
-                                st-select-mode="single"
-                                context-menu="rowMenu"
-                                ng-click="setSelected(billBuy)"
-                                ng-right-click="setSelected(billBuy)"
-                                ng-class="{'mdl-color--brown-100':billBuy.isSelected}">
-                                <td st-select-row-custom="billBuy">{{$index+1}}</td>
-                                <td st-select-row-custom="billBuy">{{billBuy.code}}</td>
-                                <td st-select-row-custom="billBuy">
-                                    {{billBuy.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="billBuy">{{billBuy.amount | currency:'SAR':0}}</td>
-                                <td st-select-row-custom="billBuy">{{billBuy.billBuyType.name}}</td>
-                                <td st-select-row-custom="billBuy">{{billBuy.fromName}}</td>
-                                <td st-select-row-custom="billBuy">
-                                    {{billBuy.lastPerson.contact.firstName}}
-                                    {{billBuy.lastPerson.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="7">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="filter()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تصفية البيانات">
+                                    <span class="fa fa-filter"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])"
+                                   ng-click="newBillBuy()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء فاتورة جديدة">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة فواتير الشراء</h3>
+                        </div>
                     </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection1" st-safe-src="billBuys"
+                                   class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
 
+                                    <th class="text-center">
+                                        <span>م</span>
+                                    </th>
+
+                                    <th st-sort="code" class="text-right">
+                                        <span> رقم الفاتورة</span>
+                                    </th>
+
+                                    <th st-sort="date" class="text-right">
+                                        <span> تاريخ الفاتورة</span>
+                                    </th>
+
+                                    <th st-sort="amount" class="text-right">
+                                        <span>قيمة الفاتورة</span>
+                                    </th>
+
+                                    <th st-sort="billBuyType.name" class="text-right">
+                                        <span>نوع الحساب</span>
+                                    </th>
+
+                                    <th st-sort="fromName" class="text-right">
+                                        <span>مصدر الفاتورة</span>
+                                    </th>
+
+                                    <th st-sort="lastPerson.contact.firstName" class="text-right">
+                                        <span> مدخل الفاتورة</span>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="7">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="billBuy in collection1"
+                                    st-select-mode="single"
+                                    context-menu="rowMenu"
+                                    ng-click="setSelected(billBuy)"
+                                    ng-right-click="setSelected(billBuy)"
+                                    ng-class="{'mdl-color--brown-100':billBuy.isSelected}">
+                                    <td st-select-row-custom="billBuy">{{$index+1}}</td>
+                                    <td st-select-row-custom="billBuy">{{billBuy.code}}</td>
+                                    <td st-select-row-custom="billBuy">
+                                        {{billBuy.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="billBuy">{{billBuy.amount | currency:'SAR':0}}</td>
+                                    <td st-select-row-custom="billBuy">{{billBuy.billBuyType.name}}</td>
+                                    <td st-select-row-custom="billBuy">{{billBuy.fromName}}</td>
+                                    <td st-select-row-custom="billBuy">
+                                        {{billBuy.lastPerson.contact.firstName}}
+                                        {{billBuy.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection1 || collection1.length ==0">
+                                    <td colspan="7">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
-                <div st-table="collection" st-safe-src="billBuys">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="billBuy in collection">
+                <div st-table="collection2" st-safe-src="billBuys">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="billBuy in collection2">
                         <!-- CONTACT ITEM -->
                         <div class="panel panel-default">
                             <div class="panel-body profile">

@@ -1,19 +1,27 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.entity.Contact;
 import com.besafx.app.entity.Student;
 import com.besafx.app.service.ContactService;
 import com.besafx.app.service.StudentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/api/student/")
 public class StudentRest {
+
+    private final static Logger log = LoggerFactory.getLogger(StudentRest.class);
+
+    public static final String FILTER_TABLE = "**";
 
     @Autowired
     private StudentService studentService;
@@ -24,22 +32,22 @@ public class StudentRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_STUDENT_CREATE')")
-    public Student create(@RequestBody Student student) {
+    public String create(@RequestBody Student student) {
         if (student.getContact().getId() == null) {
             Contact contact = contactService.save(student.getContact());
             student.setContact(contact);
         }
-        return studentService.save(student);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), studentService.save(student));
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_STUDENT_UPDATE')")
-    public Student update(@RequestBody Student student) {
+    public String update(@RequestBody Student student) {
         Student object = studentService.findOne(student.getId());
         if (object != null) {
             student.setContact(contactService.save(student.getContact()));
-            return studentService.save(student);
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), studentService.save(student));
         } else {
             return null;
         }
@@ -57,14 +65,14 @@ public class StudentRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Student> findAll() {
-        return Lists.newArrayList(studentService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(studentService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Student findOne(@PathVariable Long id) {
-        return studentService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), studentService.findOne(id));
     }
 
 }

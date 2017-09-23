@@ -49,7 +49,10 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             {id: 45, name: 'انشاء حالة للطالب', value: 'ROLE_ACCOUNT_CONDITION_CREATE', selected: false},
             {id: 46, name: 'اضافة مستندات طالب', value: 'ROLE_ACCOUNT_ATTACH_CREATE', selected: false},
             {id: 47, name: 'حذف مستندات طالب', value: 'ROLE_ACCOUNT_ATTACH_DELETE', selected: false},
-            {id: 48, name: 'انشاء ملاحظات طالب', value: 'ROLE_ACCOUNT_NOTE_CREATE', selected: false}
+            {id: 48, name: 'انشاء ملاحظات طالب', value: 'ROLE_ACCOUNT_NOTE_CREATE', selected: false},
+            {id: 49, name: 'إنشاء تصنيفات التخصصات', value: 'ROLE_MASTER_CATEGORY_CREATE', selected: false},
+            {id: 50, name: 'تعديل بيانات تصنيفات التخصصات', value: 'ROLE_MASTER_CATEGORY_UPDATE', selected: false},
+            {id: 51, name: 'حذف تصنيفات التخصصات', value: 'ROLE_MASTER_CATEGORY_DELETE', selected: false}
         ];
 
 
@@ -85,8 +88,7 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             switch ($scope.action) {
                 case 'create' :
                     TeamService.create($scope.team).then(function (data) {
-                        $scope.team = {};
-                        $scope.from.$setPristine();
+                        $uibModalInstance.close(data);
                     });
                     break;
                 case 'update' :

@@ -1,10 +1,23 @@
-app.controller("masterCtrl", ['MasterService', 'BranchService', 'ModalProvider', '$scope', '$rootScope', '$log', '$state', '$timeout',
-    function (MasterService, BranchService, ModalProvider, $scope, $rootScope, $log, $state, $timeout) {
+app.controller("masterCtrl", ['MasterCategoryService', 'MasterService', 'BranchService', 'ModalProvider', '$scope', '$rootScope', '$log', '$state', '$timeout',
+    function (MasterCategoryService ,MasterService, BranchService, ModalProvider, $scope, $rootScope, $log, $state, $timeout) {
+
+        $scope.fetchTableData = function () {
+            $scope.refreshMasterCategory();
+            $scope.refreshMaster();
+        };
 
         $scope.selected = {};
 
-        $scope.fetchTableData = function () {
-            MasterService.fetchTableDataSummery().then(function (data) {
+        $scope.masters = [];
+
+        $scope.refreshMasterCategory = function () {
+            MasterCategoryService.findAll().then(function (data) {
+                $scope.masterCategories = data;
+            });
+        };
+
+        $scope.refreshMaster = function () {
+            MasterService.fetchTableData().then(function (data) {
                 $scope.masters = data;
                 $scope.setSelected(data[0]);
             });
@@ -21,6 +34,33 @@ app.controller("masterCtrl", ['MasterService', 'BranchService', 'ModalProvider',
                     }
                 });
             }
+        };
+
+        $scope.newMaster = function () {
+            ModalProvider.openMasterCreateModel().result.then(function (data) {
+                $scope.masters.splice(0, 0, data);
+            }, function () {
+                console.info('MasterCreateModel Closed.');
+            });
+        };
+
+        $scope.newMasterCategory = function () {
+            ModalProvider.openMasterCategoryCreateModel().result.then(function (data) {
+                if ($scope.masterCategories) {
+                    $scope.masterCategories.splice(0, 0, data);
+                }
+            }, function () {
+                console.info('MasterCategoryCreateModel Closed.');
+            });
+        };
+
+        $scope.deleteMasterCategory = function (masterCategory) {
+            $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف التصنيف فعلاً؟", "error", "fa-ban", function () {
+                MasterCategoryService.remove(masterCategory.id).then(function () {
+                    var index = $scope.masterCategories.indexOf(masterCategory);
+                    $scope.masterCategories.splice(index, 1);
+                });
+            });
         };
 
         $scope.delete = function (master) {

@@ -28,7 +28,7 @@ public class PaymentReadRow {
         log.info("////////////////////////////////بداية العملية/////////////////////////////////");
         log.info("فحص هل تبقي مبالغ لم تسدد لهذا الحساب");
         if (payment.getType().equals("ايرادات اساسية")) {
-            if (accountRest.findRemainPrice(payment.getAccount().getId()) < payment.getAmountNumber()) {
+            if (payment.getAccount().getRemainPrice() < payment.getAmountNumber()) {
                 log.info("لا يمكن قبول قيمة اكبر من الباقي من التسجيل");
                 return new AsyncResult<>(null);
             }

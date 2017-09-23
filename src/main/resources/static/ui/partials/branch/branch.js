@@ -4,7 +4,7 @@ app.controller("branchCtrl", ['BranchService', 'PersonService', 'ModalProvider',
         $scope.selected = {};
 
         $scope.fetchTableData = function () {
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchTableData().then(function (data) {
                 $scope.branches = data;
                 $scope.setSelected(data[0]);
             });

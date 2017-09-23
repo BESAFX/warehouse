@@ -29,10 +29,8 @@ public class AttachType implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "attachTypeSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private String name;
 
     @JsonCreator

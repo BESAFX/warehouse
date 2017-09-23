@@ -1,4 +1,5 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.entity.BillBuy;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.BillBuySearch;
@@ -6,7 +7,12 @@ import com.besafx.app.service.BillBuyService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,11 +20,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/billBuy/")
 public class BillBuyRest {
+
+    private final static Logger log = LoggerFactory.getLogger(BillBuyRest.class);
+
+    private final String FILTER_TABLE = "**,billBuyType[**,-lastPerson],branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]]";
 
     @Autowired
     private PersonService personService;
@@ -35,7 +44,7 @@ public class BillBuyRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_CREATE')")
-    public BillBuy create(@RequestBody BillBuy billBuy, Principal principal) {
+    public String create(@RequestBody BillBuy billBuy, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         billBuy.setLastUpdate(new Date());
         billBuy.setLastPerson(person);
@@ -47,13 +56,13 @@ public class BillBuyRest {
                 .type("success")
                 .icon("fa-plus-square")
                 .build(), principal.getName());
-        return billBuy;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_UPDATE')")
-    public BillBuy update(@RequestBody BillBuy billBuy, Principal principal) {
+    public String update(@RequestBody BillBuy billBuy, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         BillBuy object = billBuyService.findOne(billBuy.getId());
         if (object != null) {
@@ -67,7 +76,7 @@ public class BillBuyRest {
                     .type("warn")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return billBuy;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
         } else {
             return null;
         }
@@ -92,19 +101,19 @@ public class BillBuyRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<BillBuy> findAll() {
-        return Lists.newArrayList(billBuyService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(billBuyService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public BillBuy findOne(@PathVariable Long id) {
-        return billBuyService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuyService.findOne(id));
     }
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<BillBuy> filter(
+    public String filter(
             @RequestParam(value = "codeFrom", required = false) final Long codeFrom,
             @RequestParam(value = "codeTo", required = false) final Long codeTo,
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
@@ -112,7 +121,7 @@ public class BillBuyRest {
             @RequestParam(value = "amountFrom", required = false) final Long amountFrom,
             @RequestParam(value = "amountTo", required = false) final Long amountTo,
             @RequestParam(value = "branchId", required = false) final Long branchId) {
-        return billBuySearch.search(codeFrom, codeTo, dateFrom, dateTo, amountFrom, amountTo, branchId);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuySearch.search(codeFrom, codeTo, dateFrom, dateTo, amountFrom, amountTo, branchId));
     }
 
 }

@@ -65,7 +65,7 @@
                                 <span>عرض بيانات المستخدمون</span>
                             </span>
                         </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openPersonCreateModel()"
+                        <li class="mdl-menu__item mdl-list__item" ng-click="newPerson()"
                             ng-if="contains(me.team.authorities, ['ROLE_PERSON_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
@@ -135,89 +135,126 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
-                <div class="panel panel-body">
 
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="persons"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-                                <th class="text-center">
-                                    <span>م</span>
-                                </th>
-
-                                <th st-sort="contact.firstName" class="text-right">
-                                    <span>الاسم</span>
-                                </th>
-
-                                <th st-sort="email" class="text-right">
-                                    <span>البريد الإلكتروني</span>
-                                </th>
-
-                                <th st-sort="team.name" class="text-right">
-                                    <span>مجموعة الصلاحيات</span>
-                                </th>
-
-                                <th st-sort="contact.mobile" class="text-right">
-                                    <span>رقم الجوال</span>
-                                </th>
-
-                                <th st-sort="lastLoginDate" class="text-right">
-                                    <span>تاريخ آخر دخول</span>
-                                </th>
-
-                                <th st-sort="ipAddress" class="text-right">
-                                    <span>أخر عنوان دخول</span>
-                                </th>
-
-                                <th st-sort="branch.name" class="text-right">
-                                    <span>الفرع</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="8"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                       type="text"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="person in collection"
-                                st-select-mode="single"
-                                ng-click="setSelected(person)"
-                                ng-right-click="setSelected(person)"
-                                ng-class="{'mdl-color--brown-100':person.isSelected}">
-                                <td st-select-row-custom="person">{{$index+1}}</td>
-                                <td st-select-row-custom="person">
-                                    <span class="label label-success">{{person.enabled ? 'مفعل' : ''}}</span>
-                                    <span class="label label-danger">{{person.enabled ? '' : 'معطل'}}</span>
-                                    {{person.contact.firstName}}
-                                    {{person.contact.forthName}}
-                                </td>
-                                <td st-select-row-custom="person">{{person.email}}</td>
-                                <td st-select-row-custom="person">{{person.team.name}}</td>
-                                <td st-select-row-custom="person">{{person.contact.mobile}}</td>
-                                <td st-select-row-custom="person">
-                                    <span>{{person.lastLoginDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                    <span class="label label-success">{{person.lastLoginDate | date:'h:m a'}}</span>
-                                </td>
-                                <td st-select-row-custom="person">{{person.ipAddress}}</td>
-                                <td st-select-row-custom="person">{{person.branch.name}}</td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="8">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="fetchTableData()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تصفية البيانات">
+                                    <span class="fa fa-filter"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_TEAM_CREATE'])"
+                                   ng-click="newTeam()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء مستخدم جديد">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة المستخدمين</h3>
+                        </div>
                     </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection1" st-safe-src="persons"
+                                   class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <span>م</span>
+                                    </th>
 
+                                    <th st-sort="contact.firstName" class="text-right">
+                                        <span>الاسم</span>
+                                    </th>
+
+                                    <th st-sort="email" class="text-right">
+                                        <span>البريد الإلكتروني</span>
+                                    </th>
+
+                                    <th st-sort="team.name" class="text-right">
+                                        <span>مجموعة الصلاحيات</span>
+                                    </th>
+
+                                    <th st-sort="contact.mobile" class="text-right">
+                                        <span>رقم الجوال</span>
+                                    </th>
+
+                                    <th st-sort="lastLoginDate" class="text-right">
+                                        <span>تاريخ آخر دخول</span>
+                                    </th>
+
+                                    <th st-sort="ipAddress" class="text-right">
+                                        <span>أخر عنوان دخول</span>
+                                    </th>
+
+                                    <th st-sort="branch.name" class="text-right">
+                                        <span>الفرع</span>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="8">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="person in collection1"
+                                    context-menu="rowMenu"
+                                    st-select-mode="single"
+                                    ng-click="setSelected(person)"
+                                    ng-right-click="setSelected(person)"
+                                    ng-class="{'mdl-color--brown-100':person.isSelected}">
+                                    <td st-select-row-custom="person">{{$index+1}}</td>
+                                    <td st-select-row-custom="person">
+                                        <span class="label label-success">{{person.enabled ? 'مفعل' : ''}}</span>
+                                        <span class="label label-danger">{{person.enabled ? '' : 'معطل'}}</span>
+                                        {{person.contact.firstName}}
+                                        {{person.contact.forthName}}
+                                    </td>
+                                    <td st-select-row-custom="person">{{person.email}}</td>
+                                    <td st-select-row-custom="person">{{person.team.name}}</td>
+                                    <td st-select-row-custom="person">{{person.contact.mobile}}</td>
+                                    <td st-select-row-custom="person">
+                                        <span>{{person.lastLoginDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span class="label label-success">{{person.lastLoginDate | date:'h:m a'}}</span>
+                                    </td>
+                                    <td st-select-row-custom="person">{{person.ipAddress}}</td>
+                                    <td st-select-row-custom="person">{{person.branch.name}}</td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection1 || collection1.length ==0">
+                                    <td colspan="8">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="8">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
-                <div st-table="collection" st-safe-src="persons">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="person in collection">
+                <div st-table="collection2" st-safe-src="persons">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="person in collection2">
                         <!-- CONTACT ITEM -->
                         <div class="panel panel-default">
                             <div class="panel-body profile">
@@ -258,7 +295,7 @@
                                             tooltip-append-to-body="true"
                                             type="button"
                                             ng-if="contains(me.team.authorities, ['ROLE_PERSON_CREATE'])"
-                                            ng-click="ModalProvider.openPersonCreateModel();"
+                                            ng-click="newPerson();"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">add</i>
                                     </button>
@@ -269,14 +306,6 @@
                                             ng-click="ModalProvider.openPersonUpdateModel(person)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <i class="material-icons">edit</i>
-                                    </button>
-                                    <button uib-tooltip="حذف"
-                                            tooltip-append-to-body="true"
-                                            type="button"
-                                            ng-if="contains(me.team.authorities, ['ROLE_PERSON_DELETE'])"
-                                            ng-click="delete(person)"
-                                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                        <i class="material-icons">delete</i>
                                     </button>
                                 </div>
                             </div>

@@ -53,7 +53,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openAccountDetailsModel = function (account) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -71,7 +71,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openAccountPaymentModel = function (account) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -88,7 +88,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openAccountHeavyWorkModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -111,7 +111,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openBranchCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -128,14 +128,14 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 branch: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });
     };
 
     this.openBranchUpdateModel = function (branch) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -164,7 +164,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openBankCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -180,14 +180,14 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 bank: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });
     };
 
     this.openBankUpdateModel = function (bank) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -210,7 +210,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openDepositCreateModel = function (bank) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -230,7 +230,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openWithdrawCreateModel = function (bank) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -255,7 +255,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openBillBuyTypeCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -271,14 +271,14 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 billBuyType: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });
     };
 
     this.openBillBuyTypeUpdateModel = function (billBuyType) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -301,7 +301,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openBillBuyCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -339,14 +339,14 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 course: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });
     };
 
     this.openCourseUpdateModel = function (course) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -369,11 +369,60 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
     /**************************************************************
      *                                                            *
+     * MasterCategory Model                                       *
+     *                                                            *
+     *************************************************************/
+    this.openMasterCategoryCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/master/masterCategoryCreateUpdate.html',
+            controller: 'masterCategoryCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'انشاء تصنيف جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                masterCategory: function () {
+                    return {};
+                }
+            }
+        });
+    };
+    this.openMasterCategoryUpdateModel = function (masterCategory) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/master/masterCategoryCreateUpdate.html',
+            controller: 'masterCategoryCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات التصنيف';
+                },
+                action: function () {
+                    return 'update';
+                },
+                masterCategory: function () {
+                    return masterCategory;
+                }
+            }
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Master Model                                               *
      *                                                            *
      *************************************************************/
     this.openMasterCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -389,14 +438,14 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 master: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });
     };
 
     this.openMasterUpdateModel = function (master) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -424,7 +473,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      *                                                            *
      *************************************************************/
     this.openOfferCreateModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -448,7 +497,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openOfferUpdateModel = function (offer) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -472,7 +521,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
     };
 
     this.openOfferDetailsModel = function (offer) {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -509,7 +558,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
 
     this.openOfferHeavyWorkModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -530,8 +579,8 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
      * Payment Model                                              *
      *                                                            *
      *************************************************************/
-    this.openPaymentCreateModel = function (payment) {
-        $uibModal.open({
+    this.openPaymentCreateModel = function () {
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -539,19 +588,17 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'paymentCreateCtrl',
             backdrop: 'static',
             keyboard: false,
+            size: 'lg',
             resolve: {
                 title: function () {
                     return 'انشاء سند قبض جديد';
-                },
-                payment: function () {
-                    return payment;
                 }
             }
         });
     };
 
     this.openPaymentHeavyWorkModel = function () {
-        $uibModal.open({
+        return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
@@ -612,7 +659,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 person: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });
@@ -664,7 +711,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'create';
                 },
                 student: function () {
-                    return undefined;
+                    return {};
                 }
             }
         });

@@ -29,30 +29,23 @@ public class Attach implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "attachSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Long id;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private String name;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private String link;
 
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Long size;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Date date;
 
     @ManyToOne
     @JoinColumn(name = "person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(value = {Views.Summery.class, Views.AttachByAccount.class})
     private Person person;
 
     @JsonCreator

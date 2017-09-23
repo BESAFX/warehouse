@@ -1,7 +1,9 @@
-app.controller("billBuyTypeCtrl", ['BillBuyTypeService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$state',
-    function (BillBuyTypeService, ModalProvider, $scope, $rootScope, $timeout, $state) {
+app.controller("billBuyTypeCtrl", ['BillBuyTypeService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$state', '$log',
+    function (BillBuyTypeService, ModalProvider, $scope, $rootScope, $timeout, $state, $log) {
 
         $scope.selected = {};
+
+        $scope.billBuyTypes = [];
 
         $scope.setSelected = function (object) {
             if (object) {
@@ -23,18 +25,30 @@ app.controller("billBuyTypeCtrl", ['BillBuyTypeService', 'ModalProvider', '$scop
             })
         };
 
+        $scope.newBillBuyType = function () {
+            ModalProvider.openBillBuyTypeCreateModel().result.then(function (data) {
+                $scope.billBuyTypes.splice(0,0,data);
+            }, function () {
+                $log.info('BillBuyTypeCreateModel Closed.');
+            });
+        };
+
         $scope.delete = function (billBuyType) {
             if (billBuyType) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف النوع فعلاً؟", "error", "fa-ban", function () {
                     BillBuyTypeService.remove(billBuyType.id).then(function () {
-
+                        var index = $scope.billBuyTypes.indexOf(billBuyType);
+                        $scope.billBuyTypes.splice(index, 1);
+                        $scope.setSelected($scope.billBuyTypes[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف النوع فعلاً؟", "error", "fa-ban", function () {
                 BillBuyTypeService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.billBuyTypes.indexOf($scope.selected);
+                    $scope.billBuyTypes.splice(index, 1);
+                    $scope.setSelected($scope.billBuyTypes[0]);
                 });
             });
         };
@@ -46,7 +60,7 @@ app.controller("billBuyTypeCtrl", ['BillBuyTypeService', 'ModalProvider', '$scop
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openBillBuyTypeCreateModel();
+                    $scope.newBillBuyType();
                 }
             },
             {

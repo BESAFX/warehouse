@@ -57,7 +57,6 @@ public class Withdraw implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     private Person lastPerson;
 
     @JsonCreator

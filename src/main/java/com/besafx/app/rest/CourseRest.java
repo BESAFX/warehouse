@@ -1,11 +1,13 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.Account;
+import com.besafx.app.entity.Course;
+import com.besafx.app.entity.Payment;
+import com.besafx.app.entity.Person;
 import com.besafx.app.service.*;
-import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
@@ -18,7 +20,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,12 +31,6 @@ public class CourseRest {
     private final static Logger log = LoggerFactory.getLogger(CourseRest.class);
 
     private final String FILTER_TABLE = "**,master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],accounts[id]";
-
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
-    private BranchService branchService;
 
     @Autowired
     private PersonService personService;
@@ -136,6 +131,7 @@ public class CourseRest {
     }
 
     @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Long count() {
         return courseService.count();
     }
@@ -149,27 +145,12 @@ public class CourseRest {
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchTableData(Principal principal) {
-        try {
-            Person person = personService.findByEmail(principal.getName());
-            List<Course> list = new ArrayList<>();
-            ///
-            companyService.findByManager(person).stream().forEach(company ->
-                    branchService.findByCompany(company).stream().forEach(branch ->
-                            masterService.findByBranch(branch).stream().forEach(master ->
-                                    list.addAll(courseService.findByMaster(master)))));
-            ///
-            branchService.findByManager(person).stream().forEach(branch ->
-                    masterService.findByBranch(branch).stream().forEach(master ->
-                            list.addAll(courseService.findByMaster(master))));
-            ///
-            masterService.findByBranch(person.getBranch()).stream().forEach(master ->
-                    list.addAll(courseService.findByMaster(master)));
-            ///
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list.stream().filter(DistinctFilter.distinctByKey(Course::getId)).collect(Collectors.toList()));
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            return null;
-        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                personService.findByEmail(principal.getName())
+                        .getBranch()
+                        .getMasters()
+                        .stream()
+                        .flatMap(master -> master.getCourses().stream()).collect(Collectors.toList()));
     }
 
 }

@@ -23,9 +23,6 @@ public class ScheduledTasks {
     private EmailSender emailSender;
 
     @Autowired
-    private CompanyService companyService;
-
-    @Autowired
     private ReportOfferController reportOfferController;
 
     @Scheduled(cron = "0 0 21 * * *")
@@ -40,17 +37,15 @@ public class ScheduledTasks {
                 FileUtils.writeByteArrayToFile(reportFile, fileBytes);
                 log.info("جاري تحويل الملف");
                 Thread.sleep(10000);
-                Lists.newArrayList(companyService.findAll()).stream().findFirst().ifPresent(value -> {
-                    Future<Boolean> mail = emailSender.send("تقرير يومي بالعروض المدخلة من كافة الفروع", "", value.getManager().getEmail(), Lists.newArrayList(reportFile));
-                    try {
-                        mail.get();
-                        log.info("تم إرسال الملف فى البريد الإلكتروني بنجاح");
-                    } catch (InterruptedException e) {
-                        log.info("ارسال التقرير الخاص بالعروض اليومية لم يتم بنجاح");
-                    } catch (ExecutionException e) {
-                        log.info("ارسال التقرير الخاص بالعروض اليومية لم يتم بنجاح");
-                    }
-                });
+                Future<Boolean> mail = emailSender.send("تقرير يومي بالعروض المدخلة من كافة الفروع", "", "w.abukhader@ararhni.com", Lists.newArrayList(reportFile));
+                try {
+                    mail.get();
+                    log.info("تم إرسال الملف فى البريد الإلكتروني بنجاح");
+                } catch (InterruptedException e) {
+                    log.info("ارسال التقرير الخاص بالعروض اليومية لم يتم بنجاح");
+                } catch (ExecutionException e) {
+                    log.info("ارسال التقرير الخاص بالعروض اليومية لم يتم بنجاح");
+                }
             } else {
                 log.info("لا يوجد تقرير لهذا المدير.");
             }

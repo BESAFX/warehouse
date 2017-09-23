@@ -9,15 +9,15 @@ app.controller('billBuyCreateCtrl', ['BillBuyTypeService', 'BillBuyService', 'Br
             BillBuyTypeService.findAll().then(function (data) {
                 $scope.billBuyTypes = data;
             });
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
+                $scope.billBuy.branch = data[0];
             });
         }, 2000);
 
         $scope.submit = function () {
             BillBuyService.create($scope.billBuy).then(function (data) {
-                $scope.billBuy = {};
-                $scope.form.$setPristine();
+                $uibModalInstance.close(data);
             });
         };
 

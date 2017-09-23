@@ -13,5 +13,4 @@ import java.util.List;
 @Transactional
 public interface CompanyService extends PagingAndSortingRepository<Company, Long>, JpaSpecificationExecutor<Company> {
 
-    List<Company> findByManager(Person manager);
 }

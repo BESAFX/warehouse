@@ -3,6 +3,8 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
 
         $scope.selected = {};
 
+        $scope.courses = [];
+
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.courses, function (course) {
@@ -23,9 +25,9 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             });
         };
 
-        $scope.create = function () {
-            ModalProvider.openCourseCreateModel().result.then(function (course) {
-                $scope.courses.splice(0,0,course);
+        $scope.newCourse = function () {
+            ModalProvider.openCourseCreateModel().result.then(function (data) {
+                $scope.courses.splice(0,0,data);
             }, function () {
                 $log.info('CourseCreateModel Closed.');
             });
@@ -44,7 +46,7 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدورة فعلاً؟", "error", "fa-ban", function () {
                 CourseService.remove($scope.selected.id).then(function () {
-                    var index = $scope.courses.indexOf(selected);
+                    var index = $scope.courses.indexOf($scope.selected);
                     $scope.courses.splice(index, 1);
                     $scope.setSelected($scope.courses[0]);
                 });
@@ -88,7 +90,7 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openCourseCreateModel();
+                    $scope.newCourse();
                 }
             },
             {

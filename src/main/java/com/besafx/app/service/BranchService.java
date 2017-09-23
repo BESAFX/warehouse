@@ -14,12 +14,10 @@ import java.util.List;
 @Transactional
 public interface BranchService extends PagingAndSortingRepository<Branch, Long>, JpaSpecificationExecutor<Branch> {
 
-    @Query("select max(code) from Branch")
-    Integer findMaxCode();
+    Branch findTopByOrderByCode();
     Branch findByCodeAndIdIsNot(Integer code, Long id);
     Branch findByCode(Integer code);
     Branch findByName(String name);
-    List<Branch> findByManager(Person manager);
     List<Branch> findByCompany(Company company);
 
 }

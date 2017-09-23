@@ -25,20 +25,72 @@
                 </select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="master" class="control-label">[الاسم][رقم الجوال][رقم البطاقة][رقم الطالب][التخصص]</label>
-                <select id="master"
-                        data-placeholder="ابحث عن الرقم"
-                        no-results-text="'لا توجد ارقام توافق بحثك'"
-                        placeholder-text-multiple="'اختر الرقم'"
-                        class="form-control text-right"
-                        chosen=""
-                        multiple=""
-                        ng-model="buffer.accountsList"
-                        required="required"
-                        disable-validation-message=""
-                        ng-options="(' [ ' + account.student.contact.firstName + ' ' + account.student.contact.secondName  + ' ' + account.student.contact.thirdName +  ' ' + account.student.contact.forthName +  ' ] ' + ' [ ' + account.student.contact.identityNumber +  ' ] ' + ' [ ' + account.student.contact.mobile +  ' ] ' + ' [ ' + ( account.code + '-' + account.course.code + '-' + account.course.master.code + '-' + account.course.master.branch.code + '-' + (account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura') ) + ' ] ' + ' ' + ' [ ' + account.course.master.name + ' ] ') group by account.course.master.branch.name for account in accounts track by account.id">
-                </select>
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label for="accountCode" class="control-label">رقم الطالب</label>
+                    <select id="accountCode" data-placeholder="ابحث عن الرقم"
+                            no-results-text="'لا توجد بيانات توافق بحثك'"
+                            placeholder-text-single="'اختر الرقم'"
+                            class="form-control text-right"
+                            chosen=""
+                            multiple=""
+                            ng-model="buffer.accountsList"
+                            required="required"
+                            disable-validation-message=""
+                            ng-options="((account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura') + account.course.master.branch.code + account.course.master.code + account.course.code + account.code) group by account.course.master.branch.name for account in accounts | orderBy:'account.course.code' track by account.id">
+                    </select>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label for="studentName" class="control-label">اسم الطالب</label>
+                    <select id="studentName" data-placeholder="ابحث عن الاسم"
+                            no-results-text="'لا توجد بيانات توافق بحثك'"
+                            placeholder-text-single="'اختر الاسم'"
+                            class="form-control text-right"
+                            chosen=""
+                            multiple=""
+                            ng-model="buffer.accountsList"
+                            required="required"
+                            disable-validation-message=""
+                            ng-options="(account.student.contact.firstName + ' ' + account.student.contact.secondName + ' ' + account.student.contact.thirdName  + ' ' + account.student.contact.forthName) group by account.course.master.branch.name for account in accounts | orderBy:'account.student.contact.firstName' track by account.id">
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label for="studentMobile" class="control-label">رقم الجوال</label>
+                    <select id="studentMobile" data-placeholder="ابحث عن الرقم"
+                            no-results-text="'لا توجد بيانات توافق بحثك'"
+                            placeholder-text-single="'اختر الرقم'"
+                            class="form-control text-right"
+                            chosen=""
+                            multiple=""
+                            ng-model="buffer.accountsList"
+                            required="required"
+                            disable-validation-message=""
+                            ng-options="((account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura') + account.course.master.branch.code + account.course.master.code + account.course.code + account.code + ' ( ' + account.student.contact.mobile + ' ) ') group by account.course.master.branch.name for account in accounts | orderBy:'account.student.contact.mobile' track by account.id">
+                    </select>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label for="studentIdentityNumber" class="control-label">رقم البطاقة</label>
+                    <select id="studentIdentityNumber" data-placeholder="ابحث عن الرقم"
+                            no-results-text="'لا توجد بيانات توافق بحثك'"
+                            placeholder-text-single="'اختر الرقم'"
+                            class="form-control text-right"
+                            chosen=""
+                            multiple=""
+                            ng-model="buffer.accountsList"
+                            required="required"
+                            disable-validation-message=""
+                            ng-options="((account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura') + account.course.master.branch.code + account.course.master.code + account.course.code + account.code + ' ( ' + account.student.contact.identityNumber + ' ) ') group by account.course.master.branch.name for account in accounts | orderBy:'account.student.contact.identityNumber' track by account.id">
+                    </select>
+                </div>
+
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">

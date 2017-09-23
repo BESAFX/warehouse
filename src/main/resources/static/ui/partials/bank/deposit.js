@@ -15,7 +15,7 @@ app.controller("depositCtrl", ['DepositService', 'BranchService', 'ModalProvider
 
         $timeout(function () {
             $scope.sideOpacity = 1;
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.bankBranch = $scope.branches[0];
             });

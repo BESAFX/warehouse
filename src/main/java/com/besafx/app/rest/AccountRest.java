@@ -22,10 +22,8 @@ import java.security.Principal;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/account/")
@@ -34,7 +32,7 @@ public class AccountRest {
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
 
     public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]],payments[**,lastPerson[id,contact[id,firstName,forthName]],-account],accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account],accountConditions[**,-account,person[id,contact[id,firstName,forthName]]],accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
-    public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
+    public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
 
     @Autowired
     private PersonService personService;
@@ -75,7 +73,7 @@ public class AccountRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ACCOUNT_CREATE')")
-    public Account create(@RequestBody Account account, Principal principal) {
+    public String create(@RequestBody Account account, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         Account topAccount = accountService.findTopByCourseOrderByCodeDesc(account.getCourse());
         if (topAccount == null) {
@@ -115,13 +113,13 @@ public class AccountRest {
                 .type("success")
                 .icon("fa-plus-square")
                 .build(), principal.getName());
-        return account;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), account);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ACCOUNT_UPDATE')")
-    public Account update(@RequestBody Account account, Principal principal) {
+    public String update(@RequestBody Account account, Principal principal) {
         Account object = accountService.findOne(account.getId());
         if (object != null) {
             Person person = personService.findByEmail(principal.getName());
@@ -138,7 +136,7 @@ public class AccountRest {
                     .type("success")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return account;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), account);
         } else {
             return null;
         }
@@ -189,14 +187,14 @@ public class AccountRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Account> findAll() {
-        return Lists.newArrayList(accountService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(accountService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Account findOne(@PathVariable Long id) {
-        return accountService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountService.findOne(id));
     }
 
     @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -207,139 +205,52 @@ public class AccountRest {
 
     @RequestMapping(value = "findByStudent/{studentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Account> findByStudent(@PathVariable Long studentId) {
-        List<Account> list = accountService.findByStudent(studentService.findOne(studentId));
-        return list;
+    public String findByStudent(@PathVariable Long studentId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountService.findByStudent(studentService.findOne(studentId)));
     }
 
     @RequestMapping(value = "findByCourse/{courseId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Account> findByCourse(@PathVariable Long courseId) {
-        List<Account> list = accountService.findByCourse(courseService.findOne(courseId));
-        return list;
+    public String findByCourse(@PathVariable Long courseId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountService.findByCourse(courseService.findOne(courseId)));
     }
 
     @RequestMapping(value = "findByMaster/{masterId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Account> findByMaster(@PathVariable Long masterId) {
-        List<Account> list = accountService.findByCourseMaster(masterService.findOne(masterId));
-        return list;
+    public String findByMaster(@PathVariable Long masterId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountService.findByCourseMaster(masterService.findOne(masterId)));
     }
 
     @RequestMapping(value = "findByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByBranch(@PathVariable Long branchId) {
-        List<Account> list = accountService.findByCourseMasterBranch(branchService.findOne(branchId));
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO), list);
-    }
-
-    @RequestMapping(value = "findRequiredPrice/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Double findRequiredPrice(@PathVariable Long accountId) {
-        Account account = findOne(accountId);
-        return account.getRequiredPrice();
-    }
-
-    @RequestMapping(value = "findRemainPrice/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Double findRemainPrice(@PathVariable Long accountId) {
-        Account account = findOne(accountId);
-        return account.getRequiredPrice() - findPaidPrice(accountId);
-    }
-
-    @RequestMapping(value = "findPaidPrice/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Double findPaidPrice(@PathVariable Long accountId) {
-        Account account = findOne(accountId);
-        Double paid = paymentService.sumByAccountAndType(account, "ايرادات اساسية");
-        return paid == null ? 0.0 : paid;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO), accountService.findByCourseMasterBranch(branchService.findOne(branchId)));
     }
 
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Account> fetchTableData(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        return accountService.findByCourseMasterBranch(person.getBranch());
-    }
-
-    @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Account> fetchTableDataSummery(Principal principal) {
-        return fetchTableData(principal);
+    public String fetchTableData(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                personService.findByEmail(principal.getName())
+                .getBranch().getMasters().stream()
+                .flatMap(master -> master.getCourses().stream())
+                .collect(Collectors.toList())
+                .stream()
+                .flatMap(course -> course.getAccounts().stream())
+                .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "fetchTableDataAccountComboBox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.AccountComboBox.class)
-    public List<Account> fetchTableDataAccountComboBox(Principal principal) {
-        return fetchTableData(principal);
-    }
-
-    @RequestMapping(value = "fetchAccountsCountByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<WrapperUtil> fetchAccountsCountByBranch(@PathVariable(value = "branchId") Long branchId) {
-        Branch branch = branchService.findOne(branchId);
-        List<WrapperUtil> list = new ArrayList<>();
-        YearMonth thisMonth = YearMonth.now();
-        for (int i = 0; i <= 4; i++) {
-            YearMonth month = thisMonth.minusMonths(i);
-            String monthLabel = month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-            Date startDate = Date.from(month.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date endDate = Date.from(month.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Long monthData = accountService.countByCourseMasterBranchAndRegisterDateBetween(branch, startDate, endDate);
-            WrapperUtil wrapperUtil = new WrapperUtil();
-            wrapperUtil.setObj1(monthLabel);
-            wrapperUtil.setObj2(monthData);
-            list.add(wrapperUtil);
-
-        }
-        return list;
-
-    }
-
-    @RequestMapping(value = "fetchAccountsCountByMaster/{masterId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<WrapperUtil> fetchAccountsCountByMaster(@PathVariable(value = "masterId") Long masterId) {
-        Master master = masterService.findOne(masterId);
-        List<WrapperUtil> list = new ArrayList<>();
-        YearMonth thisMonth = YearMonth.now();
-        for (int i = 0; i <= 4; i++) {
-            YearMonth month = thisMonth.minusMonths(i);
-            String monthLabel = month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-            Date startDate = Date.from(month.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date endDate = Date.from(month.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Long monthData = accountService.countByCourseMasterAndRegisterDateBetween(master, startDate, endDate);
-            WrapperUtil wrapperUtil = new WrapperUtil();
-            wrapperUtil.setObj1(monthLabel);
-            wrapperUtil.setObj2(monthData);
-            list.add(wrapperUtil);
-
-        }
-        return list;
-
-    }
-
-    @RequestMapping(value = "fetchAccountsCountByCourse/{courseId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<WrapperUtil> fetchAccountsCountByCourse(@PathVariable(value = "courseId") Long courseId) {
-        Course course = courseService.findOne(courseId);
-        List<WrapperUtil> list = new ArrayList<>();
-        YearMonth thisMonth = YearMonth.now();
-        for (int i = 0; i <= 4; i++) {
-            YearMonth month = thisMonth.minusMonths(i);
-            String monthLabel = month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-            Date startDate = Date.from(month.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date endDate = Date.from(month.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Long monthData = accountService.countByCourseAndRegisterDateBetween(course, startDate, endDate);
-            WrapperUtil wrapperUtil = new WrapperUtil();
-            wrapperUtil.setObj1(monthLabel);
-            wrapperUtil.setObj2(monthData);
-            list.add(wrapperUtil);
-
-        }
-        return list;
-
+    public String fetchTableDataAccountComboBox(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO),
+                personService.findByEmail(principal.getName())
+                        .getBranch().getMasters().stream()
+                        .flatMap(master -> master.getCourses().stream())
+                        .collect(Collectors.toList())
+                        .stream()
+                        .flatMap(course -> course.getAccounts().stream())
+                        .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -120,7 +120,6 @@ public class Initializer implements CommandLineRunner {
         company.setFax("0138099352");
         company.setEmail("admin@arahni.com");
         company.setWebsite("www.ararhni.com");
-        company.setManager(person);
         companyService.save(company);
     }
 }

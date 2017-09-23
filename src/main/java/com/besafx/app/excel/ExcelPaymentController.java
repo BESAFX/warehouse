@@ -329,7 +329,7 @@ public class ExcelPaymentController {
                             }
                             nextCell.setCellType(CellType.STRING);
                             try {
-                                payment.setCode(Integer.parseInt((String) excelCellHelper.getCellValue(nextCell)));
+                                payment.setCode(Long.parseLong((String) excelCellHelper.getCellValue(nextCell)));
                             } catch (Exception ex) {
                                 accept = false;
                                 break;

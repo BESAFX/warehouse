@@ -1,6 +1,9 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.Account;
+import com.besafx.app.entity.Payment;
+import com.besafx.app.entity.Person;
 import com.besafx.app.search.PaymentSearch;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.BranchService;
@@ -9,8 +12,12 @@ import com.besafx.app.service.PersonService;
 import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +31,10 @@ import java.util.List;
 @RequestMapping(value = "/api/payment")
 public class PaymentRest {
 
+    private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
+
+    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,branch[id,code]]]]";
+
     @Autowired
     private PersonService personService;
 
@@ -34,9 +45,6 @@ public class PaymentRest {
     private AccountService accountService;
 
     @Autowired
-    private BranchService branchService;
-
-    @Autowired
     private NotificationService notificationService;
 
     @Autowired
@@ -45,8 +53,7 @@ public class PaymentRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
-    @JsonView(Views.AccountComboBox.class)
-    public Payment create(@RequestBody Payment payment, Principal principal) {
+    public String create(@RequestBody Payment payment, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         if (payment.getType().equals("مصروفات")) {
             if (paymentService.findByCodeAndLastPersonBranch(payment.getCode(), person.getBranch()) != null) {
@@ -68,20 +75,20 @@ public class PaymentRest {
                 .type("success")
                 .icon("fa-plus-square")
                 .build(), principal.getName());
-        return payment;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_UPDATE')")
-    public Payment update(@RequestBody Payment payment, Principal principal) {
+    public String update(@RequestBody Payment payment, Principal principal) {
         Payment object = paymentService.findOne(payment.getId());
         if (object != null) {
             Person person = personService.findByEmail(principal.getName());
             payment.setDate(new Date());
             payment.setLastPerson(person);
             payment = paymentService.save(payment);
-            return payment;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
         } else {
             return null;
         }
@@ -124,56 +131,25 @@ public class PaymentRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Payment> findAll() {
-        return Lists.newArrayList(paymentService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(paymentService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Payment findOne(@PathVariable Long id) {
-        return paymentService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentService.findOne(id));
     }
 
     @RequestMapping(value = "findByAccount/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.PaymentByAccount.class)
-    public List<Payment> findByAccount(@PathVariable Long accountId) {
-        return paymentService.findByAccount(accountService.findOne(accountId));
-    }
-
-    @RequestMapping(value = "findByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Payment> findByBranch(@PathVariable Long branchId) {
-        return paymentService.findByAccountCourseMasterBranch(branchService.findOne(branchId));
-    }
-
-    @RequestMapping(value = "findByAccountBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Payment> findByAccountBranch(@PathVariable Long branchId) {
-        return paymentService.findByAccountCourseMasterBranch(branchService.findOne(branchId));
-    }
-
-    @RequestMapping(value = "findPaidPriceByAccount/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Double findPaidPriceByAccount(@PathVariable(value = "accountId") Long accountId) {
-        return paymentService.findByAccount(accountService.findOne(accountId)).stream().mapToDouble(row -> row.getAmountNumber()).sum();
-    }
-
-    @RequestMapping(value = "findByCode/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Payment findByCode(@PathVariable Integer code) {
-        return paymentService.findByCode(code);
-    }
-
-    @RequestMapping(value = "findByCodeAndBranch/{code}/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Payment findByCodeAndAccountCourseMasterBranch(@PathVariable(value = "code") Integer code, @PathVariable(value = "branchId") Long branchId) {
-        return paymentService.findByCodeAndAccountCourseMasterBranch(code, branchService.findOne(branchId));
+    public String findByAccount(@PathVariable Long accountId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentService.findByAccountId(accountId));
     }
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Payment> filter(
+    public String filter(
             @RequestParam(value = "paymentCodeFrom", required = false) final String paymentCodeFrom,
             @RequestParam(value = "paymentCodeTo", required = false) final String paymentCodeTo,
             @RequestParam(value = "paymentDateFrom", required = false) final Long paymentDateFrom,
@@ -195,6 +171,6 @@ public class PaymentRest {
             @RequestParam(value = "branch", required = false) final Long branch,
             @RequestParam(value = "personBranch", required = false) final Long personBranch,
             @RequestParam(value = "type", required = false) final String type) {
-        return paymentSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch, personBranch, type);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch, personBranch, type));
     }
 }

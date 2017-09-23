@@ -2,12 +2,10 @@ package com.besafx.app.rest;
 
 import com.besafx.app.entity.Call;
 import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Views;
 import com.besafx.app.service.CallService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
@@ -27,7 +25,6 @@ public class CallRest {
 
     private final static Logger log = LoggerFactory.getLogger(CallRest.class);
 
-    public static final String FILTER_ALL = "**";
     public static final String FILTER_TABLE = "**,person[id,contact[id,firstName,lastName]],offer[id]";
 
     @Autowired
@@ -70,7 +67,6 @@ public class CallRest {
 
     @RequestMapping(value = "findByOffer/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.Summery.class)
     public String findByOffer(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), callService.findByOfferId(id));
     }

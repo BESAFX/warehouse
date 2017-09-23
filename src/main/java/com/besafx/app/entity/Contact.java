@@ -28,56 +28,40 @@ public class Contact implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "contactSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.PersonComboBox.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.PersonComboBox.class})
     private String firstName;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String secondName;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String thirdName;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.PersonComboBox.class})
     private String forthName;
 
-    @JsonView(Views.Summery.class)
     private String address;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String mobile;
 
-    @JsonView(Views.Summery.class)
     private String phone;
 
-    @JsonView(Views.Summery.class)
     private String nationality;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private String identityNumber;
 
-    @JsonView(Views.Summery.class)
     private String identityLocation;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
     private String photo;
 
-    @JsonView(Views.Summery.class)
     @Temporal(TemporalType.TIMESTAMP)
     private Date identityStartDate;
 
-    @JsonView(Views.Summery.class)
     @Temporal(TemporalType.TIMESTAMP)
     private Date birthDate;
 
-    @JsonView(Views.Summery.class)
     private String birthLocation;
 
-    @JsonView(Views.Summery.class)
     private String qualification;
 
     @JsonCreator

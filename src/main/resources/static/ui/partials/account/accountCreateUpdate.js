@@ -39,9 +39,7 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
                     $scope.account.course.master = $scope.buffer.master;
                     $scope.account.course.master.branch = $scope.buffer.branch;
                     AccountService.create($scope.account).then(function (data) {
-                        $scope.account = data;
-                        $scope.clear();
-                        $scope.form.$setPristine();
+                        $uibModalInstance.close(data);
                     });
                     break;
                 case 'update' :

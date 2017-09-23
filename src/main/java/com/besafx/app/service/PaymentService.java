@@ -16,12 +16,14 @@ import java.util.List;
 @Transactional
 public interface PaymentService extends PagingAndSortingRepository<Payment, Long>, JpaSpecificationExecutor<Payment> {
 
-    Payment findByCode(Integer code);
-    Payment findByCodeAndAccountCourseMasterBranch(Integer code, Branch branch);
-    Payment findByCodeAndLastPersonBranch(Integer code, Branch branch);
+    Payment findByCode(Long code);
+    Payment findByCodeAndAccountCourseMasterBranch(Long code, Branch branch);
+    Payment findByCodeAndLastPersonBranch(Long code, Branch branch);
     List<Payment> findByAccount(Account account);
+    List<Payment> findByAccountId(Long account);
     List<Payment> findByAccountAndType(Account account, String type);
     List<Payment> findByAccountCourseMasterBranch(Branch branch);
+    List<Payment> findByAccountCourseMasterBranchId(Long branch);
     List<Payment> findByAccountCourseMaster(Master master);
     List<Payment> findByAccountCourse(Course course);
     List<Payment> findByAccountIn(List<Account> accounts);

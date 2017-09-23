@@ -17,8 +17,8 @@ import java.util.List;
 @Service
 @Transactional
 public interface PaymentOutService extends PagingAndSortingRepository<PaymentOut, Long>, JpaSpecificationExecutor<PaymentOut> {
-    PaymentOut findByCode(Integer code);
-    Payment findByCodeAndBranch(Integer code, Branch branch);
+    PaymentOut findByCode(Long code);
+    Payment findByCodeAndBranch(Long code, Branch branch);
 
     List<PaymentOut> findByBranch(Branch branch);
     List<PaymentOut> findByBranchId(Long branchId);

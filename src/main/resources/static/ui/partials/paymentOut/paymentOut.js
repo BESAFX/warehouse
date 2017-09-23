@@ -1,6 +1,8 @@
 app.controller("paymentOutCtrl", ['PaymentOutService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$uibModal', '$timeout', '$log', '$state',
     function (PaymentOutService, BranchService, ModalProvider, $rootScope, $scope, $uibModal, $timeout, $log, $state) {
 
+        $scope.paymentOuts = [];
+
         //
         $scope.items = [];
         $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
@@ -33,7 +35,7 @@ app.controller("paymentOutCtrl", ['PaymentOutService', 'BranchService', 'ModalPr
 
         $scope.newPaymentOut = function () {
             ModalProvider.openPaymentOutCreateModel().result.then(function (data) {
-
+                $scope.paymentOuts.splice(0, 0, data);
             }, function () {
                 console.info('PaymentOutCreateModel Closed.');
             });
@@ -52,7 +54,7 @@ app.controller("paymentOutCtrl", ['PaymentOutService', 'BranchService', 'ModalPr
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
                 PaymentOutService.remove($scope.selected.id).then(function () {
-                    var index = $scope.paymentOuts.indexOf(selected);
+                    var index = $scope.paymentOuts.indexOf($scope.selected);
                     $scope.paymentOuts.splice(index, 1);
                     $scope.setSelected($scope.paymentOuts[0]);
                 });

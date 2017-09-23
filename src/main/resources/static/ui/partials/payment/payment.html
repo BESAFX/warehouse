@@ -147,91 +147,138 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-body">
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="payments"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-                                <th class="text-right">
-                                    <span>م</span>
-                                </th>
 
-                                <th st-sort="code" class="text-right">
-                                    <span>رقم السند</span>
-                                </th>
-
-                                <th st-sort="date" class="text-right">
-                                    <span>تاريخ السند</span>
-                                </th>
-
-                                <th st-sort="amountNumber" class="text-right">
-                                    <span>قيمة السند</span>
-                                </th>
-
-                                <th st-sort="type" class="text-right">
-                                    <span>نوع السند</span>
-                                </th>
-
-                                <th st-sort="account.id" class="text-right">
-                                    <span>رقم الطالب</span>
-                                </th>
-
-                                <th st-sort="note" class="text-right">
-                                    <span>بيان السند</span>
-                                </th>
-
-                                <th st-sort="lastPerson.contact.firstName" class="text-right">
-                                    <span>مدخل السند</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="8"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                       type="text"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="payment in collection"
-                                st-select-mode="single"
-                                context-menu="rowMenu"
-                                ng-click="setSelected(payment)"
-                                ng-right-click="setSelected(payment)"
-                                ng-class="{'mdl-color--brown-100':payment.isSelected}">
-                                <td st-select-row-custom="payment">{{$index+1}}</td>
-                                <td st-select-row-custom="payment">{{payment.code}}</td>
-                                <td st-select-row-custom="payment">
-                                    {{payment.date | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="payment">{{payment.amountNumber}}</td>
-                                <td st-select-row-custom="payment">{{payment.type}}</td>
-                                <td st-select-row-custom="payment">
-                                    {{payment.account.code}}
-                                    -
-                                    {{payment.account.course.code}}
-                                    -
-                                    {{payment.account.course.master.code}}
-                                    -
-                                    {{payment.account.course.master.branch.code}}
-                                    -
-                                    {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="payment">{{payment.note}}</td>
-                                <td st-select-row-custom="payment">
-                                    {{payment.lastPerson.contact.firstName}}
-                                    {{payment.lastPerson.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="8">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="filter()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تصفية البيانات">
+                                    <span class="fa fa-filter"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
+                                   ng-click="newPayment()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء سند جديد">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة سندات القبض</h3>
+                        </div>
                     </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection" st-safe-src="payments"
+                                   class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-right">
+                                        <span>م</span>
+                                    </th>
 
+                                    <th st-sort="code" class="text-right">
+                                        <span>رقم السند</span>
+                                    </th>
+
+                                    <th st-sort="date" class="text-right">
+                                        <span>تاريخ السند</span>
+                                    </th>
+
+                                    <th st-sort="amountNumber" class="text-right">
+                                        <span>قيمة السند</span>
+                                    </th>
+
+                                    <th st-sort="type" class="text-right">
+                                        <span>نوع السند</span>
+                                    </th>
+
+                                    <th st-sort="account.id" class="text-right">
+                                        <span>رقم الطالب</span>
+                                    </th>
+
+                                    <th st-sort="account.student.contact.firstName" class="text-right">
+                                        <span>اسم الطالب</span>
+                                    </th>
+
+                                    <th st-sort="note" class="text-right">
+                                        <span>بيان السند</span>
+                                    </th>
+
+                                    <th st-sort="lastPerson.contact.firstName" class="text-right">
+                                        <span>مدخل السند</span>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="9">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="payment in collection"
+                                    st-select-mode="single"
+                                    context-menu="rowMenu"
+                                    ng-click="setSelected(payment)"
+                                    ng-right-click="setSelected(payment)"
+                                    ng-class="{'mdl-color--brown-100':payment.isSelected}">
+                                    <td st-select-row-custom="payment">{{$index+1}}</td>
+                                    <td st-select-row-custom="payment">{{payment.code}}</td>
+                                    <td st-select-row-custom="payment">
+                                        {{payment.date | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="payment">{{payment.amountNumber}}</td>
+                                    <td st-select-row-custom="payment">{{payment.type}}</td>
+                                    <td st-select-row-custom="payment">
+                                        {{payment.account.code}}
+                                        -
+                                        {{payment.account.course.code}}
+                                        -
+                                        {{payment.account.course.master.code}}
+                                        -
+                                        {{payment.account.course.master.branch.code}}
+                                        -
+                                        {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="payment">
+                                        {{payment.account.student.contact.firstName}}
+                                        {{payment.account.student.contact.secondName}}
+                                        {{payment.account.student.contact.thirdName}}
+                                        {{payment.account.student.contact.forthName}}
+                                    </td>
+                                    <td st-select-row-custom="payment">{{payment.note}}</td>
+                                    <td st-select-row-custom="payment">
+                                        {{payment.lastPerson.contact.firstName}}
+                                        {{payment.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection || collection.length ==0">
+                                    <td colspan="9">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="9">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
         </div>

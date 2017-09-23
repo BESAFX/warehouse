@@ -30,73 +30,35 @@ public class Course implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "courseSequenceGenerator")
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.AccountComboBox.class,
-            Views.BranchMasterCourse.class,
-            Views.CourseTable.class})
     private Long id;
 
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.AccountComboBox.class,
-            Views.BranchMasterCourse.class,
-            Views.CourseTable.class})
     private Integer code;
 
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.BranchMasterCourse.class,
-            Views.CourseTable.class})
     private String instructor;
 
-    @JsonView(Views.Summery.class)
     private String companyName;
 
     @Column(columnDefinition = "int default 1", nullable = false)
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.CourseTable.class})
     private Integer maxStudentCount;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.CourseTable.class})
     private Date startDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.CourseTable.class})
     private Date endDate;
 
     @ManyToOne
     @JoinColumn(name = "master")
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.AccountComboBox.class,
-            Views.CourseTable.class})
-    @JsonIgnoreProperties(value = {"courses", "offers", "lastPerson", "lastUpdate"}, allowSetters = true)
     private Master master;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
     private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.CourseTable.class})
     private Person lastPerson;
 
     @OneToMany(mappedBy = "course")
-    @JsonIgnoreProperties(value = {"course", "student", "lastPerson", "lastUpdate", "registerDate", "payments", "accountAttaches", "accountConditions"}, allowSetters = true)
-    @JsonView(value = {
-            Views.Summery.class,
-            Views.CourseTable.class})
     private List<Account> accounts = new ArrayList<>();
 
     @JsonCreator

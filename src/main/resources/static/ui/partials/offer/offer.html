@@ -76,7 +76,7 @@
                             </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item"
-                                ng-click="ModalProvider.openOfferCreateModel()"
+                                ng-click="newOffer()"
                                 ng-if="contains(me.team.authorities, ['ROLE_OFFER_CREATE'])">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">add</i>
@@ -211,106 +211,136 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
-                <div class="panel panel-body">
 
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="offers"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-
-                                <th class="text-right">
-                                    <span>م</span>
-                                </th>
-
-                                <th st-sort="code" class="text-right">
-                                    <span> رقم العرض</span>
-                                </th>
-
-                                <th st-sort="lastUpdate" class="text-right">
-                                    <span> تاريخ العرض</span>
-                                </th>
-
-                                <th st-sort="customerName" class="text-right">
-                                    <span> اسم العميل</span>
-                                </th>
-
-                                <th st-sort="customerMobile" class="text-right">
-                                    <span> رقم الجوال</span>
-                                </th>
-
-                                <th st-sort="masterPaymentType" class="text-right">
-                                    <span> نوع الدفع</span>
-                                </th>
-
-                                <th st-sort="masterPrice" class="text-right">
-                                    <span>المبلغ نقداً</span>
-                                    <span class="fa fa-info-circle"
-                                          tooltip-append-to-body="true"
-                                          uib-tooltip="سعر التخصص المعطى للعميل دون حساب الخصومات"></span>
-                                </th>
-
-                                <th st-sort="registered" class="text-right">
-                                    <span>الحالة</span>
-                                    <span class="fa fa-info-circle"
-                                          tooltip-append-to-body="true"
-                                          uib-tooltip="المقصود بالحالة هي حالة العميل من ناحية التسجيل لدى المعهد"></span>
-                                </th>
-
-                                <th st-sort="master.name" class="text-right">
-                                    <span>التخصص</span>
-                                </th>
-
-                                <th st-sort="lastPerson.contact.id" class="text-right">
-                                    <span>مدخل العرض</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="10"><input st-search="" class="form-control"
-                                                        placeholder="بحث شامل وسريع..." type="text"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="offer in collection"
-                                context-menu="rowMenu"
-                                st-select-mode="single"
-                                ng-dblclick="ModalProvider.openOfferDetailsModel(offer);"
-                                ng-click="setSelected(offer)"
-                                ng-right-click="setSelected(offer)"
-                                ng-class="{'mdl-color--brown-100':offer.isSelected}">
-                                <td st-select-row-custom="offer">{{$index+1}}</td>
-                                <td st-select-row-custom="offer">{{offer.code}}</td>
-                                <td st-select-row-custom="offer">
-                                    {{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="offer">{{offer.customerName}}</td>
-                                <td st-select-row-custom="offer">
-                                    {{offer.customerMobile}}
-                                    <span class="label label-warning" ng-if="offer.calls.length > 0">{{offer.calls.length}} اتصال</span>
-                                </td>
-                                <td st-select-row-custom="offer">{{offer.masterPaymentType}}</td>
-                                <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
-                                <td st-select-row-custom="offer" ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
-                                <td st-select-row-custom="offer">
-                                    [ {{offer.master.code}} ]
-                                    {{offer.master.name}}
-                                </td>
-                                <td st-select-row-custom="offer">
-                                    {{offer.lastPerson.contact.firstName}}
-                                    {{offer.lastPerson.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="10">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="filter()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تصفية البيانات">
+                                    <span class="fa fa-filter"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_OFFER_CREATE'])"
+                                   ng-click="newOffer()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء عرض جديد">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة العروض</h3>
+                        </div>
                     </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection1" st-safe-src="offers"
+                                   class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
 
+                                    <th class="text-right">
+                                        <span>م</span>
+                                    </th>
+
+                                    <th st-sort="code" class="text-right">
+                                        <span> رقم العرض</span>
+                                    </th>
+
+                                    <th st-sort="lastUpdate" class="text-right">
+                                        <span> تاريخ العرض</span>
+                                    </th>
+
+                                    <th st-sort="customerName" class="text-right">
+                                        <span> اسم العميل</span>
+                                    </th>
+
+                                    <th st-sort="customerMobile" class="text-right">
+                                        <span> رقم الجوال</span>
+                                    </th>
+
+                                    <th st-sort="masterPaymentType" class="text-right">
+                                        <span> نوع الدفع</span>
+                                    </th>
+
+                                    <th st-sort="masterPrice" class="text-right">
+                                        <span>المبلغ نقداً</span>
+                                    </th>
+
+                                    <th st-sort="registered" class="text-right">
+                                        <span>الحالة</span>
+                                    </th>
+
+                                    <th st-sort="master.name" class="text-right">
+                                        <span>التخصص</span>
+                                    </th>
+
+                                    <th st-sort="lastPerson.contact.id" class="text-right">
+                                        <span>مدخل العرض</span>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="10">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="offer in collection1"
+                                    context-menu="rowMenu"
+                                    st-select-mode="single"
+                                    ng-dblclick="ModalProvider.openOfferDetailsModel(offer);"
+                                    ng-click="setSelected(offer)"
+                                    ng-right-click="setSelected(offer)"
+                                    ng-class="{'mdl-color--brown-100':offer.isSelected}">
+                                    <td st-select-row-custom="offer">{{$index+1}}</td>
+                                    <td st-select-row-custom="offer">{{offer.code}}</td>
+                                    <td st-select-row-custom="offer">
+                                        {{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="offer">{{offer.customerName}}</td>
+                                    <td st-select-row-custom="offer">
+                                        {{offer.customerMobile}}
+                                        <span class="label label-warning" ng-if="offer.calls.length > 0">{{offer.calls.length}} اتصال</span>
+                                    </td>
+                                    <td st-select-row-custom="offer">{{offer.masterPaymentType}}</td>
+                                    <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
+                                    <td st-select-row-custom="offer" ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
+                                    <td st-select-row-custom="offer">
+                                        [ {{offer.master.code}} ]
+                                        {{offer.master.name}}
+                                    </td>
+                                    <td st-select-row-custom="offer">
+                                        {{offer.lastPerson.contact.firstName}}
+                                        {{offer.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection1 || collection1.length ==0">
+                                    <td colspan="10">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="10">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">

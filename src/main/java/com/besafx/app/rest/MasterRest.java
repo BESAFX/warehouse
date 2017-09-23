@@ -30,17 +30,13 @@ public class MasterRest {
 
     private final static Logger log = LoggerFactory.getLogger(MasterRest.class);
 
-    private final String FILTER_ALL = "**";
-    private final String FILTER_TABLE = "id,code,name,period,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]],courses[id,code,instructor]";
+    private final String FILTER_TABLE = "**,-offers,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]],masterCategory[id,code,name],courses[id]";
     private final String FILTER_MASTER_COMBO = "id,code,name";
     private final String FILTER_MASTER_BRANCH_COMBO = "id,code,name,branch[id,code,name]";
     private final String FILTER_MASTER_COURSE_COMBO = "id,code,name,courses[id,code,instructor]";
 
     @Autowired
     private PersonService personService;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private BranchService branchService;
@@ -68,11 +64,11 @@ public class MasterRest {
     @PreAuthorize("hasRole('ROLE_MASTER_CREATE')")
     public String create(@RequestBody Master master, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
-        Integer lastCode = findLastCodeByBranch(master.getBranch().getId());
-        if (lastCode == null) {
+        Master topMaster = masterService.findTopByBranchOrderByCodeDesc(master.getBranch());
+        if (topMaster == null) {
             master.setCode(1);
         } else {
-            master.setCode(lastCode + 1);
+            master.setCode(topMaster.getCode() + 1);
         }
         master.setLastUpdate(new Date());
         master.setLastPerson(person);
@@ -142,22 +138,22 @@ public class MasterRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Master> findAll() {
-        return Lists.newArrayList(masterService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(masterService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Master findOne(@PathVariable Long id) {
-        return masterService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterService.findOne(id));
     }
 
     @RequestMapping(value = "findByBranch", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Master> findByBranch(@RequestParam(value = "branchId") Long branchId) {
+    public String findByBranch(@RequestParam(value = "branchId") Long branchId) {
         Branch branch = branchService.findOne(branchId);
         if (branch != null) {
-            return masterService.findByBranch(branch);
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterService.findByBranch(branch));
         } else {
             return null;
         }
@@ -165,76 +161,43 @@ public class MasterRest {
 
     @RequestMapping(value = "findByCodeAndBranch", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Master findByCodeAndBranch(@RequestParam(value = "code") Integer code, @RequestParam(value = "branchId") Long branchId) {
+    public String findByCodeAndBranch(@RequestParam(value = "code") Integer code, @RequestParam(value = "branchId") Long branchId) {
         Branch branch = branchService.findOne(branchId);
         if (branch != null) {
-            return masterService.findByCodeAndBranch(code, branch);
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterService.findByCodeAndBranch(code, branch));
         } else {
             return null;
         }
     }
 
-    @RequestMapping(value = "findLastCodeByBranch/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Integer findLastCodeByBranch(@PathVariable Long id) {
-        Integer maxCode = masterService.findLastCodeByBranch(id);
-        if (maxCode == null) {
-            return 1;
-        } else {
-            return maxCode + 1;
-        }
-    }
-
     @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Long count() {
         return masterService.count();
     }
 
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Master> fetchTableData(Principal principal) {
-        try {
-            Person person = personService.findByEmail(principal.getName());
-            List<Master> list = new ArrayList<>();
-            ///
-            companyService.findByManager(person).stream().forEach(company ->
-                    branchService.findByCompany(company).stream().forEach(branch ->
-                            list.addAll(masterService.findByBranch(branch))));
-            ///
-            branchService.findByManager(person).stream().forEach(branch ->
-                    list.addAll(masterService.findByBranch(branch)));
-            ///
-            list.addAll(masterService.findByBranch(person.getBranch()));
-            ///
-            return list.stream().filter(DistinctFilter.distinctByKey(Master::getId)).collect(Collectors.toList());
-        } catch (Exception ex) {
-            log.info(ex.getMessage(), ex);
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "fetchTableDataSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String fetchTableDataSummery(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), fetchTableData(principal));
+    public String fetchTableData(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findByEmail(principal.getName()).getBranch().getMasters());
     }
 
     @RequestMapping(value = "fetchMasterCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchMasterCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COMBO), fetchTableData(principal));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
     }
 
     @RequestMapping(value = "fetchMasterCourseCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchMasterCourseCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO), fetchTableData(principal));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
     }
 
     @RequestMapping(value = "fetchMasterBranchCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchMasterBranchCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO), fetchTableData(principal));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
     }
 
 }

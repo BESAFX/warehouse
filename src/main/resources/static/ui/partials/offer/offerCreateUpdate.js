@@ -6,7 +6,7 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
         $scope.action = action;
 
         $timeout(function () {
-            MasterService.fetchMasterBranchCombo().then(function (data) {
+            MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 2000);
@@ -43,8 +43,7 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
             switch ($scope.action) {
                 case 'create' :
                     OfferService.create($scope.offer).then(function (data) {
-                        $scope.clear();
-                        $scope.form.$setPristine();
+                        $uibModalInstance.close(data);
                     });
                     break;
                 case 'update' :

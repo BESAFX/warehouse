@@ -3,12 +3,12 @@ package com.besafx.app.rest;
 import com.besafx.app.config.DropboxManager;
 import com.besafx.app.entity.AccountAttach;
 import com.besafx.app.entity.Attach;
-import com.besafx.app.entity.AttachType;
-import com.besafx.app.entity.Views;
 import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -29,6 +27,8 @@ import java.util.concurrent.Future;
 public class AccountAttachRest {
 
     private final static Logger log = LoggerFactory.getLogger(AccountAttachRest.class);
+
+    private final String FILTER_TABLE = "**,account[id],attach[id],attachType[id]";
 
     @Autowired
     private PersonService personService;
@@ -54,7 +54,7 @@ public class AccountAttachRest {
     @RequestMapping(value = "upload/{accountId}/{attachTypeId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ACCOUNT_ATTACH_CREATE')")
-    public AccountAttach upload(@PathVariable(value = "accountId") Long accountId,
+    public String upload(@PathVariable(value = "accountId") Long accountId,
                                 @PathVariable(value = "attachTypeId") Long attachTypeId,
                                 @RequestParam(value = "fileName") String fileName,
                                 @RequestParam(value = "file") MultipartFile file,
@@ -85,7 +85,7 @@ public class AccountAttachRest {
 
             attach = attachService.save(attach);
             accountAttach.setAttach(attach);
-            return accountAttachService.save(accountAttach);
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountAttachService.save(accountAttach));
         } else {
             return null;
         }
@@ -142,8 +142,7 @@ public class AccountAttachRest {
 
     @RequestMapping(value = "findByAccount/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.AttachByAccount.class)
-    public List<AccountAttach> findByAccount(@PathVariable(value = "accountId") Long accountId) {
-        return accountAttachService.findByAccountId(accountId);
+    public String findByAccount(@PathVariable(value = "accountId") Long accountId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountAttachService.findByAccountId(accountId));
     }
 }

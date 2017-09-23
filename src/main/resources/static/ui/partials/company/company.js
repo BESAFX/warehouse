@@ -40,9 +40,6 @@ app.controller("companyCtrl", ['CompanyService', 'PersonService', 'ModalProvider
             CompanyService.findAll().then(function (data) {
                 $scope.selected = data[0];
             });
-            PersonService.findAllSummery().then(function (data) {
-                $scope.persons = data;
-            });
             window.componentHandler.upgradeAllRegistered();
         }, 1500);
 

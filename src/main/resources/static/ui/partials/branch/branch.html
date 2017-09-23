@@ -185,14 +185,6 @@
                                     <span> اسم الشركة</span>
                                 </th>
 
-                                <th st-sort="manager.contact.firstName" class="text-right">
-                                    <span> مدير الفرع</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="5"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                       type="text"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -207,14 +199,11 @@
                                 <td st-select-row-custom="branch">{{branch.code}}</td>
                                 <td st-select-row-custom="branch">{{branch.name}}</td>
                                 <td st-select-row-custom="branch">{{branch.company.name}}</td>
-                                <td st-select-row-custom="branch">{{branch.manager.contact.firstName}}
-                                    {{branch.manager.contact.forthName}}
-                                </td>
                             </tr>
                             <tr class="blank_row"
                                 style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!collection || collection.length ==0">
-                                <td colspan="5">لا توجد بيانات</td>
+                                <td colspan="4">لا توجد بيانات</td>
                             </tr>
                             </tbody>
                         </table>
@@ -247,11 +236,6 @@
                                     <p>
                                         <strong>رقم الفرع</strong>
                                         {{branch.code}}
-                                    </p>
-                                    <hr>
-                                    <p>
-                                        <strong>مسئول الفرع</strong>
-                                        {{branch.manager.contact.firstName}} {{branch.manager.contact.forthName}}
                                     </p>
                                     <hr>
                                     <p>

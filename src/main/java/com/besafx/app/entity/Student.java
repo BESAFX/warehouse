@@ -26,12 +26,10 @@ public class Student implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "studentSequenceGenerator")
-    @JsonView(Views.Summery.class)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "contact")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Contact contact;
 
     @JsonCreator

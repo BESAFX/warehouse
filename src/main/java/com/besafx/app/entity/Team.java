@@ -30,22 +30,17 @@ public class Team implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "teamSequenceGenerator")
-    @JsonView(Views.Summery.class)
     private Long id;
 
-    @JsonView(Views.Summery.class)
     private Integer code;
 
-    @JsonView(Views.Summery.class)
     private String name;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
     private String authorities;
 
     @OneToMany(mappedBy = "team")
-    @JsonIgnoreProperties(value = {"team", "branch"}, allowSetters = true)
     private List<Person> persons = new ArrayList<>();
 
     @JsonCreator

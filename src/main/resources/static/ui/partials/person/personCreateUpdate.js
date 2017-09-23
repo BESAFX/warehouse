@@ -2,24 +2,15 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'Perso
     function (TeamService, BranchService, PersonService, FileUploader, FileService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, person) {
 
         $timeout(function () {
-
-            $scope.teams = [];
-
             TeamService.findAll().then(function (data) {
                 $scope.teams = data;
             });
-
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.findAllCombo().then(function (data) {
                 $scope.branches = data;
             });
-
         }, 2000);
 
-        if (person) {
-            $scope.person = person;
-        } else {
-            $scope.person = {};
-        }
+        $scope.person = person;
 
         $scope.title = title;
 
@@ -29,8 +20,7 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'Perso
             switch ($scope.action) {
                 case 'create' :
                     PersonService.create($scope.person).then(function (data) {
-                        $scope.person = {};
-                        $scope.from.$setPristine();
+                        $uibModalInstance.close(data);
                     });
                     break;
                 case 'update' :

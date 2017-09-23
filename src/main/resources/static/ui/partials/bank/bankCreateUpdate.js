@@ -12,7 +12,7 @@ app.controller('bankCreateUpdateCtrl', ['BankService', 'BranchService', '$scope'
         }
 
         $timeout(function () {
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);

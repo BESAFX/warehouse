@@ -41,11 +41,6 @@ app.factory("MasterService",
                     return response.data;
                 });
             },
-            fetchTableDataSummery: function () {
-                return $http.get("/api/master/fetchTableDataSummery").then(function (response) {
-                    return response.data;
-                });
-            },
             fetchMasterCombo: function () {
                 return $http.get("/api/master/fetchMasterCombo").then(function (response) {
                     return response.data;

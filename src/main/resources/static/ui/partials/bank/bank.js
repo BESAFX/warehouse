@@ -11,22 +11,19 @@ app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$r
 
         $scope.selected = {};
 
+        $scope.banks = [];
+
         $timeout(function () {
-            $scope.sideOpacity = 1;
-            BranchService.fetchTableDataSummery().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
             });
         }, 1500);
 
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
-
         $scope.setSelected = function (object) {
             if (object) {
                 angular.forEach($scope.banks, function (bank) {
-                    if (object.id == bank.id) {
+                    if (object.id === bank.id) {
                         $scope.selected = bank;
                         return bank.isSelected = true;
                     } else {
@@ -37,56 +34,80 @@ app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$r
         };
 
         $scope.filter = function () {
-            var search = [];
-            if ($scope.buffer.code) {
-                search.push('code=');
-                search.push($scope.buffer.code);
-                search.push('&');
-            }
-            if ($scope.buffer.name) {
-                search.push('name=');
-                search.push($scope.buffer.name);
-                search.push('&');
-            }
-            if ($scope.buffer.branchName) {
-                search.push('branchName=');
-                search.push($scope.buffer.branchName);
-                search.push('&');
-            }
-            if ($scope.buffer.stockFrom) {
-                search.push('stockFrom=');
-                search.push($scope.buffer.stockFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.stockTo) {
-                search.push('stockTo=');
-                search.push($scope.buffer.stockTo);
-                search.push('&');
-            }
-            if ($scope.buffer.branch) {
-                search.push('branchId=');
-                search.push($scope.buffer.branch.id);
-                search.push('&');
-            }
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/billBuy/billBuyFilter.html',
+                controller: 'billBuyFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'البحث فى الحسابات البنكية';
+                    }
+                }
+            });
 
-            BankService.filter(search.join("")).then(function (data) {
-                $scope.banks = data;
-                $scope.setSelected(data[0]);
-                $scope.items = [];
-                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                $scope.items.push({'id': 2, 'type': 'title', 'name': 'الحسابات البنكية', 'style': 'font-weight:bold'});
-                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
-                $scope.items.push({
-                    'id': 4,
-                    'type': 'title',
-                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+            modalInstance.result.then(function (buffer) {
+                var search = [];
+                if (buffer.code) {
+                    search.push('code=');
+                    search.push(buffer.code);
+                    search.push('&');
+                }
+                if (buffer.name) {
+                    search.push('name=');
+                    search.push(buffer.name);
+                    search.push('&');
+                }
+                if (buffer.branchName) {
+                    search.push('branchName=');
+                    search.push(buffer.branchName);
+                    search.push('&');
+                }
+                if (buffer.stockFrom) {
+                    search.push('stockFrom=');
+                    search.push(buffer.stockFrom);
+                    search.push('&');
+                }
+                if (buffer.stockTo) {
+                    search.push('stockTo=');
+                    search.push(buffer.stockTo);
+                    search.push('&');
+                }
+                if (buffer.branch) {
+                    search.push('branchId=');
+                    search.push(buffer.branch.id);
+                    search.push('&');
+                }
+
+                BankService.filter(search.join("")).then(function (data) {
+                    $scope.banks = data;
+                    $scope.setSelected(data[0]);
+                    $scope.items = [];
+                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'الحسابات البنكية', 'style': 'font-weight:bold'});
+                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 4,
+                        'type': 'title',
+                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
+                    });
                 });
+
+            }, function () {
+                console.info('BankFilterModel Closed.');
             });
         };
 
-        $scope.clear = function () {
-            $scope.buffer = {};
-            $scope.buffer.branch = $scope.branches[0];
+        $scope.newBank = function () {
+            ModalProvider.openBankCreateModel().result.then(function (data) {
+                $scope.banks.splice(0,0,data);
+            }, function () {
+                console.info('BankCreateModel Closed.');
+            });
         };
 
         $scope.openDepositModel = function (bank) {
@@ -134,5 +155,9 @@ app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$r
                 }
             }
         ];
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
 
     }]);

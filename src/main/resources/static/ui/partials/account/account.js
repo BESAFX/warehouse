@@ -34,12 +34,26 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
             $scope.buffer.branch = $scope.branches[0];
         };
 
+        $scope.newAccount = function () {
+            ModalProvider.openAccountCreateModel($scope.selected).result.then(function (data) {
+                $rootScope.showConfirmNotify("تسجيل الطلاب", "هل تود طباعة العقد ؟", "notification", "fa-info", function () {
+                    $scope.print(data);
+                });
+            });
+        };
+
+        $scope.newPayment = function () {
+            ModalProvider.openAccountPaymentModel($scope.selected).result.then(function (data) {
+                AccountService.findOne($scope.selected.id).then(function (data) {
+                    var index = $scope.accounts.indexOf($scope.selected);
+                    $scope.accounts[index] = data;
+                    $scope.setSelected(data);
+                });
+            });
+        };
+
         $scope.print = function (account) {
-            if (account) {
-                window.open('/report/account/contract/' + account.id);
-                return;
-            }
-            window.open('/report/account/contract/' + $scope.selected.id);
+            window.open('/report/account/contract/' + account.id);
         };
 
         $scope.filter = function () {
@@ -130,11 +144,6 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 AccountService.filter(search.join("")).then(function (data) {
                     $scope.accounts = data;
                     $scope.setSelected(data[0]);
-                    angular.forEach($scope.accounts, function (account) {
-                        AccountService.findRemainPrice(account.id).then(function (data) {
-                            return account.remainPrice = data;
-                        });
-                    });
                     $scope.items = [];
                     $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                     $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
@@ -222,7 +231,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openAccountPaymentModel($itemScope.account);
+                    $scope.newPayment($itemScope.account);
                 }
             },
             {

@@ -47,12 +47,10 @@ public class Bank implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "branch")
-    @JsonIgnoreProperties(value = {"manager", "masters", "banks"}, allowSetters = true)
     private Branch branch;
 
     @ManyToOne
     @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
     private Person lastPerson;
 
     @JsonCreator

@@ -6,6 +6,11 @@ app.factory("BranchService",
                     return response.data;
                 })
             },
+            findAllCombo: function () {
+                return $http.get("/api/branch/findAllCombo").then(function (response) {
+                    return response.data;
+                })
+            },
             findOne: function (id) {
                 return $http.get("/api/branch/findOne/" + id).then(function (response) {
                     return response.data;
@@ -56,11 +61,6 @@ app.factory("BranchService",
             },
             fetchTableData: function () {
                 return $http.get("/api/branch/fetchTableData").then(function (response) {
-                    return response.data;
-                });
-            },
-            fetchTableDataSummery: function () {
-                return $http.get("/api/branch/fetchTableDataSummery").then(function (response) {
                     return response.data;
                 });
             },

@@ -126,79 +126,111 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-body">
 
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="paymentOuts"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-                                <th class="text-right">
-                                    <span>م</span>
-                                </th>
-
-                                <th st-sort="code" class="text-right">
-                                    <span>رقم السند</span>
-                                </th>
-
-                                <th st-sort="date" class="text-right">
-                                    <span>تاريخ السند</span>
-                                </th>
-
-                                <th st-sort="amountNumber" class="text-right">
-                                    <span>قيمة السند</span>
-                                </th>
-
-                                <th st-sort="toName" class="text-right">
-                                    <span>وجهة الصرف</span>
-                                </th>
-
-                                <th st-sort="note" class="text-right">
-                                    <span>بيان الصرف</span>
-                                </th>
-
-                                <th st-sort="person.contact.firstName" class="text-right">
-                                    <span>مدخل السند</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="7">
-                                    <input st-search=""
-                                           class="form-control"
-                                           placeholder="بحث شامل وسريع..."
-                                           type="text"/>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="paymentOut in collection"
-                                st-select-mode="single"
-                                context-menu="rowMenu"
-                                ng-click="setSelected(paymentOut)"
-                                ng-right-click="setSelected(paymentOut)"
-                                ng-class="{'mdl-color--brown-100':paymentOut.isSelected}">
-                                <td st-select-row-custom="paymentOut">{{$index+1}}</td>
-                                <td st-select-row-custom="paymentOut">{{paymentOut.code}}</td>
-                                <td st-select-row-custom="paymentOut">{{paymentOut.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
-                                <td st-select-row-custom="paymentOut">{{paymentOut.amountNumber}}</td>
-                                <td st-select-row-custom="paymentOut">{{paymentOut.toName}}</td>
-                                <td st-select-row-custom="paymentOut">{{paymentOut.note}}</td>
-                                <td st-select-row-custom="paymentOut">
-                                    {{paymentOut.person.contact.firstName}}
-                                    {{paymentOut.person.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="7">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="filter()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تصفية البيانات">
+                                    <span class="fa fa-filter"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_OUT_CREATE'])"
+                                   ng-click="newPaymentOut()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء سند جديد">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة سندات الصرف</h3>
+                        </div>
                     </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection" st-safe-src="paymentOuts"
+                                   class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-right">
+                                        <span>م</span>
+                                    </th>
 
+                                    <th st-sort="code" class="text-right">
+                                        <span>رقم السند</span>
+                                    </th>
+
+                                    <th st-sort="date" class="text-right">
+                                        <span>تاريخ السند</span>
+                                    </th>
+
+                                    <th st-sort="amountNumber" class="text-right">
+                                        <span>قيمة السند</span>
+                                    </th>
+
+                                    <th st-sort="toName" class="text-right">
+                                        <span>وجهة الصرف</span>
+                                    </th>
+
+                                    <th st-sort="note" class="text-right">
+                                        <span>بيان الصرف</span>
+                                    </th>
+
+                                    <th st-sort="person.contact.firstName" class="text-right">
+                                        <span>مدخل السند</span>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="7">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="paymentOut in collection"
+                                    st-select-mode="single"
+                                    context-menu="rowMenu"
+                                    ng-click="setSelected(paymentOut)"
+                                    ng-right-click="setSelected(paymentOut)"
+                                    ng-class="{'mdl-color--brown-100':paymentOut.isSelected}">
+                                    <td st-select-row-custom="paymentOut">{{$index+1}}</td>
+                                    <td st-select-row-custom="paymentOut">{{paymentOut.code}}</td>
+                                    <td st-select-row-custom="paymentOut">{{paymentOut.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
+                                    <td st-select-row-custom="paymentOut">{{paymentOut.amountNumber}}</td>
+                                    <td st-select-row-custom="paymentOut">{{paymentOut.toName}}</td>
+                                    <td st-select-row-custom="paymentOut">{{paymentOut.note}}</td>
+                                    <td st-select-row-custom="paymentOut">
+                                        {{paymentOut.person.contact.firstName}}
+                                        {{paymentOut.person.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection || collection.length ==0">
+                                    <td colspan="7">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
         </div>

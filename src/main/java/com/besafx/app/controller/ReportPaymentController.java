@@ -303,9 +303,9 @@ public class ReportPaymentController {
                             + "-" + row.getAccount().getCourse().getCode()
                             + "-" + row.getAccount().getCode()
             );
-            wrapperUtil.setObj4(accountRest.findRequiredPrice(row.getAccount().getId()));
-            wrapperUtil.setObj5(accountRest.findPaidPrice(row.getAccount().getId()));
-            wrapperUtil.setObj6(accountRest.findRemainPrice(row.getAccount().getId()));
+            wrapperUtil.setObj4(row.getAccount().getRequiredPrice());
+            wrapperUtil.setObj5(row.getAccount().getPaidPrice());
+            wrapperUtil.setObj6(row.getAccount().getRemainPrice());
             list.add(wrapperUtil);
         });
         list.sort(Comparator.comparing(v -> v.getObj3().toString()));

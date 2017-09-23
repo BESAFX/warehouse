@@ -31,7 +31,7 @@ public class PaymentOut implements Serializable {
     @GeneratedValue(generator = "paymentOutSequenceGenerator")
     private Long id;
 
-    private Integer code;
+    private Long code;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

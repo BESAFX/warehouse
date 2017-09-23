@@ -1,17 +1,16 @@
-app.controller('masterCreateUpdateCtrl', ['BranchService', 'MasterService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'master',
-    function (BranchService, MasterService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, master) {
+app.controller('masterCreateUpdateCtrl', ['MasterCategoryService' ,'BranchService', 'MasterService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'master',
+    function (MasterCategoryService, BranchService, MasterService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, master) {
 
         $timeout(function () {
+            MasterCategoryService.findAllCombo().then(function (data) {
+                $scope.masterCategories = data;
+            });
             BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1500);
 
-        if (master) {
-            $scope.master = master;
-        } else {
-            $scope.master = {};
-        }
+        $scope.master = master;
 
         $scope.title = title;
 
@@ -21,13 +20,13 @@ app.controller('masterCreateUpdateCtrl', ['BranchService', 'MasterService', '$sc
             switch ($scope.action) {
                 case 'create' :
                     MasterService.create($scope.master).then(function (data) {
-                        $scope.master = {};
-                        $scope.form.$setPristine();
+                        $uibModalInstance.close(data);
                     });
                     break;
                 case 'update' :
                     MasterService.update($scope.master).then(function (data) {
                         $scope.master = data;
+                        $scope.form.$setPristine();
                     });
                     break;
             }

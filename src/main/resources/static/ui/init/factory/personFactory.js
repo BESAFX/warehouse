@@ -6,8 +6,8 @@ app.factory("PersonService",
                     return response.data;
                 });
             },
-            findAllSummery: function () {
-                return $http.get("/api/person/findAllSummery").then(function (response) {
+            findAllCombo: function () {
+                return $http.get("/api/person/findAllCombo").then(function (response) {
                     return response.data;
                 });
             },
@@ -36,11 +36,6 @@ app.factory("PersonService",
             },
             disable: function (person) {
                 return $http.put("/api/person/disable", person).then(function (response) {
-                    return response.data;
-                });
-            },
-            findByBranch: function (branchId) {
-                return $http.get("/api/person/findByBranch/" + branchId).then(function (response) {
                     return response.data;
                 });
             },

@@ -65,7 +65,7 @@
                                 <span>عرض بيانات الدورات</span>
                             </span>
                         </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="create();"
+                        <li class="mdl-menu__item mdl-list__item" ng-click="newCourse();"
                             ng-if="contains(me.team.authorities, ['ROLE_COURSE_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
@@ -142,104 +142,141 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
-                <div class="panel panel-body">
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="courses"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-                                <th class="text-center">
-                                    <span>م</span>
-                                </th>
 
-                                <th st-sort="code" class="text-right">
-                                    <span> رقم الدورة</span>
-                                </th>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="fetchTableData()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تحديث البيانات">
+                                    <span class="fa fa-refresh"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_COURSE_CREATE'])"
+                                   ng-click="newCourse()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="انشاء دورة جديدة">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة الدورات</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection1" st-safe-src="courses" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <span>م</span>
+                                    </th>
 
-                                <th st-sort="startDate" class="text-right">
-                                    <span>تاريخ البداية</span>
-                                </th>
+                                    <th st-sort="code" class="text-right">
+                                        <span> رقم الدورة</span>
+                                    </th>
 
-                                <th st-sort="endDate" class="text-right">
-                                    <span>تاريخ النهاية</span>
-                                </th>
+                                    <th st-sort="startDate" class="text-right">
+                                        <span>تاريخ البداية</span>
+                                    </th>
 
-                                <th st-sort="instructor" class="text-right">
-                                    <span>المدرب</span>
-                                </th>
+                                    <th st-sort="endDate" class="text-right">
+                                        <span>تاريخ النهاية</span>
+                                    </th>
 
-                                <th st-sort="companyName" class="text-right">
-                                    <span>الشركة</span>
-                                </th>
+                                    <th st-sort="instructor" class="text-right">
+                                        <span>المدرب</span>
+                                    </th>
 
-                                <th st-sort="accounts.length" class="text-right">
-                                    <span>عدد للطلاب</span>
-                                </th>
+                                    <th st-sort="companyName" class="text-right">
+                                        <span>الشركة</span>
+                                    </th>
 
-                                <th st-sort="master.name" class="text-right">
-                                    <span>التخصص</span>
-                                </th>
+                                    <th st-sort="accounts.length" class="text-right">
+                                        <span>عدد للطلاب</span>
+                                    </th>
 
-                                <th st-sort="master.branch.name" class="text-right">
-                                    <span>الفرع</span>
-                                </th>
+                                    <th st-sort="master.name" class="text-right">
+                                        <span>التخصص</span>
+                                    </th>
 
-                                <th st-sort="lastPerson.contact.firstName" class="text-right">
-                                    <span>مدخل التخصص</span>
-                                </th>
+                                    <th st-sort="master.branch.name" class="text-right">
+                                        <span>الفرع</span>
+                                    </th>
 
-                            </tr>
-                            <tr>
-                                <th colspan="10"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                       type="text"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="course in collection"
-                                context-menu="rowMenu"
-                                st-select-mode="single"
-                                ng-click="setSelected(course)"
-                                ng-right-click="setSelected(course)"
-                                ng-class="{'mdl-color--brown-100':course.isSelected}">
-                                <td st-select-row-custom="course">{{$index+1}}</td>
-                                <td st-select-row-custom="course">{{course.code}}</td>
-                                <td st-select-row-custom="course">
-                                    {{course.startDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="course">
-                                    {{course.endDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="course">{{course.instructor}}</td>
-                                <td st-select-row-custom="course">{{course.companyName}}</td>
-                                <td st-select-row-custom="course">
-                                    {{course.accounts.length}}
-                                </td>
-                                <td st-select-row-custom="course">
-                                    [ {{course.master.code}} ]
-                                    {{course.master.name}}
-                                </td>
-                                <td st-select-row-custom="course">
-                                    [ {{course.master.branch.code}} ]
-                                    {{course.master.branch.name}}
-                                </td>
-                                <td st-select-row-custom="course">
-                                    {{course.lastPerson.contact.firstName}} {{course.lastPerson.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="10">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    <th st-sort="lastPerson.contact.firstName" class="text-right">
+                                        <span>مدخل التخصص</span>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="10">
+                                        <input st-search=""
+                                               class="form-control"
+                                               placeholder="بحث شامل وسريع..."
+                                               type="text"/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="course in collection1"
+                                    context-menu="rowMenu"
+                                    st-select-mode="single"
+                                    ng-click="setSelected(course)"
+                                    ng-right-click="setSelected(course)"
+                                    ng-class="{'mdl-color--brown-100':course.isSelected}">
+                                    <td st-select-row-custom="course">{{$index+1}}</td>
+                                    <td st-select-row-custom="course">{{course.code}}</td>
+                                    <td st-select-row-custom="course">
+                                        {{course.startDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="course">
+                                        {{course.endDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="course">{{course.instructor}}</td>
+                                    <td st-select-row-custom="course">{{course.companyName}}</td>
+                                    <td st-select-row-custom="course">
+                                        {{course.accounts.length}}
+                                    </td>
+                                    <td st-select-row-custom="course">
+                                        [ {{course.master.code}} ]
+                                        {{course.master.name}}
+                                    </td>
+                                    <td st-select-row-custom="course">
+                                        [ {{course.master.branch.code}} ]
+                                        {{course.master.branch.name}}
+                                    </td>
+                                    <td st-select-row-custom="course">
+                                        {{course.lastPerson.contact.firstName}} {{course.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection1 || collection1.length ==0">
+                                    <td colspan="10">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="10">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
-                <div st-table="collection" st-safe-src="courses">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="course in collection">
+                <div st-table="collection2" st-safe-src="courses">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="course in collection2">
                         <!-- CONTACT ITEM -->
                         <div class="panel panel-default">
                             <div class="panel-body profile">

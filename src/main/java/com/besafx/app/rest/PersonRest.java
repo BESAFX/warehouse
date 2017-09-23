@@ -1,13 +1,16 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Views;
 import com.besafx.app.service.ContactService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bohnman.squiggly.Squiggly;
+import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,12 +19,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/person/")
 public class PersonRest {
+
+    private final static Logger log = LoggerFactory.getLogger(PersonRest.class);
+
+    public static final String FILTER_TABLE = "**,contact[id,firstName,forthName],team[**,-persons],branch[id,code,name]";
+    public static final String FILTER_PERSON_COMBO = "id,contact[id,firstName,forthName]";
 
     @Autowired
     private PersonService personService;
@@ -38,7 +45,7 @@ public class PersonRest {
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_CREATE')")
-    public Person create(@RequestBody Person person, Principal principal) {
+    public String create(@RequestBody Person person, Principal principal) {
         if (personService.findByEmail(person.getEmail()) != null) {
             throw new CustomException("هذا البريد الإلكتروني غير متاح ، فضلاً ادخل بريد آخر غير مستخدم");
         }
@@ -57,13 +64,13 @@ public class PersonRest {
                 .type("success")
                 .icon("fa-user")
                 .build(), principal.getName());
-        return person;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_UPDATE') or hasRole('ROLE_PROFILE_UPDATE')")
-    public Person update(@RequestBody Person person, Principal principal) {
+    public String update(@RequestBody Person person, Principal principal) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
             if (!object.getPassword().equals(person.getPassword())) {
@@ -80,7 +87,7 @@ public class PersonRest {
                     .type("success")
                     .icon("fa-user")
                     .build(), principal.getName());
-            return person;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
         }
@@ -89,7 +96,7 @@ public class PersonRest {
     @RequestMapping(value = "enable", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_ENABLE')")
-    public Person enable(@RequestBody Person person, Principal principal) {
+    public String enable(@RequestBody Person person, Principal principal) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
             person.setEnabled(true);
@@ -101,7 +108,7 @@ public class PersonRest {
                     .type("success")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return person;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
         }
@@ -110,7 +117,7 @@ public class PersonRest {
     @RequestMapping(value = "disable", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_DISABLE')")
-    public Person disable(@RequestBody Person person, Principal principal) {
+    public String disable(@RequestBody Person person, Principal principal) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
             person.setEnabled(false);
@@ -122,7 +129,7 @@ public class PersonRest {
                     .type("error")
                     .icon("fa-edit")
                     .build(), principal.getName());
-            return person;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
         }
@@ -140,45 +147,32 @@ public class PersonRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Person> findAll() {
-        return Lists.newArrayList(personService.findByEnabledIsTrue());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(personService.findByEnabledIsTrue()));
     }
 
-    @RequestMapping(value = "findAllSummery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "findAllCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @JsonView(Views.Summery.class)
-    public List<Person> findAllSummery() {
-        return findAll();
+    public String findAllCombo() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_PERSON_COMBO), Lists.newArrayList(personService.findByEnabledIsTrue()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Person findOne(@PathVariable Long id) {
-        return personService.findOne(id);
-    }
-
-    @RequestMapping(value = "findByEmail/{email}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Person findByPersonName(@PathVariable(value = "email") String email) {
-        return personService.findByEmail(email);
-    }
-
-    @RequestMapping("findActivePersonDetails")
-    @ResponseBody
-    public Principal findActivePersonDetails(Principal person) {
-        return person;
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findOne(id));
     }
 
     @RequestMapping("findAuthorities")
     @ResponseBody
-    public List<String> findAuthorities(Authentication authentication) {
-        return authentication.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
+    public String findAuthorities(Authentication authentication) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), authentication.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList()));
     }
 
     @RequestMapping("findActivePerson")
     @ResponseBody
-    public Person findActivePerson(Principal principal) {
-        return personService.findByEmail(principal.getName());
+    public String findActivePerson(Principal principal) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findByEmail(principal.getName()));
     }
 
 }

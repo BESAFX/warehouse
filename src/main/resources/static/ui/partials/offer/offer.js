@@ -1,7 +1,9 @@
-app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  'MasterService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state', '$uibModal',
+app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService', 'MasterService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state', '$uibModal',
     function (OfferService, BranchService, PersonService, MasterService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state, $uibModal) {
 
         $scope.buffer = {};
+
+        $scope.offers = [];
 
         $scope.selected = {};
 
@@ -14,7 +16,7 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
         //
 
         $timeout(function () {
-            PersonService.findAllSummery().then(function (data) {
+            PersonService.findAllCombo().then(function (data) {
                 $scope.persons = data;
             });
             BranchService.fetchBranchMaster().then(function (data) {
@@ -146,12 +148,17 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
             $scope.buffer.branch = $scope.branches[0];
         };
 
+        $scope.newOffer = function () {
+            ModalProvider.openOfferCreateModel($scope.selected).result.then(function (data) {
+                $rootScope.showConfirmNotify("العروض", "هل تود طباعة العرض ؟", "notification", "fa-info", function () {
+                    $scope.print(data);
+                });
+                $scope.offers.splice(0, 0, data);
+            });
+        };
+
         $scope.print = function (offer) {
-            if (offer) {
-                window.open('/report/OfferById/' + offer.id + '?exportType=PDF');
-                return;
-            }
-            window.open('/report/OfferById/' + $scope.selected.id + '?exportType=PDF');
+            window.open('/report/OfferById/' + offer.id + '?exportType=PDF');
         };
 
         $scope.delete = function (offer) {
@@ -175,13 +182,13 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
         };
 
         $scope.call = function (offer) {
-            if(offer){
+            if (offer) {
                 ModalProvider.openCallCreateModel(offer).result.then(function (call) {
-                   offer.calls.push(call);
+                    offer.calls.push(call);
                 }, function () {
                     $log.info('CallCreateModel Closed.');
                 });
-            }else{
+            } else {
                 ModalProvider.openCallCreateModel($scope.selected).result.then(function (call) {
                     $scope.selected.calls.push(call);
                 }, function () {
@@ -197,7 +204,7 @@ app.controller("offerCtrl", ['OfferService', 'BranchService', 'PersonService',  
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openOfferCreateModel();
+                    $scope.newOffer();
                 }
             },
             {

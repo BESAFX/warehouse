@@ -7,11 +7,7 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
             })
         }, 2000);
 
-        if (course) {
-            $scope.course = course;
-        } else {
-            $scope.course = {};
-        }
+        $scope.course = course;
 
         $scope.title = title;
 

@@ -207,6 +207,10 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
             });
         };
 
+        $scope.newPayment = function () {
+            ModalProvider.openPaymentCreateModel();
+        };
+
         $scope.printList = function () {
             var listId = [];
             for (var i = 0; i < $scope.payments.length; i++) {

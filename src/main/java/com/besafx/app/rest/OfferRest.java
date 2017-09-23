@@ -1,15 +1,15 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.config.CustomException;
-import com.besafx.app.config.EmailSender;
-import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Views;
-import com.besafx.app.service.*;
-import com.besafx.app.util.DateConverter;
+import com.besafx.app.search.OfferSearch;
+import com.besafx.app.service.BranchService;
+import com.besafx.app.service.MasterService;
+import com.besafx.app.service.OfferService;
+import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
@@ -17,16 +17,13 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.Charset;
 import java.security.Principal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,20 +32,19 @@ public class OfferRest {
 
     private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
 
-    public static final String FILTER_ALL = "**";
     public static final String FILTER_TABLE = "**,master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
 
     @Autowired
     private PersonService personService;
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private BranchService branchService;
 
     @Autowired
     private OfferService offerService;
+
+    @Autowired
+    private OfferSearch offerSearch;
 
     @Autowired
     private MasterService masterService;
@@ -127,64 +123,49 @@ public class OfferRest {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Offer> findAll() {
-        return Lists.newArrayList(offerService.findAll());
+    public String findAll() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(offerService.findAll()));
     }
 
     @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Offer findOne(@PathVariable Long id) {
-        return offerService.findOne(id);
+    public String findOne(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offerService.findOne(id));
     }
 
     @RequestMapping(value = "findByCustomerMobile/{customerMobile}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Offer> findByCustomerMobile(@PathVariable String customerMobile) {
-        return offerService.findByCustomerMobile(customerMobile);
+    public String findByCustomerMobile(@PathVariable String customerMobile) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offerService.findByCustomerMobile(customerMobile));
     }
 
     @RequestMapping(value = "findByBranch/{branchId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Offer> findByBranch(@PathVariable(value = "branchId") Long branchId) {
-        return offerService.findByMasterBranch(branchService.findOne(branchId));
+    public String findByBranch(@PathVariable(value = "branchId") Long branchId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offerService.findByMasterBranch(branchService.findOne(branchId)));
     }
 
     @RequestMapping(value = "findByMaster/{masterId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Offer> findByMaster(@PathVariable(value = "masterId") Long masterId) {
-        return offerService.findByMaster(masterService.findOne(masterId));
+    public String findByMaster(@PathVariable(value = "masterId") Long masterId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offerService.findByMaster(masterService.findOne(masterId)));
     }
 
     @RequestMapping(value = "findCustomersByBranch/{branchId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> findCustomersByBranch(@PathVariable(value = "branchId") Long branchId) {
+    public String findCustomersByBranch(@PathVariable(value = "branchId") Long branchId) {
         List<String> list = offerService
                 .findByMasterBranch(branchService.findOne(branchId))
                 .stream()
                 .map(value -> value.getCustomerName())
                 .distinct()
                 .collect(Collectors.toList());
-        return list;
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
     }
 
     @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Long count() {
-        return offerService.count();
-    }
-
-    @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Offer> fetchTableData(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        List<Offer> list = new ArrayList<>();
-        return findAll();
-    }
-
-    @RequestMapping(value = "fetchCount", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Long fetchCount(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
         return offerService.count();
     }
 
@@ -203,39 +184,7 @@ public class OfferRest {
             @RequestParam(value = "branch", required = false) final Long branch,
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "registered", required = false) final Boolean registered) {
-        List<Specification> predicates = new ArrayList<>();
-        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
-        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
-        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new Date(value))));
-        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new Date(value))));
-        Optional.ofNullable(customerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customerName"), "%" + value + "%")));
-        Optional.ofNullable(customerIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customerIdentityNumber"), "%" + value + "%")));
-        Optional.ofNullable(customerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customerMobile"), "%" + value + "%")));
-        Optional.ofNullable(masterPriceFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("masterPrice"), value)));
-        Optional.ofNullable(masterPriceTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("masterPrice"), value)));
-        Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("master").get("branch").get("id"), value)));
-        Optional.ofNullable(master).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("master").get("id"), value)));
-        Optional.ofNullable(registered).ifPresent(value -> predicates.add((root, cq, cb) -> value ? cb.isTrue(root.get("registered")) : cb.isFalse(root.get("registered"))));
-        if (!predicates.isEmpty()) {
-            Specification result = predicates.get(0);
-            for (int i = 1; i < predicates.size(); i++) {
-                result = Specifications.where(result).and(predicates.get(i));
-            }
-            List<Offer> list = Lists.newArrayList(offerService.findAll(result));
-            list.sort(Comparator.comparing(Offer::getCustomerName));
-            log.info("فحص العروض وتحديث حالات التسجيل");
-            list.stream().forEach(offer -> {
-                List<Account> accounts = accountService.findByStudentContactMobile(offer.getCustomerMobile());
-                if(accounts.isEmpty()){
-                    offer.setRegistered(false);
-                }else {
-                    offer.setRegistered(true);
-                }
-                offerService.save(offer);
-            });
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
-        } else {
-            throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");
-        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                offerSearch.search(codeFrom, codeTo, dateFrom, dateTo, customerName, customerIdentityNumber, customerMobile, masterPriceFrom, masterPriceTo, branch, master, registered));
     }
 }

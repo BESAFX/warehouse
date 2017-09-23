@@ -1,4 +1,5 @@
 package com.besafx.app.entity;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -31,89 +32,90 @@ public class Account implements Serializable {
     )
     @Id
     @GeneratedValue(generator = "accountSequenceGenerator")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class, Views.CourseTable.class})
     private Long id;
 
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Integer code;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Date registerDate;
 
-    @JsonView(Views.Summery.class)
     private String coursePaymentType;
 
-    @JsonView(Views.Summery.class)
     private Double coursePrice;
 
-    @JsonView(Views.Summery.class)
     private Double courseDiscountAmount;
 
-    @JsonView(Views.Summery.class)
     private Double courseProfitAmount;
 
-    @JsonView(Views.Summery.class)
     private Double courseCreditAmount;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    @JsonView(Views.Summery.class)
     private String note;
 
     @ManyToOne
     @JoinColumn(name = "course")
-    @JsonIgnoreProperties(value = {"accounts"}, allowSetters = true)
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "student")
-    @JsonView(value = {Views.Summery.class, Views.AccountComboBox.class})
     private Student student;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(Views.Summery.class)
     private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name = "last_person")
-    @JsonIgnoreProperties(value = {"branch"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private Person lastPerson;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private List<Payment> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private List<AccountAttach> accountAttaches = new ArrayList<>();
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private List<AccountCondition> accountConditions = new ArrayList<>();
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"account"}, allowSetters = true)
-    @JsonView(Views.Summery.class)
     private List<AccountNote> accountNotes = new ArrayList<>();
+
+    public Double getRequiredPrice() {
+        try{
+            if (this.coursePaymentType.equals("نقدي")) {
+                return (this.coursePrice - (this.coursePrice * this.courseDiscountAmount / 100));
+            } else {
+                return (this.coursePrice + (this.coursePrice * this.courseProfitAmount / 100));
+            }
+        }catch (Exception ex){
+            return 0.0;
+        }
+    }
+
+    public Double getPaidPrice() {
+        try {
+            return this.payments
+                    .stream()
+                    .filter(payment -> payment.getType().equals("ايرادات اساسية"))
+                    .mapToDouble(Payment::getAmountNumber)
+                    .sum();
+        }catch (Exception ex){
+            return 0.0;
+        }
+    }
+
+    public Double getRemainPrice() {
+        try{
+            return this.getRequiredPrice() - this.getPaidPrice();
+        }catch (Exception ex){
+            return 0.0;
+        }
+    }
 
     @JsonCreator
     public static Account Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(jsonString, Account.class);
         return account;
-    }
-
-    public Double getRequiredPrice() {
-        if (this.coursePaymentType.equals("نقدي")) {
-            return (this.coursePrice - (this.coursePrice * this.courseDiscountAmount / 100));
-        } else {
-            return (this.coursePrice + (this.coursePrice * this.courseProfitAmount / 100));
-        }
     }
 }
