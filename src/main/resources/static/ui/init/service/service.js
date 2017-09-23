@@ -345,6 +345,23 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openCourseHeavyWorkModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/course/courseHeavyWork.html',
+            controller: 'courseHeavyWorkCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تسجيل دفعة من الدورات';
+                }
+            }
+        });
+    };
+
     this.openCourseUpdateModel = function (course) {
         return $uibModal.open({
             animation: true,

@@ -1,9 +1,10 @@
 package com.besafx.app.excel;
-import com.besafx.app.entity.Master;
+
 import com.besafx.app.entity.Course;
+import com.besafx.app.entity.Master;
 import com.besafx.app.entity.Person;
-import com.besafx.app.service.MasterService;
 import com.besafx.app.service.CourseService;
+import com.besafx.app.service.MasterService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
@@ -11,7 +12,6 @@ import com.besafx.app.ws.NotificationService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,10 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @RestController
 public class ExcelCourseController {
@@ -125,34 +128,46 @@ public class ExcelCourseController {
         sheet.setColumnWidth(1, 20 * 256);
         //
         cell = row.createCell(2);
-        cell.setCellValue("المدرب");
+        cell.setCellValue("رقم الفرع");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(2, 20 * 256);
         //
         cell = row.createCell(3);
-        cell.setCellValue("الحد الأقصى لعدد الطلاب");
+        cell.setCellValue("المدرب");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(3, 20 * 256);
         //
         cell = row.createCell(4);
-        cell.setCellValue("التاريخ من");
+        cell.setCellValue("الشركة");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(4, 20 * 256);
         //
         cell = row.createCell(5);
-        cell.setCellValue("التاريخ إلى");
+        cell.setCellValue("الحد الأقصى لعدد الطلاب");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(5, 20 * 256);
+        //
+        cell = row.createCell(6);
+        cell.setCellValue("التاريخ من");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(6, 20 * 256);
+        //
+        cell = row.createCell(7);
+        cell.setCellValue("التاريخ إلى");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(7, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 5; j++) {
+            for (int j = 0; j <= 7; j++) {
                 cell = row.createCell(j);
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
@@ -173,200 +188,162 @@ public class ExcelCourseController {
 
     }
 
-//    @RequestMapping(value = "/api/heavy-work/course/read", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public void readExcelFile(@RequestParam("file") MultipartFile multipartFile, Principal principal) {
-//        Person person = personService.findByEmail(principal.getName());
-//        try {
-//            List<Course> courseList = new ArrayList<>();
-//            //
-//            File tempFile = File.createTempFile(new BigInteger(130, random).toString(32), "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
-//            FileUtils.writeByteArrayToFile(tempFile, multipartFile.getBytes());
-//            FileInputStream fileInputStream = new FileInputStream(tempFile);
-//            //
-//            Workbook workbook = new XSSFWorkbook(fileInputStream);
-//            Sheet dataTypeSheet = workbook.getSheetAt(0);
-//            //
-//            Iterator<Row> iterator = dataTypeSheet.iterator();
-//            log.info("تجاهل الصف الأول من الجدول والذي يحتوي على رؤوس الأعمدة");
-//            if (iterator.hasNext()) iterator.next();
-//            while (iterator.hasNext()) {
-//                Row nextRow = iterator.next();
-//                Iterator<Cell> cellIterator = nextRow.cellIterator();
-//                Course course = new Course();
-//                boolean accept = true;
-//                while (cellIterator.hasNext()) {
-//                    Cell nextCell = cellIterator.next();
-//                    int columnIndex = nextCell.getColumnIndex();
-//                    switch (columnIndex) {
-//                        case 0:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            Integer courseCode;
-//                            try {
-//                                courseCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-//                            } catch (Exception ex) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            course.setCode(courseCode);
-//                            log.info("رقم الدورة / " + (String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 1:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            Integer masterCode;
-//                            try {
-//                                masterCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-//                            } catch (Exception ex) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            Master master = masterService.findByCodeAndBranch(masterCode, person.getBranch());
-//                            Optional.ofNullable(master).ifPresent(v -> {
-//                                course.setMaster(v);
-//                                log.info("التخصص / " + v.getName());
-//                            });
-//                            break;
-//                        case 2:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            course.setInstructor((String) excelCellHelper.getCellValue(nextCell));
-//                            log.info("المدرب / " + (String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 3:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            course.setRegistered(excelCellHelper.getCellValue(nextCell).equals("مسجل") ? true : false);
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 4:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            course.setNote((String) excelCellHelper.getCellValue(nextCell));
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 5:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            course.setMasterPaymentType((String) excelCellHelper.getCellValue(nextCell));
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 6:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            Double masterPrice;
-//                            try {
-//                                masterPrice = Double.parseDouble((String) excelCellHelper.getCellValue(nextCell));
-//                            } catch (Exception ex) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            course.setMasterPrice(masterPrice);
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 7:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            Master master = masterService.findByNameAndBranch((String) excelCellHelper.getCellValue(nextCell), person.getBranch());
-//                            if (master == null) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            course.setMaster(master);
-//                            log.info("اسم التخصص من قواعد البيانات: " + master.getName());
-//                            log.info("اسم فرع التخصص: " + master.getBranch().getName());
-//                            break;
-//                        case 8:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            try {
-//                                day = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-//                            } catch (Exception ex) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 9:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            try {
-//                                month = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-//                            } catch (Exception ex) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                        case 10:
-//                            if (excelCellHelper.getCellValue(nextCell) == null) {
-//                                accept = false;
-//                            }
-//                            nextCell.setCellType(CellType.STRING);
-//                            try {
-//                                year = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
-//                            } catch (Exception ex) {
-//                                accept = false;
-//                                break;
-//                            }
-//                            log.info((String) excelCellHelper.getCellValue(nextCell));
-//                            break;
-//                    }
-//
-//                }
-//                if (accept) {
-//                    try {
-//                        Course topCourse = courseService.findTopByMasterBranchOrderByCodeDesc(course.getMaster().getBranch());
-//                        if (topCourse == null) {
-//                            course.setCode(1);
-//                        } else {
-//                            course.setCode(topCourse.getCode() + 1);
-//                        }
-//                        course.setLastPerson(person);
-//                        course.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
-//                        course.setMasterCreditAmount(0.0);
-//                        course.setMasterDiscountAmount(0.0);
-//                        course.setMasterProfitAmount(0.0);
-//                        courseList.add(course);
-//                        courseService.save(course);
-//                    } catch (Exception ex) {
-//                        log.info(ex.getMessage());
-//                    }
-//                }
-//            }
-//            notificationService.notifyOne(Notification
-//                    .builder()
-//                    .title("العمليات على العروض")
-//                    .message("تم اضافة عدد " + courseList.size() + " من العروض بنجاح.")
-//                    .type("success")
-//                    .icon("fa-plus-circle")
-//                    .build(), principal.getName());
-//            workbook.close();
-//            fileInputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @RequestMapping(value = "/api/heavy-work/course/read", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void readExcelFile(@RequestParam("file") MultipartFile multipartFile, Principal principal) {
+        Person person = personService.findByEmail(principal.getName());
+        try {
+            List<Course> courseList = new ArrayList<>();
+            //
+            File tempFile = File.createTempFile(new BigInteger(130, random).toString(32), "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
+            FileUtils.writeByteArrayToFile(tempFile, multipartFile.getBytes());
+            FileInputStream fileInputStream = new FileInputStream(tempFile);
+            //
+            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            Sheet dataTypeSheet = workbook.getSheetAt(0);
+            //
+            Iterator<Row> iterator = dataTypeSheet.iterator();
+            log.info("تجاهل الصف الأول من الجدول والذي يحتوي على رؤوس الأعمدة");
+            if (iterator.hasNext()) iterator.next();
+            while (iterator.hasNext()) {
+                Row nextRow = iterator.next();
+                Iterator<Cell> cellIterator = nextRow.cellIterator();
+                Integer courseCode = null, masterCode = null, branchCode = null;
+                Course course = new Course();
+                boolean accept = true;
+                while (cellIterator.hasNext()) {
+                    Cell nextCell = cellIterator.next();
+                    int columnIndex = nextCell.getColumnIndex();
+                    switch (columnIndex) {
+                        case 0:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                courseCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            break;
+                        case 1:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                masterCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            break;
+                        case 2:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                branchCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            break;
+                        case 3:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            course.setInstructor((String) excelCellHelper.getCellValue(nextCell));
+                            break;
+                        case 4:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            course.setCompanyName((String) excelCellHelper.getCellValue(nextCell));
+                            break;
+                        case 5:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            Integer masterStudentCount;
+                            try {
+                                masterStudentCount = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            course.setMaxStudentCount(masterStudentCount);
+                            break;
+                        case 6:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            Date startDate;
+                            try {
+                                startDate = DateConverter.parseHijriDateStringWithFormat((String) excelCellHelper.getCellValue(nextCell), "dd/MM/yyyy");
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            course.setStartDate(startDate);
+                            break;
+                        case 7:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            Date endDate;
+                            try {
+                                endDate = DateConverter.parseHijriDateStringWithFormat((String) excelCellHelper.getCellValue(nextCell), "dd/MM/yyyy");
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            course.setEndDate(endDate);
+                            break;
+                    }
+
+                }
+                if (accept) {
+                    try {
+                        log.info("التأكد من وجود التخصص بالنسبة الى الفرع");
+                        Master master = masterService.findByCodeAndBranchCode(masterCode, branchCode);
+                        if (master == null) {
+                            log.info("تجاهل هذا الصف لعدم وجود التخصص المطلوب");
+                            continue;
+                        }
+                        if (courseService.findByCodeAndMaster(courseCode, master) != null) {
+                            log.info("تجاهل هذا الصف لتكرار الكود بالنسبة الي التخصص");
+                            continue;
+                        }
+                        course.setCode(courseCode);
+                        course.setMaster(master);
+                        course.setLastUpdate(new Date());
+                        course.setLastPerson(person);
+                        courseList.add(course);
+                        courseService.save(course);
+                    } catch (Exception ex) {
+                        log.info(ex.getMessage());
+                    }
+                }
+            }
+            notificationService.notifyOne(Notification
+                    .builder()
+                    .title("العمليات على الدورات")
+                    .message("تم اضافة عدد " + courseList.size() + " من الدورات بنجاح.")
+                    .type("success")
+                    .icon("fa-plus-circle")
+                    .build(), principal.getName());
+            workbook.close();
+            fileInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

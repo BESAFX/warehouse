@@ -45,6 +45,11 @@ app.factory("CourseService",
                 return $http.get("/api/course/fetchTableData").then(function (response) {
                     return response.data;
                 });
+            },
+            filter: function (search) {
+                return $http.get("/api/course/filter?" + search).then(function (response) {
+                    return response.data;
+                });
             }
         };
     }]);

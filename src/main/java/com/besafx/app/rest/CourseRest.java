@@ -5,6 +5,8 @@ import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Course;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
+import com.besafx.app.search.CourseSearch;
+import com.besafx.app.search.MasterSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -37,6 +39,9 @@ public class CourseRest {
 
     @Autowired
     private MasterService masterService;
+
+    @Autowired
+    private CourseSearch courseSearch;
 
     @Autowired
     private CourseService courseService;
@@ -151,6 +156,18 @@ public class CourseRest {
                         .getMasters()
                         .stream()
                         .flatMap(master -> master.getCourses().stream()).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String filter(
+            @RequestParam(value = "instructor", required = false) final String instructor,
+            @RequestParam(value = "codeFrom", required = false) final Long codeFrom,
+            @RequestParam(value = "codeTo", required = false) final Long codeTo,
+            @RequestParam(value = "branchId", required = false) final Long branchId,
+            @RequestParam(value = "masterId", required = false) final Long masterId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                courseSearch.search(instructor, codeFrom, codeTo, branchId, masterId));
     }
 
 }

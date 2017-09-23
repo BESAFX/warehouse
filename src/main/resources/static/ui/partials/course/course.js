@@ -1,9 +1,23 @@
-app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService', 'AccountService', 'PaymentService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state',
-    function (CourseService, MasterService, BranchService, AccountService, PaymentService, ModalProvider, $rootScope, $scope, $log, $timeout, $state) {
+app.controller("courseCtrl", ['CourseService', 'BranchService', 'AccountService', 'PaymentService', 'ModalProvider', '$rootScope', '$scope', '$log', '$timeout', '$state', '$uibModal',
+    function (CourseService, BranchService, AccountService, PaymentService, ModalProvider, $rootScope, $scope, $log, $timeout, $state, $uibModal) {
 
         $scope.selected = {};
 
         $scope.courses = [];
+
+        $scope.branches = [];
+
+        //
+        $scope.items = [];
+        $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+        $scope.items.push({'id': 2, 'type': 'title', 'name': 'الدورات'});
+        //
+
+        $timeout(function () {
+            BranchService.fetchBranchMaster().then(function (data) {
+                $scope.branches = data;
+            });
+        }, 2000);
 
         $scope.setSelected = function (object) {
             if (object) {
@@ -16,13 +30,6 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
                     }
                 });
             }
-        };
-
-        $scope.fetchTableData = function () {
-            CourseService.fetchTableData().then(function (data) {
-                $scope.courses = data;
-                $scope.setSelected(data[0]);
-            });
         };
 
         $scope.newCourse = function () {
@@ -83,6 +90,70 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
             });
         };
 
+        $scope.filter = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/course/courseFilter.html',
+                controller: 'courseFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'البحث فى الدورات';
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (buffer) {
+                var search = [];
+                if (buffer.instructor) {
+                    search.push('instructor=');
+                    search.push(buffer.instructor);
+                    search.push('&');
+                }
+                if (buffer.codeFrom) {
+                    search.push('codeFrom=');
+                    search.push(buffer.codeFrom);
+                    search.push('&');
+                }
+                if (buffer.codeTo) {
+                    search.push('codeTo=');
+                    search.push(buffer.codeTo);
+                    search.push('&');
+                }
+                if (buffer.branch) {
+                    search.push('branchId=');
+                    search.push(buffer.branch.id);
+                    search.push('&');
+                }
+                if (buffer.master) {
+                    search.push('masterId=');
+                    search.push(buffer.master.id);
+                    search.push('&');
+                }
+
+                CourseService.filter(search.join("")).then(function (data) {
+                    $scope.courses = data;
+                    $scope.setSelected(data[0]);
+                    $scope.items = [];
+                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'الدورات', 'style': 'font-weight:bold'});
+                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 4,
+                        'type': 'title',
+                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
+                    });
+                });
+
+            }, function () {
+                console.info('CourseFilterModel Closed.');
+            });
+        };
+
         $scope.rowMenu = [
             {
                 html: '<div class="drop-menu">انشاء دورة جديد<span class="fa fa-pencil fa-lg"></span></div>',
@@ -133,7 +204,6 @@ app.controller("courseCtrl", ['CourseService', 'MasterService', 'BranchService',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-            $scope.fetchTableData();
         }, 1500);
 
     }]);
