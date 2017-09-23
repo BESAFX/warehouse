@@ -32,7 +32,7 @@ public class AccountRest {
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
 
     public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]],payments[**,lastPerson[id,contact[id,firstName,forthName]],-account],accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account],accountConditions[**,-account,person[id,contact[id,firstName,forthName]]],accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
-    public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
+    public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
 
     @Autowired
     private PersonService personService;

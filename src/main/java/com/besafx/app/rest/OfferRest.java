@@ -58,7 +58,7 @@ public class OfferRest {
     public String create(@RequestBody Offer offer, Principal principal) {
         try {
             Person person = personService.findByEmail(principal.getName());
-            Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(offer.getMaster().getBranch());
+            Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(person.getBranch());
             if (topOffer == null) {
                 offer.setCode(1);
             } else {
