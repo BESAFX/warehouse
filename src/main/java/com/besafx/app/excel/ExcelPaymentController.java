@@ -45,7 +45,7 @@ public class ExcelPaymentController {
 
     private String firstName, secondName, thirdName, forthName;
 
-    private Integer day = null, month = null, year = null, masterCode = null, courseCode = null, accountCode = null;
+    private Integer day = null, month = null, year = null;
 
     @Autowired
     private PersonService personService;
@@ -174,16 +174,28 @@ public class ExcelPaymentController {
         sheet.setColumnWidth(10, 20 * 256);
         //
         cell = row.createCell(11);
-        cell.setCellValue("تاريخ السند");
+        cell.setCellValue("يوم تاريخ السند");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(11, 20 * 256);
+        //
+        cell = row.createCell(12);
+        cell.setCellValue("شهر تاريخ السند");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(12, 20 * 256);
+        //
+        cell = row.createCell(13);
+        cell.setCellValue("سنة تاريخ السند");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(13, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 11; j++) {
+            for (int j = 0; j <= 13; j++) {
                 cell = row.createCell(j);
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
@@ -193,7 +205,7 @@ public class ExcelPaymentController {
         //
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
         XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"ايرادات اساسية", "ايرادات اضافية"});
-        CellRangeAddressList addressList = new CellRangeAddressList(1, 12, 7, 7);
+        CellRangeAddressList addressList = new CellRangeAddressList(1, rowCount, 8, 8);
         XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
@@ -378,14 +390,36 @@ public class ExcelPaymentController {
                                 accept = false;
                             }
                             nextCell.setCellType(CellType.STRING);
-                            Date endDate;
                             try {
-                                endDate = DateConverter.parseHijriDateStringWithFormat((String) excelCellHelper.getCellValue(nextCell), "dd/MM/yyyy");
+                                day = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
                             }
-                            payment.setDate(endDate);
+                            break;
+                        case 12:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                month = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            break;
+                        case 13:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                year = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
                             break;
                     }
 
