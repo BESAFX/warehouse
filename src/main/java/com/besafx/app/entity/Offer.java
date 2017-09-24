@@ -72,6 +72,18 @@ public class Offer implements Serializable {
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     private List<Call> calls = new ArrayList<>();
 
+    public Double getNet(){
+        try{
+            if(masterPaymentType.equals("نقدي")){
+                return this.masterPrice - (this.masterPrice * this.masterDiscountAmount / 100);
+            }else{
+                return this.masterPrice + (this.masterPrice * this.masterProfitAmount / 100);
+            }
+        }catch (Exception ex){
+            return null;
+        }
+    }
+
     @JsonCreator
     public static Offer Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

@@ -52,7 +52,6 @@ public class ReportOfferController {
             @PathVariable(value = "id") Long id,
             @RequestParam(value = "exportType") ExportType exportType,
             HttpServletResponse response) throws Exception {
-        log.info("CALL");
         Offer offer = offerService.findOne(id);
         if (offer == null) {
             return;
@@ -72,23 +71,10 @@ public class ReportOfferController {
         param2.append("عرض سعر");
         map.put("param2", param2.toString());
         map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<WrapperUtil> list = new ArrayList<>();
-        WrapperUtil wrapperUtil = new WrapperUtil();
-        wrapperUtil.setObj1(offer);
-        if (offer.getMasterPaymentType().equals("نقدي")) {
-            wrapperUtil.setObj2(
-                    offer.getMasterPrice() - (offer.getMasterPrice() * offer.getMasterDiscountAmount() / 100));
-        } else {
-            wrapperUtil
-                    .setObj2(offer.getMasterPrice() + (offer.getMasterPrice() * offer.getMasterProfitAmount() / 100));
-        }
-        list.add(wrapperUtil);
+        map.put("offer", offer);
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/ReportOfferById.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
     }
 
