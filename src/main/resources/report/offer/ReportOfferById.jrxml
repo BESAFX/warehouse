@@ -533,7 +533,7 @@
 							<font fontName="Arial" size="12"/>
 							<paragraph rightIndent="5"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$P{offer}.getLastPerson().getContact().getFirstName() + " "
+						<textFieldExpression><![CDATA[$P{offer}.getLastPerson().getContact().getFirstName() + " " + 
 $P{offer}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 					</textField>
 					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
