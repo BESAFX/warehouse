@@ -26,6 +26,7 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ExcelAccountController {
 
     private SecureRandom random;
 
-    private Integer day = null, month = null, year = null, masterCode = null, courseCode = null;
+    private Integer day = null, month = null, year = null;
 
     @Autowired
     private CourseService courseService;
@@ -197,40 +198,46 @@ public class ExcelAccountController {
         sheet.setColumnWidth(14, 20 * 256);
         //
         cell = row.createCell(15);
-        cell.setCellValue("رقم التخصص");
+        cell.setCellValue("رقم الفرع");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(15, 20 * 256);
         //
         cell = row.createCell(16);
-        cell.setCellValue("رقم الدورة");
+        cell.setCellValue("رقم التخصص");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(16, 20 * 256);
         //
         cell = row.createCell(17);
-        cell.setCellValue("يوم التسجيل");
+        cell.setCellValue("رقم الدورة");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(17, 20 * 256);
         //
         cell = row.createCell(18);
-        cell.setCellValue("شهر التسجيل");
+        cell.setCellValue("يوم التسجيل");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(18, 20 * 256);
         //
         cell = row.createCell(19);
-        cell.setCellValue("سنة التسجيل");
+        cell.setCellValue("شهر التسجيل");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(19, 20 * 256);
+        //
+        cell = row.createCell(20);
+        cell.setCellValue("سنة التسجيل");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(20, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 19; j++) {
+            for (int j = 0; j <= 20; j++) {
                 cell = row.createCell(j);
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
@@ -240,7 +247,7 @@ public class ExcelAccountController {
         //
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
         XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"نقدي", "قسط شهري"});
-        CellRangeAddressList addressList = new CellRangeAddressList(1, 19, 13, 13);
+        CellRangeAddressList addressList = new CellRangeAddressList(1, rowCount, 13, 13);
         XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
@@ -280,6 +287,7 @@ public class ExcelAccountController {
             while (iterator.hasNext()) {
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
+                Integer courseCode = null, masterCode = null, branchCode = null;
                 Contact contact = new Contact();
                 Student student = new Student();
                 Account account = new Account();
@@ -421,7 +429,7 @@ public class ExcelAccountController {
                             }
                             nextCell.setCellType(CellType.STRING);
                             try {
-                                masterCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                                branchCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
@@ -434,7 +442,7 @@ public class ExcelAccountController {
                             }
                             nextCell.setCellType(CellType.STRING);
                             try {
-                                courseCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                                masterCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
@@ -447,7 +455,7 @@ public class ExcelAccountController {
                             }
                             nextCell.setCellType(CellType.STRING);
                             try {
-                                day = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                                courseCode = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
@@ -460,7 +468,7 @@ public class ExcelAccountController {
                             }
                             nextCell.setCellType(CellType.STRING);
                             try {
-                                month = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                                day = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
                             } catch (Exception ex) {
                                 accept = false;
                                 break;
@@ -468,6 +476,19 @@ public class ExcelAccountController {
                             log.info((String) excelCellHelper.getCellValue(nextCell));
                             break;
                         case 19:
+                            if (excelCellHelper.getCellValue(nextCell) == null) {
+                                accept = false;
+                            }
+                            nextCell.setCellType(CellType.STRING);
+                            try {
+                                month = Integer.parseInt((String) excelCellHelper.getCellValue(nextCell));
+                            } catch (Exception ex) {
+                                accept = false;
+                                break;
+                            }
+                            log.info((String) excelCellHelper.getCellValue(nextCell));
+                            break;
+                        case 20:
                             if (excelCellHelper.getCellValue(nextCell) == null) {
                                 accept = false;
                             }
@@ -485,7 +506,7 @@ public class ExcelAccountController {
                 }
                 if (accept) {
                     try {
-                        Course course = courseService.findByCodeAndMasterCodeAndMasterBranch(courseCode, masterCode, person.getBranch());
+                        Course course = courseService.findByCodeAndMasterCodeAndMasterBranchCode(courseCode, masterCode, branchCode);
                         if (course == null) {
                             continue;
                         }
@@ -497,8 +518,9 @@ public class ExcelAccountController {
                         } else {
                             account.setCode(topAccount.getCode() + 1);
                         }
-                        account.setRegisterDate(DateConverter.getDateFromHijri(year, month, day));
-                        account.setLastUpdate(DateConverter.getDateFromHijri(year, month, day));
+                        Date date = DateConverter.getDateFromHijri(year, month, day);
+                        account.setRegisterDate(date);
+                        account.setLastUpdate(date);
                         account.setLastPerson(person);
                         Student tempStudent = studentService.findByContactIdentityNumber(contact.getIdentityNumber().toLowerCase().trim());
                         if (tempStudent == null) {
