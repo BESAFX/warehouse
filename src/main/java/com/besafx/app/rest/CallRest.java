@@ -25,7 +25,7 @@ public class CallRest {
 
     private final static Logger log = LoggerFactory.getLogger(CallRest.class);
 
-    public static final String FILTER_TABLE = "**,person[id,contact[id,firstName,lastName]],offer[id]";
+    public static final String FILTER_TABLE = "**,person[id,contact[id,firstName,forthName]],offer[id]";
 
     @Autowired
     private CallService callService;
