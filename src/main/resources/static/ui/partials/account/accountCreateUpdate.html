@@ -266,7 +266,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="action=='create'">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="action=='create' || contains(me.team.authorities, ['ROLE_ACCOUNT_FEES_UPDATE'])">
                 <div class="panel panel-info">
                     <div class="panel-heading" style="height: 50px;">
                         <span class="col-sm-6">طريقة الدفع</span>
@@ -381,11 +381,11 @@
 
         <div class="row">
             <button ng-if="action=='create'"
-                    uib-tooltip="اضافة"
+                    uib-tooltip="حفظ"
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">add</i>
+                <i class="material-icons">save</i>
             </button>
             <button ng-if="action=='update'"
                     uib-tooltip="تعديل"
