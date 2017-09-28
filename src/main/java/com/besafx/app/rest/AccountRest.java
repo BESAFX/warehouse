@@ -84,27 +84,8 @@ public class AccountRest {
         account.setRegisterDate(new Date());
         account.setLastUpdate(new Date());
         account.setLastPerson(person);
-        Student student = studentService.findByContactIdentityNumber(account.getStudent().getContact().getIdentityNumber().toLowerCase().trim());
-        if (student == null) {
-            account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
-            account.setStudent(studentService.save(account.getStudent()));
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على تسجيل الطلاب")
-                    .message("تم انشاء حساب جديد لهذا الطالب")
-                    .type("success")
-                    .icon("fa-plus-square")
-                    .build(), principal.getName());
-        } else {
-            account.setStudent(student);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على تسجيل الطلاب")
-                    .message("تم استخدام بيانات الطالب المسجلة سابقاً")
-                    .type("success")
-                    .icon("fa-plus-square")
-                    .build(), principal.getName());
-        }
+        account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
+        account.setStudent(studentService.save(account.getStudent()));
         account = accountService.save(account);
         notificationService.notifyOne(Notification
                 .builder()
