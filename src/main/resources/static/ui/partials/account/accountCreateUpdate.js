@@ -39,7 +39,11 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
                     $scope.account.course.master = $scope.buffer.master;
                     $scope.account.course.master.branch = $scope.buffer.branch;
                     AccountService.create($scope.account).then(function (data) {
-                        $uibModalInstance.close(data);
+                        $rootScope.showConfirmNotify("تسجيل الطلاب", "هل تود طباعة العقد ؟", "notification", "fa-info", function () {
+                            $scope.print(data);
+                        });
+                        $scope.account = {};
+                        $scope.form.$setPristine();
                     });
                     break;
                 case 'update' :

@@ -40,14 +40,18 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
             if (payment) {
                 $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
                     PaymentService.remove(payment.id).then(function () {
-
+                        var index = $scope.payments.indexOf(payment);
+                        $scope.payments.splice(index, 1);
+                        $scope.setSelected($scope.payments[0]);
                     });
                 });
                 return;
             }
             $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
                 PaymentService.remove($scope.selected.id).then(function () {
-
+                    var index = $scope.payments.indexOf($scope.selected);
+                    $scope.payments.splice(index, 1);
+                    $scope.setSelected($scope.payments[0]);
                 });
             });
         };

@@ -35,11 +35,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
         };
 
         $scope.newAccount = function () {
-            ModalProvider.openAccountCreateModel($scope.selected).result.then(function (data) {
-                $rootScope.showConfirmNotify("تسجيل الطلاب", "هل تود طباعة العقد ؟", "notification", "fa-info", function () {
-                    $scope.print(data);
-                });
-            });
+            ModalProvider.openAccountCreateModel($scope.selected);
         };
 
         $scope.newPayment = function () {
@@ -204,7 +200,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openAccountCreateModel();
+                    $scope.newAccount();
                 }
             },
             {
