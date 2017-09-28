@@ -239,7 +239,7 @@
                     <div class="panel-body panel-body-table">
                         <div class="table-responsive">
                             <table st-table="collection1" st-safe-src="offers"
-                                   class="table table-bordered table-hover" arrow-selector>
+                                   class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
 
@@ -247,11 +247,11 @@
                                         <span>م</span>
                                     </th>
 
-                                    <th st-sort="code" class="text-right">
+                                    <th st-sort="code" class="text-right fit">
                                         <span> رقم العرض</span>
                                     </th>
 
-                                    <th st-sort="lastUpdate" class="text-right">
+                                    <th st-sort="lastUpdate" class="text-right fit">
                                         <span> تاريخ العرض</span>
                                     </th>
 
@@ -263,29 +263,37 @@
                                         <span> رقم الجوال</span>
                                     </th>
 
-                                    <th st-sort="masterPaymentType" class="text-right">
+                                    <th st-sort="masterPaymentType" class="text-right fit">
                                         <span> نوع الدفع</span>
                                     </th>
 
-                                    <th st-sort="masterPrice" class="text-right">
-                                        <span>المبلغ نقداً</span>
+                                    <th st-sort="masterPrice" class="text-right fit">
+                                        <span>سعر الدورة</span>
                                     </th>
 
-                                    <th st-sort="registered" class="text-right">
-                                        <span>الحالة</span>
+                                    <th st-sort="masterDiscountAmount" class="text-right fit">
+                                        <span>الخصم</span>
+                                    </th>
+
+                                    <th st-sort="masterProfitAmount" class="text-right fit">
+                                        <span>الفائدة</span>
+                                    </th>
+
+                                    <th st-sort="net" class="text-right fit">
+                                        <span>الصافي</span>
                                     </th>
 
                                     <th st-sort="master.name" class="text-right">
                                         <span>التخصص</span>
                                     </th>
 
-                                    <th st-sort="lastPerson.contact.id" class="text-right">
+                                    <th st-sort="lastPerson.contact.id" class="text-right fit">
                                         <span>مدخل العرض</span>
                                     </th>
 
                                 </tr>
                                 <tr>
-                                    <th colspan="10">
+                                    <th colspan="12">
                                         <input st-search=""
                                                class="form-control"
                                                placeholder="بحث شامل وسريع..."
@@ -303,35 +311,41 @@
                                     ng-right-click="setSelected(offer)"
                                     ng-class="{'mdl-color--brown-100':offer.isSelected}">
                                     <td st-select-row-custom="offer">{{$index+1}}</td>
-                                    <td st-select-row-custom="offer">{{offer.code}}</td>
-                                    <td st-select-row-custom="offer">
+                                    <td st-select-row-custom="offer" class="fit">{{offer.code}}</td>
+                                    <td st-select-row-custom="offer" class="fit">
                                         {{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
                                     </td>
-                                    <td st-select-row-custom="offer">{{offer.customerName}}</td>
+                                    <td st-select-row-custom="offer">
+                                        <span ng-if="offer.registered" class="label label-success">مسجل</span>
+                                        <span ng-if="!offer.registered" class="label label-danger">غير مُسجل</span>
+                                        {{offer.customerName}}
+                                    </td>
                                     <td st-select-row-custom="offer">
                                         {{offer.customerMobile}}
                                         <span class="label label-warning" ng-if="offer.calls.length > 0">{{offer.calls.length}} اتصال</span>
                                     </td>
-                                    <td st-select-row-custom="offer">{{offer.masterPaymentType}}</td>
-                                    <td st-select-row-custom="offer">{{offer.masterPrice}}</td>
-                                    <td st-select-row-custom="offer" ng-bind-html="offer.registered ? '<span class=&quot;label label-success&quot;>مسجل</span>' : '<span class=&quot;label label-danger&quot;>غير مسجل</span>'"></td>
+                                    <td st-select-row-custom="offer" class="fit">{{offer.masterPaymentType}}</td>
+                                    <td st-select-row-custom="offer" class="fit">{{offer.masterPrice}} SAR</td>
+                                    <td st-select-row-custom="offer" class="fit">{{offer.masterDiscountAmount}} %</td>
+                                    <td st-select-row-custom="offer" class="fit">{{offer.masterProfitAmount}} %</td>
+                                    <td st-select-row-custom="offer" class="fit"s>{{offer.net}} SAR</td>
                                     <td st-select-row-custom="offer">
                                         [ {{offer.master.code}} ]
                                         {{offer.master.name}}
                                     </td>
-                                    <td st-select-row-custom="offer">
+                                    <td st-select-row-custom="offer" class="fit">
                                         {{offer.lastPerson.contact.firstName}}
                                         {{offer.lastPerson.contact.forthName}}
                                     </td>
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                     ng-show="!collection1 || collection1.length ==0">
-                                    <td colspan="10">لا توجد بيانات</td>
+                                    <td colspan="12">لا توجد بيانات</td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td colspan="10">
+                                    <td colspan="12">
                                         <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
                                     </td>
                                 </tr>
