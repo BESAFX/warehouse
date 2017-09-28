@@ -185,7 +185,7 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                     open: 'animated fadeIn',
                     close: 'animated fadeOut',
                     easing: 'swing',
-                    speed: 100 // opening & closing animation speed
+                    speed: 200 // opening & closing animation speed
                 },
                 closeWith: ['button'], // ['click', 'button', 'hover', 'backdrop'] // backdrop click will close all notifications
                 modal: true, // [boolean] if true adds an overlay

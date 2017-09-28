@@ -8,7 +8,7 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
         $timeout(function () {
             MasterService.fetchMasterCombo().then(function (data) {
                 $scope.masters = data;
-            })
+            });
         }, 2000);
 
         $scope.clear = function () {

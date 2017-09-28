@@ -161,34 +161,40 @@ public class ExcelOfferController {
         sheet.setColumnWidth(6, 20 * 256);
         //
         cell = row.createCell(7);
-        cell.setCellValue("اسم التخصص");
+        cell.setCellValue("رقم التخصص");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(7, 20 * 256);
         //
         cell = row.createCell(8);
-        cell.setCellValue("يوم العرض");
+        cell.setCellValue("رقم الفرع");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(8, 20 * 256);
         //
         cell = row.createCell(9);
-        cell.setCellValue("شهر العرض");
+        cell.setCellValue("يوم العرض");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(9, 20 * 256);
         //
         cell = row.createCell(10);
-        cell.setCellValue("سنة العرض");
+        cell.setCellValue("شهر العرض");
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(styleColumnHeader);
         sheet.setColumnWidth(10, 20 * 256);
+        //
+        cell = row.createCell(11);
+        cell.setCellValue("سنة العرض");
+        cell.setCellType(CellType.STRING);
+        cell.setCellStyle(styleColumnHeader);
+        sheet.setColumnWidth(11, 20 * 256);
         //
         for (int i = 1; i <= rowCount; i++) {
             row = sheet.createRow(i);
             row.setHeightInPoints((short) 25);
             //
-            for (int j = 0; j <= 10; j++) {
+            for (int j = 0; j <= 11; j++) {
                 cell = row.createCell(j);
                 cell.setCellType(CellType.STRING);
                 cell.setCellValue("---");
@@ -196,34 +202,10 @@ public class ExcelOfferController {
             }
         }
         //
-        XSSFSheet realSheet = workbook.createSheet("قائمة التخصصات");
-        XSSFSheet hidden = workbook.createSheet("hidden");
-        for (int i = 0, length = masters.size(); i < length; i++) {
-            String name = masters.get(i).getName();
-            Row hiddenRow = hidden.createRow(i);
-            Cell hiddenCell = hiddenRow.createCell(0);
-            hiddenCell.setCellValue(name);
-        }
-        Name namedCell = workbook.createName();
-        namedCell.setNameName("hidden");
-        namedCell.setRefersToFormula("hidden!$A$1:$A$" + masters.size());
-        //
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
-//        XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(Lists.newArrayList(masters).stream().map(master -> master.getName().toString()).collect(Collectors.toList()).stream().toArray(String[]::new));
-        XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createFormulaListConstraint("hidden");
-        CellRangeAddressList addressList = new CellRangeAddressList(1, 10, 7, 7);
+        XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"مسجل", "غير مسجل"});
+        CellRangeAddressList addressList = new CellRangeAddressList(1, rowCount, 3, 3);
         XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
-        validation.setShowErrorBox(true);
-        validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
-        validation.createErrorBox("العروض الذكية", "فضلاً اختر اسم التخصص دون تعديل من القائمة.");
-        sheet.addValidationData(validation);
-        //
-        realSheet.addValidationData(validation);
-        //
-        dvHelper = new XSSFDataValidationHelper(sheet);
-        dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"مسجل", "غير مسجل"});
-        addressList = new CellRangeAddressList(1, 10, 3, 3);
-        validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
         validation.createErrorBox("العروض الذكية", "فضلاً اختر الحالة دون تعديل من القائمة.");
@@ -231,7 +213,7 @@ public class ExcelOfferController {
         //
         dvHelper = new XSSFDataValidationHelper(sheet);
         dvConstraint = (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(new String[]{"نقدي", "قسط شهري"});
-        addressList = new CellRangeAddressList(1, 10, 5, 5);
+        addressList = new CellRangeAddressList(1, rowCount, 5, 5);
         validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint, addressList);
         validation.setShowErrorBox(true);
         validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
