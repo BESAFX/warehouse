@@ -114,6 +114,7 @@ app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountNoteSer
             angular.forEach(files, function (file) {
                 var wrapper = {};
                 wrapper.src = file;
+                console.info(file);
                 wrapper.name = file.name;
                 wrappers.push(wrapper);
             });
