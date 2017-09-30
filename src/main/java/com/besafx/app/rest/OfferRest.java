@@ -110,6 +110,9 @@ public class OfferRest {
     public void delete(@PathVariable Long id, Principal principal) {
         Offer object = offerService.findOne(id);
         if (object != null) {
+            if(!principal.getName().equals(object.getLastPerson().getEmail())){
+                throw new CustomException("لا يمكنك حذف عرض لم تقم بإضافته");
+            }
             offerService.delete(id);
             notificationService.notifyOne(Notification
                     .builder()
