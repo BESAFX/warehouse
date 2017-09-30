@@ -47,6 +47,7 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
                     });
                     break;
                 case 'update' :
+                    $scope.account.coursePaymentType = ($scope.showBox ? 'نقدي' : 'قسط شهري');
                     AccountService.update($scope.account).then(function (data) {
                         $scope.account = data;
                     });
