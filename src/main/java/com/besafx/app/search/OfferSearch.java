@@ -37,6 +37,7 @@ public class OfferSearch {
             final Long masterPriceTo,
             final Long branch,
             final Long master,
+            final Long personId,
             final Boolean registered
     ) {
         List<Specification> predicates = new ArrayList<>();
@@ -51,6 +52,7 @@ public class OfferSearch {
         Optional.ofNullable(masterPriceTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("masterPrice"), value)));
         Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("master").get("branch").get("id"), value)));
         Optional.ofNullable(master).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("master").get("id"), value)));
+        Optional.ofNullable(personId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("lastPerson").get("id"), value)));
         Optional.ofNullable(registered).ifPresent(value -> predicates.add((root, cq, cb) -> value ? cb.isTrue(root.get("registered")) : cb.isFalse(root.get("registered"))));
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);

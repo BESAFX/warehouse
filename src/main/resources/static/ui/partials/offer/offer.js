@@ -111,6 +111,11 @@ app.controller("offerCtrl", ['OfferService', 'CallService', 'BranchService', 'Pe
                     search.push(buffer.master.id);
                     search.push('&');
                 }
+                if (buffer.person) {
+                    search.push('personId=');
+                    search.push(buffer.person.id);
+                    search.push('&');
+                }
 
                 search.push('registered=');
                 search.push(buffer.registered);
