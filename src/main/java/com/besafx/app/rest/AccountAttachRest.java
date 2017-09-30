@@ -28,7 +28,7 @@ public class AccountAttachRest {
 
     private final static Logger log = LoggerFactory.getLogger(AccountAttachRest.class);
 
-    private final String FILTER_TABLE = "**,account[id],attach[id],attachType[id]";
+    private final String FILTER_TABLE = "**,account[id],attach[**,person[id,contact[firstName,forthName]]],attachType[**]";
 
     @Autowired
     private PersonService personService;
