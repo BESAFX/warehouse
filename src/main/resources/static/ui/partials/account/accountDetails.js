@@ -194,7 +194,6 @@ app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountNoteSer
             for(var i = 0; (scannedImages instanceof Array) && i < scannedImages.length; i++) {
                 var wrapper = {};
                 wrapper.src = scannedImages[i].src;
-                console.info(wrapper.src);
                 wrappers.push(wrapper);
             }
 
