@@ -2,7 +2,7 @@
       focus-group-tail="loop">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center">تقرير عن العروض للفروع</h3>
+        <h3 class="modal-title text-center">تقرير عن العروض للتخصصات</h3>
     </div>
 
     <div class="panel-body">
@@ -20,9 +20,24 @@
                         focus-autofocus="1"
                         multiple="multiple"
                         ng-model="buffer.branchesList"
-                        required="required"
                         disable-validation-message=""
                         ng-options="(' [ ' + branch.code + ' ] ' + ' ' +  branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                </select>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="masterCategory" class="control-label">[رقم النوع] اسم النوع</label>
+                <select id="masterCategory"
+                        data-placeholder="ابحث عن نوع التخصص"
+                        no-results-text="'لا توجد أنواع توافق بحثك'"
+                        placeholder-text-multiple="'اختر أنوع التخصصات'"
+                        class="form-control text-right"
+                        chosen=""
+                        multiple="multiple"
+                        ng-model="buffer.masterCategoriesList"
+                        required="required"
+                        disable-validation-message=""
+                        ng-options="masterCategory.name for masterCategory in masterCategories | orderBy:'name' track by masterCategory.id">
                 </select>
             </div>
 
@@ -111,7 +126,7 @@
                        placeholder="ادخل عنوان مختصر..."
                        ng-model="buffer.title">
             </div>
-            
+
         </div>
 
     </div>

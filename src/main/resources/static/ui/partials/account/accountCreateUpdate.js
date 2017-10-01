@@ -20,6 +20,10 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
             }
         };
 
+        $scope.print = function (account) {
+            window.open('/report/account/contract/' + account.id);
+        };
+
         if (account) {
             $scope.account = account;
             $scope.showBox = $scope.account.coursePaymentType == 'نقدي' ? true : false;

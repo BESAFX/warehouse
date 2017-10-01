@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.swing.text.View;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -183,25 +184,61 @@ public class MasterRest {
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchTableData(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findByEmail(principal.getName()).getBranch().getMasters());
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                    Lists.newArrayList(branchService.findAll())
+                            .stream()
+                            .flatMap(branch -> branch.getMasters().stream())
+                            .collect(Collectors.toList()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person.getBranch().getMasters());
+        }
     }
 
     @RequestMapping(value = "fetchMasterCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchMasterCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COMBO),
+                    Lists.newArrayList(branchService.findAll())
+                            .stream()
+                            .flatMap(branch -> branch.getMasters().stream())
+                            .collect(Collectors.toList()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COMBO), person.getBranch().getMasters());
+        }
     }
 
     @RequestMapping(value = "fetchMasterCourseCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchMasterCourseCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO),
+                    Lists.newArrayList(branchService.findAll())
+                            .stream()
+                            .flatMap(branch -> branch.getMasters().stream())
+                            .collect(Collectors.toList()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_COURSE_COMBO), person.getBranch().getMasters());
+        }
     }
 
     @RequestMapping(value = "fetchMasterBranchCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchMasterBranchCombo(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO), personService.findByEmail(principal.getName()).getBranch().getMasters());
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO),
+                    Lists.newArrayList(branchService.findAll())
+                            .stream()
+                            .flatMap(branch -> branch.getMasters().stream())
+                            .collect(Collectors.toList()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO), person.getBranch().getMasters());
+        }
     }
 
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

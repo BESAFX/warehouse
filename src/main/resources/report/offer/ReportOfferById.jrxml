@@ -5,22 +5,11 @@
 	<import value="com.besafx.app.util.DateConverter"/>
 	<parameter name="param1" class="java.lang.Object" isForPrompting="false"/>
 	<parameter name="param2" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="param3" class="java.lang.Object" isForPrompting="false"/>
 	<parameter name="offer" class="com.besafx.app.entity.Offer"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<field name="obj1" class="com.besafx.app.entity.Offer"/>
-	<background>
-		<band height="802">
-			<rectangle radius="0">
-				<reportElement mode="Transparent" x="0" y="0" width="555" height="802" backcolor="#754C29" uuid="35b9c1e5-9d24-42ac-bda7-542f52ca0b1d"/>
-				<graphicElement>
-					<pen lineWidth="2.0" lineColor="#754C29"/>
-				</graphicElement>
-			</rectangle>
-		</band>
-	</background>
 	<pageHeader>
 		<band height="72" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -80,137 +69,141 @@
 		</band>
 	</pageHeader>
 	<pageFooter>
-		<band height="43" splitType="Stretch">
+		<band height="64" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<frame>
-				<reportElement x="0" y="6" width="555" height="37" uuid="38bb6f30-8a15-498e-adcc-96f848f5ce4e"/>
-				<staticText>
-					<reportElement mode="Transparent" x="430" y="4" width="125" height="10" backcolor="#754C29" uuid="8f7f892d-5077-463a-a548-f6e45bb1e057"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[منطقة الحدود الشمالية ـ عرعر]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="360" y="4" width="70" height="10" backcolor="#754C29" uuid="e06a2b6b-a305-4769-96b5-ee36db8f4126"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[هاتف: 046620392]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="280" y="4" width="80" height="10" backcolor="#754C29" uuid="44dfb6b8-e24e-4b95-90a7-1b44678a5dd3"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[فاكس: 046611627]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="181" y="4" width="99" height="10" backcolor="#754C29" uuid="ec09d742-1155-4fc0-a24b-d3b395d9d738"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[جوال: 0504975344]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="109" y="4" width="72" height="10" backcolor="#754C29" uuid="f7c74cba-a7f8-4961-a1b2-249a2dce3810"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[هاتف: 04663655]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="0" y="4" width="108" height="10" backcolor="#754C29" uuid="cea5dbb1-d93d-400d-85db-0a82dea5c821"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[ص . ب 1175]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="0" y="14" width="108" height="10" backcolor="#754C29" uuid="f210e6fc-9495-414e-9e11-185f51d999dd"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Northen Border Region (ARAR)]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="181" y="14" width="99" height="10" backcolor="#754C29" uuid="5752d401-f9b9-4f43-8fa7-11023c47ebaf"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Fax. 046611627]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="109" y="14" width="72" height="10" backcolor="#754C29" uuid="6b1443d1-7176-4f8d-8aa6-b00118d32ed1"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Tel. 046620392]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="280" y="14" width="80" height="10" backcolor="#754C29" uuid="4691dba8-4507-4cf4-9395-006b0eb4b7af"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Mobile. 0504975344]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="360" y="14" width="70" height="10" backcolor="#754C29" uuid="0d6904b4-b7e0-4639-98c2-c272d0ee8490"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Tel. 04663655]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="430" y="14" width="125" height="10" backcolor="#754C29" uuid="471c1fa3-9387-4f4f-8fe5-ebe4a8b2c0b0">
+				<reportElement x="0" y="11" width="555" height="28" uuid="f423e4ad-7e09-40ae-a68f-8fea8efe7a79"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="14" uuid="7d7f5b36-0cb1-4bf1-81ff-d15f30f8933f">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+					</reportElement>
+					<staticText>
+						<reportElement mode="Transparent" x="0" y="0" width="95" height="14" backcolor="#754C29" uuid="7a80149f-aab7-402b-b5c8-43f2c04d54f4"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[منطقة الحدود الشمالية ـ عرعر]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="95" y="0" width="92" height="14" backcolor="#754C29" uuid="f3996e0c-2bc4-4e68-bf0e-3cdd2f832a89"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[هاتف: 046620392]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="187" y="0" width="92" height="14" backcolor="#754C29" uuid="75f923e3-c77a-4bff-909d-768376f46ce4"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[فاكس: 046611627]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="279" y="0" width="92" height="14" backcolor="#754C29" uuid="e522459a-d1e3-48f3-8812-de7a2ae8a2e1"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[جوال: 0504975344]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="371" y="0" width="92" height="14" backcolor="#754C29" uuid="12134774-f755-4026-936a-d0e3eef387db"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[هاتف: 04663655]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="463" y="0" width="92" height="14" backcolor="#754C29" uuid="89204e4b-2d3b-47c3-9e7e-253d2179b85a"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[ص . ب 1175]]></text>
+					</staticText>
+				</frame>
+				<frame>
+					<reportElement x="0" y="14" width="555" height="14" uuid="176d5f89-180a-4178-96b4-e3304349795e">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+					</reportElement>
+					<staticText>
+						<reportElement mode="Transparent" x="0" y="0" width="95" height="14" backcolor="#754C29" uuid="69b52ef5-aa11-4c78-9cd1-88dcb36ecc15"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="6" isBold="false"/>
+						</textElement>
+						<text><![CDATA[Northen Border Region (ARAR)]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="95" y="0" width="92" height="14" backcolor="#754C29" uuid="313fc343-f802-4971-be1b-00b523eb63bc"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[Tel. 046620392]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="187" y="0" width="92" height="14" backcolor="#754C29" uuid="405ab2ff-9b33-4eb3-9dec-f9fd89dadbb3"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[Fax. 046611627]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="279" y="0" width="92" height="14" backcolor="#754C29" uuid="75b9287e-98c3-4d8d-8d9d-4426519492f5"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[Mobile. 0504975344]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="371" y="0" width="92" height="14" backcolor="#754C29" uuid="ace25831-402c-4788-872d-cce0881b1bee"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[Tel. 04663655]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="463" y="0" width="92" height="14" backcolor="#754C29" uuid="97b0777a-1aaa-45ac-9a00-17503e59ee92">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						</reportElement>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[P.O.Box 1175]]></text>
+					</staticText>
+				</frame>
+			</frame>
+			<frame>
+				<reportElement x="0" y="50" width="555" height="14" uuid="a9a574c0-09b0-4b2a-8618-cb8fbe64638c">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+				</reportElement>
+				<textField>
+					<reportElement mode="Transparent" x="0" y="0" width="185" height="14" backcolor="#754C29" uuid="f8feb2c0-9ead-42c8-a988-efa579c990fe">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
 					</textElement>
-					<text><![CDATA[P.O.Box 1175]]></text>
-				</staticText>
-				<line>
-					<reportElement x="0" y="0" width="555" height="1" backcolor="#754C29" uuid="ce0f863b-d261-45a2-8cf3-abe5c1cdd569">
+					<textFieldExpression><![CDATA["Printing Date: " + DateConverter.getHijriStringFromDateLTRWithTime(new java.util.Date())]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="463" y="0" width="46" height="14" uuid="5fd6ac3a-712e-4a8c-9fc1-3be0ef4d7cc8">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="509" y="0" width="46" height="14" uuid="5810135c-1303-441c-b06f-ee44aff1c24d">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
-				</line>
-				<textField isStretchWithOverflow="true" evaluationTime="Report">
-					<reportElement stretchType="RelativeToTallestObject" x="0" y="24" width="35" height="13" uuid="2fc83eff-dd17-4dbc-8daf-20994f7d2e16"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="GE SS Text Light" size="9"/>
-					</textElement>
-					<textFieldExpression><![CDATA[" (" + $V{PAGE_NUMBER} + ")"]]></textFieldExpression>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement stretchType="RelativeToTallestObject" x="85" y="24" width="30" height="13" uuid="08bb618a-3dd1-451d-bde8-bb7ed7106ca7"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="GE SS Text Light" size="9"/>
-					</textElement>
-					<textFieldExpression><![CDATA["(" + $V{PAGE_NUMBER} + ")"]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement mode="Transparent" x="35" y="24" width="50" height="13" backcolor="#754C29" uuid="56955205-bb81-40c5-830b-bf783c5aaf1d"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="GE SS Text Light" size="9" isBold="false"/>
-					</textElement>
-					<text><![CDATA[عدد الصفحات]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="true">
-					<reportElement stretchType="RelativeToTallestObject" x="430" y="24" width="125" height="13" uuid="7ff7b864-37fb-4fb8-b206-75c66f9cdd9a"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="GE SS Text Light" size="9"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{param3}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement mode="Transparent" x="115" y="24" width="59" height="13" backcolor="#754C29" uuid="c884d9e2-ead3-4507-bdf2-5341ec716844"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="GE SS Text Light" size="9" isBold="false"/>
-					</textElement>
-					<text><![CDATA[رقم الصفحة]]></text>
-				</staticText>
 			</frame>
 		</band>
 	</pageFooter>

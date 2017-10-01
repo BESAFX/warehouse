@@ -307,9 +307,18 @@
                                                 tooltip-append-to-body="true"
                                                 type="button"
                                                 href=""
-                                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_DELETE'])"
-                                                ng-click="deleteFile(accountAttach);"
+                                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_UPDATE'])"
+                                                ng-click="updateFile(accountAttach);"
                                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <i class="material-icons md-18">delete</i>
+                                            </a>
+                                            <a uib-tooltip="حذف"
+                                               tooltip-append-to-body="true"
+                                               type="button"
+                                               href=""
+                                               ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_DELETE'])"
+                                               ng-click="deleteFile(accountAttach);"
+                                               class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                 <i class="material-icons md-18">delete</i>
                                             </a>
                                         </div>

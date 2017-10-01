@@ -847,6 +847,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.OfferByMasterCategory                               *
+     *                                                            *
+     *************************************************************/
+    this.openReportOfferByMasterCategoryModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/offer/offerByMasterCategory.html",
+            controller: "offerByMasterCategoryCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.OfferByPerson                                       *
      *                                                            *
      *************************************************************/

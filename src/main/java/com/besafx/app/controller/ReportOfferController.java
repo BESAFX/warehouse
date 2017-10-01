@@ -9,6 +9,7 @@ import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.util.WrapperUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.joda.time.DateTime;
@@ -16,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.scheduling.annotation.Async;
@@ -33,15 +36,6 @@ public class ReportOfferController {
 
     @Autowired
     private OfferService offerService;
-
-    @Autowired
-    private BranchService branchService;
-
-    @Autowired
-    private MasterService masterService;
-
-    @Autowired
-    private PersonService personService;
 
     @Autowired
     private ReportExporter reportExporter;
@@ -67,10 +61,7 @@ public class ReportOfferController {
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
         map.put("param1", param1.toString());
-        StringBuilder param2 = new StringBuilder();
-        param2.append("عرض سعر");
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
+        map.put("param2", "عرض سعر");
         map.put("offer", offer);
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/ReportOfferById.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -78,18 +69,15 @@ public class ReportOfferController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/OfferByBranch/{id}", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/report/OfferByBranches", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void ReportOfferByBranch(
-            @PathVariable(value = "id") Long id,
+    public void ReportOfferByBranches(
+            @RequestParam(value = "ids") List<Long> ids,
+            @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws Exception {
-        Branch branch = branchService.findOne(id);
-        if (branch == null) {
-            return;
-        }
         /**
          * Insert Parameters
          */
@@ -101,19 +89,15 @@ public class ReportOfferController {
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
         map.put("param1", param1.toString());
-        StringBuilder param2 = new StringBuilder();
-        param2.append("تقرير عن العروض للفرع/ ");
-        param2.append(branch.getName());
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
+        map.put("param2", title);
         /**
          * Insert Data
          */
         List<Offer> offers;
         if (startDate == null && endDate == null) {
-            offers = offerService.findByMasterBranch(branch);
+            offers = offerService.findByMasterBranchIdIn(ids);
         } else {
-            offers = offerService.findByMasterBranchAndLastUpdateBetween(branch, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
+            offers = offerService.findByMasterBranchIdInAndLastUpdateBetween(ids, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")
@@ -130,19 +114,58 @@ public class ReportOfferController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/OfferByMaster/{id}", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/report/OfferByMasterCategories", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void ReportOfferByMaster(
-            @PathVariable(value = "id") Long id,
+    public void OfferByMasterCategories(
+            @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "masterCategoryIds") List<Long> masterCategoryIds,
+            @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
             throws Exception {
-        Master master = masterService.findOne(id);
-        if (master == null) {
-            return;
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder param1 = new StringBuilder();
+        param1.append("المملكة العربية السعودية");
+        param1.append("\n");
+        param1.append("المعهد الأهلي العالي للتدريب");
+        param1.append("\n");
+        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
+        map.put("param1", param1.toString());
+        map.put("param2", title);
+        //Start Search
+        List<Offer> list = new ArrayList<>();
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("branch").get("id").in(value)));
+        Optional.ofNullable(masterCategoryIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("masterCategory").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        if (!predicates.isEmpty()) {
+            Specification result = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                result = Specifications.where(result).and(predicates.get(i));
+            }
+            list.addAll(offerService.findAll(result));
         }
+        //End Search
+        map.put("offers", list);
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
+    @RequestMapping(value = "/report/OfferByMasters", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    public void ReportOfferByMasters(
+            @RequestParam(value = "ids") List<Long> ids,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            HttpServletResponse response)
+            throws Exception {
         /**
          * Insert Parameters
          */
@@ -154,22 +177,15 @@ public class ReportOfferController {
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
         map.put("param1", param1.toString());
-        StringBuilder param2 = new StringBuilder();
-        param2.append("تقرير عن العروض للتخصص/ ");
-        param2.append(master.getName());
-        param2.append(" ");
-        param2.append("التابع للفرع/ ");
-        param2.append(master.getBranch().getName());
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
+        map.put("param2", title);
         /**
          * Insert Data
          */
         List<Offer> offers;
         if (startDate == null && endDate == null) {
-            offers = offerService.findByMaster(master);
+            offers = offerService.findByMasterIdIn(ids);
         } else {
-            offers = offerService.findByMasterAndLastUpdateBetween(master, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
+            offers = offerService.findByMasterIdInAndLastUpdateBetween(ids, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")
@@ -186,19 +202,16 @@ public class ReportOfferController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/OfferByPerson/{id}", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/report/OfferByPersons", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void ReportOfferByPerson(
-            @PathVariable(value = "id") Long id,
+    public void ReportOfferByPersons(
+            @RequestParam(value = "ids") List<Long> ids,
+            @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
             throws Exception {
-        Person person = personService.findOne(id);
-        if (person == null) {
-            return;
-        }
         /**
          * Insert Parameters
          */
@@ -210,19 +223,15 @@ public class ReportOfferController {
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
         map.put("param1", param1.toString());
-        StringBuilder param2 = new StringBuilder();
-        param2.append("تقرير عن العروض للموظف/ ");
-        param2.append(person.getContact().getFirstName().concat(" ").concat(person.getContact().getForthName()));
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
+        map.put("param2", title);
         /**
          * Insert Data
          */
         List<Offer> offers;
         if (startDate == null && endDate == null) {
-            offers = offerService.findByLastPerson(person);
+            offers = offerService.findByLastPersonIdIn(ids);
         } else {
-            offers = offerService.findByLastPersonAndLastUpdateBetween(person, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
+            offers = offerService.findByLastPersonIdInAndLastUpdateBetween(ids, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
             map.put("param2", map.get("param2").toString()
                     .concat(" ")
                     .concat("التاريخ من: ")

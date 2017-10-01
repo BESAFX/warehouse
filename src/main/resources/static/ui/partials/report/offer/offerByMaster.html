@@ -14,13 +14,15 @@
                 <select id="master"
                         data-placeholder="ابحث عن التخصص"
                         no-results-text="'لا توجد تخصصات توافق بحثك'"
-                        placeholder-text-single="'اختر التخصص'"
+                        placeholder-text-multiple="'اختر التخصصات'"
                         class="form-control text-right"
                         chosen=""
-                        ng-model="buffer.master"
+                        focus-autofocus="1"
+                        multiple="multiple"
+                        ng-model="buffer.mastersList"
                         required="required"
                         disable-validation-message=""
-                        ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
+                        ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name + ' [ ' + master.branch.name + ' ] ') group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>
             </div>
 
@@ -97,6 +99,17 @@
                         <span>ملف من نوع ODT</span>
                     </option>
                 </select>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="title" class="control-label">عنوان التقرير</label>
+                <input id="title"
+                       type="text"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       placeholder="ادخل عنوان مختصر..."
+                       ng-model="buffer.title">
             </div>
 
         </div>
