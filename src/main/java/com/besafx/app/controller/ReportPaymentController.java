@@ -211,7 +211,7 @@ public class ReportPaymentController {
         param2.append("قائمة سندات مخصصة");
         map.put("param1", param1.toString());
         map.put("param2", param2.toString());
-        map.put("param3", listId.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
+        map.put("payments", listId.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
