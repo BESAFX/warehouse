@@ -119,29 +119,40 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="obj1" class="com.besafx.app.entity.Offer"/>
+		<field name="code" class="java.lang.Integer"/>
+		<field name="customerName" class="java.lang.String"/>
+		<field name="customerMobile" class="java.lang.String"/>
+		<field name="masterPaymentType" class="java.lang.String"/>
+		<field name="masterPrice" class="java.lang.Double"/>
+		<field name="registered" class="java.lang.Boolean"/>
+		<field name="masterDiscountAmount" class="java.lang.Double"/>
+		<field name="masterCreditAmount" class="java.lang.Double"/>
+		<field name="master" class="com.besafx.app.entity.Master"/>
+		<field name="lastUpdate" class="java.util.Date"/>
+		<field name="lastPerson" class="com.besafx.app.entity.Person"/>
+		<field name="net" class="java.lang.Double"/>
 		<sortField name="SORT_BY_BRANCH" type="Variable"/>
 		<sortField name="SORT_BY_MASTER" type="Variable"/>
 		<sortField name="SORT_BY_MOBILE" type="Variable"/>
 		<sortField name="SORT_BY_DATE" type="Variable"/>
 		<sortField name="SORT_BY_CODE" type="Variable"/>
 		<variable name="SUM_MASTER_PRICE" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[$F{obj1}.getMasterPrice()]]></variableExpression>
+			<variableExpression><![CDATA[$F{net}]]></variableExpression>
 		</variable>
 		<variable name="SORT_BY_CODE" class="java.lang.Integer">
-			<variableExpression><![CDATA[$F{obj1}.getCode()]]></variableExpression>
+			<variableExpression><![CDATA[$F{code}]]></variableExpression>
 		</variable>
 		<variable name="SORT_BY_DATE" class="java.util.Date">
-			<variableExpression><![CDATA[$F{obj1}.getLastUpdate()]]></variableExpression>
+			<variableExpression><![CDATA[$F{lastUpdate}]]></variableExpression>
 		</variable>
 		<variable name="SORT_BY_MOBILE" class="java.lang.String">
-			<variableExpression><![CDATA[$F{obj1}.getCustomerMobile()]]></variableExpression>
+			<variableExpression><![CDATA[$F{customerMobile}]]></variableExpression>
 		</variable>
 		<variable name="SORT_BY_MASTER" class="java.lang.Long">
-			<variableExpression><![CDATA[$F{obj1}.getMaster().getId()]]></variableExpression>
+			<variableExpression><![CDATA[$F{master}.getId()]]></variableExpression>
 		</variable>
 		<variable name="SORT_BY_BRANCH" class="java.lang.Long">
-			<variableExpression><![CDATA[$F{obj1}.getMaster().getBranch().getId()]]></variableExpression>
+			<variableExpression><![CDATA[$F{master}.getBranch().getId()]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="param1" class="java.lang.Object" isForPrompting="false"/>
@@ -325,7 +336,7 @@
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
-					<textElement textAlignment="Left"/>
+					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 			</frame>
@@ -341,7 +352,7 @@
 					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
-					<datasetRun subDataset="ItemDataset" uuid="a8cc9713-c7e1-4a06-864b-25a326ac6431">
+					<datasetRun subDataset="ItemDataset" uuid="712174dc-e078-4b3e-9b9c-7a3be575dd30">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{offers})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:columnGroup width="555" uuid="48a0a450-8588-402a-9f24-74fb6da1ce71">
@@ -404,8 +415,8 @@
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getLastPerson().getContact().getFirstName() + " " +
-$F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{lastPerson}.getContact().getFirstName() + " " +
+$F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -426,7 +437,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getMaster().getBranch().getName()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{master}.getBranch().getName()]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -447,7 +458,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getMaster().getName()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{master}.getName()]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -468,7 +479,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getCustomerMobile()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{customerMobile}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -489,7 +500,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($F{obj1}.getLastUpdate())]]></textFieldExpression>
+									<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($F{lastUpdate})]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -548,7 +559,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 										<textElement textAlignment="Center" verticalAlignment="Middle">
 											<font fontName="Arial" size="8"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$F{obj1}.getMasterCreditAmount()]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$F{masterCreditAmount}]]></textFieldExpression>
 									</textField>
 									<textField isStretchWithOverflow="true" pattern="#,##0.###" isBlankWhenNull="true">
 										<reportElement x="0" y="18" width="46" height="17" uuid="3f01f615-6ffe-489c-9f55-2f486414fd5f"/>
@@ -561,7 +572,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 										<textElement textAlignment="Center" verticalAlignment="Middle">
 											<font fontName="Arial" size="8"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$F{obj1}.getMasterDiscountAmount()]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$F{masterDiscountAmount}]]></textFieldExpression>
 									</textField>
 								</frame>
 							</jr:detailCell>
@@ -627,7 +638,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 										<textElement textAlignment="Center" verticalAlignment="Middle">
 											<font fontName="Arial" size="8"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$F{obj1}.getMasterPrice()]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$F{masterPrice}]]></textFieldExpression>
 									</textField>
 									<textField isStretchWithOverflow="true" pattern="#,##0.###" isBlankWhenNull="true">
 										<reportElement stretchType="RelativeToTallestObject" x="0" y="18" width="46" height="17" uuid="b4bfa7b4-5acb-4639-87da-1e12686e849a"/>
@@ -640,9 +651,7 @@ $F{obj1}.getLastPerson().getContact().getForthName()]]></textFieldExpression>
 										<textElement textAlignment="Center" verticalAlignment="Middle">
 											<font fontName="Arial" size="8"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$F{obj1}.getMasterPaymentType().equals("نقدي") ? 
-$F{obj1}.getMasterPrice() - ($F{obj1}.getMasterPrice() * $F{obj1}.getMasterDiscountAmount() / 100) : 
-$F{obj1}.getMasterPrice() + ($F{obj1}.getMasterPrice() * $F{obj1}.getMasterProfitAmount() / 100)]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$F{net}]]></textFieldExpression>
 									</textField>
 								</frame>
 							</jr:detailCell>
@@ -664,7 +673,7 @@ $F{obj1}.getMasterPrice() + ($F{obj1}.getMasterPrice() * $F{obj1}.getMasterProfi
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getMasterPaymentType()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{masterPaymentType}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -685,7 +694,7 @@ $F{obj1}.getMasterPrice() + ($F{obj1}.getMasterPrice() * $F{obj1}.getMasterProfi
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8" isBold="false"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getRegistered() ? "مسجل" : "غير مسجل"]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{registered} ? "مسجل" : "غير مسجل"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -706,7 +715,7 @@ $F{obj1}.getMasterPrice() + ($F{obj1}.getMasterPrice() * $F{obj1}.getMasterProfi
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getCustomerName()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{customerName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -727,7 +736,7 @@ $F{obj1}.getMasterPrice() + ($F{obj1}.getMasterPrice() * $F{obj1}.getMasterProfi
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{obj1}.getCode()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

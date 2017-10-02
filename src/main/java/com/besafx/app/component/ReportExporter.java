@@ -126,7 +126,7 @@ public class ReportExporter {
             baos.close();
 
         } catch (Exception ex) {
-            log.error(ex.getMessage());
+            log.info(ex.getMessage());
         }
     }
 }

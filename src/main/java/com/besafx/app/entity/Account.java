@@ -1,5 +1,6 @@
 package com.besafx.app.entity;
 
+import com.besafx.app.util.DateConverter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -109,6 +110,24 @@ public class Account implements Serializable {
             return this.getRequiredPrice() - this.getPaidPrice();
         }catch (Exception ex){
             return 0.0;
+        }
+    }
+
+    public String getKey(){
+        try {
+            StringBuilder builder = new StringBuilder();
+            builder.append(DateConverter.getYearShortcut(this.getRegisterDate()));
+            builder.append("-");
+            builder.append(this.getCourse().getMaster().getBranch().getCode());
+            builder.append("-");
+            builder.append(this.getCourse().getMaster().getCode());
+            builder.append("-");
+            builder.append(this.getCourse().getCode());
+            builder.append("-");
+            builder.append(this.getCode());
+            return builder.toString();
+        }catch (Exception ex){
+            return "";
         }
     }
 

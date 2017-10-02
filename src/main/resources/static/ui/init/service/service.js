@@ -991,6 +991,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.PaymentByMasterCategory                             *
+     *                                                            *
+     *************************************************************/
+    this.openReportPaymentByMasterCategoryModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/payment/paymentByMasterCategory.html",
+            controller: "paymentByMasterCategoryCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.PaymentByCourse                                     *
      *                                                            *
      *************************************************************/

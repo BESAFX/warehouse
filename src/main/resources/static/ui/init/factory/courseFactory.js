@@ -46,6 +46,16 @@ app.factory("CourseService",
                     return response.data;
                 });
             },
+            fetchCourseMasterCombo: function () {
+                return $http.get("/api/course/fetchCourseMasterCombo").then(function (response) {
+                    return response.data;
+                });
+            },
+            fetchCourseMasterBranchCombo: function () {
+                return $http.get("/api/course/fetchCourseMasterBranchCombo").then(function (response) {
+                    return response.data;
+                });
+            },
             filter: function (search) {
                 return $http.get("/api/course/filter?" + search).then(function (response) {
                     return response.data;

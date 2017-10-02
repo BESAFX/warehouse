@@ -36,13 +36,14 @@ public class Payment implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdate;
+
     private String amountString;
 
     private Double amountNumber;
 
     private String type;
-
-    private String toName;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")

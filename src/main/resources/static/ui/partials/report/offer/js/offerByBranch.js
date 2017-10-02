@@ -12,23 +12,37 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
         }, 1500);
 
         $scope.submit = function () {
-            var ids = [];
-            angular.forEach($scope.buffer.branchesList, function (branch) {
-                ids.push(branch.id);
-            });
-            if ($scope.buffer.startDate && $scope.buffer.endDate) {
-                window.open('/report/OfferByBranches?'
-                    + 'ids=' + ids + '&'
-                    + 'title=' + $scope.buffer.title + '&'
-                    + 'exportType=' + $scope.buffer.exportType + '&'
-                    + "startDate=" + $scope.buffer.startDate.getTime() + "&"
-                    + "endDate=" + $scope.buffer.endDate.getTime());
-            } else {
-                window.open('/report/OfferByBranches?'
-                    + 'ids=' + ids + '&'
-                    + 'title=' + $scope.buffer.title + '&'
-                    + 'exportType=' + $scope.buffer.exportType);
+            var param = [];
+            //
+            if ($scope.buffer.startDate) {
+                param.push('startDate=');
+                param.push($scope.buffer.startDate.getTime());
+                param.push('&');
             }
+            if ($scope.buffer.endDate) {
+                param.push('endDate=');
+                param.push($scope.buffer.endDate.getTime());
+                param.push('&');
+            }
+            //
+            var branchIds = [];
+            angular.forEach($scope.buffer.branchesList, function (branch) {
+                branchIds.push(branch.id);
+            });
+            param.push('branchIds=');
+            param.push(branchIds);
+            param.push('&');
+            //
+            param.push('exportType=');
+            param.push($scope.buffer.exportType);
+            param.push('&');
+            //
+            param.push('title=');
+            param.push($scope.buffer.title);
+            param.push('&');
+            //
+            console.info(param.join(""));
+            window.open('/report/OfferByBranches?' + param.join(""));
         };
 
         $scope.cancel = function () {

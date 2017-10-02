@@ -64,8 +64,8 @@ public class PaymentRest {
                 throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
             }
         }
-        payment.setDate(new Date());
         payment.setLastPerson(person);
+        payment.setLastUpdate(new Date());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
         notificationService.notifyOne(Notification

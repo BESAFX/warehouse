@@ -12,23 +12,37 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
         }, 1500);
 
         $scope.submit = function () {
-            var ids = [];
-            angular.forEach($scope.buffer.personsList, function (master) {
-                ids.push(master.id);
-            });
-            if ($scope.buffer.startDate && $scope.buffer.endDate) {
-                window.open('/report/OfferByPersons?'
-                    + 'ids=' + ids + '&'
-                    + 'title=' + $scope.buffer.title + '&'
-                    + 'exportType=' + $scope.buffer.exportType + '&'
-                    + "startDate=" + $scope.buffer.startDate.getTime() + "&"
-                    + "endDate=" + $scope.buffer.endDate.getTime());
-            } else {
-                window.open('/report/OfferByPersons?'
-                    + 'ids=' + ids + '&'
-                    + 'title=' + $scope.buffer.title + '&'
-                    + 'exportType=' + $scope.buffer.exportType);
+            var param = [];
+            //
+            if ($scope.buffer.startDate) {
+                param.push('startDate=');
+                param.push($scope.buffer.startDate.getTime());
+                param.push('&');
             }
+            if ($scope.buffer.endDate) {
+                param.push('endDate=');
+                param.push($scope.buffer.endDate.getTime());
+                param.push('&');
+            }
+            //
+            var personIds = [];
+            angular.forEach($scope.buffer.personsList, function (person) {
+                personIds.push(person.id);
+            });
+            param.push('personIds=');
+            param.push(personIds);
+            param.push('&');
+            //
+            param.push('exportType=');
+            param.push($scope.buffer.exportType);
+            param.push('&');
+            //
+            param.push('title=');
+            param.push($scope.buffer.title);
+            param.push('&');
+            //
+            console.info(param.join(""));
+            window.open('/report/OfferByMasters?' + param.join(""));
         };
 
         $scope.cancel = function () {

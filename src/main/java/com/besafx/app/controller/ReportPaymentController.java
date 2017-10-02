@@ -1,34 +1,31 @@
 package com.besafx.app.controller;
-import com.besafx.app.entity.Branch;
-import com.besafx.app.entity.Course;
-import com.besafx.app.entity.Master;
+
+import com.besafx.app.component.ReportExporter;
 import com.besafx.app.entity.Payment;
-import com.besafx.app.rest.AccountRest;
-import com.besafx.app.rest.CompanyRest;
-import com.besafx.app.service.*;
-import com.besafx.app.util.DateConverter;
-import com.besafx.app.util.WrapperUtil;
+import com.besafx.app.enums.ExportType;
+import com.besafx.app.service.AccountService;
+import com.besafx.app.service.CourseService;
+import com.besafx.app.service.PaymentService;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 public class ReportPaymentController {
 
-    @Autowired
-    private BranchService branchService;
-
-    @Autowired
-    private MasterService masterService;
+    private final Logger log = LoggerFactory.getLogger(ReportPaymentController.class);
 
     @Autowired
     private CourseService courseService;
@@ -37,28 +34,21 @@ public class ReportPaymentController {
     private AccountService accountService;
 
     @Autowired
-    private AccountRest accountRest;
-
-    @Autowired
     private PaymentService paymentService;
 
-    @RequestMapping(value = "/report/PaymentByBranch/{branchId}", method = RequestMethod.GET, produces = "application/pdf")
+    @Autowired
+    private ReportExporter reportExporter;
+
+
+    @RequestMapping(value = "/report/PaymentByBranches", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printPaymentByBranch(
-            @PathVariable("branchId") Long branchId,
+    public void printPaymentByBranches(
+            @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
-        Branch branch = branchService.findOne(branchId);
-        if (branch == null) {
-            return;
-        }
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=PaymentByBranch.pdf");
-        final OutputStream outStream = response.getOutputStream();
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -66,53 +56,31 @@ public class ReportPaymentController {
         param1.append("المعهد الأهلي العالي للتدريب");
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        StringBuilder param2 = new StringBuilder();
-        param2.append("الطلبة المسجلين حسب الفرع ودفعاتهم ");
-        param2.append(" --- ");
-        param2.append("الفرع: " + "(" + branch.getName() + ")");
         map.put("param1", param1.toString());
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<Payment> paymentList;
-        if (startDate == null && endDate == null) {
-            paymentList = paymentService.findByAccountCourseMasterBranch(branch);
-        } else {
-            paymentList = paymentService.findByAccountCourseMasterBranchAndDateBetween(branch, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
-            map.put("param2", map.get("param2").toString()
-                    .concat(" ")
-                    .concat("التاريخ من: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(startDate.longValue()))
-                    .concat(" ")
-                    .concat("التاريخ إلى: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(endDate.longValue())));
-        }
-        List<WrapperUtil> list = initDataList(paymentList);
+        map.put("param2", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("branch").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("payments", getList(predicates));
+        //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/PaymentByMaster/{masterId}", method = RequestMethod.GET, produces = "application/pdf")
+    @RequestMapping(value = "/report/PaymentByMasterCategories", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printPaymentByMaster(
-            @PathVariable("masterId") Long masterId,
+    public void printPaymentByMasterCategories(
+            @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "masterCategoryIds") List<Long> masterCategoryIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
-        Master master = masterService.findOne(masterId);
-        if (master == null) {
-            return;
-        }
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=PaymentByMaster.pdf");
-        final OutputStream outStream = response.getOutputStream();
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -120,54 +88,31 @@ public class ReportPaymentController {
         param1.append("المعهد الأهلي العالي للتدريب");
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        StringBuilder param2 = new StringBuilder();
-        param2.append("الطلبة المسجلين حسب التخصص ودفعاتهم ");
-        param2.append(" --- ");
-        param2.append("الفرع: " + "(" + master.getBranch().getName() + ")");
-        param2.append("التخصص: " + "(" + master.getName() + ")");
         map.put("param1", param1.toString());
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<Payment> paymentList;
-        if (startDate == null && endDate == null) {
-            paymentList = paymentService.findByAccountCourseMaster(master);
-        } else {
-            paymentList = paymentService.findByAccountCourseMasterAndDateBetween(master, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
-            map.put("param2", map.get("param2").toString()
-                    .concat(" ")
-                    .concat("التاريخ من: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(startDate.longValue()))
-                    .concat(" ")
-                    .concat("التاريخ إلى: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(endDate.longValue())));
-        }
-        List<WrapperUtil> list = initDataList(paymentList);
+        map.put("param2", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("branch").get("id").in(value)));
+        Optional.ofNullable(masterCategoryIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("masterCategory").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("payments", getList(predicates));
+        //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/PaymentByCourse/{courseId}", method = RequestMethod.GET, produces = "application/pdf")
+    @RequestMapping(value = "/report/PaymentByMasters", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printPaymentByCourse(
-            @PathVariable("courseId") Long courseId,
+    public void printPaymentByMasters(
+            @RequestParam(value = "masterIds") List<Long> masterIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
-        Course course = courseService.findOne(courseId);
-        if (course == null) {
-            return;
-        }
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=PaymentByCourse.pdf");
-        final OutputStream outStream = response.getOutputStream();
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -175,51 +120,59 @@ public class ReportPaymentController {
         param1.append("المعهد الأهلي العالي للتدريب");
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        StringBuilder param2 = new StringBuilder();
-        param2.append("الطلبة المسجلين حسب الدورة ودفعاتهم ");
-        param2.append(" --- ");
-        param2.append("الفرع: " + "(" + course.getMaster().getBranch().getName() + ")");
-        param2.append("التخصص: " + "(" + course.getMaster().getName() + ")");
-        param2.append("رقم الدورة: " + "(" + course.getCode() + ")");
         map.put("param1", param1.toString());
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<Payment> paymentList;
-        if (startDate == null && endDate == null) {
-            paymentList = paymentService.findByAccountCourse(course);
-        } else {
-            paymentList = paymentService.findByAccountCourseAndDateBetween(course, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
-            map.put("param2", map.get("param2").toString()
-                    .concat(" ")
-                    .concat("التاريخ من: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(startDate.longValue()))
-                    .concat(" ")
-                    .concat("التاريخ إلى: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(endDate.longValue())));
-        }
-        List<WrapperUtil> list = initDataList(paymentList);
+        map.put("param2", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(masterIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("payments", getList(predicates));
+        //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/PaymentByAccountIn", method = RequestMethod.GET, produces = "application/pdf")
+    @RequestMapping(value = "/report/PaymentByCourses", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    public void printPaymentByCourses(
+            @RequestParam(value = "courseIds") List<Long> courseIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            HttpServletResponse response) throws JRException, IOException {
+        Map<String, Object> map = new HashMap<>();
+        StringBuilder param1 = new StringBuilder();
+        param1.append("المملكة العربية السعودية");
+        param1.append("\n");
+        param1.append("المعهد الأهلي العالي للتدريب");
+        param1.append("\n");
+        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
+        map.put("param1", param1.toString());
+        map.put("param2", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(courseIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("payments", getList(predicates));
+        //End Search
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
+    @RequestMapping(value = "/report/PaymentByAccountIn", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
     public void printPaymentByAccountIn(
             @RequestParam("accountList") List<Long> accountList,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=PaymentByAccountIn.pdf");
-        final OutputStream outStream = response.getOutputStream();
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -231,41 +184,22 @@ public class ReportPaymentController {
         param2.append("الطلبة المسجلين ودفعاتهم");
         map.put("param1", param1.toString());
         map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<Payment> paymentList;
-        if (startDate == null && endDate == null) {
-            paymentList = paymentService.findByAccountIn(accountList.stream().map(id -> accountService.findOne(id)).collect(Collectors.toList()));
-        } else {
-            paymentList = paymentService.findByAccountInAndDateBetween(accountList.stream().map(id -> accountService.findOne(id)).collect(Collectors.toList()), new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
-            map.put("param2", map.get("param2").toString()
-                    .concat(" ")
-                    .concat("التاريخ من: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(startDate.longValue()))
-                    .concat(" ")
-                    .concat("التاريخ إلى: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(endDate.longValue())));
-        }
-        List<WrapperUtil> list = initDataList(paymentList);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(accountList).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("payments", getList(predicates));
+        //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(ExportType.PDF, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/PaymentsByList", method = RequestMethod.GET, produces = "application/pdf")
+    @RequestMapping(value = "/report/PaymentsByList", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printPaymentsByList(
-            @RequestParam("listId") List<Long> listId,
-            HttpServletResponse response) throws JRException, IOException {
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=PaymentsByList.pdf");
-        final OutputStream outStream = response.getOutputStream();
-        /**
-         * Insert Parameters
-         */
+    public void printPaymentsByList(@RequestParam("listId") List<Long> listId, HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -277,38 +211,22 @@ public class ReportPaymentController {
         param2.append("قائمة سندات مخصصة");
         map.put("param1", param1.toString());
         map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<Payment> paymentList = new ArrayList<>();
-        listId.stream().forEach(id -> paymentList.add(paymentService.findOne(id)));
-        List<WrapperUtil> list = initDataList(paymentList);
+        map.put("param3", listId.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(list));
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(ExportType.PDF, response, jasperPrint);
     }
 
-    private List<WrapperUtil> initDataList(List<Payment> paymentList) {
-        List<WrapperUtil> list = new ArrayList<>();
-        paymentList.stream().forEach(row -> {
-            WrapperUtil wrapperUtil = new WrapperUtil();
-            Optional.ofNullable(row).ifPresent(payment -> wrapperUtil.setObj1(payment));
-            Optional.ofNullable(row.getDate()).ifPresent(value -> wrapperUtil.setObj2(DateConverter.getHijriStringFromDateRTL(value.getTime())));
-            wrapperUtil.setObj3(
-                    DateConverter.getYearShortcut(row.getAccount().getRegisterDate())
-                            + "-" + row.getAccount().getCourse().getMaster().getBranch().getCode()
-                            + "-" + row.getAccount().getCourse().getMaster().getCode()
-                            + "-" + row.getAccount().getCourse().getCode()
-                            + "-" + row.getAccount().getCode()
-            );
-            wrapperUtil.setObj4(row.getAccount().getRequiredPrice());
-            wrapperUtil.setObj5(row.getAccount().getPaidPrice());
-            wrapperUtil.setObj6(row.getAccount().getRemainPrice());
-            list.add(wrapperUtil);
-        });
-        list.sort(Comparator.comparing(v -> v.getObj3().toString()));
+    private List<Payment> getList(List<Specification> predicates) {
+        List<Payment> list = new ArrayList<>();
+        if (!predicates.isEmpty()) {
+            Specification result = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                result = Specifications.where(result).and(predicates.get(i));
+            }
+            list.addAll(paymentService.findAll(result));
+        }
         return list;
     }
 

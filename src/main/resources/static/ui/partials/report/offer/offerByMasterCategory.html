@@ -2,7 +2,7 @@
       focus-group-tail="loop">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center">تقرير عن العروض للتخصصات</h3>
+        <h3 class="modal-title text-center">تقرير عن العروض حسب تصنيفات التخصصات</h3>
     </div>
 
     <div class="panel-body">
@@ -143,7 +143,7 @@
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
-                    ng-click="form.$setPristine()"
+                    ng-click="buffer={};form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
                 <i class="material-icons">delete</i>
             </button>

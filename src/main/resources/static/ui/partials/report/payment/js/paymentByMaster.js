@@ -1,22 +1,48 @@
 app.controller('paymentByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
     function (MasterService, $scope, $rootScope, $timeout, $uibModalInstance) {
+
+        $scope.buffer = {};
+        $scope.buffer.mastersList = [];
+        $scope.masters = [];
+
         $timeout(function () {
-            $scope.buffer = {};
-            $scope.masters = [];
-            MasterService.fetchMasterCombo().then(function (data) {
+            MasterService.fetchMasterBranchCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);
 
         $scope.submit = function () {
-            if ($scope.buffer.startDate && $scope.buffer.endDate) {
-                window.open('/report/PaymentByMaster/'
-                    + $scope.buffer.master.id + "?"
-                    + "startDate=" + $scope.buffer.startDate.getTime() + "&"
-                    + "endDate=" + $scope.buffer.endDate.getTime());
-            } else {
-                window.open('/report/PaymentByMaster/' + $scope.buffer.master.id);
+            var param = [];
+            //
+            if ($scope.buffer.startDate) {
+                param.push('startDate=');
+                param.push($scope.buffer.startDate.getTime());
+                param.push('&');
             }
+            if ($scope.buffer.endDate) {
+                param.push('endDate=');
+                param.push($scope.buffer.endDate.getTime());
+                param.push('&');
+            }
+            //
+            var masterIds = [];
+            angular.forEach($scope.buffer.mastersList, function (master) {
+                masterIds.push(master.id);
+            });
+            param.push('masterIds=');
+            param.push(masterIds);
+            param.push('&');
+            //
+            param.push('exportType=');
+            param.push($scope.buffer.exportType);
+            param.push('&');
+            //
+            param.push('title=');
+            param.push($scope.buffer.title);
+            param.push('&');
+            //
+            console.info(param.join(""));
+            window.open('/report/PaymentByMasters?' + param.join(""));
         };
 
         $scope.cancel = function () {

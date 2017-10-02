@@ -2,36 +2,51 @@
       focus-group-tail="loop">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center">تقرير عن السندات للدورات</h3>
+        <h3 class="modal-title text-center">تقرير عن السندات حسب تصنيفات التخصصات</h3>
     </div>
 
-    <div class="modal-body">
+    <div class="panel-body">
 
         <div class="row">
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="course" class="control-label">رقم الدورة</label>
-                <select id="course"
-                        data-placeholder="ابحث عن رقم الدورة المتاحة"
-                        no-results-text="'لا توجد دورات توافق بحثك'"
-                        placeholder-text-single="'اختر رقم الدورة'"
+                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                <select id="branch"
+                        data-placeholder="ابحث عن الفرع"
+                        no-results-text="'لا توجد فروع توافق بحثك'"
+                        placeholder-text-multiple="'اختر الفروع'"
                         class="form-control text-right"
                         chosen=""
+                        focus-autofocus="1"
                         multiple="multiple"
-                        ng-model="buffer.coursesList"
-                        required="required"
+                        ng-model="buffer.branchesList"
                         disable-validation-message=""
-                        ng-options="(' [ ' + course.code + ' ] ' + course.instructor + ' - [ ' + course.master.code + ' ] ' + course.master.name) group by course.master.branch.name for course in courses | orderBy:['master.code', 'code'] track by course.id">
+                        ng-options="(' [ ' + branch.code + ' ] ' + ' ' +  branch.name) for branch in branches | orderBy:'code' track by branch.id">
                 </select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="masterCategory" class="control-label">[رقم النوع] اسم النوع</label>
+                <select id="masterCategory"
+                        data-placeholder="ابحث عن نوع التخصص"
+                        no-results-text="'لا توجد أنواع توافق بحثك'"
+                        placeholder-text-multiple="'اختر أنوع التخصصات'"
+                        class="form-control text-right"
+                        chosen=""
+                        multiple="multiple"
+                        ng-model="buffer.masterCategoriesList"
+                        required="required"
+                        disable-validation-message=""
+                        ng-options="masterCategory.name for masterCategory in masterCategories | orderBy:'name' track by masterCategory.id">
+                </select>
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="startDate" class="control-label">التاريخ من</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
                            id="startDate"
                            type="text"
-                           focus-index="4"
                            class="form-control text-right is-calendarPicker"
                            ng-model="buffer.startDate"
                            calendarType="ummalqura"
@@ -43,13 +58,12 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="endDate" class="control-label">التاريخ إلى</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
                            id="endDate"
                            type="text"
-                           focus-index="3"
                            class="form-control text-right is-calendarPicker"
                            ng-model="buffer.endDate"
                            calendarType="ummalqura"
@@ -129,7 +143,7 @@
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
-                    ng-click="form.$setPristine()"
+                    ng-click="buffer={};form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
                 <i class="material-icons">delete</i>
             </button>

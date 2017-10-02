@@ -191,12 +191,15 @@ gulp.task('scripts', function () {
         './partials/report/offer/js/offerById.js',
         './partials/report/offer/js/offerByPerson.js',
         './partials/report/call/js/callByPerson.js',
+
         './partials/report/account/js/accountByBranch.js',
         './partials/report/account/js/accountByCourse.js',
         './partials/report/account/js/accountByMaster.js',
+
         './partials/report/payment/js/paymentByBranch.js',
         './partials/report/payment/js/paymentByCourse.js',
         './partials/report/payment/js/paymentByMaster.js',
+        './partials/report/payment/js/paymentByMasterCategory.js',
         './partials/report/payment/js/paymentByAccountIn.js',
 
         './partials/report/paymentOut/js/paymentOutByBranch.js',
