@@ -1,5 +1,5 @@
-app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state',
-    function (BankService, BranchService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state) {
+app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state', '$uibModal',
+    function (BankService, BranchService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state, $uibModal) {
 
         //
         $scope.items = [];

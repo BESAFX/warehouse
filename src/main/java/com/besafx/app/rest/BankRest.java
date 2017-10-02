@@ -27,7 +27,8 @@ public class BankRest {
 
     private final static Logger log = LoggerFactory.getLogger(BankRest.class);
 
-    private final String FILTER_TABLE = "";
+    private final String FILTER_TABLE = "**,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]]";
+    private final String FILTER_BANK_COMBO = "id,code,name,branchName,stock";
 
     @Autowired
     private PersonService personService;

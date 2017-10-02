@@ -65,6 +65,9 @@ public class AccountRest {
     private AccountConditionService accountConditionService;
 
     @Autowired
+    private AccountNoteService accountNoteService;
+
+    @Autowired
     private AccountSearch accountSearch;
 
     @Autowired
@@ -127,8 +130,12 @@ public class AccountRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ACCOUNT_DELETE')")
     public void delete(@PathVariable Long id, Principal principal) {
-        Account object = accountService.findOne(id);
-        if (object != null) {
+        Account account = accountService.findOne(id);
+        if (account != null) {
+            accountAttachService.delete(account.getAccountAttaches());
+            accountConditionService.delete(account.getAccountConditions());
+            accountNoteService.delete(account.getAccountNotes());
+            paymentService.delete(account.getPayments());
             accountService.delete(id);
             notificationService.notifyOne(Notification
                     .builder()
