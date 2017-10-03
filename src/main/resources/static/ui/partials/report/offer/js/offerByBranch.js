@@ -41,7 +41,7 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
             param.push($scope.buffer.title);
             param.push('&');
             //
-            console.info(param.join(""));
+
             window.open('/report/OfferByBranches?' + param.join(""));
         };
 

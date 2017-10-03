@@ -36,11 +36,15 @@ app.controller('paymentByCourseCtrl', ['CourseService', '$scope', '$rootScope', 
             param.push($scope.buffer.exportType);
             param.push('&');
             //
+            param.push('isSummery=');
+            param.push($scope.buffer.isSummery);
+            param.push('&');
+            //
             param.push('title=');
             param.push($scope.buffer.title);
             param.push('&');
             //
-            console.info(param.join(""));
+
             window.open('/report/PaymentByCourses?' + param.join(""));
         };
 

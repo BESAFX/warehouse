@@ -112,6 +112,15 @@
                        ng-model="buffer.title">
             </div>
 
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-init="buffer.isSummery=false;">
+                <label class="help-block">
+                    <input style="height: 10px !important;"
+                           type="checkbox"
+                           ng-model="buffer.isSummery"/>
+                    <span>مختصر</span>
+                </label>
+            </div>
+
 
         </div>
 

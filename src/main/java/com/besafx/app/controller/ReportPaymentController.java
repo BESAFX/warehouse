@@ -28,12 +28,6 @@ public class ReportPaymentController {
     private final Logger log = LoggerFactory.getLogger(ReportPaymentController.class);
 
     @Autowired
-    private CourseService courseService;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private PaymentService paymentService;
 
     @Autowired
@@ -46,6 +40,7 @@ public class ReportPaymentController {
             @RequestParam(value = "branchIds") List<Long> branchIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
@@ -65,7 +60,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -78,6 +73,9 @@ public class ReportPaymentController {
             @RequestParam(value = "masterCategoryIds") List<Long> masterCategoryIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "isSummery") Boolean isSummery,
+            @RequestParam(value = "codeFrom", required = false) Long codeFrom,
+            @RequestParam(value = "codeTo", required = false) Long codeTo,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
@@ -94,11 +92,13 @@ public class ReportPaymentController {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("branch").get("id").in(value)));
         Optional.ofNullable(masterCategoryIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("masterCategory").get("id").in(value)));
+        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -110,6 +110,7 @@ public class ReportPaymentController {
             @RequestParam(value = "masterIds") List<Long> masterIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
@@ -129,7 +130,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -141,6 +142,7 @@ public class ReportPaymentController {
             @RequestParam(value = "courseIds") List<Long> courseIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
@@ -160,7 +162,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -169,7 +171,10 @@ public class ReportPaymentController {
     @RequestMapping(value = "/report/PaymentByAccountIn", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
     public void printPaymentByAccountIn(
-            @RequestParam("accountList") List<Long> accountList,
+            @RequestParam("accountIds") List<Long> accountIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
@@ -180,26 +185,24 @@ public class ReportPaymentController {
         param1.append("المعهد الأهلي العالي للتدريب");
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        StringBuilder param2 = new StringBuilder();
-        param2.append("الطلبة المسجلين ودفعاتهم");
         map.put("param1", param1.toString());
-        map.put("param2", param2.toString());
+        map.put("param2", title);
         //Start Search
         List<Specification> predicates = new ArrayList<>();
-        Optional.ofNullable(accountList).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("id").in(value)));
+        Optional.ofNullable(accountIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
-        reportExporter.export(ExportType.PDF, response, jasperPrint);
+        reportExporter.export(exportType, response, jasperPrint);
     }
 
     @RequestMapping(value = "/report/PaymentsByList", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printPaymentsByList(@RequestParam("listId") List<Long> listId, HttpServletResponse response) throws JRException, IOException {
+    public void printPaymentsByList(@RequestParam("paymentIds") List<Long> paymentIds, @RequestParam(value = "isSummery") Boolean isSummery, HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -211,8 +214,8 @@ public class ReportPaymentController {
         param2.append("قائمة سندات مخصصة");
         map.put("param1", param1.toString());
         map.put("param2", param2.toString());
-        map.put("payments", listId.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/Report.jrxml");
+        map.put("payments", paymentIds.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(ExportType.PDF, response, jasperPrint);

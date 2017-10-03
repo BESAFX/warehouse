@@ -54,7 +54,7 @@ app.controller('offerByMasterCategoryCtrl', ['BranchService' ,'MasterCategorySer
             param.push($scope.buffer.title);
             param.push('&');
             //
-            console.info(param.join(""));
+
             window.open('/report/OfferByMasterCategories?' + param.join(""));
         };
 

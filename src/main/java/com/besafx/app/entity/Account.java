@@ -131,6 +131,22 @@ public class Account implements Serializable {
         }
     }
 
+    public String getName(){
+        try {
+            StringBuilder builder = new StringBuilder();
+            builder.append(this.student.getContact().getFirstName());
+            builder.append(" ");
+            builder.append(this.student.getContact().getSecondName());
+            builder.append(" ");
+            builder.append(this.student.getContact().getThirdName());
+            builder.append(" ");
+            builder.append(this.student.getContact().getForthName());
+            return builder.toString();
+        }catch (Exception ex){
+            return "";
+        }
+    }
+
     @JsonCreator
     public static Account Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

@@ -216,12 +216,19 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
         };
 
         $scope.printList = function () {
-            var listId = [];
-            for (var i = 0; i < $scope.payments.length; i++) {
-                listId[i] = $scope.payments[i].id;
-            }
-            window.open('/report/PaymentsByList?'
-                + "listId=" + listId);
+            var paymentIds = [];
+            angular.forEach($scope.payments, function (payment) {
+               paymentIds.push(payment.id);
+            });
+            window.open('/report/PaymentsByList?' + "paymentIds=" + paymentIds + "&isSummery=" + false);
+        };
+
+        $scope.printListSummery = function () {
+            var paymentIds = [];
+            angular.forEach($scope.payments, function (payment) {
+                paymentIds.push(payment.id);
+            });
+            window.open('/report/PaymentsByList?' + "paymentIds=" + paymentIds + "&isSummery=" + true);
         };
 
         $scope.rowMenu = [
@@ -244,12 +251,21 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
                 }
             },
             {
-                html: '<div class="drop-menu">طباعة تقرير مخصص<span class="fa fa-print fa-lg"></span></div>',
+                html: '<div class="drop-menu">طباعة تقرير بالقائمة<span class="fa fa-print fa-lg"></span></div>',
                 enabled: function () {
                     return true
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.printList();
+                }
+            },
+            {
+                html: '<div class="drop-menu">طباعة تقرير مختصر بالقائمة<span class="fa fa-print fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.printListSummery();
                 }
             }
         ];

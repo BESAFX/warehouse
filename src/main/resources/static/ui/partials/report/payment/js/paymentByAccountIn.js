@@ -1,8 +1,11 @@
 app.controller('paymentByAccountInCtrl', ['BranchService', 'AccountService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
     function (BranchService, AccountService, $scope, $rootScope, $timeout, $uibModalInstance) {
+
+        $scope.buffer = {};
+        $scope.buffer.accountsList = [];
+        $scope.branches = [];
+
         $timeout(function () {
-            $scope.buffer = {};
-            $scope.accounts = [];
             BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
@@ -15,19 +18,41 @@ app.controller('paymentByAccountInCtrl', ['BranchService', 'AccountService', '$s
         };
 
         $scope.submit = function () {
-            var listId = [];
-            for (var i = 0; i < $scope.buffer.accountsList.length; i++) {
-                listId[i] = $scope.buffer.accountsList[i].id;
+            var param = [];
+            //
+            if ($scope.buffer.startDate) {
+                param.push('startDate=');
+                param.push($scope.buffer.startDate.getTime());
+                param.push('&');
             }
-            if ($scope.buffer.startDate && $scope.buffer.endDate) {
-                window.open('/report/PaymentByAccountIn?'
-                    + "accountList=" + listId + "&"
-                    + "startDate=" + $scope.buffer.startDate.getTime() + "&"
-                    + "endDate=" + $scope.buffer.endDate.getTime());
-            } else {
-                window.open('/report/PaymentByAccountIn?'
-                    + "accountList=" + listId);
+            if ($scope.buffer.endDate) {
+                param.push('endDate=');
+                param.push($scope.buffer.endDate.getTime());
+                param.push('&');
             }
+            //
+            var accountIds = [];
+            angular.forEach($scope.buffer.accountsList, function (account) {
+                accountIds.push(account.id);
+            });
+            param.push('accountIds=');
+            param.push(accountIds);
+            param.push('&');
+            //
+            param.push('exportType=');
+            param.push($scope.buffer.exportType);
+            param.push('&');
+            //
+            param.push('isSummery=');
+            param.push($scope.buffer.isSummery);
+            param.push('&');
+            //
+            param.push('title=');
+            param.push($scope.buffer.title);
+            param.push('&');
+            //
+
+            window.open('/report/PaymentByAccountIn?' + param.join(""));
         };
 
         $scope.cancel = function () {

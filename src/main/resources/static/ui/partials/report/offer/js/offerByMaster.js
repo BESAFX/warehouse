@@ -41,7 +41,7 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
             param.push($scope.buffer.title);
             param.push('&');
             //
-            console.info(param.join(""));
+
             window.open('/report/OfferByMasters?' + param.join(""));
         };
 

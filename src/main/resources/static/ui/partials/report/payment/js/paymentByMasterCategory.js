@@ -30,6 +30,17 @@ app.controller('paymentByMasterCategoryCtrl', ['BranchService' ,'MasterCategoryS
                 param.push('&');
             }
             //
+            if ($scope.buffer.codeFrom) {
+                param.push('codeFrom=');
+                param.push($scope.buffer.codeFrom);
+                param.push('&');
+            }
+            if ($scope.buffer.codeTo) {
+                param.push('codeTo=');
+                param.push($scope.buffer.codeTo);
+                param.push('&');
+            }
+            //
             var branchIds = [];
             angular.forEach($scope.buffer.branchesList, function (branch) {
                 branchIds.push(branch.id);
@@ -50,11 +61,15 @@ app.controller('paymentByMasterCategoryCtrl', ['BranchService' ,'MasterCategoryS
             param.push($scope.buffer.exportType);
             param.push('&');
             //
+            param.push('isSummery=');
+            param.push($scope.buffer.isSummery);
+            param.push('&');
+            //
             param.push('title=');
             param.push($scope.buffer.title);
             param.push('&');
             //
-            console.info(param.join(""));
+
             window.open('/report/PaymentByMasterCategories?' + param.join(""));
         };
 
