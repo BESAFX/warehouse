@@ -60,7 +60,6 @@
 		<field name="note" class="java.lang.String"/>
 		<field name="account" class="com.besafx.app.entity.Account"/>
 		<field name="lastPerson" class="com.besafx.app.entity.Person"/>
-		<sortField name="SORT_BY_COURSE" type="Variable"/>
 		<sortField name="code"/>
 		<variable name="SUM_AMOUNT" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[$F{amountNumber}]]></variableExpression>
