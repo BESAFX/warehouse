@@ -238,6 +238,15 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 click: function ($itemScope, $event, value) {
                     ModalProvider.openAccountDetailsModel($itemScope.account);
                 }
+            },
+            {
+                html: '<div class="drop-menu">طباعة عقد<span class="fa fa-print fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.print($itemScope.account);
+                }
             }
         ];
 
