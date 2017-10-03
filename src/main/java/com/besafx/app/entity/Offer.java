@@ -101,7 +101,7 @@ public class Offer implements Serializable {
 
     public Boolean getRegistered(){
         try {
-            Long accountsCount = accountService.countByStudentContactMobile(this.customerMobile);
+            Long accountsCount = accountService.countByStudentContactMobileAndCourseMaster(this.customerMobile, this.master);
             log.info("عدد التسجيلات = " + accountsCount);
             if (accountsCount > 0) {
                 if(!this.registered){
