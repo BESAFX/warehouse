@@ -39,7 +39,11 @@ public class Branch implements Serializable {
 
     private String address;
 
-    private String phone;
+    private String phone1;
+
+    private String phone2;
+
+    private String postalCode;
 
     private String mobile;
 

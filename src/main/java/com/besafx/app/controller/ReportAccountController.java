@@ -23,6 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.net.URL;
 import java.util.*;
 
 @RestController
@@ -231,7 +232,10 @@ public class ReportAccountController {
         map.put("COURSE_START_DATE", DateConverter.getHijriStringFromDateRTL(account.getCourse().getStartDate()));
         map.put("COURSE_END_DATE", DateConverter.getHijriStringFromDateRTL(account.getCourse().getEndDate()));
         map.put("COURSE_PRICE", account.getCoursePrice().toString());
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/Contract.jrxml");
+        map.put("ACCOUNT", account);
+        map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
+        map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/"+account.getCourse().getMaster().getMasterCategory().getReportFileName()+".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(ExportType.PDF, response, jasperPrint);
