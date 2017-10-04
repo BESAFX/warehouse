@@ -10,16 +10,10 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<parameter name="BRANCH_NAME" class="java.lang.String"/>
-	<parameter name="STUDENT_NAME" class="java.lang.String"/>
-	<parameter name="STUDENT_NUMBER" class="java.lang.String"/>
-	<parameter name="STUDENT_IDENTITY_NUMBER" class="java.lang.String"/>
-	<parameter name="STUDENT_MOBILE" class="java.lang.String"/>
-	<parameter name="MASTER_NAME" class="java.lang.String"/>
-	<parameter name="MASTER_PERIOD" class="java.lang.String"/>
-	<parameter name="COURSE_START_DATE" class="java.lang.String"/>
-	<parameter name="COURSE_END_DATE" class="java.lang.String"/>
-	<parameter name="COURSE_PRICE" class="java.lang.String"/>
+	<import value="com.besafx.app.util.DateConverter"/>
+	<parameter name="TITLE" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="ACCOUNT" class="com.besafx.app.entity.Account"/>
 	<pageHeader>
 		<band height="80">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -31,13 +25,9 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#754C29"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="true">
-					<reportElement x="20" y="10" width="100" height="50" uuid="1a77595b-7f90-4d6f-8168-b5bf8950312c"/>
-					<imageExpression><![CDATA["src/main/resources/report/img/LOGO.bmp"]]></imageExpression>
-				</image>
 				<staticText>
-					<reportElement stretchType="RelativeToTallestObject" x="169" y="0" width="237" height="80" uuid="49b37b51-313b-4555-9704-55f7b95ea89e"/>
-					<box padding="10">
+					<reportElement stretchType="RelativeToTallestObject" x="169" y="0" width="237" height="40" uuid="49b37b51-313b-4555-9704-55f7b95ea89e"/>
+					<box padding="0">
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
 						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
@@ -45,113 +35,234 @@
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
 						<font fontName="PT Bold Heading" size="10" isBold="false" isUnderline="false"/>
-						<paragraph lineSpacing="Single" lineSpacingSize="3.0" spacingBefore="0" spacingAfter="0"/>
+						<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingBefore="0" spacingAfter="0"/>
 					</textElement>
 					<text><![CDATA[المعهد الأهلي العالي للتدريب
-تحت إشراف المؤسسة العامة للتدريب التقني والمهني
-عقد إشتراك بدورة]]></text>
+تحت إشراف المؤسسة العامة للتدريب التقني والمهني]]></text>
 				</staticText>
+				<textField>
+					<reportElement stretchType="RelativeToTallestObject" x="169" y="40" width="237" height="20" uuid="672ead15-a800-407d-b940-5df83c87b480"/>
+					<box padding="0">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+						<font fontName="PT Bold Heading" size="10" isBold="false" isUnderline="false"/>
+						<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingBefore="0" spacingAfter="0"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{TITLE}]]></textFieldExpression>
+				</textField>
+				<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="true" isLazy="true" onErrorType="Icon">
+					<reportElement x="0" y="0" width="99" height="60" uuid="343670ec-5c29-4439-b339-7a3e1e556bbe"/>
+					<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+				</image>
+				<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="true" isLazy="true" onErrorType="Icon">
+					<reportElement x="476" y="0" width="99" height="60" uuid="9a149cd2-6833-4380-aa12-fe5b1326f745"/>
+					<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+				</image>
 			</frame>
 		</band>
 	</pageHeader>
 	<pageFooter>
-		<band height="25" splitType="Stretch">
+		<band height="42" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<frame>
-				<reportElement x="0" y="0" width="575" height="25" uuid="b04aff74-3093-480c-8afa-343efc282859"/>
+				<reportElement x="0" y="0" width="575" height="28" uuid="eb0432ee-79a4-4cf5-98ce-358a619b67aa"/>
 				<box>
-					<topPen lineWidth="1.0" lineColor="#754C29"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<staticText>
-					<reportElement mode="Transparent" x="430" y="0" width="145" height="10" backcolor="#754C29" uuid="c29805a2-a3c2-4b17-a8b9-e521e870ff29"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[منطقة الحدود الشمالية ـ عرعر]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="360" y="0" width="70" height="10" backcolor="#754C29" uuid="b8d948aa-5460-442b-ba0b-cb80d586d327"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[هاتف: 046620392]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="280" y="0" width="80" height="10" backcolor="#754C29" uuid="d05bcb57-f11e-43da-9c00-ccc692bf7612"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[فاكس: 046611627]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="181" y="0" width="99" height="10" backcolor="#754C29" uuid="6c1491a6-4913-4771-960d-02b396b16442"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[جوال: 0504975344]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="109" y="0" width="72" height="10" backcolor="#754C29" uuid="6ab73f7f-f902-42f1-8b83-a9f469129e71"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[هاتف: 04663655]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="0" y="0" width="108" height="10" backcolor="#754C29" uuid="cff82c26-d47d-43d5-b138-930f0234b73e"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[ص . ب 1175]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="0" y="10" width="108" height="10" backcolor="#754C29" uuid="3f105883-3469-49bd-ae0e-bd7af0afce5f"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Northen Border Region (ARAR)]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="181" y="10" width="99" height="10" backcolor="#754C29" uuid="c2a15960-6182-4b6e-a043-db9e362e5f67"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Fax. 046611627]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="109" y="10" width="72" height="10" backcolor="#754C29" uuid="76ea5cb1-f3a4-436c-89a6-dd921aad8802"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Tel. 046620392]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="280" y="10" width="80" height="10" backcolor="#754C29" uuid="9ba20802-8e95-4350-8f63-27c9c9d2c11a"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Mobile. 0504975344]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="360" y="10" width="70" height="10" backcolor="#754C29" uuid="e84d70e4-3220-48dc-bd81-fc2e1d1d79d1"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Tel. 04663655]]></text>
-				</staticText>
-				<staticText>
-					<reportElement mode="Transparent" x="430" y="10" width="145" height="10" backcolor="#754C29" uuid="0851ceec-e315-48c0-880a-90d62cd73abc">
+				<frame>
+					<reportElement x="0" y="0" width="575" height="14" uuid="32a5ee3c-0273-4fd0-a09c-d6fe16275f1b">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+					</reportElement>
+					<staticText>
+						<reportElement mode="Transparent" x="0" y="0" width="100" height="14" backcolor="#754C29" uuid="f05cfb3d-56d0-497c-865b-65a842060cb9"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[الصندوق البريدي]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="100" y="0" width="95" height="14" backcolor="#754C29" uuid="25bb4bbe-ba94-4c93-aed5-38768d9433cd"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[الجوال]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="195" y="0" width="95" height="14" backcolor="#754C29" uuid="62a6215f-b3f2-473b-93b4-5ede0546806a"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[الفاكس]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="290" y="0" width="95" height="14" backcolor="#754C29" uuid="a5eae607-f4a8-4862-b73b-d0e1581e7e57"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[الهاتف 2]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="385" y="0" width="95" height="14" backcolor="#754C29" uuid="a6b92aab-e4f8-4a43-90fa-8479cb8a3472"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[الهاتف 1]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Transparent" x="480" y="0" width="95" height="14" backcolor="#754C29" uuid="d3c8771c-98eb-4e57-9142-010f749b9471"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[العنوان]]></text>
+					</staticText>
+				</frame>
+				<frame>
+					<reportElement x="0" y="14" width="575" height="14" uuid="47d535f6-afdf-4153-99a0-9a650d639b2e">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+					</reportElement>
+					<textField>
+						<reportElement mode="Transparent" x="0" y="0" width="100" height="14" backcolor="#754C29" uuid="ec134651-5f89-4cc5-8aac-1fc67a7b097e">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						</reportElement>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getBranch().getPostalCode()]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement mode="Transparent" x="100" y="0" width="95" height="14" backcolor="#754C29" uuid="3764d1ce-e133-4dcc-8726-f19f748df75c"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getBranch().getMobile()]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement mode="Transparent" x="195" y="0" width="95" height="14" backcolor="#754C29" uuid="3eddb790-11f5-4859-9a16-f38ee3d03c19"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getBranch().getFax()]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement mode="Transparent" x="290" y="0" width="95" height="14" backcolor="#754C29" uuid="08312da2-c7bb-4f60-b594-19397ebee316"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getBranch().getPhone2()]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement mode="Transparent" x="385" y="0" width="95" height="14" backcolor="#754C29" uuid="edd71094-d0ab-4a28-b4b5-9d29983c69a4"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getBranch().getPhone1()]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement mode="Transparent" x="480" y="0" width="95" height="14" backcolor="#754C29" uuid="43abaa67-0a1b-45c9-808c-6c7d9c36deb7"/>
+						<box>
+							<pen lineWidth="0.5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="8" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getBranch().getAddress()]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+			<frame>
+				<reportElement x="0" y="28" width="575" height="14" uuid="89d8c348-0303-49c8-aa0f-a34b46e3c64b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+				</reportElement>
+				<textField>
+					<reportElement mode="Transparent" x="0" y="0" width="185" height="14" backcolor="#754C29" uuid="bb349e3a-550e-47fe-8ff0-acb09100616e">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Agency FB" size="8" isBold="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
 					</textElement>
-					<text><![CDATA[P.O.Box 1175]]></text>
+					<textFieldExpression><![CDATA["Printing Date: " + DateConverter.getHijriStringFromDateLTRWithTime(new java.util.Date())]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement x="241" y="0" width="92" height="14" uuid="9908b92e-f21a-4a4a-bd8b-4caa7daa2bfe"/>
+					<textField>
+						<reportElement x="0" y="0" width="46" height="14" uuid="bcc7c85e-a917-4f50-ace7-3ce59fc97c07">
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						</reportElement>
+						<textElement textAlignment="Right">
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+					</textField>
+					<textField evaluationTime="Report">
+						<reportElement x="46" y="0" width="46" height="14" uuid="6868b942-0d53-4c7b-a195-7c1df49a49ee">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						</reportElement>
+						<textElement textAlignment="Left">
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<staticText>
+					<reportElement mode="Transparent" x="480" y="0" width="95" height="14" backcolor="#754C29" uuid="bea7b953-00fe-4ccc-9ff2-9e17fc28c1fa"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[www.ararhni.com]]></text>
 				</staticText>
 			</frame>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="676">
+		<band height="700">
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="90" width="575" height="20" forecolor="#FFFFFF" backcolor="#754C29" uuid="3314cf9c-d647-42e9-bfcb-31fddaf1a7ad"/>
 				<box>
@@ -171,11 +282,11 @@
 					<font fontName="Arial" size="10" isBold="false"/>
 					<paragraph lineSpacing="Double" lineSpacingSize="2.0" firstLineIndent="10" leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["انه فى يوم " + "<style isBold=\"true\" isUnderline=\"true\">"  + com.besafx.app.util.DateConverter.getHijriTodayString() + "</style>" +  " الموافق " + "<style isBold=\"true\" isUnderline=\"true\">"  + com.besafx.app.util.DateConverter.getHijriTodayDateString()  + "</style>" +  "، " +
+				<textFieldExpression><![CDATA["انه فى يوم " + "<style isBold=\"true\" isUnderline=\"true\">"  + DateConverter.getHijriTodayString() + "</style>" +  " الموافق " + "<style isBold=\"true\" isUnderline=\"true\">"  + DateConverter.getHijriTodayDateString()  + "</style>" +  "، " +
 "تم تحرير هذا العقد بين كل من :" +"\n" + 
-"(1) المعهد الأهلي العالي للتدريب فرع " + "<style isBold=\"true\" isUnderline=\"true\">" +  $P{BRANCH_NAME} + "</style>" +  " ممثلاً الطرف الأول " + "\n" + 
-"(2) المتدرب: " +"<style isBold=\"true\" isUnderline=\"true\">"  +  $P{STUDENT_NAME} + "</style>"  +" ممثلاً الطرف الثاني ، وبياناته كالتالي : " + "\n" + 
-"رقم المتدرب: " + "<style backcolor=\"#DBDBDB\">" +   $P{STUDENT_NUMBER} +   "</style>" +   " " +  "رقم الهوية/الإقامة: " + "<style backcolor=\"#DBDBDB\">" +    $P{STUDENT_IDENTITY_NUMBER} +  "</style>"  +   " " + "رقم الجوال: " + "<style backcolor=\"#DBDBDB\">"  +  $P{STUDENT_MOBILE} +  "</style>"]]></textFieldExpression>
+"(1) المعهد الأهلي العالي للتدريب فرع " + "<style isBold=\"true\" isUnderline=\"true\">" +  $P{ACCOUNT}.getCourse().getMaster().getBranch().getName() + "</style>" +  " ممثلاً الطرف الأول " + "\n" + 
+"(2) المتدرب: " +"<style isBold=\"true\" isUnderline=\"true\">"  +  $P{ACCOUNT}.getName() + "</style>"  +" ممثلاً الطرف الثاني ، وبياناته كالتالي : " + "\n" + 
+"رقم المتدرب: " + "<style backcolor=\"#DBDBDB\">" +   $P{ACCOUNT}.getKeyRTL() +   "</style>" +   " " +  "رقم الهوية/الإقامة: " + "<style backcolor=\"#DBDBDB\">" +    $P{ACCOUNT}.getStudent().getContact().getIdentityNumber() +  "</style>"  +   " " + "رقم الجوال: " + "<style backcolor=\"#DBDBDB\">"  +  $P{ACCOUNT}.getStudent().getContact().getMobile() +  "</style>"]]></textFieldExpression>
 			</textField>
 			<frame>
 				<reportElement x="5" y="114" width="564" height="54" uuid="2a8a4d16-9ab8-498e-9f15-c547c7743830">
@@ -349,7 +460,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{MASTER_NAME}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getName()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="376" y="18" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="7b9b0e70-b3cc-484f-bce0-32741caba852">
@@ -371,7 +482,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{MASTER_PERIOD}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getPeriod()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="188" y="18" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="6bb03090-3967-403b-a446-858cb52bd8d4">
@@ -393,7 +504,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{COURSE_START_DATE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getStartDate())]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="0" y="18" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="70181544-9692-4414-80af-e7e277f25555">
@@ -415,7 +526,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{COURSE_END_DATE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getEndDate())]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="376" y="36" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="79dccf0b-ce43-4198-87e7-2c50ec2f78e8">
@@ -437,7 +548,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{COURSE_PRICE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getRequiredPrice()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="188" y="36" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="f593974b-23d3-4871-81ca-d8f4c4192970">
@@ -459,7 +570,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCoursePaymentType().equals("نقدي") ? "" : $P{ACCOUNT}.getRequiredPrice()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="0" y="36" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="30f7b82d-c6eb-4f5a-8e57-ad7cc6e92157">
@@ -481,7 +592,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourseCreditAmount()]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>
@@ -731,7 +842,7 @@
 				</staticText>
 			</frame>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="658" width="575" height="18" forecolor="#43A047" backcolor="#754C29" uuid="4048f921-bc8a-4973-978f-48350051e16a">
+				<reportElement mode="Transparent" x="0" y="658" width="575" height="42" forecolor="#43A047" backcolor="#754C29" uuid="4048f921-bc8a-4973-978f-48350051e16a">
 					<property name="com.jaspersoft.layout.grid.x" value="6"/>
 					<property name="com.jaspersoft.layout.grid.y" value="1"/>
 					<property name="com.jaspersoft.layout.grid.weight.x" value="1.0"/>
@@ -749,8 +860,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[
-                    .............................................................................................]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="638" width="575" height="20" forecolor="#FFFFFF" backcolor="#43A047" uuid="9d4c2034-dbbf-48c5-bd0e-41578b353602"/>

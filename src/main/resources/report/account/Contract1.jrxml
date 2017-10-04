@@ -11,16 +11,6 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<import value="com.besafx.app.util.DateConverter"/>
-	<parameter name="BRANCH_NAME" class="java.lang.String"/>
-	<parameter name="STUDENT_NAME" class="java.lang.String"/>
-	<parameter name="STUDENT_NUMBER" class="java.lang.String"/>
-	<parameter name="STUDENT_IDENTITY_NUMBER" class="java.lang.String"/>
-	<parameter name="STUDENT_MOBILE" class="java.lang.String"/>
-	<parameter name="MASTER_NAME" class="java.lang.String"/>
-	<parameter name="MASTER_PERIOD" class="java.lang.String"/>
-	<parameter name="COURSE_START_DATE" class="java.lang.String"/>
-	<parameter name="COURSE_END_DATE" class="java.lang.String"/>
-	<parameter name="COURSE_PRICE" class="java.lang.String"/>
 	<parameter name="TITLE" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
 	<parameter name="ACCOUNT" class="com.besafx.app.entity.Account"/>
@@ -292,11 +282,11 @@
 					<font fontName="Arial" size="10" isBold="false"/>
 					<paragraph lineSpacing="Double" lineSpacingSize="2.0" firstLineIndent="10" leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA["انه فى يوم " + "<style isBold=\"true\" isUnderline=\"true\">"  + com.besafx.app.util.DateConverter.getHijriTodayString() + "</style>" +  " الموافق " + "<style isBold=\"true\" isUnderline=\"true\">"  + com.besafx.app.util.DateConverter.getHijriTodayDateString()  + "</style>" +  "، " +
+				<textFieldExpression><![CDATA["انه فى يوم " + "<style isBold=\"true\" isUnderline=\"true\">"  + DateConverter.getHijriTodayString() + "</style>" +  " الموافق " + "<style isBold=\"true\" isUnderline=\"true\">"  + DateConverter.getHijriTodayDateString()  + "</style>" +  "، " +
 "تم تحرير هذا العقد بين كل من :" +"\n" + 
-"(1) المعهد الأهلي العالي للتدريب فرع " + "<style isBold=\"true\" isUnderline=\"true\">" +  $P{BRANCH_NAME} + "</style>" +  " ممثلاً الطرف الأول " + "\n" + 
-"(2) المتدرب: " +"<style isBold=\"true\" isUnderline=\"true\">"  +  $P{STUDENT_NAME} + "</style>"  +" ممثلاً الطرف الثاني ، وبياناته كالتالي : " + "\n" + 
-"رقم المتدرب: " + "<style backcolor=\"#DBDBDB\">" +   $P{STUDENT_NUMBER} +   "</style>" +   " " +  "رقم الهوية/الإقامة: " + "<style backcolor=\"#DBDBDB\">" +    $P{STUDENT_IDENTITY_NUMBER} +  "</style>"  +   " " + "رقم الجوال: " + "<style backcolor=\"#DBDBDB\">"  +  $P{STUDENT_MOBILE} +  "</style>"]]></textFieldExpression>
+"(1) المعهد الأهلي العالي للتدريب فرع " + "<style isBold=\"true\" isUnderline=\"true\">" +  $P{ACCOUNT}.getCourse().getMaster().getBranch().getName() + "</style>" +  " ممثلاً الطرف الأول " + "\n" + 
+"(2) المتدرب: " +"<style isBold=\"true\" isUnderline=\"true\">"  +  $P{ACCOUNT}.getName() + "</style>"  +" ممثلاً الطرف الثاني ، وبياناته كالتالي : " + "\n" + 
+"رقم المتدرب: " + "<style backcolor=\"#DBDBDB\">" +   $P{ACCOUNT}.getKeyRTL() +   "</style>" +   " " +  "رقم الهوية/الإقامة: " + "<style backcolor=\"#DBDBDB\">" +    $P{ACCOUNT}.getStudent().getContact().getIdentityNumber() +  "</style>"  +   " " + "رقم الجوال: " + "<style backcolor=\"#DBDBDB\">"  +  $P{ACCOUNT}.getStudent().getContact().getMobile() +  "</style>"]]></textFieldExpression>
 			</textField>
 			<frame>
 				<reportElement x="5" y="114" width="564" height="54" uuid="2a8a4d16-9ab8-498e-9f15-c547c7743830">
@@ -470,7 +460,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{MASTER_NAME}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getName()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="376" y="18" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="7b9b0e70-b3cc-484f-bce0-32741caba852">
@@ -492,7 +482,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{MASTER_PERIOD}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourse().getMaster().getPeriod()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="188" y="18" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="6bb03090-3967-403b-a446-858cb52bd8d4">
@@ -514,7 +504,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{COURSE_START_DATE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getStartDate())]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="0" y="18" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="70181544-9692-4414-80af-e7e277f25555">
@@ -536,7 +526,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{COURSE_END_DATE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getEndDate())]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="376" y="36" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="79dccf0b-ce43-4198-87e7-2c50ec2f78e8">
@@ -558,7 +548,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{COURSE_PRICE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getRequiredPrice()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="188" y="36" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="f593974b-23d3-4871-81ca-d8f4c4192970">
@@ -580,7 +570,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCoursePaymentType().equals("نقدي") ? "" : $P{ACCOUNT}.getRequiredPrice()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="0" y="36" width="94" height="18" forecolor="#754C29" backcolor="#754C29" uuid="30f7b82d-c6eb-4f5a-8e57-ad7cc6e92157">
@@ -602,7 +592,7 @@
 						<font fontName="Arial" size="8" isBold="false"/>
 						<paragraph rightIndent="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{ACCOUNT}.getCourseCreditAmount()]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>

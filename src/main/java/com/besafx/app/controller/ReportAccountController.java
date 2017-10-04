@@ -222,16 +222,6 @@ public class ReportAccountController {
          * Insert Parameters
          */
         Map<String, Object> map = new HashMap<>();
-        map.put("BRANCH_NAME", account.getCourse().getMaster().getBranch().getName());
-        map.put("STUDENT_NAME", account.getStudent().getContact().getFirstName() + " " + account.getStudent().getContact().getSecondName() + " " + account.getStudent().getContact().getThirdName() + " " + account.getStudent().getContact().getForthName());
-        map.put("STUDENT_NUMBER", account.getCode() + " " + account.getCourse().getCode() + " " + account.getCourse().getMaster().getCode() + " " + account.getCourse().getMaster().getBranch().getCode() + " " + DateConverter.getYearShortcut(account.getRegisterDate()));
-        map.put("STUDENT_IDENTITY_NUMBER", account.getStudent().getContact().getIdentityNumber());
-        map.put("STUDENT_MOBILE", account.getStudent().getContact().getMobile());
-        map.put("MASTER_NAME", account.getCourse().getMaster().getName());
-        map.put("MASTER_PERIOD", account.getCourse().getMaster().getPeriod());
-        map.put("COURSE_START_DATE", DateConverter.getHijriStringFromDateRTL(account.getCourse().getStartDate()));
-        map.put("COURSE_END_DATE", DateConverter.getHijriStringFromDateRTL(account.getCourse().getEndDate()));
-        map.put("COURSE_PRICE", account.getCoursePrice().toString());
         map.put("ACCOUNT", account);
         map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
         map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));

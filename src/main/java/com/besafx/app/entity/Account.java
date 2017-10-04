@@ -131,6 +131,24 @@ public class Account implements Serializable {
         }
     }
 
+    public String getKeyRTL(){
+        try {
+            StringBuilder builder = new StringBuilder();
+            builder.append(this.getCode());
+            builder.append("-");
+            builder.append(this.getCourse().getCode());
+            builder.append("-");
+            builder.append(this.getCourse().getMaster().getCode());
+            builder.append("-");
+            builder.append(this.getCourse().getMaster().getBranch().getCode());
+            builder.append("-");
+            builder.append(DateConverter.getYearShortcut(this.getRegisterDate()));
+            return builder.toString();
+        }catch (Exception ex){
+            return "";
+        }
+    }
+
     public String getName(){
         try {
             StringBuilder builder = new StringBuilder();
