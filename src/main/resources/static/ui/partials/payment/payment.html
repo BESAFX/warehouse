@@ -213,6 +213,10 @@
                                         <span>اسم الطالب</span>
                                     </th>
 
+                                    <th st-sort="account.course.master.name" class="text-right">
+                                        <span>التخصص</span>
+                                    </th>
+
                                     <th st-sort="note" class="text-right">
                                         <span>بيان السند</span>
                                     </th>
@@ -223,7 +227,7 @@
 
                                 </tr>
                                 <tr>
-                                    <th colspan="9">
+                                    <th colspan="10">
                                         <input st-search=""
                                                class="form-control"
                                                placeholder="بحث شامل وسريع..."
@@ -263,6 +267,11 @@
                                         {{payment.account.student.contact.thirdName}}
                                         {{payment.account.student.contact.forthName}}
                                     </td>
+                                    <td>
+                                        <span class="label label-info">{{payment.account.course.master.masterCategory.name}}</span>
+                                        [ {{payment.account.course.master.code}} ]
+                                        {{payment.account.course.master.name}}
+                                    </td>
                                     <td st-select-row-custom="payment">{{payment.note}}</td>
                                     <td st-select-row-custom="payment">
                                         {{payment.lastPerson.contact.firstName}}
@@ -271,12 +280,12 @@
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                     ng-show="!collection || collection.length ==0">
-                                    <td colspan="9">لا توجد بيانات</td>
+                                    <td colspan="10">لا توجد بيانات</td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td colspan="9">
+                                    <td colspan="10">
                                         <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
                                     </td>
                                 </tr>

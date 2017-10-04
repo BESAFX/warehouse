@@ -33,7 +33,7 @@ public class PaymentRest {
 
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
 
-    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,branch[id,code]]]]";
+    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
 
     @Autowired
     private PersonService personService;
