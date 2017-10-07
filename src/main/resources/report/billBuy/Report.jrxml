@@ -47,6 +47,7 @@
 		<field name="billBuyType" class="com.besafx.app.entity.BillBuyType"/>
 		<field name="branch" class="com.besafx.app.entity.Branch"/>
 		<field name="lastPerson" class="com.besafx.app.entity.Person"/>
+		<sortField name="SORT_BY_BILL_BUY_TYPE" type="Variable"/>
 		<sortField name="code"/>
 		<sortField name="date"/>
 		<variable name="SUM_AMOUNT" class="java.lang.Double" resetType="Group" resetGroup="GROUP_BY_BILL_BUY_TYPE" calculation="Sum">
@@ -54,6 +55,9 @@
 		</variable>
 		<variable name="SUM_TOTAL" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+		</variable>
+		<variable name="SORT_BY_BILL_BUY_TYPE" class="java.lang.Long">
+			<variableExpression><![CDATA[$F{billBuyType}.getId()]]></variableExpression>
 		</variable>
 		<group name="GROUP_BY_BILL_BUY_TYPE">
 			<groupExpression><![CDATA[$F{billBuyType}.getId()]]></groupExpression>
@@ -501,7 +505,7 @@
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="70" height="20" uuid="780ed047-5e50-4ed5-924a-016699004caa"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
@@ -526,7 +530,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="87" height="20" uuid="017cf8fc-356b-497f-9e57-840e1967fe00"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
@@ -556,7 +560,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="77" height="20" uuid="a91e9f0b-fcb0-405d-996f-a68ca85201e3"/>
 									<box>
 										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -586,7 +590,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="64" height="20" uuid="cb3c44d2-424f-413a-8fb1-834ad7c41db4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
@@ -610,7 +614,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="63" height="20" uuid="99041494-40d1-4a49-9a52-caa43175548d"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
@@ -634,7 +638,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="69" height="20" uuid="9f0c783e-7009-4a1c-bd03-bc4d45665324"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
@@ -658,7 +662,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								</jr:cell>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="81" height="20" uuid="0d015378-eec4-4569-8397-63be8ff95148"/>
 									<box>
 										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -690,12 +694,12 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 							</jr:groupHeader>
 							<jr:detailCell style="Table_TD" height="20">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
-								<textField>
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="44" height="20" uuid="2be4e06a-4c8d-41bc-a1dd-56916d3bce23"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$V{GROUP_BY_BILL_BUY_TYPE_COUNT}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
