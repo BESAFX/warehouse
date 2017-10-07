@@ -1,4 +1,5 @@
 package com.besafx.app.controller;
+
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
@@ -40,9 +41,9 @@ public class ReportBillBuyController {
     @ResponseBody
     public void printBillBuyByBranch(
             @RequestParam(value = "branchIds") List<Long> branchIds,
-            @RequestParam(value = "billBuyTypeIds") List<Long> billBuyTypeIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "billBuyTypeIds", required = false) List<Long> billBuyTypeIds,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             Principal principal,
