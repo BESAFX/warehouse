@@ -27,37 +27,55 @@
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="startDate" class="control-label">التاريخ من</label>
-                <div dir="ltr" class="input-group">
-                    <input dir="rtl"
-                           id="startDate"
-                           type="text"
-                           class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.startDate"
-                           calendarType="ummalqura"
-                           language="en"
-                           dateFormat="yyyy/mm/dd"
-                           showOnFocus="false"
-                           readonly="readonly"
-                           kdatepicker>
-                </div>
+                <label for="bank" class="control-label">[رقم الحساب] اسم الحساب</label>
+                <select id="bank"
+                        data-placeholder="ابحث عن الحساب"
+                        no-results-text="'لا توجد حسابات توافق بحثك'"
+                        placeholder-text-multiple="'اختر الحساب'"
+                        class="form-control text-right"
+                        multiple="multiple"
+                        chosen=""
+                        ng-model="buffer.billBuyTypesList"
+                        ng-options="( ' [ ' + billBuyType.code + ' ] ' + billBuyType.name ) for billBuyType in billBuyTypes | orderBy:'code' track by billBuyType.id">
+                </select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="endDate" class="control-label">التاريخ إلى</label>
-                <div dir="ltr" class="input-group">
-                    <input dir="rtl"
-                           id="endDate"
-                           type="text"
-                           class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.endDate"
-                           calendarType="ummalqura"
-                           language="en"
-                           dateFormat="yyyy/mm/dd"
-                           showOnFocus="false"
-                           readonly="readonly"
-                           kdatepicker>
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label for="startDate" class="control-label">التاريخ من</label>
+                    <div dir="ltr" class="input-group">
+                        <input dir="rtl"
+                               id="startDate"
+                               type="text"
+                               class="form-control text-right is-calendarPicker"
+                               ng-model="buffer.startDate"
+                               calendarType="ummalqura"
+                               language="en"
+                               dateFormat="yyyy/mm/dd"
+                               showOnFocus="false"
+                               readonly="readonly"
+                               kdatepicker>
+                    </div>
                 </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label for="endDate" class="control-label">التاريخ إلى</label>
+                    <div dir="ltr" class="input-group">
+                        <input dir="rtl"
+                               id="endDate"
+                               type="text"
+                               class="form-control text-right is-calendarPicker"
+                               ng-model="buffer.endDate"
+                               calendarType="ummalqura"
+                               language="en"
+                               dateFormat="yyyy/mm/dd"
+                               showOnFocus="false"
+                               readonly="readonly"
+                               kdatepicker>
+                    </div>
+                </div>
+
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">

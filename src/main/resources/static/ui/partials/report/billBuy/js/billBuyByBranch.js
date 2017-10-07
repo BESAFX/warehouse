@@ -1,5 +1,5 @@
-app.controller('billBuyByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
-    function (BranchService, $scope, $rootScope, $timeout, $uibModalInstance) {
+app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService','$scope', '$rootScope', '$timeout', '$uibModalInstance',
+    function (BranchService, BillBuyTypeService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
         $scope.buffer.branchesList = [];
@@ -8,6 +8,9 @@ app.controller('billBuyByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
         $timeout(function () {
             BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
+            });
+            BillBuyTypeService.findAll().then(function (data) {
+                $scope.billBuyTypes = data;
             });
         }, 1500);
 
@@ -31,6 +34,15 @@ app.controller('billBuyByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
             });
             param.push('branchIds=');
             param.push(branchIds);
+            param.push('&');
+            //
+            //
+            var billBuyTypeIds = [];
+            angular.forEach($scope.buffer.billBuyTypesList, function (billBuyType) {
+                billBuyTypeIds.push(billBuyType.id);
+            });
+            param.push('billBuyTypeIds=');
+            param.push(billBuyTypeIds);
             param.push('&');
             //
             param.push('exportType=');

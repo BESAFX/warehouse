@@ -40,6 +40,7 @@ public class ReportBillBuyController {
     @ResponseBody
     public void printBillBuyByBranch(
             @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "billBuyTypeIds") List<Long> billBuyTypeIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
@@ -54,6 +55,7 @@ public class ReportBillBuyController {
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("branch").get("id").in(value)));
+        Optional.ofNullable(billBuyTypeIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("billBuyType").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("BILL_BUYS", getList(predicates));
