@@ -56,7 +56,7 @@ public class ReportBillBuyController {
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("branch").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
-        map.put("ACCOUNTS", getList(predicates));
+        map.put("BILL_BUYS", getList(predicates));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/billBuy/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());

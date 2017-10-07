@@ -47,22 +47,10 @@
 		<field name="billBuyType" class="com.besafx.app.entity.BillBuyType"/>
 		<field name="branch" class="com.besafx.app.entity.Branch"/>
 		<field name="lastPerson" class="com.besafx.app.entity.Person"/>
-		<sortField name="SORT_BY_COURSE" type="Variable"/>
-		<sortField name="SORT_BY_CODE" type="Variable"/>
-		<variable name="SORT_BY_DATE" class="java.util.Date">
-			<variableExpression><![CDATA[$F{date}]]></variableExpression>
-		</variable>
+		<sortField name="SORT_BY_BRANCH" type="Variable"/>
+		<sortField name="date"/>
 		<variable name="SORT_BY_BRANCH" class="java.lang.Long">
-			<variableExpression><![CDATA[$F{note}.getMaster().getBranch().getId()]]></variableExpression>
-		</variable>
-		<variable name="SORT_BY_MASTER" class="java.lang.Long">
-			<variableExpression><![CDATA[$F{note}.getMaster().getId()]]></variableExpression>
-		</variable>
-		<variable name="SORT_BY_COURSE" class="java.lang.Long">
-			<variableExpression><![CDATA[$F{note}.getId()]]></variableExpression>
-		</variable>
-		<variable name="SORT_BY_CODE" class="java.lang.Integer">
-			<variableExpression><![CDATA[$F{code}]]></variableExpression>
+			<variableExpression><![CDATA[$F{branch}.getId()]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="TITLE" class="java.lang.String"/>
@@ -96,15 +84,15 @@
 تحت إشراف المؤسسة العامة للتدريب التقني والمهني]]></text>
 				</staticText>
 				<textField>
-					<reportElement stretchType="RelativeToTallestObject" x="159" y="40" width="237" height="20" uuid="2fa638b0-0a00-47a4-9b45-72042013cbb7"/>
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="40" width="555" height="40" uuid="2fa638b0-0a00-47a4-9b45-72042013cbb7"/>
 					<box padding="0">
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
 						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#754C29"/>
 					</box>
-					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
-						<font fontName="PT Bold Heading" size="10" isBold="false" isUnderline="false"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Arial" size="10" isBold="true" isUnderline="false"/>
 						<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingBefore="0" spacingAfter="0"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{TITLE}]]></textFieldExpression>
