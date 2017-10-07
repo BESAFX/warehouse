@@ -1,17 +1,8 @@
 app.controller('depositCreateCtrl', ['BankService', 'DepositService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'bank',
     function (BankService, DepositService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, bank) {
 
-        $scope.clear = function () {
-            $scope.deposit = {};
-            if ($scope.form) {
-                $scope.form.$setPristine()
-            }
-        };
-
-        $scope.clear();
-
         $scope.title = title;
-
+        $scope.deposit = {};
         $scope.deposit.bank = bank;
 
         $timeout(function () {

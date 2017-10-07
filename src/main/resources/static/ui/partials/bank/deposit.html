@@ -1,245 +1,4 @@
-﻿<style>
-    #filter .chosen-container.chosen-with-drop .chosen-drop {
-        right: 0 !important;
-        left: auto !important;
-    }
-
-    #filter .chosen-container .chosen-drop {
-        right: -9999px !important;
-        left: auto !important;
-    }
-</style>
-
-<div dir="rtl" id="filter"
-     ng-init="showFilter=false"
-     ps-open="showFilter"
-     pageslide=""
-     ng-style="{'opacity':sideOpacity}"
-     ps-side="left"
-     ps-click-outside="false"
-     ps-size="50%">
-
-    <div class="panel panel-info" focus-group="" focus-stack=""
-         focus-group-head="loop" focus-group-tail="loop">
-
-        <div class="panel-heading">
-            <a class="pull-left" href="" ng-click="showFilter=false"><span class="fa fa-close fa-2x"></span></a>
-            <h3 class="panel-title pull-right">
-                <span class="fa fa-database"></span>
-                <span>تصفية متعددة من قاعدة البيانات</span>
-            </h3>
-        </div>
-
-        <div class="panel-body"
-             style="overflow-y: auto; overflow-x: hidden;"
-             ng-style="resizeWithOffset(130)"
-             resize="">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <uib-accordion close-others="true">
-                        <div uib-accordion-group class="panel panel-primary" is-open="true">
-                            <uib-accordion-heading>
-                                <i class="fa fa-search fa-lg"></i>
-                                <span>خيارات البحث - بيانات الحساب البنكي</span>
-                            </uib-accordion-heading>
-
-                            <div class="row">
-
-                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
-                                    <select id="branch"
-                                            data-placeholder="ابحث عن الفرع"
-                                            no-results-text="'لا توجد فروع توافق بحثك'"
-                                            placeholder-text-single="'اختر الفرع'"
-                                            class="form-control text-right"
-                                            chosen=""
-                                            ng-model="buffer.bankBranch"
-                                            ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                                    </select>
-                                </div>
-
-                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <label for="bankCode" class="control-label">رقم الحساب (يحتوى علي)</label>
-                                    <input id="bankCode"
-                                           type="number"
-                                           min="1"
-                                           class="form-control text-right"
-                                           placeholder="ادخل رقم الحساب"
-                                           ng-model="buffer.bankCode">
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="bankName" class="control-label">اسم البنك (يحتوى علي)</label>
-                                        <input id="bankName"
-                                               type="text"
-                                               class="form-control text-right "
-                                               placeholder="ادخل اسم البنك كاملاً او جزءاً منه"
-                                               ng-model="buffer.bankName">
-                                    </div>
-
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="bankBranchName" class="control-label">فرع البنك (يحتوى على) </label>
-                                        <input id="bankBranchName"
-                                               type="text"
-                                               class="form-control text-right"
-                                               placeholder="ادخل اسم فرع البنك كاملاً او جزءاً منه"
-                                               ng-model="buffer.bankBranchName">
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="bankStockTo" class="control-label">الرصيد الحالي إلى </label>
-                                        <input id="bankStockTo"
-                                               type="number"
-                                               class="form-control text-right"
-                                               placeholder="ادخل الرصيد الحالي من"
-                                               ng-model="buffer.bankStockTo">
-                                    </div>
-
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="bankStockFrom" class="control-label">الرصيد الحالي من </label>
-                                        <input id="bankStockFrom"
-                                               type="number"
-                                               class="form-control text-right"
-                                               placeholder="ادخل الرصيد الحالي إلى"
-                                               ng-model="buffer.bankStockFrom">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div uib-accordion-group class="panel panel-primary" is-open="false">
-                            <uib-accordion-heading>
-                                <i class="fa fa-search fa-lg"></i>
-                                <span>خيارات البحث - بيانات الإيداع</span>
-                            </uib-accordion-heading>
-
-                            <div class="row">
-
-                                <div class="row">
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="code" class="control-label">رقم الإيداع (يحتوى علي)</label>
-                                        <input id="code"
-                                               type="number"
-                                               min="1"
-                                               class="form-control text-right"
-                                               placeholder="ادخل رقم الإيداع"
-                                               ng-model="buffer.code">
-                                    </div>
-
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="fromName" class="control-label">اسم المودع (يحتوى علي)</label>
-                                        <input id="fromName"
-                                               type="text"
-                                               class="form-control text-right "
-                                               placeholder="ادخل اسم المودع كاملاً او جزءاً منه"
-                                               ng-model="buffer.fromName">
-                                    </div>
-                                </div>
-
-
-                                <div class="row">
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="amountTo" class="control-label">قيمة الإيداع من </label>
-                                        <input id="amountTo"
-                                               type="number"
-                                               class="form-control text-right"
-                                               placeholder="ادخل الرصيد الحالي إلى"
-                                               ng-model="buffer.amountTo">
-                                    </div>
-
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="amountFrom" class="control-label">قيمة الإيداع إلى </label>
-                                        <input id="amountFrom"
-                                               type="number"
-                                               class="form-control text-right"
-                                               placeholder="ادخل الرصيد الحالي من"
-                                               ng-model="buffer.amountFrom">
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="dateFrom" class="control-label">تاريخ الإيداع من</label>
-                                        <div dir="ltr" class="input-group">
-                                            <input dir="rtl"
-                                                   id="dateFrom"
-                                                   type="text"
-                                                   class="form-control text-right is-calendarPicker"
-                                                   ng-model="buffer.dateFrom"
-                                                   calendarType="ummalqura"
-                                                   language="en"
-                                                   dateFormat="yyyy/mm/dd"
-                                                   showOnFocus="false"
-                                                   readonly="readonly"
-                                                   kdatepicker>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label for="dateTo" class="control-label">تاريخ الإيداع إلى</label>
-                                        <div dir="ltr" class="input-group">
-                                            <input dir="rtl"
-                                                   id="dateTo"
-                                                   type="text"
-                                                   class="form-control text-right is-calendarPicker"
-                                                   ng-model="buffer.dateTo"
-                                                   calendarType="ummalqura"
-                                                   language="en"
-                                                   dateFormat="yyyy/mm/dd"
-                                                   showOnFocus="false"
-                                                   readonly="readonly"
-                                                   kdatepicker>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </uib-accordion>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="panel-footer">
-
-            <div class="row">
-                <button uib-tooltip="بحث"
-                        tooltip-append-to-body="true"
-                        type="button"
-                        ng-click="filter()"
-                        class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <i class="material-icons">search</i>
-                </button>
-                <button uib-tooltip="مسح الحقول"
-                        tooltip-append-to-body="true"
-                        type="button"
-                        ng-click="clear()"
-                        class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <i class="material-icons">delete</i>
-                </button>
-                <button uib-tooltip="خروج"
-                        tooltip-append-to-body="true"
-                        type="button"
-                        ng-click="showFilter=false"
-                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <i class="material-icons">power_settings_new</i>
-                </button>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- Always shows a header, even in smaller screens. -->
+﻿<!-- Always shows a header, even in smaller screens. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
     <header class="mdl-layout__header">
@@ -309,13 +68,13 @@
                         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                             for="branch-menu-lower-right">
                             <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
-                                ng-click="showFilter=true">
+                                ng-click="filter()">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">visibility</i>
                                     <span>عرض الإيداعات البنكية</span>
                                 </span>
                             </li>
-                            <li class="mdl-menu__item mdl-list__item" ng-click="ModalProvider.openDepositCreateModel()"
+                            <li class="mdl-menu__item mdl-list__item" ng-click="newDeposit()"
                                 ng-if="contains(me.team.authorities, ['ROLE_DEPOSIT_CREATE'])">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">add</i>
@@ -334,77 +93,98 @@
         <div dir="rtl" class="row" style="margin-top: 10px">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-body">
 
-                    <div class="table-responsive">
-                        <table st-table="collection" st-safe-src="deposits"
-                               class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                            <thead>
-                            <tr>
-
-                                <th class="text-right">
-                                    <span>م</span>
-                                </th>
-
-                                <th st-sort="code" class="text-right">
-                                    <span> رقم الإيداع</span>
-                                </th>
-
-                                <th st-sort="amount" class="text-right">
-                                    <span>قيمة الإيداع</span>
-                                </th>
-
-                                <th st-sort="fromName" class="text-right">
-                                    <span>اسم المودع</span>
-                                </th>
-
-                                <th st-sort="date" class="text-right">
-                                    <span>تاريخ الإيداع</span>
-                                </th>
-
-                                <th st-sort="bank.code" class="text-right">
-                                    <span>رقم الحساب البنكي</span>
-                                </th>
-
-                                <th st-sort="lastPerson.contact.id" class="text-right">
-                                    <span>مدخل الإيداع</span>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th colspan="7"><input st-search="" class="form-control" placeholder="بحث شامل وسريع..."
-                                                       type="text"/></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-right"
-                                ng-repeat="deposit in collection"
-                                ng-click="setSelected(deposit)"
-                                ng-right-click="setSelected(deposit)"
-                                st-select-mode="single"
-                                ng-class="{'mdl-color--brown-100':deposit.isSelected}">
-                                <td st-select-row-custom="deposit">{{$index+1}}</td>
-                                <td st-select-row-custom="deposit">{{deposit.code}}</td>
-                                <td st-select-row-custom="deposit">{{deposit.amount | currency:'SAR':0}}</td>
-                                <td st-select-row-custom="deposit">{{deposit.fromName}}</td>
-                                <td st-select-row-custom="deposit">
-                                    {{deposit.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
-                                </td>
-                                <td st-select-row-custom="deposit">{{deposit.bank.code}}</td>
-                                <td st-select-row-custom="deposit">
-                                    {{deposit.lastPerson.contact.firstName}}
-                                    {{deposit.lastPerson.contact.forthName}}
-                                </td>
-                            </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!collection || collection.length ==0">
-                                <td colspan="7">لا توجد بيانات</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="filter()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تصفية البيانات">
+                                    <span class="fa fa-filter"></span>
+                                </a>
+                                <a href=""
+                                   ng-if="contains(me.team.authorities, ['ROLE_DEPOSIT_CREATE'])"
+                                   ng-click="newDeposit()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="إيداع">
+                                    <span class="fa fa-plus-square"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>قائمة الإيداعات</h3>
+                        </div>
                     </div>
+                    <div class="panel-body panel-body-table">
+                        <div class="table-responsive">
+                            <table st-table="collection" st-safe-src="deposits"
+                                   class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
 
+                                    <th class="text-right">
+                                        <span>م</span>
+                                    </th>
+
+                                    <th st-sort="code" class="text-right">
+                                        <span> رقم الإيداع</span>
+                                    </th>
+
+                                    <th st-sort="amount" class="text-right">
+                                        <span>قيمة الإيداع</span>
+                                    </th>
+
+                                    <th st-sort="fromName" class="text-right">
+                                        <span>اسم المودع</span>
+                                    </th>
+
+                                    <th st-sort="date" class="text-right">
+                                        <span>تاريخ الإيداع</span>
+                                    </th>
+
+                                    <th st-sort="bank.code" class="text-right">
+                                        <span>رقم الحساب البنكي</span>
+                                    </th>
+
+                                    <th st-sort="lastPerson.contact.id" class="text-right">
+                                        <span>مدخل الإيداع</span>
+                                    </th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-right"
+                                    ng-repeat="deposit in collection"
+                                    ng-click="setSelected(deposit)"
+                                    ng-right-click="setSelected(deposit)"
+                                    st-select-mode="single"
+                                    ng-class="{'mdl-color--brown-100':deposit.isSelected}">
+                                    <td st-select-row-custom="deposit">{{$index+1}}</td>
+                                    <td st-select-row-custom="deposit">{{deposit.code}}</td>
+                                    <td st-select-row-custom="deposit">{{deposit.amount | currency:'SAR':0}}</td>
+                                    <td st-select-row-custom="deposit">{{deposit.fromName}}</td>
+                                    <td st-select-row-custom="deposit">
+                                        {{deposit.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
+                                    </td>
+                                    <td st-select-row-custom="deposit">{{deposit.bank.code}}</td>
+                                    <td st-select-row-custom="deposit">
+                                        {{deposit.lastPerson.contact.firstName}}
+                                        {{deposit.lastPerson.contact.forthName}}
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!collection || collection.length ==0">
+                                    <td colspan="7">لا توجد بيانات</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
         </div>

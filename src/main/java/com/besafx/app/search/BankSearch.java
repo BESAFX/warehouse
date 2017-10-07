@@ -27,7 +27,7 @@ public class BankSearch {
             final String branchName,
             final Long stockFrom,
             final Long stockTo,
-            final Long branch
+            final Long branchId
     ) {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(code).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("code"), "%" + value + "%")));
@@ -35,7 +35,7 @@ public class BankSearch {
         Optional.ofNullable(branchName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("branchName"), "%" + value + "%")));
         Optional.ofNullable(stockFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("stock"), value)));
         Optional.ofNullable(stockTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("stock"), value)));
-        Optional.ofNullable(branch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("branch").get("id"), value)));
+        Optional.ofNullable(branchId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("branch").get("id"), value)));
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {

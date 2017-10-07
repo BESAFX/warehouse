@@ -31,7 +31,7 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             {id: 27, name: 'تعديل حسابات البنوك', value: 'ROLE_BANK_UPDATE', selected: false},
             {id: 28, name: 'حذف حسابات البنوك', value: 'ROLE_BANK_DELETE', selected: false},
             {id: 29, name: 'إيداع الي الحساب البنكي', value: 'ROLE_DEPOSIT_CREATE', selected: false},
-            {id: 30, name: 'سحب من الحساب البنكي', value: 'ROLE_WITHDRAW_UPDATE', selected: false},
+            {id: 30, name: 'سحب من الحساب البنكي', value: 'ROLE_WITHDRAW_CREATE', selected: false},
             {id: 31, name: 'إنشاء انواع فواتير الشراء', value: 'ROLE_BILL_BUY_TYPE_CREATE', selected: false},
             {id: 32, name: 'تعديل انواع فواتير الشراء', value: 'ROLE_BILL_BUY_TYPE_UPDATE', selected: false},
             {id: 33, name: 'حذف انواع فواتير الشراء', value: 'ROLE_BILL_BUY_TYPE_DELETE', selected: false},

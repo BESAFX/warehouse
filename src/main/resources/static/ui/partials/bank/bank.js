@@ -130,25 +130,43 @@ app.controller("bankCtrl", ['BankService', 'BranchService', 'ModalProvider', '$r
             {
                 html: '<div class="drop-menu">انشاء حساب جديد<span class="fa fa-pencil fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_BANK_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openBankCreateModel();
+                    $scope.newBank();
                 }
             },
             {
                 html: '<div class="drop-menu">تعديل بيانات الحساب<span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_BANK_UPDATE']);
                 },
                 click: function ($itemScope, $event, value) {
                     ModalProvider.openBankUpdateModel($itemScope.bank);
                 }
             },
             {
+                html: '<div class="drop-menu">سحب<span class="fa fa-upload fa-lg"></span></div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_WITHDRAW_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.openWithdrawModel($itemScope.bank);
+                }
+            },
+            {
+                html: '<div class="drop-menu">إيداع<span class="fa fa-download fa-lg"></span></div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_DEPOSIT_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.openDepositModel($itemScope.bank);
+                }
+            },
+            {
                 html: '<div class="drop-menu">حذف الحساب<span class="fa fa-trash fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_BANK_DELETE']);
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.delete($itemScope.bank);

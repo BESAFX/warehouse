@@ -2,21 +2,46 @@
       focus-group-head="loop" focus-group-tail="loop">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">add</i>
+                <strong>{{title}}</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body" id="modal-body">
 
         <div class="row">
 
-            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="bank" class="control-label">الحساب البنكي [اسم البنك/فرع البنك]</label>
+                <select id="bank"
+                        data-placeholder="ابحث عن الحساب"
+                        no-results-text="'لا توجد حسابات بنكية توافق بحثك'"
+                        placeholder-text-single="'اختر الحساب'"
+                        class="form-control text-right"
+                        chosen=""
+                        focus-autofocus="1"
+                        ng-model="deposit.bank"
+                        required="required"
+                        disable-validation-message=""
+                        ng-options="(' [ ' + bank.name + ' / ' + bank.branchName + ' ] ') group by bank.branch.name for bank in banks | orderBy:'name' track by bank.id">
+                </select>
+            </div>
+
             <div class="row">
-                <div class="form-group text-right col-md-6">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="masterCreditAmount" class="control-label"> قيمة السحب </label>
                     <div dir="ltr" class="input-group" id="masterCreditAmount">
                         <span class="input-group-addon">ريال سعودي</span>
@@ -25,18 +50,16 @@
                                ng-max="withdraw.bank.stock"
                                class="form-control text-right "
                                ng-model="withdraw.amount"
-                               focus-index="2"
                                placeholder="ادخل القيمة"
                                required="required"
                                disable-validation-message="">
                     </div>
                 </div>
 
-                <div class="form-group text-right col-md-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="code" class="control-label">رقم السحب </label>
                     <input id="code"
                            type="text"
-                           focus-index="1"
                            required="required"
                            disable-validation-message=""
                            class="form-control text-right"
@@ -46,11 +69,11 @@
             </div>
 
             <div class="row">
-                <div class="form-group text-right col-md-6">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="fromName" class="control-label">اسم الساحب </label>
                     <input id="fromName"
                            type="text"
-                           focus-index="4"
                            required="required"
                            disable-validation-message=""
                            class="form-control text-right"
@@ -58,7 +81,7 @@
                            ng-model="withdraw.fromName">
                 </div>
 
-                <div class="form-group text-right col-md-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="date" class="control-label">
                         <span> تاريخ السحب</span>
                     </label>
@@ -66,7 +89,6 @@
                         <input dir="rtl"
                                id="date"
                                type="text"
-                               focus-index="3"
                                class="form-control text-right is-calendarPicker"
                                ng-model="withdraw.date"
                                calendarType="ummalqura"
@@ -80,10 +102,12 @@
                                kdatepicker>
                     </div>
                 </div>
+
             </div>
 
             <div class="row">
-                <div class="form-group text-right col-md-6">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="checkDate" class="control-label">
                         <span> تاريخ إصدار الشيك</span>
                     </label>
@@ -91,7 +115,6 @@
                         <input dir="rtl"
                                id="checkDate"
                                type="text"
-                               focus-index="6"
                                class="form-control text-right is-calendarPicker"
                                ng-model="withdraw.checkDate"
                                calendarType="ummalqura"
@@ -104,39 +127,21 @@
                     </div>
                 </div>
 
-                <div class="form-group text-right col-md-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="checkNumber" class="control-label">رقم الشيك </label>
                     <input id="checkNumber"
                            type="text"
-                           focus-index="5"
                            class="form-control text-right"
                            placeholder="ادخل رقم الشيك"
                            ng-model="withdraw.checkNumber">
                 </div>
+
             </div>
 
-            <div class="form-group text-right col-md-12">
-                <label for="bank" class="control-label">الحساب البنكي [رقم الحساب] [اسم البنك] [الفرع] [الرصيد
-                    الحالي]</label>
-                <select id="bank"
-                        data-placeholder="ابحث عن الحساب"
-                        no-results-text="'لا توجد حسابات بنكية توافق بحثك'"
-                        placeholder-text-single="'اختر الحساب'"
-                        class="form-control text-right"
-                        chosen=""
-                        ng-model="withdraw.bank"
-                        focus-index="7"
-                        required="required"
-                        disable-validation-message=""
-                        ng-options="( ' [ ' + bank.code + ' ] ' + ' [ ' + bank.name + ' ] ' + ' [ ' + bank.branch + ' ] ' + ' [ ' + bank.stock + ' ] ' ) for bank in banks track by bank.id">
-                </select>
-            </div>
-
-            <div class="form-group text-right col-md-12">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="note" class="control-label">ملاحظات</label>
                 <textarea id="note"
                           type="text"
-                          focus-index="8"
                           msd-elastic="\n"
                           required="required"
                           class="form-control text-right"
@@ -151,26 +156,26 @@
 
     <div class="modal-footer">
 
-        <div class="form-group col-md-12" role="group">
-            <button type="button"
-                    focus-index="14"
+        <div class="row">
+            <button uib-tooltip="اضافة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">add</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
                     ng-click="cancel()"
-                    class="btn btn-danger pull-left">
-                <span>خروج</span>
-                <i class="fa fa-power-off  fa-lg"></i>
-            </button>
-            <button type="button"
-                    ng-click="clear()"
-                    focus-index="13"
-                    class="btn btn-info pull-left">
-                <span>مسح الحقول</span>
-                <i class="fa fa-recycle  fa-lg"></i>
-            </button>
-            <button type="submit"
-                    focus-index="10"
-                    class="btn btn-success pull-right">
-                <span>اضافة</span>
-                <i class="fa fa-plus-square fa-lg"></i>
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
             </button>
         </div>
 

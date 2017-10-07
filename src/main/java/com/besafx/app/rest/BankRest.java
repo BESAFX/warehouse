@@ -121,9 +121,9 @@ public class BankRest {
             @RequestParam(value = "branchName", required = false) final String branchName,
             @RequestParam(value = "stockFrom", required = false) final Long stockFrom,
             @RequestParam(value = "stockTo", required = false) final Long stockTo,
-            @RequestParam(value = "branch", required = false) final Long branch) {
+            @RequestParam(value = "branchId", required = false) final Long branchId) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                bankSearch.search(code, name, branchName, stockFrom, stockTo, branch));
+                bankSearch.search(code, name, branchName, stockFrom, stockTo, branchId));
     }
 
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

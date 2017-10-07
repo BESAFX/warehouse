@@ -1,5 +1,5 @@
-app.controller("depositCtrl", ['DepositService', 'BranchService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state',
-    function (DepositService, BranchService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state) {
+app.controller("depositCtrl", ['DepositService', 'BranchService', 'ModalProvider', '$uibModal', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state',
+    function (DepositService, BranchService, ModalProvider, $uibModal, $rootScope, $scope, $window, $timeout, $log, $state) {
 
         //
         $scope.items = [];
@@ -14,16 +14,11 @@ app.controller("depositCtrl", ['DepositService', 'BranchService', 'ModalProvider
         $scope.deposits = [];
 
         $timeout(function () {
-            $scope.sideOpacity = 1;
             BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
                 $scope.buffer.bankBranch = $scope.branches[0];
             });
         }, 2000);
-
-        $timeout(function () {
-            window.componentHandler.upgradeAllRegistered();
-        }, 1500);
 
         $scope.setSelected = function (object) {
             if (object) {
@@ -38,88 +33,118 @@ app.controller("depositCtrl", ['DepositService', 'BranchService', 'ModalProvider
             }
         };
 
-        $scope.filter = function () {
-            var search = [];
-            if ($scope.buffer.code) {
-                search.push('code=');
-                search.push($scope.buffer.code);
-                search.push('&');
-            }
-            if ($scope.buffer.amountFrom) {
-                search.push('amountFrom=');
-                search.push($scope.buffer.amountFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.amountTo) {
-                search.push('amountTo=');
-                search.push($scope.buffer.amountTo);
-                search.push('&');
-            }
-            if ($scope.buffer.fromName) {
-                search.push('fromName=');
-                search.push($scope.buffer.fromName);
-                search.push('&');
-            }
-            if ($scope.buffer.dateFrom) {
-                search.push('dateFrom=');
-                search.push($scope.buffer.dateFrom.getTime());
-                search.push('&');
-            }
-            if ($scope.buffer.dateTo) {
-                search.push('dateTo=');
-                search.push($scope.buffer.dateTo.getTime());
-                search.push('&');
-            }
-
-            if ($scope.buffer.bankCode) {
-                search.push('bankCode=');
-                search.push($scope.buffer.bankCode);
-                search.push('&');
-            }
-            if ($scope.buffer.bankName) {
-                search.push('bankName=');
-                search.push($scope.buffer.bankName);
-                search.push('&');
-            }
-            if ($scope.buffer.bankBranch) {
-                search.push('bankBranch=');
-                search.push($scope.buffer.bankBranch.id);
-                search.push('&');
-            }
-            if ($scope.buffer.bankBranchName) {
-                search.push('bankBranchName=');
-                search.push($scope.buffer.bankBranchName);
-                search.push('&');
-            }
-            if ($scope.buffer.bankStockFrom) {
-                search.push('bankStockFrom=');
-                search.push($scope.buffer.bankStockFrom);
-                search.push('&');
-            }
-            if ($scope.buffer.bankStockTo) {
-                search.push('bankStockTo=');
-                search.push($scope.buffer.bankStockTo);
-                search.push('&');
-            }
-
-            DepositService.filter(search.join("")).then(function (data) {
-                $scope.deposits = data;
-                $scope.setSelected(data[0]);
-                $scope.items = [];
-                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                $scope.items.push({'id': 2, 'type': 'title', 'name': 'الإيداعات البنكية', 'style': 'font-weight:bold'});
-                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
-                $scope.items.push({
-                    'id': 4,
-                    'type': 'title',
-                    'name': ' [ ' + $scope.buffer.bankBranch.code + ' ] ' + $scope.buffer.bankBranch.name
-                });
+        $scope.newDeposit = function () {
+            ModalProvider.openDepositCreateModel().result.then(function (data) {
+                $scope.deposits.splice(0,0,data);
+            }, function () {
+                console.info('BankCreateModel Closed.');
             });
         };
 
-        $scope.clear = function () {
-            $scope.buffer = {};
-            $scope.buffer.bankBranch = $scope.branches[0];
+        $scope.filter = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/bank/depositFilter.html',
+                controller: 'depositFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    title: function () {
+                        return 'البحث فى الإيداعات البنكية';
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (buffer) {
+
+                var search = [];
+                if (buffer.code) {
+                    search.push('code=');
+                    search.push(buffer.code);
+                    search.push('&');
+                }
+                if (buffer.amountFrom) {
+                    search.push('amountFrom=');
+                    search.push(buffer.amountFrom);
+                    search.push('&');
+                }
+                if (buffer.amountTo) {
+                    search.push('amountTo=');
+                    search.push(buffer.amountTo);
+                    search.push('&');
+                }
+                if (buffer.fromName) {
+                    search.push('fromName=');
+                    search.push(buffer.fromName);
+                    search.push('&');
+                }
+                if (buffer.dateFrom) {
+                    search.push('dateFrom=');
+                    search.push(buffer.dateFrom.getTime());
+                    search.push('&');
+                }
+                if (buffer.dateTo) {
+                    search.push('dateTo=');
+                    search.push(buffer.dateTo.getTime());
+                    search.push('&');
+                }
+
+                if (buffer.bankCode) {
+                    search.push('bankCode=');
+                    search.push(buffer.bankCode);
+                    search.push('&');
+                }
+                if (buffer.bankName) {
+                    search.push('bankName=');
+                    search.push(buffer.bankName);
+                    search.push('&');
+                }
+                if (buffer.bankBranchName) {
+                    search.push('bankBranchName=');
+                    search.push(buffer.bankBranchName);
+                    search.push('&');
+                }
+                if (buffer.bankStockFrom) {
+                    search.push('bankStockFrom=');
+                    search.push(buffer.bankStockFrom);
+                    search.push('&');
+                }
+                if (buffer.bankStockTo) {
+                    search.push('bankStockTo=');
+                    search.push(buffer.bankStockTo);
+                    search.push('&');
+                }
+                if (buffer.branch) {
+                    search.push('branchId=');
+                    search.push(buffer.branch.id);
+                    search.push('&');
+                }
+
+                DepositService.filter(search.join("")).then(function (data) {
+                    $scope.deposits = data;
+                    $scope.setSelected(data[0]);
+                    $scope.items = [];
+                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'الإيداعات البنكية', 'style': 'font-weight:bold'});
+                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 4,
+                        'type': 'title',
+                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
+                    });
+                });
+
+            }, function () {
+                console.info('DepositFilterModel Closed.');
+            });
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
+
 
     }]);

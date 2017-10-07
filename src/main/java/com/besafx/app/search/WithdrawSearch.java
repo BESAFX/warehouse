@@ -29,7 +29,8 @@ public class WithdrawSearch {
             final String bankName,
             final String bankBranch,
             final Long bankStockFrom,
-            final Long bankStockTo
+            final Long bankStockTo,
+            final Long branchId
     ) {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(code).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("code"), "%" + value + "%")));
@@ -43,6 +44,7 @@ public class WithdrawSearch {
         Optional.ofNullable(bankBranch).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("bank").get("branch"), "%" + value + "%")));
         Optional.ofNullable(bankStockFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("bank").get("stock"), value)));
         Optional.ofNullable(bankStockTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("bank").get("stock"), value)));
+        Optional.ofNullable(branchId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("bank").get("branch").get("id"), value)));
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
