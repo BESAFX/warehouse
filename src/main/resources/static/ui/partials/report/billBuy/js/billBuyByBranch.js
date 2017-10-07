@@ -3,6 +3,7 @@ app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService','$s
 
         $scope.buffer = {};
         $scope.buffer.branchesList = [];
+        $scope.buffer.billBuyTypesList = [];
         $scope.branches = [];
 
         $timeout(function () {
@@ -37,13 +38,15 @@ app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService','$s
             param.push('&');
             //
             //
-            var billBuyTypeIds = [];
-            angular.forEach($scope.buffer.billBuyTypesList, function (billBuyType) {
-                billBuyTypeIds.push(billBuyType.id);
-            });
-            param.push('billBuyTypeIds=');
-            param.push(billBuyTypeIds);
-            param.push('&');
+            if($scope.buffer.billBuyTypesList.length > 0){
+                var billBuyTypeIds = [];
+                angular.forEach($scope.buffer.billBuyTypesList, function (billBuyType) {
+                    billBuyTypeIds.push(billBuyType.id);
+                });
+                param.push('billBuyTypeIds=');
+                param.push(billBuyTypeIds);
+                param.push('&');
+            }
             //
             param.push('exportType=');
             param.push($scope.buffer.exportType);
