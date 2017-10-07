@@ -42,9 +42,6 @@ public class ReportOfferController {
         if (offer == null) {
             return;
         }
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -70,9 +67,6 @@ public class ReportOfferController {
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws Exception {
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -139,9 +133,6 @@ public class ReportOfferController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
             throws Exception {
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -174,9 +165,6 @@ public class ReportOfferController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
             throws Exception {
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المملكة العربية السعودية");
@@ -201,9 +189,6 @@ public class ReportOfferController {
 
     @Async("threadPoolReportGenerator")
     public Future<byte[]> reportOffersToday() {
-        /**
-         * Insert Parameters
-         */
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();
         param1.append("المعهد الأهلي العالي للتدريب");

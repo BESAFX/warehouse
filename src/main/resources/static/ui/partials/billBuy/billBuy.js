@@ -36,6 +36,7 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
         $scope.newBillBuy = function () {
             ModalProvider.openBillBuyCreateModel().result.then(function (data) {
                 $scope.billBuys.splice(0,0,data);
+                $scope.setSelected(data);
             }, function () {
                 console.info('BillBuyCreateModel Closed.');
             });
@@ -151,15 +152,6 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.delete($itemScope.billBuy);
-                }
-            },
-            {
-                html: '<div class="drop-menu"> التفاصيل <span class="fa fa-info fa-lg"></span></div>',
-                enabled: function () {
-                    return true
-                },
-                click: function ($itemScope, $event, value) {
-                    ModalProvider.openBillBuyDetailsModel($itemScope.billBuy);
                 }
             }
         ];

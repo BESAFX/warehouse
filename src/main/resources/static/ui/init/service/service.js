@@ -1087,6 +1087,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.BillBuyByBranch                                     *
+     *                                                            *
+     *************************************************************/
+    this.openReportBillBuyByBranchModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/billBuy/billBuyByBranch.html",
+            controller: "billBuyByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.ChartOffersCountAverageByBranch                     *
      *                                                            *
      *************************************************************/

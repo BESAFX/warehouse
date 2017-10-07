@@ -206,6 +206,8 @@ gulp.task('scripts', function () {
         './partials/report/paymentOut/js/paymentOutByBranch.js',
         './partials/report/paymentOut/js/paymentOutByPerson.js',
 
+        './partials/report/billBuy/js/billBuyByBranch.js',
+
         './partials/report/chart/js/offersCountAverageByBranch.js',
         './partials/report/chart/js/offersCountAverageByMaster.js',
         './partials/report/chart/js/offersPriceAverageByBranch.js',
