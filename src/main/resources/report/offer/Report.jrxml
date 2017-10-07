@@ -324,21 +324,28 @@
 					</textElement>
 					<textFieldExpression><![CDATA["Printing Date: " + DateConverter.getHijriStringFromDateLTRWithTime(new java.util.Date())]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="463" y="0" width="46" height="14" uuid="6e256b9d-4f18-4218-bbcb-d096050d691c">
-						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-					</reportElement>
-					<textElement textAlignment="Right"/>
-					<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
-				</textField>
-				<textField evaluationTime="Report">
-					<reportElement x="509" y="0" width="46" height="14" uuid="e9a387a1-623b-41b4-8040-dbcee07a9eb9">
-						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-					</reportElement>
-					<textElement textAlignment="Right"/>
-					<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
-				</textField>
+				<frame>
+					<reportElement x="231" y="0" width="92" height="14" uuid="5dcef480-7a15-411f-b53f-7ff141c4101d"/>
+					<textField>
+						<reportElement x="0" y="0" width="46" height="14" uuid="6e256b9d-4f18-4218-bbcb-d096050d691c">
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						</reportElement>
+						<textElement textAlignment="Right">
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+					</textField>
+					<textField evaluationTime="Report">
+						<reportElement x="46" y="0" width="46" height="14" uuid="e9a387a1-623b-41b4-8040-dbcee07a9eb9">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						</reportElement>
+						<textElement textAlignment="Left">
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+					</textField>
+				</frame>
 			</frame>
 		</band>
 	</pageFooter>

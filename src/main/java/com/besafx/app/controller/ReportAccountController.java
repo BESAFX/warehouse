@@ -1,15 +1,9 @@
 package com.besafx.app.controller;
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Account;
-import com.besafx.app.entity.Branch;
-import com.besafx.app.entity.Course;
-import com.besafx.app.entity.Master;
+import com.besafx.app.entity.*;
 import com.besafx.app.enums.ExportType;
-import com.besafx.app.service.AccountService;
-import com.besafx.app.service.BranchService;
-import com.besafx.app.service.CourseService;
-import com.besafx.app.service.MasterService;
+import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.util.WrapperUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -20,14 +14,20 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.net.URL;
+import java.security.Principal;
 import java.util.*;
 
 @RestController
 public class ReportAccountController {
+
+    @Autowired
+    private PersonService personService;
 
     @Autowired
     private BranchService branchService;
@@ -91,6 +91,36 @@ public class ReportAccountController {
         List<WrapperUtil> list = initDateList(accounts);
         map.put("ItemDataSource", new JRBeanCollectionDataSource(list));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/account/Report.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
+    @RequestMapping(value = "/report/AccountByMasterCategories", method = RequestMethod.GET, produces = "application/pdf")
+    @ResponseBody
+    public void AccountByMasterCategories(
+            @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "masterCategoryIds") List<Long> masterCategoryIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            Principal principal,
+            HttpServletResponse response) throws Exception {
+        Person caller = personService.findByEmail(principal.getName());
+        Map<String, Object> map = new HashMap<>();
+        map.put("LOGO", new URL(caller.getBranch().getLogo()).openStream());
+        map.put("TITLE", title);
+        map.put("CALLER", caller);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("course").get("master").get("branch").get("id").in(value)));
+        Optional.ofNullable(masterCategoryIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("course").get("master").get("masterCategory").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("ACCOUNTS", getList(predicates));
+        //End Search
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/ReportByMasterCategory.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -238,6 +268,18 @@ public class ReportAccountController {
             Optional.ofNullable(row).ifPresent(account -> wrapperUtil.setObj1(account));
             list.add(wrapperUtil);
         });
+        return list;
+    }
+
+    private List<Offer> getList(List<Specification> predicates) {
+        List<Offer> list = new ArrayList<>();
+        if (!predicates.isEmpty()) {
+            Specification result = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                result = Specifications.where(result).and(predicates.get(i));
+            }
+            list.addAll(accountService.findAll(result));
+        }
         return list;
     }
 }

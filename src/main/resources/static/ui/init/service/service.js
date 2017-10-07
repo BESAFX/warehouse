@@ -943,6 +943,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * ReportAccountByMasterCategory                              *
+     *                                                            *
+     *************************************************************/
+    this.openReportAccountByMasterCategoryModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/account/accountByMasterCategory.html",
+            controller: "accountByMasterCategoryCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.AccountByCourse                                     *
      *                                                            *
      *************************************************************/
