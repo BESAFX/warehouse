@@ -30,7 +30,7 @@ public class Deposit implements Serializable {
     @GeneratedValue(generator = "depositSequenceGenerator")
     private Long id;
 
-    private String code;
+    private Long code;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

@@ -210,6 +210,9 @@ gulp.task('scripts', function () {
 
         './partials/report/billBuy/js/billBuyByBranch.js',
 
+        './partials/report/deposit/js/depositByBranch.js',
+        './partials/report/withdraw/js/withdrawByBranch.js',
+
         './partials/report/chart/js/offersCountAverageByBranch.js',
         './partials/report/chart/js/offersCountAverageByMaster.js',
         './partials/report/chart/js/offersPriceAverageByBranch.js',

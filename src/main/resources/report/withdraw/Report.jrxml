@@ -43,16 +43,21 @@
 		<field name="date" class="java.util.Date"/>
 		<field name="amount" class="java.lang.Double"/>
 		<field name="fromName" class="java.lang.String"/>
+		<field name="checkDate" class="java.util.Date"/>
+		<field name="checkBankName" class="java.lang.String"/>
+		<field name="checkNumber" class="java.lang.String"/>
 		<field name="note" class="java.lang.String"/>
-		<field name="billBuyType" class="com.besafx.app.entity.BillBuyType"/>
-		<field name="branch" class="com.besafx.app.entity.Branch"/>
+		<field name="bank" class="com.besafx.app.entity.Bank"/>
 		<field name="lastPerson" class="com.besafx.app.entity.Person"/>
-		<sortField name="code"/>
+		<sortField name="SORT_BY_BRANCH" type="Variable"/>
 		<sortField name="date"/>
+		<variable name="SORT_BY_BRANCH" class="java.lang.Long">
+			<variableExpression><![CDATA[$F{branch}.getId()]]></variableExpression>
+		</variable>
 	</subDataset>
 	<parameter name="TITLE" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
-	<parameter name="BILL_BUYS" class="java.util.List"/>
+	<parameter name="WITHDRAWS" class="java.util.List"/>
 	<parameter name="CALLER" class="com.besafx.app.entity.Person"/>
 	<pageHeader>
 		<band height="80">
@@ -388,7 +393,7 @@
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="ItemDataset" uuid="655b8e8a-dcba-4970-852a-e99c955283b3">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{BILL_BUYS})]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{WITHDRAWS})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="69" uuid="4cce1189-4bde-423c-8ef6-53c023b0d0c3">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
@@ -398,7 +403,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial"/>
 								</textElement>
-								<text><![CDATA[مدخل الفاتورة]]></text>
+								<text><![CDATA[بواسطة]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -420,7 +425,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial"/>
 								</textElement>
-								<text><![CDATA[البيان]]></text>
+								<text><![CDATA[ملاحظات]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -451,7 +456,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial"/>
 									</textElement>
-									<text><![CDATA[الفرع]]></text>
+									<text><![CDATA[البنك]]></text>
 								</staticText>
 								<staticText>
 									<reportElement x="0" y="15" width="77" height="15" uuid="d3cc447e-4a21-4103-b973-b68a8dff3041"/>
@@ -464,7 +469,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial"/>
 									</textElement>
-									<text><![CDATA[نوع الحساب]]></text>
+									<text><![CDATA[فرع البنك]]></text>
 								</staticText>
 							</frame>
 						</jr:columnHeader>
@@ -484,7 +489,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{branch}.getName()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{bank}.getName()]]></textFieldExpression>
 								</textField>
 								<textField>
 									<reportElement x="0" y="15" width="77" height="15" uuid="ee7cfbc5-a3c9-4c27-b224-8c283c7dbc80"/>
@@ -497,7 +502,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="Arial"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{billBuyType}.getName()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{bank}.getBranchName()]]></textFieldExpression>
 								</textField>
 							</frame>
 						</jr:detailCell>
@@ -510,7 +515,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial"/>
 								</textElement>
-								<text><![CDATA[مصدر الفاتورة]]></text>
+								<text><![CDATA[الساحب]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -531,7 +536,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial"/>
 								</textElement>
-								<text><![CDATA[قيمة الفاتورة]]></text>
+								<text><![CDATA[قيمة السحب]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -552,7 +557,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial"/>
 								</textElement>
-								<text><![CDATA[تاريخ الفاتورة]]></text>
+								<text><![CDATA[تاريخ السحب]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -573,7 +578,7 @@ $F{lastPerson}.getContact().getForthName()]]></textFieldExpression>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial"/>
 								</textElement>
-								<text><![CDATA[رقم الفاتورة]]></text>
+								<text><![CDATA[رقم السحب]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">

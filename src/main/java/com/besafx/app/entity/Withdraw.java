@@ -30,7 +30,7 @@ public class Withdraw implements Serializable {
     @GeneratedValue(generator = "withdrawSequenceGenerator")
     private Long id;
 
-    private String code;
+    private Long code;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

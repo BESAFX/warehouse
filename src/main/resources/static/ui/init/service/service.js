@@ -1103,6 +1103,38 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.DepositByBranch                                     *
+     *                                                            *
+     *************************************************************/
+    this.openReportDepositByBranchModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/deposit/depositByBranch.html",
+            controller: "depositByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
+     * Report.WithdrawByBranch                                    *
+     *                                                            *
+     *************************************************************/
+    this.openReportWithdrawByBranchModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/withdraw/withdrawByBranch.html",
+            controller: "withdrawByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.ChartOffersCountAverageByBranch                     *
      *                                                            *
      *************************************************************/

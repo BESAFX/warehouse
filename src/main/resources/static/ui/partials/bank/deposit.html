@@ -60,7 +60,8 @@
                     </ul>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+
+                    <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
                         <button id="branch-menu-lower-right" style="width: 100%;"
                                 class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
                             <span>العمليات</span>
@@ -83,6 +84,24 @@
                             </li>
                         </ul>
                     </div>
+
+                    <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button style="width:100%" id="report-menu-lower-right" style="width: 100%;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>التقارير</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="report-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportDepositByBranchModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>الإيداعات حسب الفروع</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
