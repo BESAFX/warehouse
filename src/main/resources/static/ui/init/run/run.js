@@ -128,9 +128,25 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
 
         $rootScope.ModalProvider = ModalProvider;
 
+        $rootScope.dateType = 'H';
+
+        $rootScope.switchDateType = function () {
+            $rootScope.dateType === 'H' ? $rootScope.dateType = 'G' : $rootScope.dateType = 'H';
+            PersonService.setDateType($rootScope.dateType);
+        };
+
         PersonService.findActivePerson().then(function (data) {
             $rootScope.me = data;
+            $rootScope.options = JSON.parse($rootScope.me.options);
+            $rootScope.dateType = $rootScope.options.dateType;
         });
+
+        $rootScope.goFullscreen = function () {
+            if (Fullscreen.isEnabled())
+                Fullscreen.cancel();
+            else
+                Fullscreen.all();
+        };
 
         $rootScope.showNotify = function (title, message, type, icon) {
             noty({

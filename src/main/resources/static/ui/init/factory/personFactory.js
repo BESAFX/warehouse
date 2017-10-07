@@ -39,6 +39,11 @@ app.factory("PersonService",
                     return response.data;
                 });
             },
+            setDateType: function (dateType) {
+                return $http.get("/api/person/setDateType/" + dateType).then(function (response) {
+                    return response.data;
+                });
+            },
             findAuthorities: function () {
                 return $http.get("/api/person/findAuthorities").then(function (response) {
                     return response.data;

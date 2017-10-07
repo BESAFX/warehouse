@@ -3,6 +3,8 @@ import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.ContactService;
 import com.besafx.app.service.PersonService;
+import com.besafx.app.util.JSONConverter;
+import com.besafx.app.util.Options;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -133,6 +135,17 @@ public class PersonRest {
         } else {
             return null;
         }
+    }
+
+    @RequestMapping(value = "setDateType/{type}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    public void setDateType(@PathVariable(value = "type") String type,  Principal principal) {
+        Person person = personService.findByEmail(principal.getName());
+        Options options = JSONConverter.toObject(person.getOptions(), Options.class);
+        options.setDateType(type);
+        person.setOptions(JSONConverter.toString(options));
+        personService.save(person);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
