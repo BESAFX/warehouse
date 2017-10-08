@@ -26,7 +26,7 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
             }
             //
             var masterIds = [];
-            angular.forEach($scope.buffer.masteresList, function (master) {
+            angular.forEach($scope.buffer.mastersList, function (master) {
                 masterIds.push(master.id);
             });
             param.push('masterIds=');
