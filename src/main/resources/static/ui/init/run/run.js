@@ -1,5 +1,5 @@
-app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'ReportModelProvider', '$state', 'FileService',
-    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, ReportModelProvider, $state, FileService) {
+app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'Fullscreen' , 'ReportModelProvider', '$state', 'FileService',
+    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, Fullscreen, ReportModelProvider, $state, FileService) {
 
         defaultErrorMessageResolver.getErrorMessages().then(function (errorMessages) {
             errorMessages['fieldRequired'] = 'هذا الحقل مطلوب';
@@ -336,6 +336,9 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
         };
         $rootScope.goToHome = function () {
             $state.go('home');
+        };
+        $rootScope.goToMenu = function () {
+            $state.go('menu');
         };
         $rootScope.goToHelp = function () {
             $state.go('help');

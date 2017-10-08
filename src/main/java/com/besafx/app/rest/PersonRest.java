@@ -142,8 +142,11 @@ public class PersonRest {
     @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
     public void setDateType(@PathVariable(value = "type") String type,  Principal principal) {
         Person person = personService.findByEmail(principal.getName());
-        Options options = JSONConverter.toObject(person.getOptions(), Options.class);
-        options.setDateType(type);
+        Options options = new Options();
+        if(person.getOptions() != null){
+            options = JSONConverter.toObject(person.getOptions(), Options.class);
+            options.setDateType(type);
+        }
         person.setOptions(JSONConverter.toString(options));
         personService.save(person);
     }

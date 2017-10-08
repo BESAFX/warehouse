@@ -75,13 +75,6 @@
                         </a>
                     </div>
 
-                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center" ng-if="contains(me.team.authorities, ['ROLE_EMPLOYEE_CREATE', 'ROLE_EMPLOYEE_UPDATE', 'ROLE_EMPLOYEE_DELETE'])">
-                        <a href="" ng-click="goToEmployee()" class="card-square mdl-card mdl-shadow--8dp">
-                            <i class="material-icons md-100">person_pin</i>
-                            <p>الموظفون</p>
-                        </a>
-                    </div>
-
                     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center"
                          ng-if="contains(me.team.authorities, ['ROLE_MASTER_CREATE', 'ROLE_MASTER_UPDATE', 'ROLE_MASTER_DELETE', 'ROLE_MASTER_REPORT'])">
                         <a href="" ng-click="goToMaster()" class="card-square mdl-card mdl-shadow--8dp">

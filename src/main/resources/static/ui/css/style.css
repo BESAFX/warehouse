@@ -388,6 +388,10 @@ WebKit inertia scrolling is being added here for any present/future devices that
     flex: 1;
 }
 
+.mdl-icon-margin{
+    margin-right: 15px !important;
+}
+
 .drop-menu {
     padding: 10px;
     text-align: right;
