@@ -29,7 +29,7 @@ public class PersonRest {
 
     private final static Logger log = LoggerFactory.getLogger(PersonRest.class);
 
-    public static final String FILTER_TABLE = "**,contact[id,firstName,forthName],team[**,-persons],branch[id,code,name]";
+    public static final String FILTER_TABLE = "**,team[**,-persons],branch[id,code,name]";
     public static final String FILTER_PERSON_COMBO = "id,contact[id,firstName,forthName]";
 
     @Autowired
