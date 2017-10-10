@@ -25,7 +25,7 @@ app.controller('billBuyCreateUpdateCtrl', ['BillBuyTypeService', 'BillBuyService
                     break;
                 case 'update' :
                     BillBuyService.update($scope.billBuy).then(function (data) {
-                        $uibModalInstance.close(data);
+                        $scope.billBuy = data;
                     });
                     break;
             }

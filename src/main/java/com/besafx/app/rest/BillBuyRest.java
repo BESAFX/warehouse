@@ -73,7 +73,7 @@ public class BillBuyRest {
                     .builder()
                     .title("العمليات على قاعدة البيانات")
                     .message("تم تعديل بيانات الفاتورة بنجاح")
-                    .type("warn")
+                    .type("warning")
                     .icon("fa-edit")
                     .build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
