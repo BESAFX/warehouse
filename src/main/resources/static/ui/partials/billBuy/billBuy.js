@@ -142,7 +142,16 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
                     return true
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openBillBuyCreateModel();
+                    $scope.newBillBuy();
+                }
+            },
+            {
+                html: '<div class="drop-menu">تعديل بيانات الفاتورة<span class="fa fa-edit fa-lg"></span></div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_BILL_BUY_UPDATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openBillBuyUpdateModel($itemScope.billBuy);
                 }
             },
             {

@@ -300,18 +300,52 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    /**************************************************************
+     *                                                            *
+     * BillBuy Model                                              *
+     *                                                            *
+     *************************************************************/
     this.openBillBuyCreateModel = function () {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billBuy/billBuyCreate.html',
-            controller: 'billBuyCreateCtrl',
+            templateUrl: '/ui/partials/billBuy/billBuyCreateUpdate.html',
+            controller: 'billBuyCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
             resolve: {
                 title: function () {
                     return 'انشاء فاتورة شراء جديدة';
+                },
+                action: function () {
+                    return 'update';
+                },
+                billBuy: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openBillBuyUpdateModel = function (billBuy) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billBuy/billBuyCreateUpdate.html',
+            controller: 'billBuyCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات فاتورة شراء';
+                },
+                action: function () {
+                    return 'update';
+                },
+                billBuy: function () {
+                    return billBuy;
                 }
             }
         });

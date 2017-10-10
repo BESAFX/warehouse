@@ -185,7 +185,7 @@ gulp.task('scripts', function () {
         './partials/billBuyType/billBuyTypeCreateUpdate.js',
         './partials/billBuy/billBuy.js',
         './partials/billBuy/billBuyFilter.js',
-        './partials/billBuy/billBuyCreate.js',
+        './partials/billBuy/billBuyCreateUpdate.js',
         './partials/report/report.js',
         './partials/report/offer/js/offerByBranch.js',
         './partials/report/offer/js/offerByMaster.js',
