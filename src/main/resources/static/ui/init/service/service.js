@@ -1153,6 +1153,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
     };
     /**************************************************************
      *                                                            *
+     * Report.DepositByBank                                       *
+     *                                                            *
+     *************************************************************/
+    this.openReportDepositByBankModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/deposit/depositByBank.html",
+            controller: "depositByBankCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
      * Report.WithdrawByBranch                                    *
      *                                                            *
      *************************************************************/
@@ -1163,6 +1179,22 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/withdraw/withdrawByBranch.html",
             controller: "withdrawByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+    /**************************************************************
+     *                                                            *
+     * Report.WithdrawByBank                                      *
+     *                                                            *
+     *************************************************************/
+    this.openReportWithdrawByBankModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/withdraw/withdrawByBank.html",
+            controller: "withdrawByBankCtrl",
             backdrop: 'static',
             keyboard: false
         });

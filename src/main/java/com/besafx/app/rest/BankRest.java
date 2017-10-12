@@ -4,6 +4,7 @@ import com.besafx.app.entity.Bank;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.BankSearch;
 import com.besafx.app.service.BankService;
+import com.besafx.app.service.BranchService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -19,7 +20,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/bank/")
@@ -28,7 +31,7 @@ public class BankRest {
     private final static Logger log = LoggerFactory.getLogger(BankRest.class);
 
     private final String FILTER_TABLE = "**,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]]";
-    private final String FILTER_BANK_COMBO = "id,code,name,branchName,stock";
+    private final String FILTER_BANK_COMBO = "id,code,name,branchName,stock,branch[id,code,name]";
 
     @Autowired
     private PersonService personService;
@@ -38,6 +41,9 @@ public class BankRest {
 
     @Autowired
     private BankSearch bankSearch;
+
+    @Autowired
+    private BranchService branchService;
 
     @Autowired
     private NotificationService notificationService;
@@ -129,7 +135,29 @@ public class BankRest {
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchTableData(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findByEmail(principal.getName()).getBranch().getBanks());
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                    Lists.newArrayList(branchService.findAll()).stream()
+                            .flatMap(branch -> branch.getBanks().stream())
+                            .collect(Collectors.toList()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person.getBranch().getBanks());
+        }
+    }
+
+    @RequestMapping(value = "fetchTableDataCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String fetchTableDataCombo(Principal principal) {
+        Person person = personService.findByEmail(principal.getName());
+        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BANK_COMBO),
+                    Lists.newArrayList(branchService.findAll()).stream()
+                            .flatMap(branch -> branch.getBanks().stream())
+                            .collect(Collectors.toList()));
+        }else{
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BANK_COMBO), person.getBranch().getBanks());
+        }
     }
 
 }

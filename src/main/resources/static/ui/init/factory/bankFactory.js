@@ -33,6 +33,11 @@ app.factory("BankService", ['$http', '$log',
                 return $http.get("/api/bank/fetchTableData").then(function (response) {
                     return response.data;
                 });
+            },
+            fetchTableDataCombo: function () {
+                return $http.get("/api/bank/fetchTableDataCombo").then(function (response) {
+                    return response.data;
+                });
             }
         };
     }

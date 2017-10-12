@@ -49,6 +49,7 @@
 		<field name="note" class="java.lang.String"/>
 		<field name="bank" class="com.besafx.app.entity.Bank"/>
 		<field name="lastPerson" class="com.besafx.app.entity.Person"/>
+		<field name="branch" class="com.besafx.app.entity.Branch"/>
 		<sortField name="SORT_BY_BRANCH" type="Variable"/>
 		<sortField name="date"/>
 		<variable name="SORT_BY_BRANCH" class="java.lang.Long">

@@ -63,6 +63,34 @@ public class ReportDepositController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
+    @RequestMapping(value = "/report/DepositByBanks", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    public void printDepositByBank(
+            @RequestParam(value = "bankIds") List<Long> bankIds,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            Principal principal,
+            HttpServletResponse response) throws Exception {
+        Person caller = personService.findByEmail(principal.getName());
+        Map<String, Object> map = new HashMap<>();
+        map.put("LOGO", new URL(caller.getBranch().getLogo()).openStream());
+        map.put("TITLE", title);
+        map.put("CALLER", caller);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(bankIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("bank").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        map.put("DEPOSITS", getList(predicates));
+        //End Search
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/deposit/Report.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
     private List<Offer> getList(List<Specification> predicates) {
         List<Offer> list = new ArrayList<>();
         if (!predicates.isEmpty()) {
