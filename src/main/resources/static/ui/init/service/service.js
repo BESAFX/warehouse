@@ -319,7 +319,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
                     return 'انشاء فاتورة شراء جديدة';
                 },
                 action: function () {
-                    return 'update';
+                    return 'create';
                 },
                 billBuy: function () {
                     return {};
