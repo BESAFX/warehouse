@@ -117,10 +117,6 @@ app.controller("offerCtrl", ['OfferService', 'CallService', 'BranchService', 'Pe
                     search.push('&');
                 }
 
-                search.push('registered=');
-                search.push(buffer.registered);
-                search.push('&');
-
                 OfferService.filter(search.join("")).then(function (data) {
                     $scope.offers = data;
                     $scope.setSelected(data[0]);

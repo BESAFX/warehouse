@@ -186,9 +186,8 @@ public class OfferRest {
             @RequestParam(value = "masterPriceTo", required = false) final Long masterPriceTo,
             @RequestParam(value = "branch", required = false) final Long branch,
             @RequestParam(value = "master", required = false) final Long master,
-            @RequestParam(value = "personId", required = false) final Long personId,
-            @RequestParam(value = "registered", required = false) final Boolean registered) {
+            @RequestParam(value = "personId", required = false) final Long personId) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                offerSearch.search(codeFrom, codeTo, dateFrom, dateTo, customerName, customerIdentityNumber, customerMobile, masterPriceFrom, masterPriceTo, branch, master, personId, registered));
+                offerSearch.search(codeFrom, codeTo, dateFrom, dateTo, customerName, customerIdentityNumber, customerMobile, masterPriceFrom, masterPriceTo, branch, master, personId));
     }
 }
