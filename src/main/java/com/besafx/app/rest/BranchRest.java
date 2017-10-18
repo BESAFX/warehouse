@@ -1,6 +1,7 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Branch;
+import com.besafx.app.entity.BranchAccess;
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.CompanyService;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value = "/api/branch/")
@@ -138,44 +140,24 @@ public class BranchRest {
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchTableData(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(branchService.findAll()));
-        }else{
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(person.getBranch()));
-        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findByEmail(principal.getName()).getBranches());
     }
 
     @RequestMapping(value = "fetchBranchMaster", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchBranchMaster(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COMBO), Lists.newArrayList(branchService.findAll()));
-        }else{
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COMBO), Lists.newArrayList(person.getBranch()));
-        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COMBO), personService.findByEmail(principal.getName()).getBranches());
     }
 
     @RequestMapping(value = "fetchBranchMasterCourse", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchBranchMasterCourse(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO), Lists.newArrayList(branchService.findAll()));
-        }else{
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO), Lists.newArrayList(person.getBranch()));
-        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO), personService.findByEmail(principal.getName()).getBranches());
     }
 
     @RequestMapping(value = "fetchBranchCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String fetchBranchCombo(Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        if(Arrays.asList(person.getTeam().getAuthorities().split(",")).contains("ROLE_BRANCH_FULL_CONTROL")){
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_COMBO), Lists.newArrayList(branchService.findAll()));
-        }else{
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_COMBO), Lists.newArrayList(person.getBranch()));
-        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_COMBO), personService.findByEmail(principal.getName()).getBranches());
     }
 }

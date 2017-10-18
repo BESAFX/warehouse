@@ -134,27 +134,31 @@
                             </div>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="qualification" class="control-label">المنصب الوظيفي </label>
-                            <input id="qualification"
-                                   type="text"
-                                   required="required"
-                                   disable-validation-message=""
-                                   class="form-control text-right"
-                                   ng-model="person.contact.qualification">
-                        </div>
+                        <div class="form-group row">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="address" class="control-label">العنوان الحالي </label>
-                            <input id="address"
-                                   type="text"
-                                   class="form-control text-right"
-                                   ng-model="person.contact.address">
+                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <label for="qualification" class="control-label">المنصب الوظيفي </label>
+                                <input id="qualification"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       ng-model="person.contact.qualification">
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <label for="address" class="control-label">العنوان الحالي </label>
+                                <input id="address"
+                                       type="text"
+                                       class="form-control text-right"
+                                       ng-model="person.contact.address">
+                            </div>
+
                         </div>
 
                         <div class="row">
                             <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                                <label for="branch" class="control-label">الفرع الاساسي</label>
                                 <select id="branch"
                                         data-placeholder="ابحث عن الفرع"
                                         no-results-text="'لا توجد فروع توافق بحثك'"
@@ -182,6 +186,20 @@
                                         ng-options="team.name for team in teams track by team.id">
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="branchList" class="control-label">الفروع الاخرى</label>
+                            <select id="branchList"
+                                    data-placeholder="ابحث عن الفرع"
+                                    no-results-text="'لا توجد فروع توافق بحثك'"
+                                    placeholder-text-multiple="'اختر الفروع'"
+                                    class="form-control text-right"
+                                    chosen=""
+                                    multiple="multiple"
+                                    ng-model="buffer.branchList"
+                                    ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                            </select>
                         </div>
 
                         <div class="row">

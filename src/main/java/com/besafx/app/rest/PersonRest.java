@@ -1,6 +1,8 @@
 package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
+import com.besafx.app.entity.BranchAccess;
 import com.besafx.app.entity.Person;
+import com.besafx.app.service.BranchAccessService;
 import com.besafx.app.service.ContactService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.JSONConverter;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,11 +32,14 @@ public class PersonRest {
 
     private final static Logger log = LoggerFactory.getLogger(PersonRest.class);
 
-    public static final String FILTER_TABLE = "**,team[**,-persons],branch[id,code,name]";
+    public static final String FILTER_TABLE = "**,team[**,-persons],branch[id,code,name],branches[id],branchAccesses[id,-person,branch[id,code,name]]";
     public static final String FILTER_PERSON_COMBO = "id,contact[id,firstName,forthName]";
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private BranchAccessService branchAccessService;
 
     @Autowired
     private ContactService contactService;
@@ -59,6 +65,12 @@ public class PersonRest {
         person.setActive(false);
         person.setEnabled(true);
         person = personService.save(person);
+        ListIterator<BranchAccess> listIterator = person.getBranchAccesses().listIterator();
+        while (listIterator.hasNext()){
+            BranchAccess branchAccess = listIterator.next();
+            branchAccess.setPerson(person);
+            branchAccessService.save(branchAccess);
+        }
         notificationService.notifyOne(Notification
                 .builder()
                 .title("العمليات على المستخدمون")
@@ -81,7 +93,14 @@ public class PersonRest {
             if (person.getContact() != null) {
                 person.setContact(contactService.save(person.getContact()));
             }
+            ListIterator<BranchAccess> listIterator = person.getBranchAccesses().listIterator();
+            branchAccessService.delete(branchAccessService.findByPerson(person));
             person = personService.save(person);
+            while (listIterator.hasNext()){
+                BranchAccess branchAccess = listIterator.next();
+                branchAccess.setPerson(person);
+                branchAccessService.save(branchAccess);
+            }
             notificationService.notifyOne(Notification
                     .builder()
                     .title("العمليات على المستخدمون")
@@ -155,10 +174,7 @@ public class PersonRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_DELETE')")
     public void delete(@PathVariable Long id) {
-        Person object = personService.findOne(id);
-        if (object != null) {
-            personService.delete(id);
-        }
+
     }
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
