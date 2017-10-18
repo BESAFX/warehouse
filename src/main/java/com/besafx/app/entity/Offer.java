@@ -1,13 +1,12 @@
 package com.besafx.app.entity;
+
 import com.besafx.app.component.BeanUtil;
-import com.besafx.app.search.OfferSearch;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.OfferService;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import org.decimal4j.util.DoubleRounder;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +37,10 @@ public class Offer implements Serializable {
 
     @PostConstruct
     public void init() {
-        try{
+        try {
             accountService = BeanUtil.getBean(AccountService.class);
             offerService = BeanUtil.getBean(OfferService.class);
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
         }
     }
@@ -99,35 +98,35 @@ public class Offer implements Serializable {
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     private List<Call> calls = new ArrayList<>();
 
-    public Boolean getRegistered(){
+    public Boolean getRegistered() {
         try {
             Long accountsCount = accountService.countByStudentContactMobileAndCourseMaster(this.customerMobile, this.master);
             log.info("عدد التسجيلات = " + accountsCount);
             if (accountsCount > 0) {
-                if(!this.registered){
+                if (!this.registered) {
                     this.registered = true;
                     offerService.save(this);
                 }
             } else {
-                if(this.registered){
+                if (this.registered) {
                     this.registered = false;
                     offerService.save(this);
                 }
             }
             return this.registered;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
 
-    public Double getNet(){
-        try{
-            if(masterPaymentType.equals("نقدي")){
-                return this.masterPrice - (this.masterPrice * this.masterDiscountAmount / 100);
-            }else{
-                return this.masterPrice + (this.masterPrice * this.masterProfitAmount / 100);
+    public Double getNet() {
+        try {
+            if (masterPaymentType.equals("نقدي")) {
+                return DoubleRounder.round(this.masterPrice - (this.masterPrice * this.masterDiscountAmount / 100), 2);
+            } else {
+                return DoubleRounder.round(this.masterPrice + (this.masterPrice * this.masterProfitAmount / 100), 2);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
