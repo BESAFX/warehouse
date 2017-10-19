@@ -106,26 +106,26 @@ public class Offer implements Serializable {
         }
     }
 
-    public Boolean getRegistered() {
-        try {
-            Long accountsCount = accountService.countByStudentContactMobileContainingAndCourseMaster(this.customerMobile, this.master);
-            log.info("عدد التسجيلات = " + accountsCount);
-            if (accountsCount > 0) {
-                if (!this.registered) {
-                    this.registered = true;
-                    offerService.save(this);
-                }
-            } else {
-                if (this.registered) {
-                    this.registered = false;
-                    offerService.save(this);
-                }
-            }
-            return this.registered;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
+//    public Boolean getRegistered() {
+//        try {
+//            Long accountsCount = accountService.countByStudentContactMobileContainingAndCourseMaster(this.customerMobile, this.master);
+//            log.info("عدد التسجيلات = " + accountsCount);
+//            if (accountsCount > 0) {
+//                if (!this.registered) {
+//                    this.registered = true;
+//                    offerService.save(this);
+//                }
+//            } else {
+//                if (this.registered) {
+//                    this.registered = false;
+//                    offerService.save(this);
+//                }
+//            }
+//            return this.registered;
+//        } catch (Exception ex) {
+//            return null;
+//        }
+//    }
 
     public Double getNet() {
         try {
