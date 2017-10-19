@@ -528,71 +528,129 @@
 
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="selected.id && toggleList===1">
+            <div class="form-group row">
 
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left"
-                            style="margin-top: 2px;">
-                            <li>
-                                <a href=""
-                                   ng-click="refreshCallsByOffer()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث البيانات">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                                <a href=""
-                                   ng-click="call()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="انشاء اتصال جديد">
-                                    <span class="fa fa-plus-square"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>قائمة الاتصالات</h3>
-                            <span>رقم العرض  / {{selected.code}}</span>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="selected.id && toggleList===1">
+
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <ul class="panel-controls pull-left"
+                                style="margin-top: 2px;">
+                                <li>
+                                    <a href=""
+                                       ng-click="refreshCallsByOffer()"
+                                       tooltip-append-to-body="true"
+                                       uib-tooltip="تحديث البيانات">
+                                        <span class="fa fa-refresh"></span>
+                                    </a>
+                                    <a href=""
+                                       ng-click="call()"
+                                       tooltip-append-to-body="true"
+                                       uib-tooltip="انشاء اتصال جديد">
+                                        <span class="fa fa-plus-square"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="panel-title-box pull-right">
+                                <h3>قائمة الاتصالات</h3>
+                                <span>رقم العرض  / {{selected.code}}</span>
+                            </div>
+                        </div>
+                        <div class="panel-body panel-body-table">
+                            <div class="table-responsive">
+                                <table st-table="collection2" st-safe-src="selected.calls" class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th st-sort="person.contact.firstName" class="text-center">المتصل</th>
+                                        <th st-sort="date" st-sort-default="reverse" class="text-center fit">التاريخ والوقت</th>
+                                        <th st-sort="note" class="text-center">تفاصيل الاتصال</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="call in collection2">
+                                        <td class="fit">
+                                            {{call.person.contact.firstName}} {{call.person.contact.forthName}}
+                                        </td>
+                                        <td class="fit">
+                                            <span>{{call.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                            <span class="label label-success">{{call.date | date:'h:m a'}}</span>
+                                        </td>
+                                        <td>
+                                            {{call.note}}
+                                        </td>
+                                    </tr>
+                                    <tr class="blank_row"
+                                        style="height: 10px !important; background-color: #FFFFFF;"
+                                        ng-show="!collection2 || collection2.length ==0">
+                                        <td colspan="3">لا توجد اتصالات</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="panel-body panel-body-table">
-                        <div class="table-responsive">
-                            <table st-table="collection2" st-safe-src="selected.calls" class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th st-sort="person.contact.firstName" class="text-center">المتصل</th>
-                                    <th st-sort="date" st-sort-default="reverse" class="text-center fit">التاريخ والوقت</th>
-                                    <th st-sort="note" class="text-center">تفاصيل الاتصال</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="call in collection2">
-                                    <td class="fit">
-                                        {{call.person.contact.firstName}} {{call.person.contact.forthName}}
-                                    </td>
-                                    <td class="fit">
-                                        <span>{{call.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                        <span class="label label-success">{{call.date | date:'h:m a'}}</span>
-                                    </td>
-                                    <td>
-                                        {{call.note}}
-                                    </td>
-                                </tr>
-                                <tr class="blank_row"
-                                    style="height: 10px !important; background-color: #FFFFFF;"
-                                    ng-show="!collection2 || collection2.length ==0">
-                                    <td colspan="3">لا توجد اتصالات</td>
-                                </tr>
-                                </tbody>
-                            </table>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="selected.id && toggleList===1">
+
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <ul class="panel-controls pull-left"
+                                style="margin-top: 2px;">
+                                <li>
+                                    <a href=""
+                                       ng-click="refreshAccountsByMobile()"
+                                       tooltip-append-to-body="true"
+                                       uib-tooltip="تحديث البيانات">
+                                        <span class="fa fa-refresh"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="panel-title-box pull-right">
+                                <h3>قائمة التسجيلات</h3>
+                                <span>رقم العرض  / {{selected.code}}</span>
+                            </div>
+                        </div>
+                        <div class="panel-body panel-body-table">
+                            <div class="table-responsive">
+                                <table st-table="collection3" st-safe-src="selected.accountsByMobile" class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th st-sort="course.code" class="text-center">رقم الدورة</th>
+                                        <th st-sort="course.master.name" class="text-center">التخصص</th>
+                                        <th st-sort="registerDate" class="text-center fit">تاريخ التسجيل</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="account in collection3">
+                                        <td class="fit">
+                                            {{account.course.code}}
+                                        </td>
+                                        <td>[{{account.course.master.code}}] {{account.course.master.name}}</td>
+                                        <td class="fit">
+                                            <span>{{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                            <span class="label label-success">{{account.registerDate | date:'h:m a'}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="blank_row"
+                                        style="height: 10px !important; background-color: #FFFFFF;"
+                                        ng-show="!collection3 || collection3.length ==0">
+                                        <td colspan="3">لا توجد تسجيلات</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
-                <div st-table="collection3" st-safe-src="offers">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="offer in collection3">
+                <div st-table="collection4" st-safe-src="offers">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="offer in collection4">
                         <!-- CONTACT ITEM -->
                         <div class="panel panel-default">
                             <div class="panel-body profile">

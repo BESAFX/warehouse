@@ -98,6 +98,14 @@ public class Offer implements Serializable {
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     private List<Call> calls = new ArrayList<>();
 
+    public List<Account> getAccountsByMobile(){
+        try{
+            return accountService.findByStudentContactMobile(this.customerMobile);
+        }catch (Exception ex){
+            return null;
+        }
+    }
+
     public Boolean getRegistered() {
         try {
             Long accountsCount = accountService.countByStudentContactMobileContainingAndCourseMaster(this.customerMobile, this.master);

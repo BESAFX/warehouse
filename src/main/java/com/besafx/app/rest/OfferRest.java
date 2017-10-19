@@ -32,7 +32,7 @@ public class OfferRest {
 
     private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
 
-    public static final String FILTER_TABLE = "**,master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
+    public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
 
     @Autowired
     private PersonService personService;
