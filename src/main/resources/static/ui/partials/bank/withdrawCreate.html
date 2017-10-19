@@ -35,7 +35,7 @@
                         ng-model="deposit.bank"
                         required="required"
                         disable-validation-message=""
-                        ng-options="(' [ ' + bank.name + ' / ' + bank.branchName + ' ] ') group by bank.branch.name for bank in banks | orderBy:'name' track by bank.id">
+                        ng-options="(' [ ' + bank.code  + ' / ' + bank.name + ' / ' + bank.branchName + ' ] ') group by bank.branch.name for bank in banks | orderBy:'name' track by bank.id">
                 </select>
             </div>
 
