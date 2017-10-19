@@ -51,7 +51,7 @@ public class BranchRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BRANCH_CREATE')")
     public String create(@RequestBody Branch branch, Principal principal) {
-        Branch topBranch = branchService.findTopByOrderByCode();
+        Branch topBranch = branchService.findTopByOrderByCodeDesc();
         if (topBranch == null) {
             branch.setCode(1);
         } else {

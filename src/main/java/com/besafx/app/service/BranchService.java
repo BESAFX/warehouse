@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public interface BranchService extends PagingAndSortingRepository<Branch, Long>, JpaSpecificationExecutor<Branch> {
 
-    Branch findTopByOrderByCode();
+    Branch findTopByOrderByCodeDesc();
     Branch findByCodeAndIdIsNot(Integer code, Long id);
     Branch findByCode(Integer code);
     Branch findByName(String name);
