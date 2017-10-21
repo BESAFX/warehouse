@@ -102,7 +102,8 @@ public class Offer implements Serializable {
         try{
             return accountService.findByStudentContactMobile(this.customerMobile);
         }catch (Exception ex){
-            return null;
+            ex.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
