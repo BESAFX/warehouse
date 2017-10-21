@@ -1,22 +1,15 @@
 package com.besafx.app;
 
-import com.besafx.app.component.ScheduledTasks;
-import com.besafx.app.config.EmailSender;
-import com.besafx.app.controller.ReportOfferController;
-import com.besafx.app.entity.Branch;
-import com.besafx.app.search.AccountSearch;
-import com.besafx.app.service.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.bohnman.squiggly.Squiggly;
-import com.github.bohnman.squiggly.util.SquigglyUtils;
+import com.besafx.app.config.TwilioManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.concurrent.ExecutionException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,52 +17,11 @@ public class MainTests {
 
     private final static Logger log = LoggerFactory.getLogger(MainTests.class);
 
-    private static final String ACCESS_TOKEN = "_kj_6GrBNbYAAAAAAACR03IkJ8JnT5i1AntPiHU9GiLCsT7zO_LxIJMUEMk93T9O";
-
     @Autowired
-    private EmailSender emailSender;
-
-    @Autowired
-    private PersonService personService;
-
-    @Autowired
-    private OfferService offerService;
-
-    @Autowired
-    private BranchService branchService;
-
-    @Autowired
-    private CourseService courseService;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private PaymentService paymentService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ContactService contactService;
-
-    @Autowired
-    private TeamService teamService;
-
-    @Autowired
-    private ScheduledTasks scheduledTasks;
-
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private AccountSearch accountSearch;
-
-    @Autowired
-    private ReportOfferController reportOfferController;
+    private TwilioManager twilioManager;
 
     @Test
-    public void contextLoads() {
-
+    public void contextLoads() throws ExecutionException, InterruptedException {
+        twilioManager.getMessages().stream().forEach(message -> log.info(message.toString()));
     }
 }
