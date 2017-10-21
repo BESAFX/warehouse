@@ -64,6 +64,7 @@ public class ReportOfferController {
             @RequestParam(value = "branchIds") List<Long> branchIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws Exception {
@@ -81,6 +82,18 @@ public class ReportOfferController {
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("branch").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(registerOption).ifPresent(value -> {
+            switch (value){
+                case 2:
+                    predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
+                    break;
+                case 3:
+                    predicates.add((root, cq, cb) -> cb.isFalse(root.get("registered")));
+                    break;
+                default:
+                    break;
+            }
+        });
         map.put("offers", getList(predicates));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
@@ -96,6 +109,7 @@ public class ReportOfferController {
             @RequestParam(value = "masterCategoryIds") List<Long> masterCategoryIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
@@ -115,6 +129,18 @@ public class ReportOfferController {
         Optional.ofNullable(masterCategoryIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("masterCategory").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(registerOption).ifPresent(value -> {
+            switch (value){
+                case 2:
+                    predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
+                    break;
+                case 3:
+                    predicates.add((root, cq, cb) -> cb.isFalse(root.get("registered")));
+                    break;
+                default:
+                    break;
+            }
+        });
         map.put("offers", getList(predicates));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
@@ -129,6 +155,7 @@ public class ReportOfferController {
             @RequestParam(value = "masterIds") List<Long> masterIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
@@ -147,6 +174,18 @@ public class ReportOfferController {
         Optional.ofNullable(masterIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(registerOption).ifPresent(value -> {
+            switch (value){
+                case 2:
+                    predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
+                    break;
+                case 3:
+                    predicates.add((root, cq, cb) -> cb.isFalse(root.get("registered")));
+                    break;
+                default:
+                    break;
+            }
+        });
         map.put("offers", getList(predicates));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
@@ -161,6 +200,7 @@ public class ReportOfferController {
             @RequestParam(value = "personIds") List<Long> personIds,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response)
@@ -179,6 +219,18 @@ public class ReportOfferController {
         Optional.ofNullable(personIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("lastPerson").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(registerOption).ifPresent(value -> {
+            switch (value){
+                case 2:
+                    predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
+                    break;
+                case 3:
+                    predicates.add((root, cq, cb) -> cb.isFalse(root.get("registered")));
+                    break;
+                default:
+                    break;
+            }
+        });
         map.put("offers", getList(predicates));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");

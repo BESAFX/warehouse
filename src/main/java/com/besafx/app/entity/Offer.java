@@ -98,35 +98,33 @@ public class Offer implements Serializable {
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     private List<Call> calls = new ArrayList<>();
 
-    public List<Account> getAccountsByMobile(){
-        try{
+    public List<Account> getAccountsByMobile() {
+        try {
             return accountService.findByStudentContactMobile(this.customerMobile);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return new ArrayList<>();
         }
     }
 
-//    public Boolean getRegistered() {
-//        try {
-//            Long accountsCount = accountService.countByStudentContactMobileContainingAndCourseMaster(this.customerMobile, this.master);
-//            log.info("عدد التسجيلات = " + accountsCount);
-//            if (accountsCount > 0) {
-//                if (!this.registered) {
-//                    this.registered = true;
-//                    offerService.save(this);
-//                }
-//            } else {
-//                if (this.registered) {
-//                    this.registered = false;
-//                    offerService.save(this);
-//                }
-//            }
-//            return this.registered;
-//        } catch (Exception ex) {
-//            return null;
-//        }
-//    }
+    public Boolean getRegistered() {
+        try {
+            if (!this.getAccountsByMobile().isEmpty()) {
+                if (!this.registered) {
+                    this.registered = true;
+                    offerService.save(this);
+                }
+            } else {
+                if (this.registered) {
+                    this.registered = false;
+                    offerService.save(this);
+                }
+            }
+            return this.registered;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public Double getNet() {
         try {

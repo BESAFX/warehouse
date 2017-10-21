@@ -1,5 +1,5 @@
-app.controller("offerCtrl", ['OfferService', 'CallService', 'BranchService', 'PersonService', 'MasterService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state', '$uibModal',
-    function (OfferService, CallService, BranchService, PersonService, MasterService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state, $uibModal) {
+app.controller("offerCtrl", ['OfferService', 'AccountService', 'CallService', 'BranchService', 'PersonService', 'MasterService', 'ModalProvider', '$rootScope', '$scope', '$window', '$timeout', '$log', '$state', '$uibModal',
+    function (OfferService, AccountService, CallService, BranchService, PersonService, MasterService, ModalProvider, $rootScope, $scope, $window, $timeout, $log, $state, $uibModal) {
 
         $scope.buffer = {};
 
@@ -201,6 +201,12 @@ app.controller("offerCtrl", ['OfferService', 'CallService', 'BranchService', 'Pe
         $scope.refreshCallsByOffer = function () {
             CallService.findByOffer($scope.selected.id).then(function (data) {
                 $scope.selected.calls = data;
+            });
+        };
+
+        $scope.refreshAccountsByMobile = function () {
+            AccountService.findByMobile($scope.selected.customerMobile).then(function (data) {
+                $scope.selected.accountsByMobile = data;
             });
         };
 

@@ -50,6 +50,10 @@ app.controller('offerByMasterCategoryCtrl', ['BranchService' ,'MasterCategorySer
             param.push($scope.buffer.exportType);
             param.push('&');
             //
+            param.push('registerOption=');
+            param.push($scope.buffer.registerOption);
+            param.push('&');
+            //
             param.push('title=');
             param.push($scope.buffer.title);
             param.push('&');
@@ -61,4 +65,10 @@ app.controller('offerByMasterCategoryCtrl', ['BranchService' ,'MasterCategorySer
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 800);
+
+
     }]);

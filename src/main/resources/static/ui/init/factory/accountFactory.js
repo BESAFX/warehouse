@@ -31,6 +31,11 @@ app.factory("AccountService", ['$http', '$log',
                     return response.data;
                 });
             },
+            findByMobile: function (mobile) {
+                return $http.get("/api/account/findByMobile/" + mobile).then(function (response) {
+                    return response.data;
+                });
+            },
             findByBranch: function (branchId) {
                 return $http.get("/api/account/findByBranch/" + branchId).then(function (response) {
                     return response.data;
