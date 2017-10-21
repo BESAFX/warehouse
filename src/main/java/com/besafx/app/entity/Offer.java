@@ -71,13 +71,19 @@ public class Offer implements Serializable {
 
     private String customerEmail;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String messageBody;
+
     private String masterPaymentType;
+
+    private Boolean sendSMS;
 
     private String messageSid;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
-    private String messageBody;
+    private String smsBody;
 
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterPrice;

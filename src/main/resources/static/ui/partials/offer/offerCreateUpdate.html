@@ -90,55 +90,68 @@
                                    ng-model="offer.customerMobile">
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
-                                <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" ng-model="offer.sendSMS">
-                                <span class="mdl-checkbox__label">ارسال رسالة قصيرة</span>
-                            </label>
-                        </div>
+                        <div class="form-group row" ng-if="action=='create'">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
-                                <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input" ng-model="offer.sendByEmail">
-                                <span class="mdl-checkbox__label">ارسال رسالة إلى البريد الإلكتروني</span>
-                            </label>
-                        </div>
+                            <div class="form-group row" ng-if="contains(me.team.authorities, ['ROLE_SEND_SMS'])">
 
-                        <div class="form-group row" ng-if="offer.sendByEmail">
+                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+                                        <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input"
+                                               ng-model="offer.sendSMS">
+                                        <span class="mdl-checkbox__label">ارسال رسالة قصيرة</span>
+                                    </label>
+                                </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="customerEmail" class="control-label">البريد الإلكتروني</label>
-                                <input id="customerEmail"
-                                       dir="ltr"
-                                       type="email"
-                                       disable-validation-message=""
-                                       class="form-control text-left"
-                                       ng-model="offer.customerEmail">
+                                <div class="form-group row" ng-if="offer.sendSMS">
+
+                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label for="smsBody" class="control-label">محتوي الرسالة القصيرة</label>
+                                        <textarea id="smsBody"
+                                                  type="text"
+                                                  msd-elastic=""
+                                                  class="form-control text-right"
+                                                  placeholder="اذكر باختصار نص الرسالة القصيرة"
+                                                  ng-model="offer.smsBody">
+                                    </textarea>
+                                    </div>
+
+                                </div>
+
                             </div>
 
                             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="messageBody" class="control-label">محتوي الرسالة</label>
-                                <textarea id="messageBody"
-                                          type="text"
-                                          msd-elastic=""
-                                          class="form-control text-right"
-                                          placeholder="اذكر باختصار موضوع الرسالة"
-                                          ng-model="offer.messageBody">
-                            </textarea>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
+                                    <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input"
+                                           ng-model="offer.sendByEmail">
+                                    <span class="mdl-checkbox__label">ارسال رسالة إلى البريد الإلكتروني</span>
+                                </label>
                             </div>
 
-                        </div>
+                            <div class="form-group row" ng-if="offer.sendByEmail">
 
-                        <div hidden class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label class="control-label">الحالة</label>
-                            <toggle-switch
-                                    dir="ltr"
-                                    style="width: 100%"
-                                    ng-model="offer.registered"
-                                    class="switch-success"
-                                    on-label="مسجل"
-                                    off-label="غير مسجل">
-                            </toggle-switch>
+                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <label for="customerEmail" class="control-label">البريد الإلكتروني</label>
+                                    <input id="customerEmail"
+                                           dir="ltr"
+                                           type="email"
+                                           disable-validation-message=""
+                                           class="form-control text-left"
+                                           ng-model="offer.customerEmail">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <label for="messageBody" class="control-label">محتوي الرسالة</label>
+                                    <textarea id="messageBody"
+                                              type="text"
+                                              msd-elastic=""
+                                              class="form-control text-right"
+                                              placeholder="اذكر باختصار موضوع الرسالة"
+                                              ng-model="offer.messageBody">
+                                </textarea>
+                                </div>
+
+                            </div>
+
                         </div>
 
                         <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">

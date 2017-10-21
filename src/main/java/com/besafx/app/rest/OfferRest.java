@@ -27,6 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.Date;
@@ -69,7 +70,7 @@ public class OfferRest {
     @RequestMapping(value = "create/{{sendSMS}}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
-    public String create(@RequestBody Offer offer , @PathVariable(value = "sendSMS") Boolean sendSMS, Principal principal) {
+    public String create(@RequestBody Offer offer , Principal principal) {
         try {
             Person person = personService.findByEmail(principal.getName());
             Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(person.getBranch());
@@ -96,7 +97,7 @@ public class OfferRest {
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
             }
-            if(sendSMS){
+            if(offer.getSendSMS()){
                 Message message = twilioManager.send(offer.getCustomerMobile(), offer.getMessageBody()).get();
                 offer.setMessageSid(message.getSid());
                 offer = offerService.save(offer);

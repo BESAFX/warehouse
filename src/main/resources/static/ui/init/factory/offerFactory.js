@@ -1,8 +1,8 @@
 app.factory("OfferService",
     ['$http', '$log', function ($http, $log) {
         return {
-            create: function (offer, sendSMS) {
-                return $http.post("/api/offer/create/" + sendSMS, offer).then(function (response) {
+            create: function (offer) {
+                return $http.post("/api/offer/create", offer).then(function (response) {
                     return response.data;
                 });
             },
