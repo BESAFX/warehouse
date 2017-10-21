@@ -1,6 +1,7 @@
 package com.besafx.app;
 
 import com.besafx.app.config.TwilioManager;
+import com.twilio.rest.api.v2010.account.Message;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,6 +23,6 @@ public class MainTests {
 
     @Test
     public void contextLoads() throws ExecutionException, InterruptedException {
-        twilioManager.getMessages().stream().forEach(message -> log.info(message.toString()));
+
     }
 }

@@ -13,6 +13,7 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
 
         $scope.clear = function () {
             $scope.offer = {};
+            $scope.offer.sendSMS = false;
             $scope.offer.registered = false;
             $scope.offer.masterPrice = 0.0;
             $scope.offer.masterDiscountAmount = 0.0;
@@ -42,7 +43,7 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
             }
             switch ($scope.action) {
                 case 'create' :
-                    OfferService.create($scope.offer).then(function (data) {
+                    OfferService.create($scope.offer, $scope.offer.sendSMS).then(function (data) {
                         $uibModalInstance.close(data);
                     });
                     break;

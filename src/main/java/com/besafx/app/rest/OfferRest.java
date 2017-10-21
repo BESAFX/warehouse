@@ -2,6 +2,7 @@ package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
+import com.besafx.app.config.TwilioManager;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.OfferSearch;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import com.twilio.rest.api.v2010.account.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,7 @@ public class OfferRest {
 
     private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
 
-    public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name,logo]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
+    public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
 
     @Autowired
     private PersonService personService;
@@ -61,10 +63,13 @@ public class OfferRest {
     @Autowired
     private EmailSender emailSender;
 
-    @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Autowired
+    private TwilioManager twilioManager;
+
+    @RequestMapping(value = "create/{{sendSMS}}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
-    public String create(@RequestBody Offer offer, Principal principal) {
+    public String create(@RequestBody Offer offer , @PathVariable(value = "sendSMS") Boolean sendSMS, Principal principal) {
         try {
             Person person = personService.findByEmail(principal.getName());
             Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(person.getBranch());
@@ -90,6 +95,11 @@ public class OfferRest {
                 message = message.replaceAll("OFFER_BODY", offer.getMessageBody());
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
+            }
+            if(sendSMS){
+                Message message = twilioManager.send(offer.getCustomerMobile(), offer.getMessageBody()).get();
+                offer.setMessageSid(message.getSid());
+                offer = offerService.save(offer);
             }
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
