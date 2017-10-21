@@ -67,7 +67,7 @@ public class OfferRest {
     @Autowired
     private TwilioManager twilioManager;
 
-    @RequestMapping(value = "create/{{sendSMS}}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
     public String create(@RequestBody Offer offer , Principal principal) {
