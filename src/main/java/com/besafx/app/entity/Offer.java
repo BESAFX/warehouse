@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.decimal4j.util.DoubleRounder;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -68,7 +69,15 @@ public class Offer implements Serializable {
 
     private String customerMobile;
 
+    private String customerEmail;
+
     private String masterPaymentType;
+
+    private String messageSid;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String messageBody;
 
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterPrice;

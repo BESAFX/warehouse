@@ -36,17 +36,17 @@ public class TwilioManager {
     }
 
     @Async("threadPoolTwilioSMS")
-    public Future<Message.Status> send(String to, String body){
+    public Future<Message> send(String to, String body){
         try{
             Message message = Message.creator(
                     new PhoneNumber(to),
                     new PhoneNumber("+14157234094"),
                     body)
                     .create();
-            return new AsyncResult<>(message.getStatus());
+            return new AsyncResult<>(message);
         }catch (Exception ex){
             log.error(ex.getMessage(), ex);
-            return new AsyncResult<>(Message.Status.FAILED);
+            return new AsyncResult<>(null);
         }
     }
 }

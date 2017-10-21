@@ -1,6 +1,7 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
+import com.besafx.app.config.EmailSender;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.OfferSearch;
@@ -8,6 +9,7 @@ import com.besafx.app.service.BranchService;
 import com.besafx.app.service.MasterService;
 import com.besafx.app.service.OfferService;
 import com.besafx.app.service.PersonService;
+import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,13 +19,17 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +38,7 @@ public class OfferRest {
 
     private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
 
-    public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
+    public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name,logo]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
 
     @Autowired
     private PersonService personService;
@@ -51,6 +57,9 @@ public class OfferRest {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private EmailSender emailSender;
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -74,6 +83,14 @@ public class OfferRest {
                     .type("success")
                     .icon("fa-plus-square")
                     .build(), principal.getName());
+            if(offer.getCustomerEmail() != null){
+                ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
+                String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
+                message = message.replaceAll("BRANCH_LOGO", branchService.findByCode(offer.getMaster().getBranch().getCode()).getLogo());
+                message = message.replaceAll("OFFER_BODY", offer.getMessageBody());
+                log.info("إرسال رسالة الي العميل");
+                emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
+            }
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);

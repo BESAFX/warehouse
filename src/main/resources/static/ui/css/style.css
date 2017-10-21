@@ -989,12 +989,15 @@ WebKit inertia scrolling is being added here for any present/future devices that
     color: white !important;
 }
 
-.mdl-radio.is-upgraded{
+.mdl-radio.is-upgraded,
+.mdl-checkbox.is-upgraded{
     padding-right: 24px;
     padding-left: auto !important;
 }
 
-.mdl-radio__outer-circle{
+.mdl-radio__outer-circle,
+.mdl-checkbox__focus-helper,
+.mdl-checkbox__box-outline{
     right: 0px;
     left: auto !important;
 }
@@ -1005,4 +1008,13 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .mdl-radio__ripple-container{
     right: -13px;
     left: auto !important;
+}
+
+.mdl-checkbox__ripple-container{
+    right: -10px;
+    left: auto !important;
+}
+
+.mdl-checkbox__label{
+    font-size: 12px !important;
 }

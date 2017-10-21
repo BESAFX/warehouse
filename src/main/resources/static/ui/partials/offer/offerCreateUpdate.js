@@ -58,4 +58,8 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
             $uibModalInstance.dismiss('cancel');
         };
 
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 800);
+
     }]);
