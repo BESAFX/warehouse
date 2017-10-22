@@ -126,24 +126,24 @@ public class Offer implements Serializable {
         }
     }
 
-//    public Boolean getRegistered() {
-//        try {
-//            if (!this.getAccountsByMobile().isEmpty()) {
-//                if (!this.registered) {
-//                    this.registered = true;
-//                    offerService.save(this);
-//                }
-//            } else {
-//                if (this.registered) {
-//                    this.registered = false;
-//                    offerService.save(this);
-//                }
-//            }
-//            return this.registered;
-//        } catch (Exception ex) {
-//            return null;
-//        }
-//    }
+    public Boolean getRegistered() {
+        try {
+            if (!this.getAccountsByMobile().isEmpty()) {
+                if (!this.registered) {
+                    this.registered = true;
+                    offerService.save(this);
+                }
+            } else {
+                if (this.registered) {
+                    this.registered = false;
+                    offerService.save(this);
+                }
+            }
+            return this.registered;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public Double getNet() {
         try {

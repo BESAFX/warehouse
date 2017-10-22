@@ -59,16 +59,16 @@ public class OfferSearch {
             }
             List<Offer> list = Lists.newArrayList(offerService.findAll(result));
             list.sort(Comparator.comparing(Offer::getCustomerName));
-            log.info("فحص العروض وتحديث حالات التسجيل");
-            list.stream().forEach(offer -> {
-                List<Account> accounts = accountService.findByStudentContactMobile(offer.getCustomerMobile());
-                if (accounts.isEmpty()) {
-                    offer.setRegistered(false);
-                } else {
-                    offer.setRegistered(true);
-                }
-                offerService.save(offer);
-            });
+//            log.info("فحص العروض وتحديث حالات التسجيل");
+//            list.stream().forEach(offer -> {
+//                List<Account> accounts = accountService.findByStudentContactMobileContaining(offer.getCustomerMobile());
+//                if (accounts.isEmpty()) {
+//                    offer.setRegistered(false);
+//                } else {
+//                    offer.setRegistered(true);
+//                }
+//                offerService.save(offer);
+//            });
             return list;
         } else {
             return null;
