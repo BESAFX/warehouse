@@ -115,7 +115,11 @@ public class Offer implements Serializable {
 
     public List<Account> getAccountsByMobile() {
         try {
-            return accountService.findByStudentContactMobile(this.customerMobile);
+            if(this.customerMobile != null){
+                return accountService.findByStudentContactMobileContaining(this.customerMobile);
+            }else{
+                return new ArrayList<>();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return new ArrayList<>();
@@ -143,7 +147,7 @@ public class Offer implements Serializable {
 
     public Double getNet() {
         try {
-            if (masterPaymentType.equals("نقدي")) {
+            if (this.masterPaymentType.equals("نقدي")) {
                 return DoubleRounder.round(this.masterPrice - (this.masterPrice * this.masterDiscountAmount / 100), 2);
             } else {
                 return DoubleRounder.round(this.masterPrice + (this.masterPrice * this.masterProfitAmount / 100), 2);

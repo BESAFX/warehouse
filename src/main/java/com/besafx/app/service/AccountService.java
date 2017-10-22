@@ -21,7 +21,7 @@ public interface AccountService extends PagingAndSortingRepository<Account, Long
             (String firstName, String secondName, String thirdName, String forthName, Integer courseCode, Integer masterCode, Integer branchCode);
     List<Account> findByStudent(Student student);
     List<Account> findByStudentContactIdentityNumber(String identityNumber);
-    List<Account> findByStudentContactMobile(String mobile);
+    List<Account> findByStudentContactMobileContaining(String mobile);
     Long countByStudentContactMobile(String mobile);
     Long countByStudentContactMobileContainingAndCourseMaster(String mobile, Master master);
     List<Account> findByCourse(Course course);
