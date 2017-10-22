@@ -194,7 +194,7 @@ public class AccountRest {
     @RequestMapping(value = "findByMobile/{mobile}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByMobile(@PathVariable String mobile) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountService.findByStudentContactMobile(mobile));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountService.findByStudentContactMobileContaining(mobile));
     }
 
     @RequestMapping(value = "findByStudent/{studentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
