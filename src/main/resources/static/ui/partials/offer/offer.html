@@ -539,7 +539,7 @@
 
             <div class="form-group row">
 
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="selected.id && toggleList===1">
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4" ng-show="selected.id && toggleList===1">
 
                     <div class="panel panel-danger">
                         <div class="panel-heading">
@@ -562,7 +562,7 @@
                             </ul>
                             <div class="panel-title-box pull-right">
                                 <h3>قائمة الاتصالات</h3>
-                                <span>رقم العرض  / {{selected.code}}</span>
+                                <span>رقم الجوال  / {{selected.customerMobile}}</span>
                             </div>
                         </div>
                         <div class="panel-body panel-body-table">
@@ -603,7 +603,7 @@
 
                 </div>
 
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="selected.id && toggleList===1">
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4" ng-show="selected.id && toggleList===1">
 
                     <div class="panel panel-danger">
                         <div class="panel-heading">
@@ -620,7 +620,7 @@
                             </ul>
                             <div class="panel-title-box pull-right">
                                 <h3>قائمة التسجيلات</h3>
-                                <span>رقم العرض  / {{selected.code}}</span>
+                                <span>رقم الجوال  / {{selected.customerMobile}}</span>
                             </div>
                         </div>
                         <div class="panel-body panel-body-table">
@@ -658,11 +658,66 @@
 
                 </div>
 
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4" ng-show="selected.id && toggleList===1">
+
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <ul class="panel-controls pull-left"
+                                style="margin-top: 2px;">
+                                <li>
+                                    <a href=""
+                                       ng-click="refreshOffersByMobile()"
+                                       tooltip-append-to-body="true"
+                                       uib-tooltip="تحديث البيانات">
+                                        <span class="fa fa-refresh"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="panel-title-box pull-right">
+                                <h3>عروض اخرى</h3>
+                                <span>رقم الجوال  / {{selected.customerMobile}}</span>
+                            </div>
+                        </div>
+                        <div class="panel-body panel-body-table">
+                            <div class="table-responsive">
+                                <table st-table="collection4" st-safe-src="selected.offers"
+                                       class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th st-sort="code" class="text-center">رقم العرض</th>
+                                        <th st-sort="master.name" class="text-center">التخصص</th>
+                                        <th st-sort="lastUpdate" class="text-center fit">تاريخ ألعرض</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="offer in collection4">
+                                        <td class="fit">
+                                            {{offer.code}}
+                                        </td>
+                                        <td>[{{offer.master.code}}] {{offer.master.name}}</td>
+                                        <td class="fit">
+                                            <span>{{offer.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                            <span class="label label-success">{{offer.lastUpdate | date:'h:m a'}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="blank_row"
+                                        style="height: 10px !important; background-color: #FFFFFF;"
+                                        ng-show="!collection4 || collection4.length ==0">
+                                        <td colspan="3">لا توجد تسجيلات</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
-                <div st-table="collection4" st-safe-src="offers">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="offer in collection4">
+                <div st-table="collection5" st-safe-src="offers">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="offer in collection5">
                         <!-- CONTACT ITEM -->
                         <div class="panel panel-default">
                             <div class="panel-body profile">

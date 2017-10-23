@@ -210,6 +210,12 @@ app.controller("offerCtrl", ['OfferService', 'AccountService', 'CallService', 'B
             });
         };
 
+        $scope.refreshOffersByMobile = function () {
+            OfferService.findByCustomerMobileAndCodeIsNot($scope.selected.customerMobile, $scope.selected.code).then(function (data) {
+                $scope.selected.offers = data;
+            });
+        };
+
         $scope.rowMenu = [
             {
                 html: '<div class="drop-menu"> انشاء عرض جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',

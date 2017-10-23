@@ -20,6 +20,7 @@ public interface OfferService extends PagingAndSortingRepository<Offer, Long>, J
     Offer findTopByMasterBranchOrderByCodeDesc(Branch branch);
     Offer findByCodeAndMasterBranchAndIdIsNot(Integer code, Branch branch, Long id);
     List<Offer> findByCustomerMobile(String customerMobile);
+    List<Offer> findByCustomerMobileAndCodeIsNot(String customerMobile, Integer code);
     List<Offer> findByLastUpdateBetween(@Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Offer> findByMasterBranch(Branch branch);
     List<Offer> findByMasterBranchIn(List<Branch> branches);

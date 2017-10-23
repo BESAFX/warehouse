@@ -191,6 +191,12 @@ public class OfferRest {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offerService.findByCustomerMobile(customerMobile));
     }
 
+    @RequestMapping(value = "findByCustomerMobileAndCodeIsNot/{customerMobile}/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findByCustomerMobileAndCodeIsNot(@PathVariable String customerMobile, @PathVariable Integer code) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offerService.findByCustomerMobileAndCodeIsNot(customerMobile, code));
+    }
+
     @RequestMapping(value = "findByBranch/{branchId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByBranch(@PathVariable(value = "branchId") Long branchId) {
