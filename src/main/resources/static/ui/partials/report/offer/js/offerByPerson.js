@@ -46,7 +46,7 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
             param.push('&');
             //
 
-            window.open('/report/OfferByMasters?' + param.join(""));
+            window.open('/report/OfferByPersons?' + param.join(""));
         };
 
         $scope.cancel = function () {

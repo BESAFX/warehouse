@@ -3,6 +3,7 @@ package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
 import com.besafx.app.config.TwilioManager;
+import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.OfferSearch;
@@ -83,6 +84,7 @@ public class OfferRest {
             offer.setLastUpdate(new Date());
             offer.setLastPerson(person);
             offer = offerService.save(offer);
+            Branch branch = branchService.findByCode(offer.getMaster().getBranch().getCode());
             notificationService.notifyOne(Notification
                     .builder()
                     .title("العمليات على العروض")
@@ -93,13 +95,31 @@ public class OfferRest {
             if(offer.getCustomerEmail() != null){
                 ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
                 String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
-                message = message.replaceAll("BRANCH_LOGO", branchService.findByCode(offer.getMaster().getBranch().getCode()).getLogo());
+                message = message.replaceAll("BRANCH_LOGO", branch.getLogo());
                 message = message.replaceAll("OFFER_BODY", offer.getMessageBody());
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
             }
             if(offer.getSendSMS()){
-                Message message = twilioManager.send(offer.getCustomerMobile(), offer.getMessageBody()).get();
+                StringBuffer buffer = new StringBuffer();
+                buffer.append(branch.getName());
+                buffer.append(" ");
+                buffer.append("يقدم لكم عرض رقم");
+                buffer.append(" ");
+                buffer.append(offer.getCode());
+                buffer.append(" ");
+                buffer.append("بخصوص دورة");
+                buffer.append(" ");
+                buffer.append(offer.getMaster().getName());
+                buffer.append(" ");
+                buffer.append("بسعر خاص");
+                buffer.append(" ");
+                buffer.append(offer.getNet());
+                buffer.append(" ");
+                buffer.append("ريال");
+                buffer.append(" ");
+                buffer.append("للمزيد من المعلومات قم بزيارتنا");
+                Message message = twilioManager.send(offer.getCustomerMobile(), buffer.toString()).get();
                 offer.setMessageSid(message.getSid());
                 offer = offerService.save(offer);
             }
