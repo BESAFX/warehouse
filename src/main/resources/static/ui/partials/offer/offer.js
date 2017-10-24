@@ -29,6 +29,7 @@ app.controller("offerCtrl", ['OfferService', 'AccountService', 'CallService', 'B
                 angular.forEach($scope.offers, function (offer) {
                     if (object.id == offer.id) {
                         $scope.selected = offer;
+                        $scope.refreshOffersByMobile();
                         return offer.isSelected = true;
                     } else {
                         return offer.isSelected = false;
