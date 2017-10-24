@@ -126,7 +126,7 @@ public class OfferRest {
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
-            return null;
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         }
     }
 
