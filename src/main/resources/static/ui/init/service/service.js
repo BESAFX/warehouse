@@ -418,6 +418,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
+
     /**************************************************************
      *                                                            *
      * MasterCategory Model                                       *
@@ -445,6 +446,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
+
     this.openMasterCategoryUpdateModel = function (masterCategory) {
         return $uibModal.open({
             animation: true,
@@ -467,6 +469,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
+
     /**************************************************************
      *                                                            *
      * Master Model                                               *
@@ -547,6 +550,32 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openOfferCopyModel = function (offer) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/offer/offerCreateUpdate.html',
+            controller: 'offerCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                title: function () {
+                    return 'نسخ العرض';
+                },
+                action: function () {
+                    return 'create';
+                },
+                offer: function () {
+                    var newOffer = jQuery.extend(true, {}, offer);
+                    newOffer.id = undefined;
+                    return newOffer;
+                }
+            }
+        });
+    };
+
     this.openOfferUpdateModel = function (offer) {
         return $uibModal.open({
             animation: true,
@@ -606,7 +635,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
-
 
     this.openOfferHeavyWorkModel = function () {
         return $uibModal.open({
@@ -739,6 +767,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
+
     /**************************************************************
      *                                                            *
      * Student Model                                              *
@@ -791,6 +820,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             }
         });
     };
+
     /**************************************************************
      *                                                            *
      * Team Model                                                 *

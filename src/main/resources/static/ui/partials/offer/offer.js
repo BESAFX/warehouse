@@ -151,12 +151,30 @@ app.controller("offerCtrl", ['OfferService', 'AccountService', 'CallService', 'B
         };
 
         $scope.newOffer = function () {
-            ModalProvider.openOfferCreateModel($scope.selected).result.then(function (data) {
+            ModalProvider.openOfferCreateModel().result.then(function (data) {
                 $rootScope.showConfirmNotify("العروض", "هل تود طباعة العرض ؟", "notification", "fa-info", function () {
                     $scope.print(data);
                 });
                 $scope.offers.splice(0, 0, data);
             });
+        };
+
+        $scope.copyOffer = function (offer) {
+            if(offer){
+                ModalProvider.openOfferCopyModel(offer).result.then(function (data) {
+                    $rootScope.showConfirmNotify("العروض", "هل تود طباعة العرض ؟", "notification", "fa-info", function () {
+                        $scope.print(data);
+                    });
+                    $scope.offers.splice(0, 0, data);
+                });
+            }else{
+                ModalProvider.openOfferCopyModel($scope.selected).result.then(function (data) {
+                    $rootScope.showConfirmNotify("العروض", "هل تود طباعة العرض ؟", "notification", "fa-info", function () {
+                        $scope.print(data);
+                    });
+                    $scope.offers.splice(0, 0, data);
+                });
+            }
         };
 
         $scope.print = function (offer) {
@@ -225,6 +243,15 @@ app.controller("offerCtrl", ['OfferService', 'AccountService', 'CallService', 'B
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.newOffer();
+                }
+            },
+            {
+                html: '<div class="drop-menu"> نسخ العرض <span class="fa fa-copy fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.copyOffer($itemScope.offer);
                 }
             },
             {
