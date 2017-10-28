@@ -2,7 +2,7 @@ app.controller('courseDetailsCtrl', ['MasterService', 'CourseService', '$scope',
     function (MasterService, CourseService, $scope, $rootScope, $timeout, $uibModalInstance) {
         $scope.buffer = {};
         $timeout(function () {
-            MasterService.fetchMasterCourseCombo().then(function (data) {
+            MasterService.fetchBranchMasterCourseCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);

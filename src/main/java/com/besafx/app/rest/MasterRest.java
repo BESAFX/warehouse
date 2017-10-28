@@ -36,6 +36,7 @@ public class MasterRest {
     private final String FILTER_MASTER_COMBO = "id,code,name";
     private final String FILTER_MASTER_BRANCH_COMBO = "id,code,name,branch[id,code,name]";
     private final String FILTER_MASTER_COURSE_COMBO = "id,code,name,courses[id,code,instructor]";
+    private final String FILTER_BRANCH_MASTER_COURSE_COMBO = "id,code,name,branch[id,code,name],courses[id,code,instructor]";
 
     @Autowired
     private PersonService personService;
@@ -219,6 +220,17 @@ public class MasterRest {
     public String fetchMasterBranchCombo(Principal principal) {
         Person person = personService.findByEmail(principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_MASTER_BRANCH_COMBO),
+                person.getBranches()
+                        .stream()
+                        .flatMap(branch -> branch.getMasters().stream())
+                        .collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "fetchBranchMasterCourseCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String fetchBranchMasterCourseCombo(Principal principal) {
+        Person person = personService.findByEmail(principal.getName());
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_BRANCH_MASTER_COURSE_COMBO),
                 person.getBranches()
                         .stream()
                         .flatMap(branch -> branch.getMasters().stream())
