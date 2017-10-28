@@ -3,7 +3,7 @@ app.controller('accountByMasterCtrl', ['MasterService', '$scope', '$rootScope', 
         $scope.buffer = {};
 
         $timeout(function () {
-            MasterService.fetchMasterCombo().then(function (data) {
+            MasterService.fetchMasterBranchCombo().then(function (data) {
                 $scope.masters = data;
             })
         }, 1500);

@@ -12,13 +12,17 @@
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
                 <select id="master"
+                        name="master"
                         data-placeholder="ابحث عن التخصص"
                         no-results-text="'لا توجد تخصصات توافق بحثك'"
                         placeholder-text-single="'اختر التخصص'"
                         class="form-control text-right"
                         chosen=""
+                        focus-autofocus="1"
                         ng-model="buffer.master"
-                        ng-options="(' [ ' + master.code + ' ] ' + ' ' +  master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
+                        required="required"
+                        disable-validation-message=""
+                        ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                 </select>
             </div>
 
