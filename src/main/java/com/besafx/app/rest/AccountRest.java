@@ -239,7 +239,10 @@ public class AccountRest {
     public String fetchTableDataAccountComboBox(Principal principal) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO),
                 personService.findByEmail(principal.getName())
-                        .getBranch().getMasters().stream()
+                        .getBranches().stream()
+                        .flatMap(branch -> branch.getMasters().stream())
+                        .collect(Collectors.toList())
+                        .stream()
                         .flatMap(master -> master.getCourses().stream())
                         .collect(Collectors.toList())
                         .stream()
