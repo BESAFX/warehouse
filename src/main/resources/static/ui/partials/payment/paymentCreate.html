@@ -58,7 +58,7 @@
                                         ng-model="payment.account"
                                         required="required"
                                         disable-validation-message=""
-                                        ng-options="(account.student.contact.firstName + ' ' + account.student.contact.secondName + ' ' + account.student.contact.thirdName  + ' ' + account.student.contact.forthName) group by account.course.master.branch.name for account in accounts | orderBy:'account.student.contact.firstName' track by account.id">
+                                        ng-options="('[' + account.course.code + ']' + account.course.master.name + ' ' + account.student.contact.firstName + ' ' + account.student.contact.secondName + ' ' + account.student.contact.thirdName  + ' ' + account.student.contact.forthName) group by account.course.master.branch.name for account in accounts | orderBy:'account.student.contact.firstName' track by account.id">
                                 </select>
                             </div>
 
