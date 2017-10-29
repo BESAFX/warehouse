@@ -13,7 +13,7 @@ app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'Payment
         $scope.title = title;
 
         $timeout(function () {
-            BranchService.findAllCombo().then(function (data) {
+            BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
         }, 1000);
