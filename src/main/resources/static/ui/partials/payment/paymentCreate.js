@@ -8,6 +8,8 @@ app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'Payment
         $scope.buffer = {};
         $scope.buffer.branchesList = [];
 
+        $scope.buffer.hijriDate = true;
+
         $scope.accounts = [];
 
         $scope.title = title;
@@ -44,5 +46,9 @@ app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'Payment
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 1500);
 
     }]);
