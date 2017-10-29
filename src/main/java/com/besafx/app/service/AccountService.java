@@ -30,6 +30,7 @@ public interface AccountService extends PagingAndSortingRepository<Account, Long
     List<Account> findByCourseMaster(Master master);
     List<Account> findByCourseMasterAndRegisterDateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     List<Account> findByCourseMasterBranch(Branch branch);
+    List<Account> findByCourseMasterBranchIdIn(List<Long> branchIds);
     List<Account> findByCourseMasterBranchAndRegisterDateBetween(Branch branch, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
     Long countByCourse(Course course);
     Long countByCourseAndRegisterDateBetween(Course course, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);

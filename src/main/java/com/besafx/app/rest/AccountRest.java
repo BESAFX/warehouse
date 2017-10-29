@@ -218,7 +218,15 @@ public class AccountRest {
     @RequestMapping(value = "findByBranch/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByBranch(@PathVariable Long branchId) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO), accountService.findByCourseMasterBranch(branchService.findOne(branchId)));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO),
+                accountService.findByCourseMasterBranch(branchService.findOne(branchId)));
+    }
+
+    @RequestMapping(value = "findByBranches", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findByBranches(@RequestParam List<Long> branchIds) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_COMBO),
+                accountService.findByCourseMasterBranchIdIn(branchIds));
     }
 
     @RequestMapping(value = "fetchTableData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

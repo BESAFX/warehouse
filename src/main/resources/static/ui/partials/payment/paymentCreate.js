@@ -1,17 +1,33 @@
-app.controller('paymentCreateCtrl', ['AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
-    function (AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
+app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
+    function (BranchService, AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
 
         $scope.payment = {};
+
+        $scope.branches = [];
+
+        $scope.buffer = {};
+        $scope.buffer.branchesList = [];
 
         $scope.accounts = [];
 
         $scope.title = title;
 
         $timeout(function () {
-            AccountService.fetchTableDataAccountComboBox().then(function (data) {
-               $scope.accounts = data;
+            BranchService.findAllCombo().then(function (data) {
+                $scope.branches = data;
             });
         }, 1000);
+
+        $scope.refreshAccounts = function () {
+            var branchIds = [];
+            angular.forEach($scope.buffer.branchesList, function (branch) {
+                console.info(branch);
+                branchIds.push(branch.id);
+            });
+            AccountService.findByBranches(branchIds).then(function (data) {
+                $scope.accounts = data;
+            });
+        };
 
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {
