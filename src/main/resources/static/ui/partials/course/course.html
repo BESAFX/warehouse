@@ -415,10 +415,12 @@
                                     <td st-select-row-custom="course">{{$index+1}}</td>
                                     <td st-select-row-custom="course">{{course.code}}</td>
                                     <td st-select-row-custom="course">
-                                        {{course.startDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                        <span ng-show="dateType==='H'">{{course.startDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{course.startDate | date: 'yyyy-MM-dd'}}</span>
                                     </td>
                                     <td st-select-row-custom="course">
-                                        {{course.endDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                        <span ng-show="dateType==='H'">{{course.endDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{course.endDate | date: 'yyyy-MM-dd'}}</span>
                                     </td>
                                     <td st-select-row-custom="course">{{course.instructor}}</td>
                                     <td st-select-row-custom="course">{{course.companyName}}</td>
