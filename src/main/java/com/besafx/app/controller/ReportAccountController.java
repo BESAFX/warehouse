@@ -248,6 +248,10 @@ public class ReportAccountController {
             @RequestParam(value = "contractType") ContractType contractType,
             HttpServletResponse response) throws Exception {
 
+        if (accountIds.isEmpty()) {
+            throw new CustomException("عفواً، اختر عنصر واحد على الأقل");
+        }
+
         List<JasperPrint> jasperPrints = new ArrayList<>();
 
         ListIterator<Long> listIterator = accountIds.listIterator();
@@ -274,7 +278,7 @@ public class ReportAccountController {
 //        builder.append(account.getStudent().getContact().getForthName());
 //        builder.append("_");
 //        builder.append(account.getCourse().getMaster().getName());
-        reportExporter.exportMultiple("", response, jasperPrints);
+        reportExporter.exportMultiple("__", response, jasperPrints);
     }
 
     private List<WrapperUtil> initDateList(List<Account> accountList) {

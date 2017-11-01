@@ -267,9 +267,12 @@ public class AccountRest {
             @RequestParam(value = "studentMobile", required = false) final String studentMobile,
             @RequestParam(value = "coursePriceFrom", required = false) final Long coursePriceFrom,
             @RequestParam(value = "coursePriceTo", required = false) final Long coursePriceTo,
-            @RequestParam(value = "course", required = false) final Long course,
-            @RequestParam(value = "master", required = false) final Long master,
-            @RequestParam(value = "branch", required = false) final Long branch) {
+            @RequestParam(value = "courseIds", required = false) final List<Long> courseIds,
+            @RequestParam(value = "masterIds", required = false) final List<Long> masterIds,
+            @RequestParam(value = "branchIds", required = false) final List<Long> branchIds,
+            @RequestParam(value = "courseCodes", required = false) final List<Integer> courseCodes,
+            @RequestParam(value = "masterCodes", required = false) final List<Integer> masterCodes,
+            @RequestParam(value = "branchCodes", required = false) final List<Integer> branchCodes) {
         List<Account> list = accountSearch.search(
                 firstName,
                 secondName,
@@ -281,12 +284,12 @@ public class AccountRest {
                 studentMobile,
                 coursePriceFrom,
                 coursePriceTo,
-                Lists.newArrayList(course),
-                Lists.newArrayList(master),
-                Lists.newArrayList(branch),
-                null,
-                null,
-                null);
+                courseIds,
+                masterIds,
+                branchIds,
+                courseCodes,
+                masterCodes,
+                branchCodes);
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
     }
 

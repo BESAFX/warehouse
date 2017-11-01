@@ -49,7 +49,7 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
         };
 
         $scope.print = function (account) {
-            window.open('/report/account/contract/' + account.id);
+
         };
 
         $scope.filter = function () {
@@ -123,18 +123,24 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                     search.push('&');
                 }
                 if (buffer.branch) {
-                    search.push('branch=');
-                    search.push(buffer.branch.id);
+                    search.push('branchIds=');
+                    var branchIds = [];
+                    branchIds.push(buffer.branch.id);
+                    search.push(branchIds);
                     search.push('&');
                 }
                 if (buffer.master) {
-                    search.push('master=');
-                    search.push(buffer.master.id);
+                    search.push('masterIds=');
+                    var masterIds = [];
+                    masterIds.push(buffer.master.id);
+                    search.push(masterIds);
                     search.push('&');
                 }
                 if (buffer.course) {
-                    search.push('course=');
-                    search.push(buffer.course.id);
+                    search.push('courseIds=');
+                    var courseIds = [];
+                    courseIds.push(buffer.course.id);
+                    search.push(courseIds);
                     search.push('&');
                 }
                 AccountService.filter(search.join("")).then(function (data) {

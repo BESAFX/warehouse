@@ -1,7 +1,7 @@
 package com.besafx.app;
 
-import com.besafx.app.config.TwilioManager;
-import com.twilio.rest.api.v2010.account.Message;
+import com.besafx.app.service.AccountService;
+import com.besafx.app.service.BranchService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,10 +19,17 @@ public class MainTests {
     private final static Logger log = LoggerFactory.getLogger(MainTests.class);
 
     @Autowired
-    private TwilioManager twilioManager;
+    private AccountService accountService;
+
+    @Autowired
+    private BranchService branchService;
 
     @Test
     public void contextLoads() throws ExecutionException, InterruptedException {
-
+        accountService.findByCourseMasterBranch(branchService.findByCode(2)).stream().forEach(account -> {
+            account.setCoursePaymentType("قسط شهري");
+            account.setCourseCreditAmount(1000.0);
+            accountService.save(account);
+        });
     }
 }
