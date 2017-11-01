@@ -1,13 +1,17 @@
-app.controller('printContractCtrl', ['BranchService', 'AccountService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
-    function (BranchService, AccountService, $scope, $rootScope, $timeout, $uibModalInstance) {
+app.controller('printContractCtrl', ['BranchService', 'MasterService', 'AccountService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
+    function (BranchService, MasterService, AccountService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
         $scope.buffer.branchList=[];
+        $scope.buffer.masterList = [];
 
         $timeout(function () {
             BranchService.fetchBranchCombo().then(function (data) {
                 $scope.branches = data;
             });
+            MasterService.fetchMasterBranchCombo().then(function (data) {
+                $scope.masters = data;
+            })
         }, 1500);
 
         $scope.search = function () {
@@ -25,6 +29,16 @@ app.controller('printContractCtrl', ['BranchService', 'AccountService', '$scope'
             search.push('branchIds=');
             search.push(branchIds);
             search.push('&');
+            //
+            if($scope.buffer.masterList && $scope.buffer.branchList.length>0){
+                var masterIds = [];
+                angular.forEach($scope.buffer.masterList, function (master) {
+                    masterIds.push(master.id);
+                });
+                search.push('masterIds=');
+                search.push(masterIds);
+                search.push('&');
+            }
             //
             if ($scope.buffer.firstName) {
                 search.push('firstName=');
