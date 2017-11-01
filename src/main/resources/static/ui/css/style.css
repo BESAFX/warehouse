@@ -60,6 +60,10 @@ body {
     width: 1%;
 }
 
+.table > thead > tr > th{
+    text-align: center !important;
+}
+
 input, .btn {
     height: 40px !important;
 }

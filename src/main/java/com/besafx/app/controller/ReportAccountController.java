@@ -1,7 +1,9 @@
 package com.besafx.app.controller;
+
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
+import com.besafx.app.entity.enums.ContractType;
 import com.besafx.app.enums.ExportType;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
@@ -239,26 +241,40 @@ public class ReportAccountController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/account/contract/{id}", method = RequestMethod.GET, produces = "application/pdf")
+    @RequestMapping(value = "/report/account/contract", method = RequestMethod.GET, produces = "application/pdf")
     @ResponseBody
     public void printContract(
-            @PathVariable(value = "id") Long id,
+            @RequestParam(value = "accountIds") List<Long> accountIds,
+            @RequestParam(value = "contractType") ContractType contractType,
             HttpServletResponse response) throws Exception {
-        Account account = accountService.findOne(id);
-        if (account == null) {
-            throw new CustomException("عفواً، لا يوجد هذا الحساب");
+
+        List<JasperPrint> jasperPrints = new ArrayList<>();
+
+        ListIterator<Long> listIterator = accountIds.listIterator();
+        while (listIterator.hasNext()){
+            Long id = listIterator.next();
+            Account account = accountService.findOne(id);
+            Map<String, Object> map = new HashMap<>();
+            map.put("ACCOUNT", account);
+            map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
+            map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));
+            ClassPathResource jrxmlFile = new ClassPathResource("/report/account/" + contractType + ".jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+            jasperPrints.add(jasperPrint);
         }
-        /**
-         * Insert Parameters
-         */
-        Map<String, Object> map = new HashMap<>();
-        map.put("ACCOUNT", account);
-        map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
-        map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/"+account.getCourse().getMaster().getMasterCategory().getReportFileName()+".jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
-        reportExporter.export(ExportType.PDF, response, jasperPrint);
+
+//        StringBuilder builder = new StringBuilder();
+//        builder.append(account.getStudent().getContact().getFirstName());
+//        builder.append("_");
+//        builder.append(account.getStudent().getContact().getSecondName());
+//        builder.append("_");
+//        builder.append(account.getStudent().getContact().getThirdName());
+//        builder.append("_");
+//        builder.append(account.getStudent().getContact().getForthName());
+//        builder.append("_");
+//        builder.append(account.getCourse().getMaster().getName());
+        reportExporter.exportMultiple("", response, jasperPrints);
     }
 
     private List<WrapperUtil> initDateList(List<Account> accountList) {

@@ -1,0 +1,247 @@
+<form dir="rtl" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack="" focus-group-head="loop"
+      focus-group-tail="loop">
+
+    <div class="modal-header">
+        <h3 class="modal-title text-center">طباعة عقد المتدربين</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-right">
+                            <h3>بحث عن المتدرب</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="branchList" class="control-label">[رقم الفرع] اسم الفرع</label>
+                            <select id="branchList"
+                                    data-placeholder="ابحث عن الفرع"
+                                    no-results-text="'لا توجد فروع توافق بحثك'"
+                                    placeholder-text-single="'اختر الفرع'"
+                                    class="form-control text-right"
+                                    chosen=""
+                                    multiple
+                                    focus-autofocus="1"
+                                    ng-model="buffer.branchList"
+                                    ng-change="search()"
+                                    ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                            </select>
+                        </div>
+
+                        <div class="form-group row" ng-if="buffer.branchList.length > 0">
+
+                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <label for="firstName" class="control-label">الاسم الأول (يحتوى على) </label>
+                                    <input id="firstName"
+                                           type="text"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الاسم الأول او جزءاً منه"
+                                           ng-change="search()"
+                                           ng-model="buffer.firstName">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <label for="secondName" class="control-label">الاسم الثاني (يحتوى على) </label>
+                                    <input id="secondName"
+                                           type="text"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الاسم الثاني او جزءاً منه"
+                                           ng-change="search()"
+                                           ng-model="buffer.secondName">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <label for="thirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
+                                    <input id="thirdName"
+                                           type="text"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الاسم الثالث او جزءاً منه"
+                                           ng-change="search()"
+                                           ng-model="buffer.thirdName">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <label for="forthName" class="control-label">الاسم الرابع (يحتوى على) </label>
+                                    <input id="forthName"
+                                           type="text"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الاسم الرابع او جزءاً منه"
+                                           ng-change="search()"
+                                           ng-model="buffer.forthName">
+                                </div>
+
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="table-responsive">
+                                <table st-table="collection1"
+                                       st-safe-src="accounts"
+                                       class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <span>م</span>
+                                        </th>
+
+                                        <th st-sort="student.code">
+                                            <span> رقم الطالب</span>
+                                        </th>
+
+                                        <th st-sort="registerDate">
+                                            <span>تاريخ التسجيل</span>
+                                        </th>
+
+                                        <th st-sort="student.contact.firstName">
+                                            <span>الاسم</span>
+                                        </th>
+
+                                        <th st-sort="student.contact.identityNumber">
+                                            <span>رقم البطاقة</span>
+                                        </th>
+
+                                        <th st-sort="student.contact.mobile">
+                                            <span>رقم الجوال</span>
+                                        </th>
+
+                                        <th st-sort="course.master.name">
+                                            <span>التخصص</span>
+                                        </th>
+
+                                        <th st-sort="course.master.branch.name">
+                                            <span>الفرع</span>
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="account in collection1">
+                                        <td st-select-row-multi="account">{{$index+1}}</td>
+                                        <td st-select-row-multi="account">
+                                            {{account.code}}
+                                            -
+                                            {{account.course.code}}
+                                            -
+                                            {{account.course.master.code}}
+                                            -
+                                            {{account.course.master.branch.code}}
+                                            -
+                                            {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                                        </td>
+                                        <td st-select-row-multi="account">
+                                            {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                        </td>
+                                        <td st-select-row-multi="account">
+                                            {{account.student.contact.firstName}}
+                                            {{account.student.contact.secondName}}
+                                            {{account.student.contact.thirdName}}
+                                            {{account.student.contact.forthName}}
+                                        </td>
+                                        <td st-select-row-multi="account">{{account.student.contact.identityNumber}}
+                                        </td>
+                                        <td st-select-row-multi="account">{{account.student.contact.mobile}}</td>
+                                        <td st-select-row-multi="account">
+                                            [{{account.course.master.code}}]{{account.course.master.name}}
+                                        </td>
+                                        <td st-select-row-multi="account">
+                                            [{{account.course.master.branch.code}}]{{account.course.master.branch.name}}
+                                        </td>
+                                    </tr>
+                                    <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                        ng-show="!collection1 || collection1.length ==0">
+                                        <td colspan="8">لا توجد بيانات</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="8">
+                                            <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-right">
+                            <h3>خيارات الطباعة</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <label for="contractType" class="control-label">نوع العقد المطلوب</label>
+                                <select id="contractType"
+                                        style="height: 40px"
+                                        required="required"
+                                        disable-validation-message=""
+                                        class="form-control text-right"
+                                        ng-model="buffer.contractType">
+                                    <option value="Contract1">
+                                        <span>عقد دورات تأهيلية / دورات تطويرية / برامج تدريبية - رجال</span>
+                                    </option>
+                                    <option value="Contract4">
+                                        <span>عقد دورات تأهيلية / دورات تطويرية / برامج تدريبية - سيدات</span>
+                                    </option>
+                                    <option value="Contract3">
+                                        <span>عقد برامج اللغة الإنجليزية - رجال</span>
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="row">
+            <button uib-tooltip="طباعة"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">print</i>
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">delete</i>
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="cancel()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <i class="material-icons">power_settings_new</i>
+            </button>
+        </div>
+
+    </div>
+
+</form>

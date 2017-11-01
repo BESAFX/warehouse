@@ -218,6 +218,42 @@ app.directive('stSelectRowCustom', function () {
     };
 });
 
+app.directive('stSelectRowMulti', function () {
+    return {
+        restrict: 'A',
+        require: '^stTable',
+        scope: {
+            row: '=stSelectRowMulti',
+            callback: '&stSelected' // ADDED THIS
+        },
+        link: function (scope, element, attr, ctrl) {
+            element.bind('click', function (eventType) {
+                scope.$apply(function () {
+                    // ctrl.select(scope.row, 'multiple');
+                    ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
+                    scope.callback(); // AND THIS
+                });
+            });
+
+            element.bind('contextmenu', function (eventType) {
+                scope.$apply(function () {
+                    // ctrl.select(scope.row, 'multiple');
+                    ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
+                    scope.callback(); // AND THIS
+                });
+            });
+
+            scope.$watch('row.isSelected', function (newValue) {
+                if (newValue === true) {
+                    element.parent().addClass('success');
+                } else {
+                    element.parent().removeClass('success');
+                }
+            });
+        }
+    };
+});
+
 app.directive('stDefaultValue', function () {
     return {
         restrict: 'A',
@@ -297,5 +333,32 @@ app.directive("formatDate", function(){
             })
         }
     }
-})
+});
+
+app.directive('csSelect', function () {
+    return {
+        require: '^stTable',
+        template: '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" ng-for="checkbox{{$index+1}}"><input type="checkbox" ng-id="checkbox{{$index+1}}" class="mdl-checkbox__input"></label>',
+        scope: {
+            row: '=csSelect'
+        },
+        link: function (scope, element, attr, ctrl) {
+
+            element.bind('change', function (evt) {
+                scope.$apply(function () {
+                    ctrl.select(scope.row, 'multiple');
+                });
+            });
+
+            scope.$watch('row.isSelected', function (newValue, oldValue) {
+                if (newValue === true) {
+                    element.parent().addClass('success');
+                } else {
+                    element.parent().removeClass('success');
+                }
+            });
+        }
+    };
+});
+
 

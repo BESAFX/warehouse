@@ -41,8 +41,6 @@ public class MasterCategory implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    private String reportFileName;
-
     @ManyToOne
     @JoinColumn(name = "person")
     private Person person;

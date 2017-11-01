@@ -100,6 +100,11 @@ app.factory("AccountService", ['$http', '$log',
                 return $http.get("/api/account/filter?" + search).then(function (response) {
                     return response.data;
                 });
+            },
+            filterWithInfo: function (search) {
+                return $http.get("/api/account/filterWithInfo?" + search).then(function (response) {
+                    return response.data;
+                });
             }
         };
     }

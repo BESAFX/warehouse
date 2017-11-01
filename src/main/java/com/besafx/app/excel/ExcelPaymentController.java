@@ -9,6 +9,7 @@ import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -425,7 +426,25 @@ public class ExcelPaymentController {
 
                 }
                 if (accept) {
-                    List<Account> accounts = accountSearch.search2(firstName, secondName, thirdName, forthName, null, null, null, null, null, null, courseCode, masterCode, branchCode);
+
+                    List<Account> accounts = accountSearch.search(
+                            firstName,
+                            secondName,
+                            thirdName,
+                            forthName,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            Lists.newArrayList(courseCode),
+                            Lists.newArrayList(masterCode),
+                            Lists.newArrayList(branchCode));
+
                     if (accounts.isEmpty()) {
                         log.info("لا توجد تسجيلات لهذا الصف");
                         continue;
