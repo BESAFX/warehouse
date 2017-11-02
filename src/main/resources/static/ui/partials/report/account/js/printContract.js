@@ -2,6 +2,9 @@ app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseSe
     function (BranchService, MasterService, CourseService, AccountService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
+        $scope.buffer.reportFileName = "";
+        $scope.buffer.contractType = "";
+        $scope.buffer.reportType = "";
         $scope.radio = {};
         $scope.radio.registerOption = '1';
         $scope.buffer.branchList = [];
@@ -116,7 +119,14 @@ app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseSe
                     selectedAccountsIds.push(account.id);
                 }
             });
-            window.open('/report/account/contract?accountIds=' + selectedAccountsIds + "&&contractType=" + $scope.buffer.contractType);
+            switch ($scope.buffer.reportType){
+                case "ZIP":
+                    window.open('/report/account/contract/zip?accountIds=' + selectedAccountsIds + "&&contractType=" + $scope.buffer.contractType + "&&reportFileName="  + $scope.buffer.reportFileName);
+                    break;
+                case "PDF":
+                    window.open('/report/account/contract/pdf?accountIds=' + selectedAccountsIds + "&&contractType=" + $scope.buffer.contractType + "&&reportFileName="  + $scope.buffer.reportFileName);
+                    break;
+            }
         };
 
         $scope.cancel = function () {

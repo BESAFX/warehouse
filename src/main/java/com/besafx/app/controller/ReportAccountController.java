@@ -9,11 +9,10 @@ import com.besafx.app.enums.ExportType;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.util.WrapperUtil;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -22,10 +21,15 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 public class ReportAccountController {
@@ -246,11 +250,81 @@ public class ReportAccountController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @RequestMapping(value = "/report/account/contract", method = RequestMethod.GET, produces = "application/pdf")
+    @RequestMapping(value = "/report/account/contract/zip", method = RequestMethod.GET, produces = "application/zip")
     @ResponseBody
-    public void printContract(
+    public byte[] printContractAsZip(
             @RequestParam(value = "accountIds") List<Long> accountIds,
             @RequestParam(value = "contractType") ContractType contractType,
+            @RequestParam(value = "reportFileName") String reportFileName,
+            HttpServletResponse response){
+
+        if (accountIds.isEmpty()) {
+            throw new CustomException("عفواً، اختر عنصر واحد على الأقل");
+        }
+
+        try {
+
+            //
+            response.setHeader("Content-Type", "application/zip");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(reportFileName.replaceAll(" ", "_"), "utf-8") + ".zip\"");
+            //
+
+            //
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
+            ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
+            //
+
+            List<JasperPrint> jasperPrints = new ArrayList<>();
+            ListIterator<Long> listIterator = accountIds.listIterator();
+            while (listIterator.hasNext()) {
+                Long id = listIterator.next();
+                Account account = accountService.findOne(id);
+                JasperPrint jasperPrint = asyncMultiAccountInOneFile.getJasperPrint(id, contractType).get();
+                jasperPrints.add(jasperPrint);
+                //
+                StringBuilder fileName = new StringBuilder("");
+                fileName.append(account.getStudent().getContact().getFirstName());
+                fileName.append(" ");
+                fileName.append(account.getStudent().getContact().getSecondName());
+                fileName.append(" ");
+                fileName.append(account.getStudent().getContact().getThirdName());
+                fileName.append(" ");
+                fileName.append(account.getStudent().getContact().getForthName());
+                fileName.append(" ");
+                fileName.append(account.getCourse().getMaster().getName());
+                //
+                File jasperFile = File.createTempFile(fileName.toString().replaceAll(" ", "_"), ".pdf");
+                FileUtils.writeByteArrayToFile(jasperFile, JasperExportManager.exportReportToPdf(jasperPrint));
+                zipOutputStream.putNextEntry(new ZipEntry(fileName.toString().replaceAll(" ", "_").concat(".pdf")));
+                FileInputStream fileInputStream = new FileInputStream(jasperFile);
+                IOUtils.copy(fileInputStream, zipOutputStream);
+                fileInputStream.close();
+                zipOutputStream.closeEntry();
+            }
+
+            if (zipOutputStream != null) {
+                zipOutputStream.finish();
+                zipOutputStream.flush();
+                IOUtils.closeQuietly(zipOutputStream);
+            }
+            IOUtils.closeQuietly(bufferedOutputStream);
+            IOUtils.closeQuietly(byteArrayOutputStream);
+
+            return byteArrayOutputStream.toByteArray();
+
+        }catch (Exception ex){
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/report/account/contract/pdf", method = RequestMethod.GET, produces = "application/pdf")
+    @ResponseBody
+    public void printContractAsPDF(
+            @RequestParam(value = "accountIds") List<Long> accountIds,
+            @RequestParam(value = "contractType") ContractType contractType,
+            @RequestParam(value = "reportFileName") String reportFileName,
             HttpServletResponse response) throws Exception {
 
         if (accountIds.isEmpty()) {
@@ -266,11 +340,7 @@ public class ReportAccountController {
 
         StringBuilder builder = new StringBuilder("");
         if (accountIds.size() > 1) {
-            builder.append("تقرير مخصص لعدد");
-            builder.append(" ");
-            builder.append(accountIds.size());
-            builder.append(" ");
-            builder.append("طالب");
+            builder.append(reportFileName);
         } else if (accountIds.size() == 1) {
             Account account = accountService.findOne(accountIds.get(0));
             builder.append(account.getStudent().getContact().getFirstName());

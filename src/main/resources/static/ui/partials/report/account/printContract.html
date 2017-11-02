@@ -268,6 +268,34 @@
                                 </select>
                             </div>
 
+                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <label for="reportType" class="control-label">نوع التقرير</label>
+                                <select id="reportType"
+                                        style="height: 40px"
+                                        required="required"
+                                        disable-validation-message=""
+                                        class="form-control text-right"
+                                        ng-model="buffer.reportType">
+                                    <option value="ZIP">
+                                        <span>ملف مضغوط</span>
+                                    </option>
+                                    <option value="PDF">
+                                        <span>ملف PDF</span>
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label for="reportFileName" class="control-label">اسم الملف النهائي</label>
+                                <input id="reportFileName"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="ادخل اسم مختصر..."
+                                       ng-model="buffer.reportFileName">
+                            </div>
+
                         </div>
 
                     </div>
