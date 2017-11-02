@@ -14,6 +14,8 @@ import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletOutputStream;
@@ -145,7 +147,8 @@ public class ReportExporter {
             JRPdfExporter exporter = null;
 
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(fileName, "utf-8") + ".pdf\"");
+            response.setHeader("Cache-Control","must-revalidate, post-check=0, pre-check=0");
+            response.setHeader("content-disposition", "inline; filename=\"" + URLEncoder.encode(fileName, "utf-8") + ".pdf\"");
 
             exporter = new JRPdfExporter();
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(servletOutputStream));

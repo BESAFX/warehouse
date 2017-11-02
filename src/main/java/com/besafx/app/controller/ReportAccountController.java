@@ -1,5 +1,6 @@
 package com.besafx.app.controller;
 
+import com.besafx.app.async.AsyncMultiAccountInOneFile;
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URL;
 import java.security.Principal;
 import java.util.*;
+import java.util.concurrent.Future;
 
 @RestController
 public class ReportAccountController {
@@ -45,6 +47,9 @@ public class ReportAccountController {
 
     @Autowired
     private ReportExporter reportExporter;
+
+    @Autowired
+    private AsyncMultiAccountInOneFile asyncMultiAccountInOneFile;
 
     @RequestMapping(value = "/report/AccountByBranch/{branchId}", method = RequestMethod.GET, produces = "application/pdf")
     @ResponseBody
@@ -255,30 +260,30 @@ public class ReportAccountController {
         List<JasperPrint> jasperPrints = new ArrayList<>();
 
         ListIterator<Long> listIterator = accountIds.listIterator();
-        while (listIterator.hasNext()){
-            Long id = listIterator.next();
-            Account account = accountService.findOne(id);
-            Map<String, Object> map = new HashMap<>();
-            map.put("ACCOUNT", account);
-            map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
-            map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));
-            ClassPathResource jrxmlFile = new ClassPathResource("/report/account/" + contractType + ".jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
-            jasperPrints.add(jasperPrint);
+        while (listIterator.hasNext()) {
+            jasperPrints.add(asyncMultiAccountInOneFile.getJasperPrint(listIterator.next(), contractType).get());
         }
 
-//        StringBuilder builder = new StringBuilder();
-//        builder.append(account.getStudent().getContact().getFirstName());
-//        builder.append("_");
-//        builder.append(account.getStudent().getContact().getSecondName());
-//        builder.append("_");
-//        builder.append(account.getStudent().getContact().getThirdName());
-//        builder.append("_");
-//        builder.append(account.getStudent().getContact().getForthName());
-//        builder.append("_");
-//        builder.append(account.getCourse().getMaster().getName());
-        reportExporter.exportMultiple("__", response, jasperPrints);
+        StringBuilder builder = new StringBuilder("");
+        if (accountIds.size() > 1) {
+            builder.append("تقرير مخصص لعدد");
+            builder.append(" ");
+            builder.append(accountIds.size());
+            builder.append(" ");
+            builder.append("طالب");
+        } else if (accountIds.size() == 1) {
+            Account account = accountService.findOne(accountIds.get(0));
+            builder.append(account.getStudent().getContact().getFirstName());
+            builder.append(" ");
+            builder.append(account.getStudent().getContact().getSecondName());
+            builder.append(" ");
+            builder.append(account.getStudent().getContact().getThirdName());
+            builder.append(" ");
+            builder.append(account.getStudent().getContact().getForthName());
+            builder.append(" ");
+            builder.append(account.getCourse().getMaster().getName());
+        }
+        reportExporter.exportMultiple(builder.toString().replaceAll(" ", "_"), response, jasperPrints);
     }
 
     private List<WrapperUtil> initDateList(List<Account> accountList) {

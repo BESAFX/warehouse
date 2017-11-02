@@ -2,7 +2,15 @@
       focus-group-tail="loop">
 
     <div class="modal-header">
-        <h3 class="modal-title text-center">طباعة عقد المتدربين</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <span class="fa fa-close fa-2x"></span>
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right">
+            <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-icon">print</i>
+                <strong>طباعة عقد المتدربين</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body">
@@ -15,11 +23,35 @@
                     <div class="panel-heading">
                         <div class="panel-title-box pull-right">
                             <h3>بحث عن المتدرب</h3>
+                            <span>طباعة العديد من العقود فى ملف واحد</span>
                         </div>
                     </div>
                     <div class="panel-body">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+                                    <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" ng-model="radio.registerOption">
+                                    <span class="mdl-radio__label">حسب الفرع</span>
+                                </label>
+                            </div>
+                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+                                    <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="2" ng-model="radio.registerOption">
+                                    <span class="mdl-radio__label">حسب التخصص</span>
+                                </label>
+                            </div>
+                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
+                                    <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="3" ng-model="radio.registerOption">
+                                    <span class="mdl-radio__label">حسب الدورة</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='1'">
                             <label for="branchList" class="control-label">[رقم الفرع] اسم الفرع</label>
                             <select id="branchList"
                                     data-placeholder="ابحث عن الفرع"
@@ -35,7 +67,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='2'">
                             <label for="masterList" class="control-label">[رقم التخصص] اسم التخصص</label>
                             <select id="masterList"
                                     data-placeholder="ابحث عن التخصص"
@@ -46,7 +78,22 @@
                                     multiple
                                     ng-model="buffer.masterList"
                                     ng-change="search()"
-                                    ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
+                                    ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name + ' - ' + master.branch.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
+                            </select>
+                        </div>
+
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='3'">
+                            <label for="courseList" class="control-label">رقم الدورة</label>
+                            <select id="courseList"
+                                    data-placeholder="ابحث عن رقم الدورة المتاحة"
+                                    no-results-text="'لا توجد دورات توافق بحثك'"
+                                    placeholder-text-single="'اختر رقم الدورة'"
+                                    class="form-control text-right"
+                                    chosen=""
+                                    multiple
+                                    ng-model="buffer.courseList"
+                                    ng-change="search()"
+                                    ng-options="('رفم الدورة / ' + course.code + ' المدرب / ' + course.instructor + ' تخصص / ' + course.master.name) group by (course.master.branch.name) for course in courses | orderBy:'code' track by course.id">
                             </select>
                         </div>
 

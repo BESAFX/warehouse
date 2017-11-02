@@ -50,6 +50,12 @@ public class AsyncConfig {
         return initThreadPool(1, 1, 500, "PaymentExcel-");
     }
 
+    @Bean(name = "JasperPrintGenerator")
+    public Executor JasperPrintGenerator() {
+        log.info("Prepare JasperPrintGenerator...");
+        return initThreadPool(10, 10, 500, "JasperPrintGenerator-");
+    }
+
     private ThreadPoolTaskExecutor initThreadPool(int corePoolSize, int maxPoolSize, int queueCapacity, String prefix) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
