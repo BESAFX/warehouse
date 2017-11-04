@@ -366,6 +366,10 @@
                                         <span>مصدر الفاتورة</span>
                                     </th>
 
+                                    <th st-sort="note" class="text-right">
+                                        <span>بيان الفاتورة</span>
+                                    </th>
+
                                     <th st-sort="branch.name" class="text-right">
                                         <span>الفرع</span>
                                     </th>
@@ -376,7 +380,7 @@
 
                                 </tr>
                                 <tr>
-                                    <th colspan="8">
+                                    <th colspan="9">
                                         <input st-search=""
                                                class="form-control"
                                                placeholder="بحث شامل وسريع..."
@@ -400,6 +404,7 @@
                                     <td st-select-row-custom="billBuy">{{billBuy.amount | currency:'SAR':0}}</td>
                                     <td st-select-row-custom="billBuy">{{billBuy.billBuyType.name}}</td>
                                     <td st-select-row-custom="billBuy">{{billBuy.fromName}}</td>
+                                    <td st-select-row-custom="billBuy">{{billBuy.note}}</td>
                                     <td st-select-row-custom="billBuy">
                                         [ {{billBuy.branch.code}} ]
                                         {{billBuy.branch.name}}
