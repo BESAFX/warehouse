@@ -124,7 +124,7 @@ app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseSe
                     window.open('/report/account/contract/zip?accountIds=' + selectedAccountsIds + "&&contractType=" + $scope.buffer.contractType + "&&reportFileName="  + $scope.buffer.reportFileName);
                     break;
                 case "PDF":
-                    window.open('/report/account/contract/pdf?accountIds=' + selectedAccountsIds + "&&contractType=" + $scope.buffer.contractType + "&&reportFileName="  + $scope.buffer.reportFileName);
+                    window.open('/report/account/contract/pdf?accountIds=' + selectedAccountsIds + "&&contractType=" + $scope.buffer.contractType + "&&reportFileName="  + $scope.buffer.reportFileName + "&&hijriDate=" + $scope.buffer.hijriDate);
                     break;
             }
         };

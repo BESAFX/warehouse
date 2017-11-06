@@ -30,11 +30,12 @@ public class AsyncMultiAccountInOneFile {
     private AccountService accountService;
 
     @Async("JasperPrintGenerator")
-    public Future<JasperPrint> getJasperPrint(Long accountId, ContractType contractType) throws Exception{
+    public Future<JasperPrint> getJasperPrint(Long accountId, ContractType contractType, boolean hijriDate) throws Exception{
         log.info("العمل على التسجيل رقم/ " + accountId);
         Account account = accountService.findOne(accountId);
         Map<String, Object> map = new HashMap<>();
         map.put("ACCOUNT", account);
+        map.put("HIJRI_DATE", hijriDate);
         map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
         map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/account/" + contractType + ".jrxml");

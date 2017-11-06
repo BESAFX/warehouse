@@ -14,6 +14,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,18 +23,21 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.*;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @RestController
 public class ReportAccountController {
+
+    private final static Logger log = LoggerFactory.getLogger(ReportAccountController.class);
 
     @Autowired
     private PersonService personService;
@@ -256,7 +261,8 @@ public class ReportAccountController {
             @RequestParam(value = "accountIds") List<Long> accountIds,
             @RequestParam(value = "contractType") ContractType contractType,
             @RequestParam(value = "reportFileName") String reportFileName,
-            HttpServletResponse response){
+            @RequestParam(value = "hijriDate") boolean hijriDate,
+            HttpServletResponse response) {
 
         if (accountIds.isEmpty()) {
             throw new CustomException("عفواً، اختر عنصر واحد على الأقل");
@@ -281,7 +287,7 @@ public class ReportAccountController {
             while (listIterator.hasNext()) {
                 Long id = listIterator.next();
                 Account account = accountService.findOne(id);
-                JasperPrint jasperPrint = asyncMultiAccountInOneFile.getJasperPrint(id, contractType).get();
+                JasperPrint jasperPrint = asyncMultiAccountInOneFile.getJasperPrint(id, contractType, hijriDate).get();
                 jasperPrints.add(jasperPrint);
                 //
                 StringBuilder fileName = new StringBuilder("");
@@ -314,7 +320,7 @@ public class ReportAccountController {
 
             return byteArrayOutputStream.toByteArray();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -325,17 +331,21 @@ public class ReportAccountController {
             @RequestParam(value = "accountIds") List<Long> accountIds,
             @RequestParam(value = "contractType") ContractType contractType,
             @RequestParam(value = "reportFileName") String reportFileName,
+            @RequestParam(value = "hijriDate") Boolean hijriDate,
             HttpServletResponse response) throws Exception {
 
         if (accountIds.isEmpty()) {
             throw new CustomException("عفواً، اختر عنصر واحد على الأقل");
         }
 
+
+        log.info("HIJRI: " + hijriDate);
+
         List<JasperPrint> jasperPrints = new ArrayList<>();
 
         ListIterator<Long> listIterator = accountIds.listIterator();
         while (listIterator.hasNext()) {
-            jasperPrints.add(asyncMultiAccountInOneFile.getJasperPrint(listIterator.next(), contractType).get());
+            jasperPrints.add(asyncMultiAccountInOneFile.getJasperPrint(listIterator.next(), contractType, hijriDate).get());
         }
 
         StringBuilder builder = new StringBuilder("");

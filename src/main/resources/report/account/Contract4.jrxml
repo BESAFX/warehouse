@@ -15,6 +15,7 @@
 	<parameter name="TITLE" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
 	<parameter name="ACCOUNT" class="com.besafx.app.entity.Account"/>
+	<parameter name="HIJRI_DATE" class="java.lang.Boolean"/>
 	<pageHeader>
 		<band height="80">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -171,7 +172,9 @@
 								<font fontName="Arial" size="8" isBold="false"/>
 								<paragraph rightIndent="10"/>
 							</textElement>
-							<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getEndDate())]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$P{HIJRI_DATE}.booleanValue() ? 
+DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getEndDate()) : 
+DateConverter.getDateInFormat($P{ACCOUNT}.getCourse().getEndDate()) ]]></textFieldExpression>
 						</textField>
 						<staticText>
 							<reportElement mode="Transparent" x="100" y="0" width="95" height="18" forecolor="#754C29" backcolor="#754C29" uuid="cb709161-36b1-472b-8903-34344261585e">
@@ -214,7 +217,9 @@
 								<font fontName="Arial" size="8" isBold="false"/>
 								<paragraph rightIndent="10"/>
 							</textElement>
-							<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getStartDate())]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$P{HIJRI_DATE}.booleanValue() ? 
+DateConverter.getHijriStringFromDateRTL($P{ACCOUNT}.getCourse().getStartDate()) : 
+DateConverter.getDateInFormat($P{ACCOUNT}.getCourse().getStartDate())]]></textFieldExpression>
 						</textField>
 						<staticText>
 							<reportElement mode="Transparent" x="290" y="0" width="95" height="18" forecolor="#754C29" backcolor="#754C29" uuid="b9eded11-8a70-4f1e-9f05-275a65b43682">
