@@ -121,6 +121,7 @@ gulp.task('scripts', function () {
         './init/factory/offerFactory.js',
         './init/factory/callFactory.js',
         './init/factory/paymentFactory.js',
+        './init/factory/paymentAttachFactory.js',
         './init/factory/paymentOutFactory.js',
         './init/factory/permissionFactory.js',
         './init/factory/personFactory.js',

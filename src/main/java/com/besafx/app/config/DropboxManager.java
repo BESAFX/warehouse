@@ -45,7 +45,7 @@ public class DropboxManager {
     @Async("threadPoolFileUploader")
     public Future<Boolean> uploadFile(MultipartFile file, String path) {
         try {
-            log.info("Trying to upload file: " + file.getName());
+            log.info("Trying to upload file: " + file.getOriginalFilename());
             log.info("Sleeping for 1 seconds...");
             Thread.sleep(1000);
             client.files().uploadBuilder(path).uploadAndFinish(file.getInputStream());

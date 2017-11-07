@@ -1,5 +1,5 @@
-app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
-    function (BranchService, AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
+app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'PaymentService', 'PaymentAttachService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
+    function (BranchService, AccountService, PaymentService, PaymentAttachService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
 
         $scope.payment = {};
 
@@ -35,19 +35,12 @@ app.controller('paymentCreateCtrl', ['BranchService' ,'AccountService', 'Payment
         };
 
         $scope.submit = function () {
-            var wrapper = {};
-            wrapper.payment = $scope.payment;
-            var fileData = {
-                file: {
-                    modified: $scope.files[0].lastModifiedDate,
-                    name: $scope.files[0].name,
-                    size: $scope.files[0].size,
-                    type: $scope.files[0].type
-                }
-            };
-            console.info(fileData);
-            wrapper.file = JSON.stringify(fileData);
-            PaymentService.createWrapper(wrapper).then(function (data) {
+            PaymentService.create($scope.payment).then(function (data) {
+                /**UPLOADING FILE**/
+                PaymentAttachService.upload(data, $scope.files[0]).then(function (data) {
+                    /**FINISHING UPLOADING**/
+                });
+                /**REFRESH ACCOUNT OBJECT**/
                 AccountService.findOne(data.account.id).then(function (data) {
                     var index = $scope.accounts.indexOf(data.account);
                     $scope.accounts[index] = data;
