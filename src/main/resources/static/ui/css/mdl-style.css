@@ -163,7 +163,7 @@ main {
 }
 
 html, body {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: 'Cairo', sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px
@@ -435,7 +435,7 @@ ul, ol {
 }
 
 .mdl-typography--caption-force-preferred-font {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif
+    font-family: 'Cairo', sans-serif;
 }
 
 .mdl-typography--caption-color-contrast, .mdl-typography--caption-force-preferred-font-color-contrast {
@@ -447,7 +447,7 @@ ul, ol {
 }
 
 .mdl-typography--caption-force-preferred-font-color-contrast, .mdl-typography--menu {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif
+    font-family: 'Cairo', sans-serif;
 }
 
 .mdl-typography--menu {
@@ -6460,7 +6460,7 @@ fieldset[disabled] .mdl-switch .mdl-switch__ripple-container .mdl-ripple, .mdl-s
     border-bottom: 1px solid rgba(0, 0, 0, .12);
     display: block;
     font-size: 16px;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: 'Cairo', sans-serif;
     margin: 0;
     padding: 4px 0;
     width: 100%;
