@@ -195,7 +195,7 @@ input[type=checkbox] {
 }
 
 .mdl-layout__title, .mdl-layout-title, .mdl-button > span {
-    font-family: 'Cairo Black', serif;
+    font-family: 'Cairo Black', serif!important;
 }
 
 .mdl-menu {
