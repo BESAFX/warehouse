@@ -1,5 +1,5 @@
 <!-- Always shows a header, even in smaller screens. -->
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
     <header class="mdl-layout__header">
         <div class="mdl-layout-icon">
@@ -55,6 +55,179 @@
         </div>
     </header>
 
+    <div class="mdl-layout__drawer" style="padding-top: 50px !important;">
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               ui-sref="menu"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               href="">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">dashboard</i>
+                    <span>الرئيسية</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="company"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_COMPANY_UPDATE'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">business</i>
+                    <span>الشركة</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="branch"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_BRANCH_CREATE', 'ROLE_BRANCH_UPDATE', 'ROLE_BRANCH_DELETE', 'ROLE_BRANCH_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">layers</i>
+                    <span>الفروع</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="offer"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_OFFER_CREATE', 'ROLE_OFFER_UPDATE', 'ROLE_OFFER_DELETE', 'ROLE_OFFER_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">collections_bookmark</i>
+                    <span>العروض</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="master"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_MASTER_CREATE', 'ROLE_MASTER_UPDATE', 'ROLE_MASTER_DELETE', 'ROLE_MASTER_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">import_contacts</i>
+                    <span>التخصصات</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="course"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_COURSE_CREATE', 'ROLE_COURSE_UPDATE', 'ROLE_COURSE_DELETE', 'ROLE_COURSE_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">card_travel</i>
+                    <span>الدورات</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="account"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CREATE', 'ROLE_ACCOUNT_UPDATE', 'ROLE_ACCOUNT_DELETE', 'ROLE_ACCOUNT_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">local_library</i>
+                    <span>تسجيل الطلاب</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="payment"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE', 'ROLE_PAYMENT_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">monetization_on</i>
+                    <span>سندات القبض</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="paymentOut"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE', 'ROLE_PAYMENT_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">money_off</i>
+                    <span>سندات الصرف</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="billBuyType"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_TYPE_CREATE', 'ROLE_BILL_BUY_TYPE_UPDATE', 'ROLE_BILL_BUY_TYPE_DELETE', 'ROLE_BILL_BUY_TYPE_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">subtitles</i>
+                    <span>حسابات فواتير الشراء</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="billBuy"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE', 'ROLE_BILL_BUY_UPDATE', 'ROLE_BILL_BUY_DELETE', 'ROLE_BILL_BUY_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">shopping_cart</i>
+                    <span>فواتير الشراء</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="bank"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_BANK_CREATE', 'ROLE_BANK_UPDATE', 'ROLE_BANK_DELETE'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">account_balance</i>
+                    <span>الحسابات البنكية</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="deposit"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_DEPOSIT_CREATE', 'ROLE_DEPOSIT_UPDATE', 'ROLE_DEPOSIT_DELETE', 'ROLE_DEPOSIT_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">archive</i>
+                    <span>الايداع البنكي</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="withdraw"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_WITHDRAW_CREATE', 'ROLE_WITHDRAW_UPDATE', 'ROLE_WITHDRAW_DELETE', 'ROLE_WITHDRAW_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">unarchive</i>
+                    <span>السحب البنكي</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="team"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_TEAM_CREATE', 'ROLE_TEAM_UPDATE', 'ROLE_TEAM_DELETE'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">security</i>
+                    <span>الصلاحيات</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="person"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary"
+               ng-if="contains(me.team.authorities, ['ROLE_PERSON_CREATE', 'ROLE_PERSON_UPDATE', 'ROLE_PERSON_DELETE', 'ROLE_PERSON_REPORT'])">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">lock</i>
+                    <span>المستخدمون</span>
+                </span>
+            </a>
+            <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+               href=""
+               ui-sref="report"
+               ui-sref-active="mdl-navigation__link-active mdl-color--primary">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">assignment</i>
+                    <span>التقارير</span>
+                </span>
+            </a>
+        </nav>
+    </div>
+
     <main class="mdl-layout__content">
 
         <div dir="rtl" class="row" style="margin-top: 10px">
@@ -98,93 +271,110 @@
                                         <div class="panel-heading">البيانات الاساسية</div>
                                         <div class="panel-body">
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="name" class="control-label">اسم الشركة</label>
-                                                <input id="name"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.name">
+                                            <div class="form-group row">
+
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="name" class="control-label">اسم الشركة</label>
+                                                    <input id="name"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.name">
+                                                </div>
+
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="address" class="control-label">العنوان</label>
+                                                    <input id="address"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.address">
+                                                </div>
+
                                             </div>
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="address" class="control-label">العنوان</label>
-                                                <input id="address"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.address">
+
+                                            <div class="form-group row">
+
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="phone" class="control-label">الهاتف</label>
+                                                    <input id="phone"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.phone">
+                                                </div>
+
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="mobile" class="control-label">الجوال</label>
+                                                    <input id="mobile"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.mobile">
+                                                </div>
+
                                             </div>
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="phone" class="control-label">الهاتف</label>
-                                                <input id="phone"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.phone">
+                                            <div class="form-group row">
+
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="fax" class="control-label">الفاكس</label>
+                                                    <input id="fax"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.fax">
+                                                </div>
+
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="email" class="control-label">البريد الإلكتروني</label>
+                                                    <input id="email"
+                                                           type="email"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.email">
+                                                </div>
+
                                             </div>
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="mobile" class="control-label">الجوال</label>
-                                                <input id="mobile"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.mobile">
-                                            </div>
+                                            <div class="form-group row">
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="fax" class="control-label">الفاكس</label>
-                                                <input id="fax"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.fax">
-                                            </div>
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="website" class="control-label">الموقع الرسمي</label>
+                                                    <input id="website"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.website">
+                                                </div>
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="email" class="control-label">البريد الإلكتروني</label>
-                                                <input id="email"
-                                                       type="email"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.email">
-                                            </div>
+                                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label for="commericalRegisteration" class="control-label">السجل
+                                                        التجاري</label>
+                                                    <input id="commericalRegisteration"
+                                                           type="text"
+                                                           focus-index="1"
+                                                           required="required"
+                                                           disable-validation-message=""
+                                                           class="form-control text-right"
+                                                           ng-model="selected.commericalRegisteration">
+                                                </div>
 
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="website" class="control-label">الموقع الرسمي</label>
-                                                <input id="website"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.website">
-                                            </div>
-
-                                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                                <label for="commericalRegisteration" class="control-label">السجل
-                                                    التجاري</label>
-                                                <input id="commericalRegisteration"
-                                                       type="text"
-                                                       focus-index="1"
-                                                       required="required"
-                                                       disable-validation-message=""
-                                                       class="form-control text-right"
-                                                       ng-model="selected.commericalRegisteration">
                                             </div>
 
                                         </div>

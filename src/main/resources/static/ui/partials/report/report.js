@@ -1,3 +1,3 @@
-app.controller("reportCtrl", ['$scope', function ($scope) {
-
+app.controller("reportCtrl", ['$scope', '$rootScope', function ($scope, $rootScope) {
+    $rootScope.refreshGUI();
 }]);

@@ -1,11 +1,11 @@
-app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'Fullscreen' , 'ReportModelProvider', '$state', 'FileService',
-    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, Fullscreen, ReportModelProvider, $state, FileService) {
+app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'Fullscreen' , 'ReportModelProvider', '$state', '$timeout',
+    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, Fullscreen, ReportModelProvider, $state, $timeout) {
 
         defaultErrorMessageResolver.getErrorMessages().then(function (errorMessages) {
             errorMessages['fieldRequired'] = 'هذا الحقل مطلوب';
         });
 
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
             $.noty.clearQueue(); // Clears the notification queue
             $.noty.closeAll(); // Close all notifications
             switch (toState.name) {
@@ -106,10 +106,12 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                 }
                 case 'report': {
                     $rootScope.pageTitle = 'التقارير';
+                    $rootScope.MDLIcon = 'print';
                     break;
                 }
                 case 'help': {
                     $rootScope.pageTitle = 'المساعدة';
+                    $rootScope.MDLIcon = 'info';
                     break;
                 }
             }
@@ -117,6 +119,12 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
 
         $rootScope.contains = function (list, values) {
             return list ? _.intersection(values, list.split(',')).length > 0 : false;
+        };
+
+        $rootScope.refreshGUI = function () {
+            $timeout(function () {
+                window.componentHandler.upgradeAllRegistered();
+            }, 600);
         };
 
         $rootScope.logout = function () {
@@ -283,71 +291,5 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
             }, {'headers': 'notify'});
         });
         $rootScope.today = new Date();
-
-        /**************************************************************
-         *                                                            *
-         * Navigation Callers                                         *
-         *                                                            *
-         *************************************************************/
-        $rootScope.goToCompany = function () {
-            $state.go('company');
-        };
-        $rootScope.goToBranch = function () {
-            $state.go('branch');
-        };
-        $rootScope.goToMaster = function () {
-            $state.go('master');
-        };
-        $rootScope.goToOffer = function () {
-            $state.go('offer');
-        };
-        $rootScope.goToCourse = function () {
-            $state.go('course');
-        };
-        $rootScope.goToAccount = function () {
-            $state.go('account');
-        };
-        $rootScope.goToPayment = function () {
-            $state.go('payment');
-        };
-        $rootScope.goToPaymentOut = function () {
-            $state.go('paymentOut');
-        };
-        $rootScope.goToBillBuyType = function () {
-            $state.go('billBuyType');
-        };
-        $rootScope.goToBillBuy = function () {
-            $state.go('billBuy');
-        };
-        $rootScope.goToBank = function () {
-            $state.go('bank');
-        };
-        $rootScope.goToDeposit = function () {
-            $state.go('deposit');
-        };
-        $rootScope.goToWithdraw = function () {
-            $state.go('withdraw');
-        };
-        $rootScope.goToTeam = function () {
-            $state.go('team');
-        };
-        $rootScope.goToPerson = function () {
-            $state.go('person');
-        };
-        $rootScope.goToHome = function () {
-            $state.go('home');
-        };
-        $rootScope.goToMenu = function () {
-            $state.go('menu');
-        };
-        $rootScope.goToHelp = function () {
-            $state.go('help');
-        };
-        $rootScope.goToProfile = function () {
-            $state.go('profile');
-        };
-        $rootScope.goToAbout = function () {
-            $state.go('about');
-        };
 
     }]);
