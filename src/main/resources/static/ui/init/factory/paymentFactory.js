@@ -16,6 +16,11 @@ app.factory("PaymentService",
                     return response.data;
                 });
             },
+            createWrapper: function (wrapper) {
+                return $http.post("/api/payment/createWrapper", wrapper).then(function (response) {
+                    return response.data;
+                });
+            },
             remove: function (id) {
                 return $http.delete("/api/payment/delete/" + id).then(function (response) {
                     return response.data;

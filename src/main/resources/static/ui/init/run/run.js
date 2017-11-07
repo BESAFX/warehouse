@@ -15,7 +15,7 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                     break;
                 }
                 case 'menu': {
-                    $rootScope.pageTitle = 'البرامج';
+                    $rootScope.pageTitle = 'القائمة';
                     $rootScope.MDLIcon = 'widgets';
                     break;
                 }

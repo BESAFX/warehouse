@@ -1,14 +1,14 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
+import com.besafx.app.config.DropboxManager;
 import com.besafx.app.entity.Account;
+import com.besafx.app.entity.Attach;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.wrapper.PaymentAttachWrapper;
 import com.besafx.app.search.PaymentSearch;
-import com.besafx.app.service.AccountService;
-import com.besafx.app.service.BranchService;
-import com.besafx.app.service.PaymentService;
-import com.besafx.app.service.PersonService;
+import com.besafx.app.service.*;
 import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping(value = "/api/payment")
@@ -49,6 +51,12 @@ public class PaymentRest {
 
     @Autowired
     private PaymentSearch paymentSearch;
+
+    @Autowired
+    private DropboxManager dropboxManager;
+
+    @Autowired
+    private AttachService attachService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -76,6 +84,43 @@ public class PaymentRest {
                 .icon("fa-plus-square")
                 .build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
+    }
+
+    @RequestMapping(value = "createWrapper", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
+    public String createWrapper(@RequestBody PaymentAttachWrapper wrapper, Principal principal) throws Exception {
+        Person person = personService.findByEmail(principal.getName());
+        if (wrapper.getPayment().getType().equals("مصروفات")) {
+            if (paymentService.findByCodeAndLastPersonBranch(wrapper.getPayment().getCode(), person.getBranch()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات صرف خاص به");
+            }
+        } else {
+            if (paymentService.findByCodeAndAccountCourseMasterBranch(wrapper.getPayment().getCode(), wrapper.getPayment().getAccount().getCourse().getMaster().getBranch()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
+            }
+        }
+        wrapper.getPayment().setLastPerson(person);
+        wrapper.getPayment().setLastUpdate(new Date());
+        wrapper.getPayment().setAmountString(ArabicLiteralNumberParser.literalValueOf(wrapper.getPayment().getAmountNumber()));
+        wrapper.setPayment(paymentService.save(wrapper.getPayment()));
+        log.info("STARTING UPLOAD ATTACH...");
+        Attach attach = new Attach();
+        attach.setName(wrapper.getFile().getName());
+        attach.setSize(wrapper.getFile().length());
+        attach.setDate(new DateTime().toDate());
+        attach.setPerson(personService.findByEmail(principal.getName()));
+        Future<Boolean> uploadTask = dropboxManager.uploadFile(wrapper.getFile(), "/Smart Offer/Payments/" + wrapper.getPayment().getId() + "/" + wrapper.getFile().getName());
+        if (uploadTask.get()) {
+            Future<String> shareTask = dropboxManager.shareFile("/Smart Offer/Payments/" + wrapper.getPayment().getId() + "/" + wrapper.getFile().getName());
+            attach.setLink(shareTask.get());
+            attach = attachService.save(attach);
+            wrapper.getPayment().setAttach(attach);
+            log.info("ENDING UPLOAD ATTACH...");
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentService.save(wrapper.getPayment()));
+        } else {
+            return null;
+        }
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

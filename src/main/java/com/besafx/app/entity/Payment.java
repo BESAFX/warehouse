@@ -53,6 +53,10 @@ public class Payment implements Serializable {
     @JoinColumn(name = "account")
     private Account account;
 
+    @OneToOne
+    @JoinColumn(name = "attach")
+    private Attach attach;
+
     @ManyToOne
     @JoinColumn(name = "last_person")
     private Person lastPerson;
