@@ -183,7 +183,8 @@ app.directive('ngThumb', ['$window', function ($window) {
     };
 }]);
 
-app.directive('stSelectRowCustom', function () {
+app.directive('stSelectRowCustom',['$timeout',
+    function ($timeout) {
     return {
         restrict: 'A',
         require: '^stTable',
@@ -197,6 +198,9 @@ app.directive('stSelectRowCustom', function () {
                 scope.$apply(function () {
                     ctrl.select(scope.row, mode, $event.shiftKey);
                     scope.callback(); // AND THIS
+                    $timeout(function () {
+                        window.componentHandler.upgradeAllRegistered();
+                    }, 500);
                 });
             });
 
@@ -204,6 +208,9 @@ app.directive('stSelectRowCustom', function () {
                 scope.$apply(function () {
                     ctrl.select(scope.row, mode, $event.shiftKey);
                     scope.callback(); // AND THIS
+                    $timeout(function () {
+                        window.componentHandler.upgradeAllRegistered();
+                    }, 500);
                 });
             });
 
@@ -213,46 +220,61 @@ app.directive('stSelectRowCustom', function () {
                 } else {
                     element.parent().removeClass('success');
                 }
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 500);
             });
         }
     };
-});
+}
+]);
 
-app.directive('stSelectRowMulti', function () {
-    return {
-        restrict: 'A',
-        require: '^stTable',
-        scope: {
-            row: '=stSelectRowMulti',
-            callback: '&stSelected' // ADDED THIS
-        },
-        link: function (scope, element, attr, ctrl) {
-            element.bind('click', function (eventType) {
-                scope.$apply(function () {
-                    // ctrl.select(scope.row, 'multiple');
-                    ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
-                    scope.callback(); // AND THIS
+app.directive('stSelectRowMulti', ['$timeout',
+    function ($timeout) {
+        return {
+            restrict: 'A',
+            require: '^stTable',
+            scope: {
+                row: '=stSelectRowMulti',
+                callback: '&stSelected' // ADDED THIS
+            },
+            link: function (scope, element, attr, ctrl) {
+                element.bind('click', function (eventType) {
+                    scope.$apply(function () {
+                        // ctrl.select(scope.row, 'multiple');
+                        ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
+                        scope.callback(); // AND THIS
+                        $timeout(function () {
+                            window.componentHandler.upgradeAllRegistered();
+                        }, 500);
+                    });
                 });
-            });
 
-            element.bind('contextmenu', function (eventType) {
-                scope.$apply(function () {
-                    // ctrl.select(scope.row, 'multiple');
-                    ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
-                    scope.callback(); // AND THIS
+                element.bind('contextmenu', function (eventType) {
+                    scope.$apply(function () {
+                        // ctrl.select(scope.row, 'multiple');
+                        ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
+                        scope.callback(); // AND THIS
+                        $timeout(function () {
+                            window.componentHandler.upgradeAllRegistered();
+                        }, 500);
+                    });
                 });
-            });
 
-            scope.$watch('row.isSelected', function (newValue) {
-                if (newValue === true) {
-                    element.parent().addClass('success');
-                } else {
-                    element.parent().removeClass('success');
-                }
-            });
-        }
-    };
-});
+                scope.$watch('row.isSelected', function (newValue) {
+                    if (newValue === true) {
+                        element.parent().addClass('success');
+                    } else {
+                        element.parent().removeClass('success');
+                    }
+                    $timeout(function () {
+                        window.componentHandler.upgradeAllRegistered();
+                    }, 500);
+                });
+            }
+        };
+    }
+]);
 
 app.directive('stDefaultValue', function () {
     return {

@@ -8,9 +8,9 @@ app.controller('accountPaymentCtrl', ['AccountService', 'PaymentService', 'Payme
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {
                 /**UPLOADING FILE**/
-                PaymentAttachService.upload(data, $scope.files[0]).then(function (data) {
-                    /**FINISHING UPLOADING**/
-                });
+                // PaymentAttachService.upload(data, $scope.files[0]).then(function (data) {
+                //     /**FINISHING UPLOADING**/
+                // });
                 $uibModalInstance.close(data);
             });
         };
