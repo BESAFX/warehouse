@@ -92,33 +92,31 @@ public class OfferRest {
                     .type("success")
                     .icon("fa-plus-square")
                     .build(), principal.getName());
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(branch.getName());
+            buffer.append(" ");
+            buffer.append("عرض رقم/");
+            buffer.append(offer.getCode());
+            buffer.append("-");
+            buffer.append("تخصص/");
+            buffer.append(offer.getMaster().getName());
+            buffer.append("-");
+            buffer.append("خصم/");
+            buffer.append(offer.getDiscount().toString().concat("SAR"));
+            buffer.append("-");
+            buffer.append("سعر/");
+            buffer.append(offer.getNet().toString().concat("SAR"));
+
             if(offer.getCustomerEmail() != null){
                 ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
                 String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
                 message = message.replaceAll("BRANCH_LOGO", branch.getLogo());
-                message = message.replaceAll("OFFER_BODY", offer.getMessageBody());
+                message = message.replaceAll("OFFER_BODY", buffer.toString());
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
             }
             if(offer.getSendSMS()){
-                StringBuffer buffer = new StringBuffer();
-                buffer.append(branch.getName());
-                buffer.append(" ");
-                buffer.append("يقدم لكم عرض رقم");
-                buffer.append(" ");
-                buffer.append(offer.getCode());
-                buffer.append(" ");
-                buffer.append("بخصوص دورة");
-                buffer.append(" ");
-                buffer.append(offer.getMaster().getName());
-                buffer.append(" ");
-                buffer.append("بسعر خاص");
-                buffer.append(" ");
-                buffer.append(offer.getNet());
-                buffer.append(" ");
-                buffer.append("ريال");
-                buffer.append(" ");
-                buffer.append("للمزيد من المعلومات قم بزيارتنا");
                 Message message = twilioManager.send(offer.getCustomerMobile(), buffer.toString()).get();
                 offer.setMessageSid(message.getSid());
                 offer = offerService.save(offer);

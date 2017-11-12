@@ -153,7 +153,15 @@ public class Offer implements Serializable {
                 return DoubleRounder.round(this.masterPrice + (this.masterPrice * this.masterProfitAmount / 100), 2);
             }
         } catch (Exception ex) {
-            return null;
+            return 0.0;
+        }
+    }
+
+    public Double getDiscount() {
+        try {
+            return DoubleRounder.round(this.masterPrice * this.masterDiscountAmount / 100, 0);
+        } catch (Exception ex) {
+            return 0.0;
         }
     }
 
