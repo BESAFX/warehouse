@@ -96,16 +96,16 @@ public class OfferRest {
             StringBuffer buffer = new StringBuffer();
             buffer.append(branch.getName());
             buffer.append(" ");
-            buffer.append("عرض رقم/");
+            buffer.append("عرض رقم ");
             buffer.append(offer.getCode());
             buffer.append("-");
-            buffer.append("تخصص/");
+            buffer.append("تخصص ");
             buffer.append(offer.getMaster().getName());
             buffer.append("-");
-            buffer.append("خصم/");
+            buffer.append("خصم ");
             buffer.append(offer.getDiscount().toString().concat("SAR"));
             buffer.append("-");
-            buffer.append("سعر/");
+            buffer.append("سعر ");
             buffer.append(offer.getNet().toString().concat("SAR"));
 
             if(offer.getCustomerEmail() != null){
