@@ -19,6 +19,21 @@ public class BulkSMSManager {
 
     private final Logger log = LoggerFactory.getLogger(BulkSMSManager.class);
 
+    static public String stringToHex(String s) {
+        char[] chars = s.toCharArray();
+        String next;
+        StringBuffer output = new StringBuffer();
+        for (int i = 0; i < chars.length; i++) {
+            next = Integer.toHexString((int)chars[i]);
+            // Unfortunately, toHexString doesn't pad with zeroes, so we have to.
+            for (int j = 0; j < (4-next.length()); j++)  {
+                output.append("0");
+            }
+            output.append(next);
+        }
+        return output.toString();
+    }
+
     @Async("threadPoolBulkSMS")
     public Future<Boolean> send(String to, String body) throws Exception {
         try {
@@ -26,14 +41,22 @@ public class BulkSMSManager {
             String data = "";
             /*
              * Note the suggested encoding for certain parameters, notably
-             * the username, password and especially the message.  ISO-8859-1
-             * is essentially the character set that we use for message bodies,
-             * with a few exceptions for e.g. Greek characters.  For a full list,
-             * see:  http://developer.bulksms.com/eapi/submission/character-encoding/
+             * the username and password.
+             *
+             * Please remember that 16bit support is a route-specific feature.
+             * Please contact us if you need to confirm the status of a
+             * particular route.
+             *
+             * Also, mobile handsets only implement partial support for non-
+             * Latin characters in various languages and will generally only
+             * support languages of the area of their distribution.
+             * Please do not expect e.g. a handset sold in South America to
+             * display Arabic text.
              */
             data += "username=" + URLEncoder.encode("besafx", "ISO-8859-1");
             data += "&password=" + URLEncoder.encode("Besa2000@", "ISO-8859-1");
-            data += "&message=" + URLEncoder.encode(body, "ISO-8859-1");
+            data += "&message=" + stringToHex(body);
+            data += "&dca=16bit";
             data += "&want_report=1";
             data += "&msisdn=".concat(to);
 
