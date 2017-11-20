@@ -26,6 +26,12 @@ public class AsyncConfig {
         return initThreadPool(5, 10, 500, "TwilioSMS-");
     }
 
+    @Bean(name = "threadPoolBulkSMS")
+    public Executor threadPoolBulkSMS() {
+        log.info("Prepare threadPoolBulkSMS...");
+        return initThreadPool(5, 10, 500, "BulkSMS-");
+    }
+
     @Bean(name = "threadPoolFileUploader")
     public Executor threadPoolFileUploader() {
         log.info("Prepare threadPoolFileUploader...");

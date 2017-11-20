@@ -1,5 +1,6 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.config.BulkSMSManager;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
 import com.besafx.app.config.TwilioManager;
@@ -69,6 +70,9 @@ public class OfferRest {
     @Autowired
     private TwilioManager twilioManager;
 
+    @Autowired
+    private BulkSMSManager bulkSMSManager;
+
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
@@ -116,11 +120,12 @@ public class OfferRest {
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
             }
-            if(offer.getSendSMS()){
-                Message message = twilioManager.send(offer.getCustomerMobile(), buffer.toString()).get();
-                offer.setMessageSid(message.getSid());
-                offer = offerService.save(offer);
-            }
+            bulkSMSManager.send(offer.getCustomerMobile(), buffer.toString()).get();
+//            if(offer.getSendSMS()){
+//                Message message = twilioManager.send(offer.getCustomerMobile(), buffer.toString()).get();
+//                offer.setMessageSid(message.getSid());
+//                offer = offerService.save(offer);
+//            }
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
