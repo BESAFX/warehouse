@@ -58,7 +58,7 @@ public class BulkSMSManager {
             rd.close();
             return new AsyncResult<>(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return new AsyncResult<>(false);
         }
     }
