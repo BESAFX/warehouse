@@ -362,13 +362,49 @@
         </nav>
     </div>
 
-    <main class="mdl-layout__content">
+    <main class="mdl-layout__content" ng-init="showFilter=false;showCreator=false">
 
         <div class="row" style="margin-top: 10px">
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="showFilter===true">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 filter-div" ng-show="showCreator===true">
 
-                <div class="panel panel-primary">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="showCreator=false"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="إغلاق">
+                                    <span class="fa fa-close"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>إنشاء سريع للفواتير</h3>
+                            <span>طريقة سريعة لإدخال الفواتير</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group row">
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="panel-footer">
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 filter-div" ng-show="showFilter===true">
+
+                <div class="panel panel-warning">
                     <div class="panel-heading">
                         <ul class="panel-controls pull-left"
                             style="margin-top: 2px;">
@@ -403,11 +439,7 @@
                                 <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                     <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
                                     <select id="branch"
-                                            data-placeholder="ابحث عن الفرع"
-                                            no-results-text="'لا توجد فروع توافق بحثك'"
-                                            placeholder-text-single="'اختر الفرع'"
                                             class="form-control text-right"
-                                            chosen=""
                                             ng-model="buffer.branch"
                                             ng-change="search()"
                                             focus-autofocus="1"
@@ -522,8 +554,8 @@
                                     <span class="fa fa-filter"></span>
                                 </a>
                                 <a href=""
-                                   ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])"
-                                   ng-click="newBillBuy()"
+                                   ng-click="showCreator=true"
+                                   ng-show="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="انشاء فاتورة جديدة">
                                     <span class="fa fa-plus-square"></span>

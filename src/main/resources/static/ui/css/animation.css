@@ -98,16 +98,16 @@
  *                                                            *
  *************************************************************/
 /* when hiding the thing */
-/*div.ng-hide-add {
+.filter-div.ng-hide-add {
     -webkit-animation: 0.5s zoomOut ease;
     animation: 0.5s zoomOut ease;
-}*/
+}
 
 /* when showing the thing */
-/*div.ng-hide-remove {
+.filter-div.ng-hide-remove {
     -webkit-animation: 0.5s zoomIn ease;
     animation: 0.5s zoomIn ease;
-}*/
+}
 /**************************************************************
  *                                                            *
  * canvas Animation                                           *
