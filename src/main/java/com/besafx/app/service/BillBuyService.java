@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public interface BillBuyService extends PagingAndSortingRepository<BillBuy, Long>, JpaSpecificationExecutor<BillBuy> {
-
+    BillBuy findByCode(Long code);
 }

@@ -62,6 +62,66 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
             });
         };
 
+        $scope.search = function () {
+
+            var search = [];
+
+            if ($scope.buffer.codeFrom) {
+                search.push('codeFrom=');
+                search.push($scope.buffer.codeFrom);
+                search.push('&');
+            }
+            if ($scope.buffer.codeTo) {
+                search.push('codeTo=');
+                search.push($scope.buffer.codeTo);
+                search.push('&');
+            }
+            if ($scope.buffer.dateFrom) {
+                search.push('dateFrom=');
+                search.push($scope.buffer.dateFrom.getTime());
+                search.push('&');
+            }
+            if ($scope.buffer.dateTo) {
+                search.push('dateTo=');
+                search.push($scope.buffer.dateTo.getTime());
+                search.push('&');
+            }
+            if ($scope.buffer.amountFrom) {
+                search.push('amountFrom=');
+                search.push($scope.buffer.amountFrom);
+                search.push('&');
+            }
+            if ($scope.buffer.amountTo) {
+                search.push('amountTo=');
+                search.push($scope.buffer.amountTo);
+                search.push('&');
+            }
+            if ($scope.buffer.branch) {
+                search.push('branchId=');
+                search.push($scope.buffer.branch.id);
+                search.push('&');
+            }
+            BillBuyService.filter(search.join("")).then(function (data) {
+                $scope.billBuys = data;
+                $scope.setSelected(data[0]);
+                $scope.items = [];
+                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'فواتير الشراء', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                $scope.items.push({
+                    'id': 4,
+                    'type': 'title',
+                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                });
+            });
+
+        };
+
+        $scope.clearBuffer = function () {
+            $scope.buffer = {};
+            $scope.buffer.branch = $scope.branches[0];
+        };
+
         $scope.filter = function () {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -80,55 +140,10 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
             });
 
             modalInstance.result.then(function (buffer) {
-                var search = [];
-                if (buffer.codeFrom) {
-                    search.push('codeFrom=');
-                    search.push(buffer.codeFrom);
-                    search.push('&');
-                }
-                if (buffer.codeTo) {
-                    search.push('codeTo=');
-                    search.push(buffer.codeTo);
-                    search.push('&');
-                }
-                if (buffer.dateFrom) {
-                    search.push('dateFrom=');
-                    search.push(moment(buffer.dateFrom).valueOf());
-                    search.push('&');
-                }
-                if (buffer.dateTo) {
-                    search.push('dateTo=');
-                    search.push(moment(buffer.dateTo).valueOf());
-                    search.push('&');
-                }
-                if (buffer.amountFrom) {
-                    search.push('amountFrom=');
-                    search.push(buffer.amountFrom);
-                    search.push('&');
-                }
-                if (buffer.amountTo) {
-                    search.push('amountTo=');
-                    search.push(buffer.amountTo);
-                    search.push('&');
-                }
-                if (buffer.branch) {
-                    search.push('branchId=');
-                    search.push(buffer.branch.id);
-                    search.push('&');
-                }
-                BillBuyService.filter(search.join("")).then(function (data) {
-                    $scope.billBuys = data;
-                    $scope.setSelected(data[0]);
-                    $scope.items = [];
-                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'فواتير الشراء', 'style': 'font-weight:bold'});
-                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
-                    $scope.items.push({
-                        'id': 4,
-                        'type': 'title',
-                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
-                    });
-                });
+
+                $scope.buffer = buffer;
+
+                $scope.search();
 
             }, function () {
                 console.info('BillBuyFilterModel Closed.');

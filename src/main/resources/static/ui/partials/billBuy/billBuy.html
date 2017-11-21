@@ -86,87 +86,101 @@
         <div class="mdl-layout__header-row" style="height: auto!important;padding: 0px !important;">
             <div class="panel panel-body" style="width: 100%; margin-bottom: 0px !important;">
 
-                <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
-                    <button id="branch-menu-lower-right" style="width: 100%;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                        <span>العمليات</span>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="branch-menu-lower-right">
-                        <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
-                            ng-click="filter()">
+                <div class="row">
+                    <ul dir="rtl" class="breadcrumb">
+                        <li ng-repeat="item in items | orderBy:'id' track by item.id">
+                            <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
+                            <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button id="branch-menu-lower-right" style="width: 100%;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>العمليات</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="branch-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="filter()">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">search</i>
                                 <span>عرض بيانات الفواتير</span>
                             </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="newBillBuy()"
-                            ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])">
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="newBillBuy()"
+                                ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">add</i>
                                 <span>انشاء فاتورة جديد</span>
                             </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-click="ModalProvider.openBillBuyUpdateModel(selected)"
-                            ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_UPDATE']) && toggleList===1"
-                            ng-hide="!billBuys || billBuys.length==0">
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openBillBuyUpdateModel(selected)"
+                                ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_UPDATE']) && toggleList===1"
+                                ng-hide="!billBuys || billBuys.length==0">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">edit</i>
                                     <span>تعديل بيانات الفاتورة</span>
                                 </span>
-                        </li>
-                        <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
-                            ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_DELETE']) && toggleList===1"
-                            ng-hide="!billBuys || billBuys.length==0">
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item" ng-click="delete(selected)"
+                                ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_DELETE']) && toggleList===1"
+                                ng-hide="!billBuys || billBuys.length==0">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon">delete</i>
                                 <span>حذف الفاتورة</span>
                             </span>
-                        </li>
-                    </ul>
-                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-                <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
-                    <button style="width:100%" id="report-menu-lower-right" style="width: 100%;"
-                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                        <span>التقارير</span>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="report-menu-lower-right">
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-click="ReportModelProvider.openReportBillBuyByBranchModel()">
+                    <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
+                        <button style="width:100%" id="report-menu-lower-right" style="width: 100%;"
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                            <span>التقارير</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="report-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportBillBuyByBranchModel()">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="material-icons mdl-list__item-icon">print</i>
                                     <span>فواتير الشراء حسب الفرع</span>
                                 </span>
-                        </li>
-                    </ul>
-                </div>
+                            </li>
+                        </ul>
+                    </div>
 
-                <div class="pull-left" ng-init="toggleList=1">
-                    <div class="btn-toolbar">
-                        <div class="btn-group" data-toggle="buttons">
-                            <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
-                                    type="button" ng-click="toggleList=1"
-                                    ng-class="{'active':toggleList===1}">
-                                <input type="radio" name="options"/>
-                                <i class="material-icons">reorder</i>
-                            </button>
-                            <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
-                                    type="button" ng-click="toggleList=2"
-                                    ng-class="{'active':toggleList===2}">
-                                <input type="radio" name="options"/>
-                                <i class="material-icons">view_column</i>
-                            </button>
+                    <div class="pull-left" ng-init="toggleList=1">
+                        <div class="btn-toolbar">
+                            <div class="btn-group" data-toggle="buttons">
+                                <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="button" ng-click="toggleList=1"
+                                        ng-class="{'active':toggleList===1}">
+                                    <input type="radio" name="options"/>
+                                    <i class="material-icons">reorder</i>
+                                </button>
+                                <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                        type="button" ng-click="toggleList=2"
+                                        ng-class="{'active':toggleList===2}">
+                                    <input type="radio" name="options"/>
+                                    <i class="material-icons">view_column</i>
+                                </button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </header>
 
-    <div class="mdl-layout__drawer">
+    <div class="mdl-layout__drawer" style="padding-top: 175px !important;">
         <nav class="mdl-navigation">
             <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                ui-sref="menu"
@@ -350,7 +364,149 @@
 
     <main class="mdl-layout__content">
 
-        <div dir="rtl" class="row" style="margin-top: 10px">
+        <div class="row" style="margin-top: 10px">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="showFilter===true">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left"
+                            style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="showFilter=false"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="إغلاق">
+                                    <span class="fa fa-close"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href=""
+                                   ng-click="clearBuffer()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="مسح الحقول">
+                                    <span class="fa fa-trash"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>تصفية وبحث</h3>
+                            <span>عرض تلقائي من قاعدة البيانات مباشرة</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group row">
+
+                            <div class="form-group row">
+
+                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
+                                    <select id="branch"
+                                            data-placeholder="ابحث عن الفرع"
+                                            no-results-text="'لا توجد فروع توافق بحثك'"
+                                            placeholder-text-single="'اختر الفرع'"
+                                            class="form-control text-right"
+                                            chosen=""
+                                            ng-model="buffer.branch"
+                                            ng-change="search()"
+                                            focus-autofocus="1"
+                                            ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                                    </select>
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <label for="dateFrom" class="control-label">تاريخ الفاتورة من</label>
+                                    <div dir="ltr" class="input-group">
+                                        <input dir="rtl"
+                                               id="dateFrom"
+                                               type="text"
+                                               class="form-control text-right is-calendarPicker"
+                                               ng-model="buffer.dateFrom"
+                                               calendarType="ummalqura"
+                                               language="en"
+                                               dateFormat="yyyy/mm/dd"
+                                               showOnFocus="false"
+                                               readonly="readonly"
+                                               ng-change="search()"
+                                               kdatepicker>
+                                    </div>
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                    <label for="dateTo" class="control-label">تاريخ الفاتورة إلى</label>
+                                    <div dir="ltr" class="input-group">
+                                        <input dir="rtl"
+                                               id="dateTo"
+                                               type="text"
+                                               class="form-control text-right is-calendarPicker"
+                                               ng-model="buffer.dateTo"
+                                               calendarType="ummalqura"
+                                               language="en"
+                                               dateFormat="yyyy/mm/dd"
+                                               showOnFocus="false"
+                                               readonly="readonly"
+                                               ng-change="search()"
+                                               kdatepicker>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+
+                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="codeFrom" class="control-label">رقم الفاتورة من</label>
+                                    <input id="codeFrom"
+                                           type="number"
+                                           min="1"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرقم من"
+                                           ng-change="search()"
+                                           ng-model="buffer.codeFrom">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="codeTo" class="control-label">رقم الفاتورة إلى</label>
+                                    <input id="codeTo"
+                                           type="number"
+                                           min="1"
+                                           class="form-control text-right"
+                                           placeholder="ادخل الرقم إلى"
+                                           ng-change="search()"
+                                           ng-model="buffer.codeTo">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="amountFrom" class="control-label">قيمة الفاتورة من </label>
+                                    <input id="amountFrom"
+                                           type="number"
+                                           min="1"
+                                           class="form-control text-right"
+                                           placeholder="ادخل القيمة من"
+                                           ng-change="search()"
+                                           ng-model="buffer.amountFrom">
+                                </div>
+
+                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="amountTo" class="control-label">قيمة الفاتورة إلى </label>
+                                    <input id="amountTo"
+                                           type="number"
+                                           min="1"
+                                           class="form-control text-right"
+                                           placeholder="ادخل القيمة إلى"
+                                           ng-change="search()"
+                                           ng-model="buffer.amountTo">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
 
@@ -360,7 +516,7 @@
                             style="margin-top: 2px;">
                             <li>
                                 <a href=""
-                                   ng-click="filter()"
+                                   ng-click="showFilter=true"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="تصفية البيانات">
                                     <span class="fa fa-filter"></span>
@@ -386,7 +542,7 @@
                                 <tr>
 
                                     <th class="text-center">
-                                        <span>م</span>
+                                        <span>#</span>
                                     </th>
 
                                     <th st-sort="code" class="text-right">
@@ -422,14 +578,6 @@
                                     </th>
 
                                 </tr>
-                                <tr>
-                                    <th colspan="9">
-                                        <input st-search=""
-                                               class="form-control"
-                                               placeholder="بحث شامل وسريع..."
-                                               type="text"/>
-                                    </th>
-                                </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="text-right"
@@ -459,12 +607,12 @@
                                 </tr>
                                 <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                     ng-show="!collection1 || collection1.length ==0">
-                                    <td colspan="8">لا توجد بيانات</td>
+                                    <td colspan="9">لا توجد بيانات</td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td colspan="8">
+                                    <td colspan="9">
                                         <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
                                     </td>
                                 </tr>

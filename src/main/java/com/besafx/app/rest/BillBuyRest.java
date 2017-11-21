@@ -1,5 +1,6 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.BillBuy;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.BillBuySearch;
@@ -45,17 +46,14 @@ public class BillBuyRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_CREATE')")
     public String create(@RequestBody BillBuy billBuy, Principal principal) {
+        if(billBuyService.findByCode(billBuy.getCode()) != null){
+            throw new CustomException("رقم الفاتورة مسجل سابقاً");
+        }
         Person person = personService.findByEmail(principal.getName());
         billBuy.setLastUpdate(new Date());
         billBuy.setLastPerson(person);
         billBuy = billBuyService.save(billBuy);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على قاعدة البيانات")
-                .message("تم انشاء فاتورة جديدة بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم انشاء فاتورة جديدة بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
     }
 
@@ -69,13 +67,7 @@ public class BillBuyRest {
             billBuy.setLastUpdate(new Date());
             billBuy.setLastPerson(person);
             billBuy = billBuyService.save(billBuy);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على قاعدة البيانات")
-                    .message("تم تعديل بيانات الفاتورة بنجاح")
-                    .type("warning")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الفاتورة بنجاح").type("warning").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
         } else {
             return null;
@@ -89,13 +81,7 @@ public class BillBuyRest {
         BillBuy object = billBuyService.findOne(id);
         if (object != null) {
             billBuyService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على قاعدة البيانات")
-                    .message("تم حذف الفاتورة بنجاح")
-                    .type("error")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف الفاتورة بنجاح").type("error").build(), principal.getName());
         }
     }
 

@@ -545,8 +545,8 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .input-group-btn:last-child > .dropdown-toggle {
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    border-top-left-radius: 3px !important;
-    border-bottom-left-radius: 3px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
 }
 
 .text-overflow-dots {
