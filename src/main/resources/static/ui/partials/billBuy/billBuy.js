@@ -45,7 +45,7 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
             });
         };
 
-            $scope.createFastBill = function () {
+        $scope.createFastBill = function () {
             BillBuyService.create($scope.billBuy).then(function (data) {
                 $scope.billBuys.splice(0, 0, data);
                 $scope.billBuy = {};

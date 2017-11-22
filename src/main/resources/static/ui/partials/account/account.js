@@ -52,6 +52,122 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
 
         };
 
+        $scope.search = function () {
+
+            var search = [];
+            if ($scope.buffer.firstName) {
+                search.push('firstName=');
+                search.push($scope.buffer.firstName);
+                search.push('&');
+            }
+            if ($scope.buffer.secondName) {
+                search.push('secondName=');
+                search.push($scope.buffer.secondName);
+                search.push('&');
+            }
+            if ($scope.buffer.thirdName) {
+                search.push('thirdName=');
+                search.push($scope.buffer.thirdName);
+                search.push('&');
+            }
+            if ($scope.buffer.forthName) {
+                search.push('forthName=');
+                search.push($scope.buffer.forthName);
+                search.push('&');
+            }
+            if ($scope.buffer.dateFrom) {
+                search.push('dateFrom=');
+                search.push(moment($scope.buffer.dateFrom).valueOf());
+                search.push('&');
+            }
+            if ($scope.buffer.dateTo) {
+                search.push('dateTo=');
+                search.push(moment($scope.buffer.dateTo).valueOf());
+                search.push('&');
+            }
+            if ($scope.buffer.studentIdentityNumber) {
+                search.push('studentIdentityNumber=');
+                search.push($scope.buffer.studentIdentityNumber);
+                search.push('&');
+            }
+            if ($scope.buffer.studentMobile) {
+                search.push('studentMobile=');
+                search.push($scope.buffer.studentMobile);
+                search.push('&');
+            }
+            if ($scope.buffer.coursePriceFrom) {
+                search.push('coursePriceFrom=');
+                search.push($scope.buffer.coursePriceFrom);
+                search.push('&');
+            }
+            if ($scope.buffer.coursePriceTo) {
+                search.push('coursePriceTo=');
+                search.push($scope.buffer.coursePriceTo);
+                search.push('&');
+            }
+            if ($scope.buffer.branch) {
+                search.push('branchIds=');
+                var branchIds = [];
+                branchIds.push($scope.buffer.branch.id);
+                search.push(branchIds);
+                search.push('&');
+            }
+            if ($scope.buffer.master) {
+                search.push('masterIds=');
+                var masterIds = [];
+                masterIds.push($scope.buffer.master.id);
+                search.push(masterIds);
+                search.push('&');
+            }
+            if ($scope.buffer.course) {
+                search.push('courseIds=');
+                var courseIds = [];
+                courseIds.push($scope.buffer.course.id);
+                search.push(courseIds);
+                search.push('&');
+            }
+            AccountService.filterWithInfo(search.join("")).then(function (data) {
+                $scope.accounts = data;
+                $scope.setSelected(data[0]);
+                $scope.items = [];
+                $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
+                $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
+                $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
+                $scope.items.push({
+                    'id': 4,
+                    'type': 'title',
+                    'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                });
+                if ($scope.buffer.master) {
+                    $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 6,
+                        'type': 'title',
+                        'name': ' [ ' + $scope.buffer.master.code + ' ] ' + $scope.buffer.master.name
+                    });
+                }
+                if ($scope.buffer.course) {
+                    $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
+                    $scope.items.push({
+                        'id': 8,
+                        'type': 'title',
+                        'name': ' [ ' + $scope.buffer.course.code + ' ] '
+                    });
+                }
+
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 600);
+
+            });
+
+        };
+
+        $scope.clearBuffer = function () {
+            $scope.buffer = {};
+            $scope.buffer.branch = $scope.branches[0];
+        };
+
         $scope.filter = function () {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -71,107 +187,9 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
 
             modalInstance.result.then(function (buffer) {
 
-                var search = [];
-                if (buffer.firstName) {
-                    search.push('firstName=');
-                    search.push(buffer.firstName);
-                    search.push('&');
-                }
-                if (buffer.secondName) {
-                    search.push('secondName=');
-                    search.push(buffer.secondName);
-                    search.push('&');
-                }
-                if (buffer.thirdName) {
-                    search.push('thirdName=');
-                    search.push(buffer.thirdName);
-                    search.push('&');
-                }
-                if (buffer.forthName) {
-                    search.push('forthName=');
-                    search.push(buffer.forthName);
-                    search.push('&');
-                }
-                if (buffer.dateFrom) {
-                    search.push('dateFrom=');
-                    search.push(moment(buffer.dateFrom).valueOf());
-                    search.push('&');
-                }
-                if (buffer.dateTo) {
-                    search.push('dateTo=');
-                    search.push(moment(buffer.dateTo).valueOf());
-                    search.push('&');
-                }
-                if (buffer.studentIdentityNumber) {
-                    search.push('studentIdentityNumber=');
-                    search.push(buffer.studentIdentityNumber);
-                    search.push('&');
-                }
-                if (buffer.studentMobile) {
-                    search.push('studentMobile=');
-                    search.push(buffer.studentMobile);
-                    search.push('&');
-                }
-                if (buffer.coursePriceFrom) {
-                    search.push('coursePriceFrom=');
-                    search.push(buffer.coursePriceFrom);
-                    search.push('&');
-                }
-                if (buffer.coursePriceTo) {
-                    search.push('coursePriceTo=');
-                    search.push(buffer.coursePriceTo);
-                    search.push('&');
-                }
-                if (buffer.branch) {
-                    search.push('branchIds=');
-                    var branchIds = [];
-                    branchIds.push(buffer.branch.id);
-                    search.push(branchIds);
-                    search.push('&');
-                }
-                if (buffer.master) {
-                    search.push('masterIds=');
-                    var masterIds = [];
-                    masterIds.push(buffer.master.id);
-                    search.push(masterIds);
-                    search.push('&');
-                }
-                if (buffer.course) {
-                    search.push('courseIds=');
-                    var courseIds = [];
-                    courseIds.push(buffer.course.id);
-                    search.push(courseIds);
-                    search.push('&');
-                }
-                AccountService.filter(search.join("")).then(function (data) {
-                    $scope.accounts = data;
-                    $scope.setSelected(data[0]);
-                    $scope.items = [];
-                    $scope.items.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
-                    $scope.items.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
-                    $scope.items.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
-                    $scope.items.push({
-                        'id': 4,
-                        'type': 'title',
-                        'name': ' [ ' + buffer.branch.code + ' ] ' + buffer.branch.name
-                    });
-                    if (buffer.master) {
-                        $scope.items.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
-                        $scope.items.push({
-                            'id': 6,
-                            'type': 'title',
-                            'name': ' [ ' + buffer.master.code + ' ] ' + buffer.master.name
-                        });
-                    }
-                    if (buffer.course) {
-                        $scope.items.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
-                        $scope.items.push({
-                            'id': 8,
-                            'type': 'title',
-                            'name': ' [ ' + buffer.course.code + ' ] '
-                        });
-                    }
-                });
+                $scope.buffer = buffer;
+
+                $scope.search();
 
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());

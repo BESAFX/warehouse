@@ -235,7 +235,8 @@ app.controller('accountDetailsCtrl', ['AccountConditionService', 'AccountNoteSer
         };
 
         $timeout(function () {
+            $scope.refreshAccount();
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 800);
 
     }]);
