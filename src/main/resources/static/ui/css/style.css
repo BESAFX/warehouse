@@ -627,7 +627,4 @@ WebKit inertia scrolling is being added here for any present/future devices that
 }
 .dropdown-menu{
     text-align: right!important;
-    right: 0!important;
-    left:auto!important;
-    float: right!important;
 }
