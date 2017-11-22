@@ -18,6 +18,9 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
                 $scope.branches = data;
                 $scope.buffer.branch = $scope.branches[0];
             });
+            BillBuyTypeService.findAll().then(function (data) {
+                $scope.billBuyTypes = data;
+            });
         }, 2000);
 
         $scope.setSelected = function (object) {
@@ -35,10 +38,19 @@ app.controller("billBuyCtrl", ['BranchService', 'BillBuyService', 'BillBuyTypeSe
 
         $scope.newBillBuy = function () {
             ModalProvider.openBillBuyCreateModel().result.then(function (data) {
-                $scope.billBuys.splice(0,0,data);
+                $scope.billBuys.splice(0, 0, data);
                 $scope.setSelected(data);
             }, function () {
                 console.info('BillBuyCreateModel Closed.');
+            });
+        };
+
+            $scope.createFastBill = function () {
+            BillBuyService.create($scope.billBuy).then(function (data) {
+                $scope.billBuys.splice(0, 0, data);
+                $scope.billBuy = {};
+                $scope.form.$setPristine();
+                $scope.setSelected(data);
             });
         };
 
