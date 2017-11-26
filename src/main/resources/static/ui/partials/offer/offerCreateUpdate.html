@@ -43,20 +43,22 @@
                         </div>
 
                         <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
-                            <select id="master"
-                                    name="master"
-                                    data-placeholder="ابحث عن التخصص"
-                                    no-results-text="'لا توجد تخصصات توافق بحثك'"
-                                    placeholder-text-single="'اختر التخصص'"
-                                    class="form-control text-right"
-                                    chosen=""
-                                    focus-autofocus="2"
-                                    ng-model="offer.master"
-                                    required="required"
-                                    disable-validation-message=""
-                                    ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
-                            </select>
+                            <label for="master1" class="control-label">التخصص</label>
+                            <ui-select id="master1"
+                                       focus-autofocus="2"
+                                       ng-model="offer.master"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="اختر التخصص">
+                                    [{{$select.selected.code}}] {{$select.selected.name}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                        group-by="groupByBranch"
+                                        repeat="master in masters | filter: $select.search | orderBy:'code' track by master.id">
+                                    <div ng-bind-html="master.name | highlight: $select.search"></div>
+                                    <span>رقم التخصص : </span>
+                                    <span ng-bind-html="''+master.code | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
                         </div>
 
                         <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">

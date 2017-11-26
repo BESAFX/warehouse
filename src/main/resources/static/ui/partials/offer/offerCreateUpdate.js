@@ -11,6 +11,10 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
             });
         }, 2000);
 
+        $scope.groupByBranch = function (item) {
+            return item.branch.name;
+        };
+
         $scope.clear = function () {
             $scope.offer = {};
             $scope.offer.registered = false;
