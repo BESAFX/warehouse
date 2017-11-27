@@ -49,7 +49,26 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
         };
 
         $scope.print = function (account) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountContract.html',
+                controller: 'accountContractCtrl',
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    account: function () {
+                        return account;
+                    }
+                }
+            });
 
+            modalInstance.result.then(function (buffer) {
+
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
         };
 
         $scope.search = function () {
@@ -195,7 +214,6 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
                 $log.info('Modal dismissed at: ' + new Date());
             });
         };
-
 
         $scope.delete = function (account) {
             if (account) {

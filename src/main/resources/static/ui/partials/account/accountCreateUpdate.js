@@ -21,7 +21,26 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
         };
 
         $scope.print = function (account) {
-            window.open('/report/account/contract/' + account.id);
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/account/accountContract.html',
+                controller: 'accountContractCtrl',
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                    account: function () {
+                        return account;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (buffer) {
+
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
         };
 
         if (account) {
