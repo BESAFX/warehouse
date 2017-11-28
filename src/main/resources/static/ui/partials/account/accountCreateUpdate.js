@@ -44,8 +44,10 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
         };
 
         if (account) {
-            $scope.account = account;
-            $scope.showBox = $scope.account.coursePaymentType == 'نقدي' ? true : false;
+            AccountService.findOne(account.id).then(function (data) {
+                $scope.account = data;
+                $scope.showBox = $scope.account.coursePaymentType == 'نقدي' ? true : false;
+            });
         } else {
             $scope.clear();
             $timeout(function () {
