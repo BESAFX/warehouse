@@ -1,5 +1,5 @@
-app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', 'BranchService', 'MasterService', 'CourseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'account',
-    function (AccountService, StudentService, BranchService, MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, account) {
+app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', 'BranchService', 'MasterService', 'CourseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'title', 'action', 'account',
+    function (AccountService, StudentService, BranchService, MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, title, action, account) {
 
         $scope.title = title;
         $scope.action = action;
