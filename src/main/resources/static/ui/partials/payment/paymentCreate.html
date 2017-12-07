@@ -23,7 +23,9 @@
                 </div>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <form name="formSearch" novalidate="novalidate" focus-group="" focus-stack="" focus-group-head="loop" focus-group-tail="loop">
+
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                 <div class="panel panel-success">
                     <div class="panel-heading">
@@ -68,7 +70,6 @@
                                     multiple
                                     focus-autofocus="1"
                                     ng-model="buffer.branchList"
-                                    ng-change="search()"
                                     ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
                             </select>
                         </div>
@@ -83,7 +84,6 @@
                                     chosen=""
                                     multiple
                                     ng-model="buffer.masterList"
-                                    ng-change="search()"
                                     ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name + ' - ' + master.branch.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
                             </select>
                         </div>
@@ -98,7 +98,6 @@
                                     chosen=""
                                     multiple
                                     ng-model="buffer.courseList"
-                                    ng-change="search()"
                                     ng-options="('رفم الدورة / ' + course.code + ' المدرب / ' + course.instructor + ' تخصص / ' + course.master.name) group by (course.master.branch.name) for course in courses | orderBy:'code' track by course.id">
                             </select>
                         </div>
@@ -111,7 +110,6 @@
                                        type="text"
                                        class="form-control text-right"
                                        placeholder="ادخل الاسم الأول او جزءاً منه"
-                                       ng-change="search()"
                                        ng-model="buffer.firstName">
                             </div>
 
@@ -121,7 +119,6 @@
                                        type="text"
                                        class="form-control text-right"
                                        placeholder="ادخل الاسم الثاني او جزءاً منه"
-                                       ng-change="search()"
                                        ng-model="buffer.secondName">
                             </div>
 
@@ -131,7 +128,6 @@
                                        type="text"
                                        class="form-control text-right"
                                        placeholder="ادخل الاسم الثالث او جزءاً منه"
-                                       ng-change="search()"
                                        ng-model="buffer.thirdName">
                             </div>
 
@@ -141,7 +137,6 @@
                                        type="text"
                                        class="form-control text-right"
                                        placeholder="ادخل الاسم الرابع او جزءاً منه"
-                                       ng-change="search()"
                                        ng-model="buffer.forthName">
                             </div>
 
@@ -272,9 +267,33 @@
                         </div>
 
                     </div>
+                    <div class="panel-footer">
+                        <div class="row">
+
+                            <div class="pull-right">
+                                <button uib-tooltip="بحث"
+                                        tooltip-append-to-body="true"
+                                        type="button"
+                                        ng-click="search()"
+                                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                    <i class="material-icons">search</i>
+                                </button>
+                                <button uib-tooltip="مسح الحقول"
+                                        tooltip-append-to-body="true"
+                                        type="reset"
+                                        ng-click="formSearch.$setPristine();buffer={};"
+                                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
             </div>
+
+            </form>
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="selected.id">
                 <div class="panel panel-success">
@@ -285,8 +304,8 @@
                                     <input type="checkbox"
                                            id="switch"
                                            class="mdl-switch__input"
-                                           ng-model="buffer.hijriDate">
-                                    <span class="mdl-switch__label">{{buffer.hijriDate===true ? 'تقويم هجري' : 'تقويم ميلادي'}}</span>
+                                           ng-model="hijriDate">
+                                    <span class="mdl-switch__label">{{hijriDate===true ? 'تقويم هجري' : 'تقويم ميلادي'}}</span>
                                 </label>
                             </div>
                         </ul>
@@ -309,7 +328,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.hijriDate===true">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="hijriDate===true">
                             <label for="date" class="control-label">التاريخ</label>
                             <div dir="ltr" class="input-group">
                                 <input dir="rtl"
@@ -328,7 +347,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.hijriDate===false">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="hijriDate===false">
                             <label for="date" class="control-label">التاريخ</label>
                             <input id="G-date"
                                    class="form-control "

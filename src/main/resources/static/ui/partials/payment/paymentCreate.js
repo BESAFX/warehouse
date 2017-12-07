@@ -9,7 +9,8 @@ app.controller('paymentCreateCtrl', ['BranchService', 'MasterService', 'CourseSe
         $scope.buffer.branchList = [];
         $scope.buffer.masterList = [];
         $scope.buffer.courseList = [];
-        $scope.buffer.hijriDate = true;
+
+        $scope.hijriDate = true;
 
         $scope.accounts = [];
         $scope.files = [];
