@@ -170,6 +170,7 @@ gulp.task('scripts', function () {
         './partials/account/accountNoteCreate.js',
         './partials/payment/payment.js',
         './partials/payment/paymentCreate.js',
+        './partials/payment/paymentUpdate.js',
         './partials/payment/paymentFilter.js',
         './partials/payment/paymentHeavyWork.js',
         './partials/paymentOut/paymentOut.js',

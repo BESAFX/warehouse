@@ -68,13 +68,7 @@ public class PaymentRest {
         payment.setLastUpdate(new Date());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على سندات القبض")
-                .message("تم انشاء سند قبض بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم انشاء سند قبض بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
     }
 
@@ -84,10 +78,14 @@ public class PaymentRest {
     public String update(@RequestBody Payment payment, Principal principal) {
         Payment object = paymentService.findOne(payment.getId());
         if (object != null) {
+            if (paymentService.findByCodeAndAccountCourseMasterBranchAndIdNot(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch(), payment.getId()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
+            }
             Person person = personService.findByEmail(principal.getName());
-            payment.setDate(new Date());
+            payment.setLastUpdate(new Date());
             payment.setLastPerson(person);
             payment = paymentService.save(payment);
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات السند بنجاح").type("success").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
         } else {
             return null;

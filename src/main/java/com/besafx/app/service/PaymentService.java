@@ -18,6 +18,7 @@ public interface PaymentService extends PagingAndSortingRepository<Payment, Long
 
     Payment findByCode(Long code);
     Payment findByCodeAndAccountCourseMasterBranch(Long code, Branch branch);
+    Payment findByCodeAndAccountCourseMasterBranchAndIdNot(Long code, Branch branch, Long paymentId);
     Payment findByCodeAndLastPersonBranch(Long code, Branch branch);
     List<Payment> findByAccount(Account account);
     List<Payment> findByAccountId(Long account);

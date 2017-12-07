@@ -242,6 +242,15 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
                 }
             },
             {
+                html: '<div class="drop-menu"> تعديل السند <span class="fa fa-edit fa-lg"></span></div>',
+                enabled: function () {
+                    return true
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openPaymentUpdateModel($itemScope.payment);
+                }
+            },
+            {
                 html: '<div class="drop-menu"> حذف السند <span class="fa fa-minus-square-o fa-lg"></span></div>',
                 enabled: function () {
                     return true

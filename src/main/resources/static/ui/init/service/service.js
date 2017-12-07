@@ -104,7 +104,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
-
     /**************************************************************
      *                                                            *
      * Branch Model                                               *
@@ -671,6 +670,23 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             resolve: {
                 title: function () {
                     return 'انشاء سند قبض جديد';
+                }
+            }
+        });
+    };
+
+    this.openPaymentUpdateModel = function (payment) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/payment/paymentUpdate.html',
+            controller: 'paymentUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                payment: function () {
+                    return payment;
                 }
             }
         });
