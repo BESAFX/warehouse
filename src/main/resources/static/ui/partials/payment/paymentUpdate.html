@@ -43,18 +43,36 @@
                     </div>
                     <div class="panel-body">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label> رقم السند </label>
-                            <input id="code"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right "
-                                   required="required"
-                                   disable-validation-message=""
-                                   ng-model="payment.code">
+                        <div class="form-group row">
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label> رقم السند </label>
+                                <input id="code"
+                                       type="number"
+                                       min="1"
+                                       class="form-control text-right"
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="payment.code">
+                            </div>
+
+                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label> قيمة السند </label>
+                                <div dir="ltr" class="input-group">
+                                    <span class="input-group-addon">ريال</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="1"
+                                           class="form-control text-right "
+                                           required="required"
+                                           disable-validation-message=""
+                                           ng-model="payment.amountNumber">
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.hijriDate===true">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="buffer.hijriDate===true">
                             <label for="date" class="control-label">التاريخ</label>
                             <div dir="ltr" class="input-group">
                                 <input dir="rtl"
@@ -67,11 +85,13 @@
                                        dateFormat="yyyy/mm/dd"
                                        showOnFocus="false"
                                        readonly="readonly"
+                                       required="required"
+                                       disable-validation-message=""
                                        kdatepicker>
                             </div>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.hijriDate===false">
+                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="buffer.hijriDate===false">
                             <label for="date" class="control-label">التاريخ</label>
                             <input id="G-date"
                                    class="form-control "
@@ -79,6 +99,8 @@
                                    name="input"
                                    ng-model="payment.date"
                                    placeholder="yyyy-MM-dd"
+                                   required="required"
+                                   disable-validation-message=""
                                    min="2015-01-01"
                                    max="2030-12-31"/>
                         </div>

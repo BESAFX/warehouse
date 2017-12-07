@@ -244,7 +244,7 @@ app.controller("paymentCtrl", ['AccountService', 'PaymentService', 'BranchServic
             {
                 html: '<div class="drop-menu"> تعديل السند <span class="fa fa-edit fa-lg"></span></div>',
                 enabled: function () {
-                    return true
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_PAYMENT_UPDATE']);
                 },
                 click: function ($itemScope, $event, value) {
                     ModalProvider.openPaymentUpdateModel($itemScope.payment);

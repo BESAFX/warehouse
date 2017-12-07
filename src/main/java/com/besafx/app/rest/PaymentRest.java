@@ -84,6 +84,7 @@ public class PaymentRest {
             Person person = personService.findByEmail(principal.getName());
             payment.setLastUpdate(new Date());
             payment.setLastPerson(person);
+            payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
             payment = paymentService.save(payment);
             notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات السند بنجاح").type("success").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
