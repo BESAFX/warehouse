@@ -143,6 +143,7 @@ public class ReportPaymentController {
             @RequestParam(value = "title") String title,
             @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "isSummery") Boolean isSummery,
+            @RequestParam(value = "groupByIdentityNumber", required = false) Boolean groupByIdentityNumber,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
@@ -162,7 +163,8 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+//        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/GroupByIdentityNumber.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
