@@ -2,6 +2,8 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
     function (AccountService, BranchService, MasterService, CourseService, ModalProvider, $rootScope, $scope, $timeout, $log, $state, $uibModal) {
 
         $scope.buffer = {};
+        $scope.account = {};
+        $scope.accounts = [];
 
         //
         $scope.items = [];
@@ -36,6 +38,16 @@ app.controller("accountCtrl", ['AccountService', 'BranchService', 'MasterService
 
         $scope.newAccount = function () {
             ModalProvider.openAccountCreateModel($scope.selected);
+        };
+
+        $scope.createFastAccount = function () {
+            AccountService.create($scope.account).then(function (data) {
+                AccountService.findOne(data.id).then(function (data) {
+                    $scope.accounts.splice(0, 0, data);
+                    $scope.account = {};
+                    $scope.form1.$setPristine();
+                });
+            });
         };
 
         $scope.newPayment = function () {

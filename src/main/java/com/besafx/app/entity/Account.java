@@ -42,13 +42,17 @@ public class Account implements Serializable {
 
     private String coursePaymentType;
 
-    private Double coursePrice;
+    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    private Double coursePrice = 0.0;
 
-    private Double courseDiscountAmount;
+    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    private Double courseDiscountAmount = 0.0;
 
-    private Double courseProfitAmount;
+    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    private Double courseProfitAmount = 0.0;
 
-    private Double courseCreditAmount;
+    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    private Double courseCreditAmount = 0.0;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")

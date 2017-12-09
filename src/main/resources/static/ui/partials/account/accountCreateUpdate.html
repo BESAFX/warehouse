@@ -27,7 +27,9 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">رقم الطالب</div>
                     <div class="panel-body">
+
                         <div class="row">
+
                             <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
                                 <select id="branch"
@@ -43,6 +45,7 @@
                                         ng-options="(' [ ' + branch.code + ' ] ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
                                 </select>
                             </div>
+
                             <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
                                 <select id="master"
@@ -57,6 +60,7 @@
                                         ng-options="(' [ ' + master.code + ' ] ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
                                 </select>
                             </div>
+
                             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="course" class="control-label">[رقم الدورة] المدرب</label>
                                 <select id="course"
@@ -71,6 +75,7 @@
                                         ng-options="(' [ ' + course.code + ' ] ' + course.instructor) for course in buffer.master.courses | orderBy:'code' track by course.id">
                                 </select>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -291,7 +296,6 @@
                                      id="coursePrice">
                                     <span class="input-group-addon">ريال سعودي</span>
                                     <input required="required"
-                                           required="required"
                                            disable-validation-message=""
                                            type="number"
                                            min="0"
