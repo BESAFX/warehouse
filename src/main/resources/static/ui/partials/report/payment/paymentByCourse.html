@@ -21,7 +21,7 @@
                         ng-model="buffer.coursesList"
                         required="required"
                         disable-validation-message=""
-                        ng-options="(' [ ' + course.code + ' ] ' + course.instructor + ' - [ ' + course.master.code + ' ] ' + course.master.name) group by course.master.branch.name for course in courses | orderBy:['master.code', 'code'] track by course.id">
+                        ng-options="(' [ ' + course.code + ' ] ' + course.companyName + ' - [ ' + course.master.code + ' ] ' + course.master.name) group by course.master.branch.name for course in courses | orderBy:['master.code', 'code'] track by course.id">
                 </select>
             </div>
 

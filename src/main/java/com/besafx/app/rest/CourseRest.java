@@ -31,14 +31,11 @@ public class CourseRest {
     private final static Logger log = LoggerFactory.getLogger(CourseRest.class);
 
     private final String FILTER_TABLE = "**,master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],accounts[id]";
-    private final String FILTER_COURSE_MASTER_COMBO = "id,code,instructor,master[id,code,name]";
-    private final String FILTER_COURSE_MASTER_BRANCH_COMBO = "id,code,instructor,master[id,code,name,branch[id,code,name]]";
+    private final String FILTER_COURSE_MASTER_COMBO = "id,code,instructor,companyName,master[id,code,name]";
+    private final String FILTER_COURSE_MASTER_BRANCH_COMBO = "id,code,instructor,companyName,master[id,code,name,branch[id,code,name]]";
 
     @Autowired
     private PersonService personService;
-
-    @Autowired
-    private BranchService branchService;
 
     @Autowired
     private MasterService masterService;
