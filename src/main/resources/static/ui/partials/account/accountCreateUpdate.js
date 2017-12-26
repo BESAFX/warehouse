@@ -7,14 +7,12 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
 
         $scope.clear = function () {
             $scope.account = {};
-            $scope.account.registerDate = new Date();
             $scope.account.student = {};
             $scope.account.student.contact = {};
             $scope.account.coursePrice = 0;
             $scope.account.courseDiscountAmount = 0;
             $scope.account.courseProfitAmount = 0;
             $scope.account.courseCreditAmount = 0;
-            $scope.showBox = true;
             if ($scope.form) {
                 $scope.form.$setPristine();
             }
@@ -46,7 +44,6 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
         if (account) {
             AccountService.findOne(account.id).then(function (data) {
                 $scope.account = data;
-                $scope.showBox = $scope.account.coursePaymentType == 'نقدي' ? true : false;
             });
         } else {
             $scope.clear();
@@ -59,10 +56,6 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
         $scope.submit = function () {
             switch ($scope.action) {
                 case 'create' :
-                    $scope.account.coursePaymentType = ($scope.showBox ? 'نقدي' : 'قسط شهري');
-                    $scope.account.course = $scope.buffer.course;
-                    $scope.account.course.master = $scope.buffer.master;
-                    $scope.account.course.master.branch = $scope.buffer.branch;
                     AccountService.create($scope.account).then(function (data) {
                         $rootScope.showConfirmNotify("تسجيل الطلاب", "هل تود طباعة العقد ؟", "notification", "fa-info", function () {
                             $scope.print(data);
@@ -72,7 +65,6 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
                     });
                     break;
                 case 'update' :
-                    $scope.account.coursePaymentType = ($scope.showBox ? 'نقدي' : 'قسط شهري');
                     AccountService.update($scope.account).then(function (data) {
                         $scope.account = data;
                     });
@@ -83,4 +75,9 @@ app.controller('accountCreateUpdateCtrl', ['AccountService', 'StudentService', '
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 600);
+
     }]);

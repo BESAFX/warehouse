@@ -1,12 +1,12 @@
 <form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="">
 
-    <div class="modal-header">
+    <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
             <span class="fa fa-close fa-2x"></span>
         </a>
-        <h3 class="panel-title mdl-list__item pull-right">
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <i class="material-icons mdl-list__item-icon">add</i>
+                <i class="material-icons mdl-list__item-icon mdl-color-text--white">add</i>
                 <strong>
                     <span>دفعة سداد التسجيل رقم / </span>
                     {{payment.account.code}}
@@ -34,217 +34,108 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <div class="panel-title-box pull-right">
-                            <h3>البيانات الاساسية</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="payment.account.id">
+                <p>
+                    <span>مديونية الطالب / </span>
+                    {{payment.account.name}}
+                    <span>لهذا التسجيل = </span>
+                    {{payment.account.remainPrice}} SAR
+                </p>
+            </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <table class="table table-bordered">
-                                <tbody>
-                                <tr>
-                                    <td>رقم الطالب</td>
-                                    <td>
-                                        {{payment.account.code}}
-                                        -
-                                        {{payment.account.course.code}}
-                                        -
-                                        {{payment.account.course.master.code}}
-                                        -
-                                        {{payment.account.course.master.branch.code}}
-                                        -
-                                        {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>اسم الطالب</td>
-                                    <td>
-                                        {{payment.account.student.contact.firstName}}
-                                        {{payment.account.student.contact.secondName}}
-                                        {{payment.account.student.contact.thirdName}}
-                                        {{payment.account.student.contact.forthName}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>رقم البطاقة</td>
-                                    <td>{{payment.account.student.contact.identityNumber}}</td>
-                                </tr>
-                                <tr>
-                                    <td>رقم الجوال</td>
-                                    <td>{{payment.account.student.contact.mobile}}</td>
-                                </tr>
-                                <tr>
-                                    <td>تاريخ التسجيل</td>
-                                    <td>{{payment.account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</td>
-                                </tr>
-                                <tr>
-                                    <td>المبلغ المطلوب</td>
-                                    <td>{{payment.account.requiredPrice}} SAR</td>
-                                </tr>
-                                <tr>
-                                    <td>المبلغ المدفوع</td>
-                                    <td>{{payment.account.paidPrice}} SAR</td>
-                                </tr>
-                                <tr>
-                                    <td>المبلغ المتبقي</td>
-                                    <td>{{payment.account.remainPrice}} SAR</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="form-group row">
 
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label for="type" class="control-label">نوع السند</label>
+                    <select id="type"
+                            style="height: 40px"
+                            class="form-control text-right"
+                            ng-model="payment.type"
+                            required="required"
+                            disable-validation-message="">
+                        <option>ايرادات اساسية</option>
+                        <option>ايرادات اضافية</option>
+                    </select>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="buffer.hijriDate='true'">
+                    <label for="hijriDate" class="control-label">نوع التقويم</label>
+                    <select id="hijriDate"
+                            style="height: 40px"
+                            class="form-control text-right"
+                            ng-model="buffer.hijriDate"
+                            required="required"
+                            disable-validation-message="">
+                        <option value="true">تقويم هجري</option>
+                        <option value="false">تقويم ميلادي</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                     ng-if="buffer.hijriDate==='true'">
+                    <label for="date" class="control-label">التاريخ</label>
+                    <div dir="ltr" class="input-group">
+                        <input dir="rtl"
+                               id="date"
+                               type="text"
+                               class="form-control text-right is-calendarPicker"
+                               ng-model="payment.date"
+                               calendarType="ummalqura"
+                               language="en"
+                               dateFormat="yyyy/mm/dd"
+                               showOnFocus="false"
+                               readonly="readonly"
+                               required="required"
+                               disable-validation-message=""
+                               kdatepicker>
                     </div>
                 </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                     ng-if="buffer.hijriDate==='false'">
+                    <label for="date" class="control-label">التاريخ</label>
+                    <input id="G-date"
+                           class="form-control "
+                           type="date"
+                           name="input"
+                           ng-model="payment.date"
+                           placeholder="yyyy-MM-dd"
+                           required="required"
+                           disable-validation-message=""
+                           min="2015-01-01"
+                           max="2030-12-31"/>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label> قيمة السند </label>
+                    <div dir="ltr" class="input-group">
+                        <span class="input-group-addon">ريال</span>
+                        <input dir="rtl"
+                               type="number"
+                               min="1"
+                               ng-max="(payment.type=='ايرادات اساسية' && payment.account.remainPrice)"
+                               class="form-control text-right "
+                               required="required"
+                               disable-validation-message=""
+                               ng-model="payment.amountNumber">
+                    </div>
+                </div>
+
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <div class="panel-title-box pull-right">
-                            <h3>البيانات المطلوبة</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label for="type" class="control-label">نوع السند</label>
-                            <select id="type"
-                                    style="height: 40px"
-                                    class="form-control text-right"
-                                    ng-model="payment.type"
-                                    required="required"
-                                    disable-validation-message="">
-                                <option>ايرادات اساسية</option>
-                                <option>ايرادات اضافية</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label for="dateFrom" class="control-label">التاريخ</label>
-                            <div dir="ltr" class="input-group">
-                                <input dir="rtl"
-                                       id="dateFrom"
-                                       type="text"
-                                       class="form-control text-right is-calendarPicker"
-                                       ng-model="payment.date"
-                                       required="required"
-                                       disable-validation-message=""
-                                       calendarType="ummalqura"
-                                       language="en"
-                                       dateFormat="yyyy/mm/dd"
-                                       showOnFocus="false"
-                                       readonly="readonly"
-                                       kdatepicker>
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label> رقم السند </label>
-                            <input id="code"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right "
-                                   required="required"
-                                   disable-validation-message=""
-                                   ng-model="payment.code">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label> قيمة السند </label>
-                            <div dir="ltr" class="input-group">
-                                <span class="input-group-addon">ريال</span>
-                                <input dir="rtl"
-                                       type="number"
-                                       min="1"
-                                       ng-max="(payment.type=='ايرادات اساسية' && payment.account.remainPrice)"
-                                       class="form-control text-right "
-                                       required="required"
-                                       disable-validation-message=""
-                                       ng-model="payment.amountNumber">
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="note" class="control-label"> البيان </label>
-                            <textarea id="note"
-                                      type="text"
-                                      msd-elastic="\n"
-                                      class="form-control text-right"
-                                      placeholder="الملاحظات"
-                                      ng-model="payment.note">
+                <label for="note" class="control-label"> البيان </label>
+                <textarea id="note"
+                          type="text"
+                          msd-elastic="\n"
+                          class="form-control text-right"
+                          placeholder="الملاحظات"
+                          ng-model="payment.note">
                             </textarea>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <input id="uploader" style="display: none" type="file" onchange="angular.element(this).scope().files=this.files;"/>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href=""
-                                   ng-click="uploadFiles()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="مرفق جديد">
-                                    <span class="fa fa-paperclip"></span>
-                                </a>
-                                <a href=""
-                                   ng-click="scanToJpg()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="فحص">
-                                    <span class="fa fa-file-image-o"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>البيانات المطلوبة</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="attaches" class="control-label">المرفقات</label>
-                            <div id="attaches">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center">م</th>
-                                            <th class="text-center">اسم الملف</th>
-                                            <th class="text-center">حجم الملف</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr class="text-right" ng-repeat="file in files" ng-class="{'success':file.link, 'danger' : !file.link}">
-                                            <td>{{$index+1}}</td>
-                                            <td>
-                                                <a ng-href="{{file.link ? file.link : ''}}" target="_blank">
-                                                    <i class="fa fa-files-o"></i>
-                                                    {{file.name}}
-                                                </a>
-                                            </td>
-                                            <td>{{file.size/1024/1024|number:2}} MB</td>
-                                        </tr>
-                                        <tr class="blank_row"
-                                            style="height: 10px !important; background-color: #FFFFFF;"
-                                            ng-show="!files || files.length ==0">
-                                            <td colspan="3">فضلاً قم برفع الملفات</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
             </div>
 
         </div>

@@ -337,7 +337,7 @@ public class AccountRest {
                 courseCodes,
                 masterCodes,
                 branchCodes);
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_KEY), list);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_INFO), list);
     }
 
 
