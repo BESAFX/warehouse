@@ -24,23 +24,33 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">الشعار الرسمي</div>
-                    <div class="panel-body">
-                        <input type="file" nv-file-select="" uploader="uploader" accept="image/*"/>
-                        <img ng-src="{{branch.logo}}" style="width: 100%; height: 100%"/>
-                        <div ng-show="uploader.queue.length > 0" ng-hide="uploader.queue[0].isSuccess">
-                            <div class="progress" style="margin-bottom: 0;">
-                                <div class="progress-bar progress-bar-striped active" role="progressbar"
-                                     ng-style="{ 'width': uploader.queue[0].progress + '%' }"></div>
-                            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                            <li>
+                                <a href=""
+                                   ng-click="uploadFile()"
+                                   tooltip-append-to-body="true"
+                                   uib-tooltip="تحميل">
+                                    <span class="fa fa-paperclip"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="panel-title-box pull-right">
+                            <h3>الشعار الرسمي</h3>
+                            <span ng-if="action=='update'">فرع / {{branch.name}}</span>
                         </div>
+                    </div>
+                    <div class="panel-body">
+                        <input id="uploader" style="display: none" type="file" accept="image/*"
+                               onchange="angular.element(this).scope().setFile(this)"/>
+                        <img ng-src="{{branch.logo}}" style="width: 100%; height: 100%"/>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel panel-info">
                     <div class="panel-heading">البيانات الاساسية</div>
                     <div class="panel-body">
@@ -173,21 +183,6 @@
                                        placeholder="السجل التجاري"
                                        ng-model="branch.commericalRegisteration">
                             </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="company" class="control-label">الشركة</label>
-                            <select id="company"
-                                    data-placeholder="ابحث عن الشركة"
-                                    no-results-text="'لا توجد شركات توافق بحثك'"
-                                    placeholder-text-single="'اختر الشركة'"
-                                    class="form-control text-right"
-                                    chosen=""
-                                    ng-model="branch.company"
-                                    required="required"
-                                    disable-validation-message=""
-                                    ng-options="company.name for company in companies track by company.id">
-                            </select>
                         </div>
 
                     </div>

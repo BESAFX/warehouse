@@ -13,12 +13,7 @@ app.controller('depositCreateCtrl', ['BankService', 'DepositService', '$scope', 
 
         $scope.submit = function () {
             DepositService.create($scope.deposit).then(function (data) {
-                $scope.clear();
-                $scope.form.$setPristine();
-                BankService.filter().then(function (data) {
-                    $scope.banks = data;
-                    $scope.deposit.bank = data.bank;
-                });
+                $uibModalInstance.close(data);
             });
         };
 

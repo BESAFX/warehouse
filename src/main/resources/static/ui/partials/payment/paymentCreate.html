@@ -1,12 +1,12 @@
 <form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="">
 
-    <div class="modal-header">
+    <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
             <span class="fa fa-close fa-2x"></span>
         </a>
-        <h3 class="panel-title mdl-list__item pull-right">
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <i class="material-icons mdl-list__item-icon">add</i>
+                <i class="material-icons mdl-list__item-icon mdl-color-text--white">add</i>
                 <strong>{{title}}</strong>
             </span>
         </h3>
@@ -23,392 +23,158 @@
                 </div>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group row">
 
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <div class="panel-title-box pull-right">
-                            <h3>بحث عن المتدرب</h3>
-                            <span>تسديد العديد من السندات</span>
-                        </div>
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label for="branch" class="control-label">الفرع</label>
+                    <ui-select id="branch"
+                               focus-autofocus="1"
+                               ng-model="buffer.branch"
+                               required="required"
+                               disable-validation-message=""
+                               ng-change="onBranchSelect()"
+                               theme="bootstrap">
+                        <ui-select-match placeholder="اختر الفرع">
+                            {{$select.selected.name}}
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
+                            <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label for="account" class="control-label">رقم الطالب</label>
+                    <ui-select id="account"
+                               ng-model="payment.account"
+                               required="required"
+                               disable-validation-message=""
+                               theme="bootstrap">
+                        <ui-select-match placeholder="اختر الطالب">
+                            {{$select.selected.key}}
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="account in accounts | filter: $select.search | orderBy:'key' track by account.id">
+                            <div ng-bind-html="account.key | highlight: $select.search"></div>
+                            <small>
+                                <span>الاسم : </span>
+                                <span ng-bind-html="''+account.name | highlight: $select.search"></span>
+                                <br/>
+                                <span>المتبقي من الرسوم بالريال : </span>
+                                <span ng-bind-html="''+account.remainPrice | highlight: $select.search"></span>
+                            </small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="payment.account.id">
+                <p>
+                    <span>مديونية الطالب / </span>
+                    {{payment.account.name}}
+                    <span>لهذا التسجيل = </span>
+                    {{payment.account.remainPrice}} SAR
+                </p>
+            </div>
+
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label for="type" class="control-label">نوع السند</label>
+                    <select id="type"
+                            style="height: 40px"
+                            class="form-control text-right"
+                            ng-model="payment.type"
+                            required="required"
+                            disable-validation-message="">
+                        <option>ايرادات اساسية</option>
+                        <option>ايرادات اضافية</option>
+                    </select>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="buffer.hijriDate='true'">
+                    <label for="hijriDate" class="control-label">نوع التقويم</label>
+                    <select id="hijriDate"
+                            style="height: 40px"
+                            class="form-control text-right"
+                            ng-model="buffer.hijriDate"
+                            required="required"
+                            disable-validation-message="">
+                        <option value="true">تقويم هجري</option>
+                        <option value="false">تقويم ميلادي</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                     ng-if="buffer.hijriDate==='true'">
+                    <label for="date" class="control-label">التاريخ</label>
+                    <div dir="ltr" class="input-group">
+                        <input dir="rtl"
+                               id="date"
+                               type="text"
+                               class="form-control text-right is-calendarPicker"
+                               ng-model="payment.date"
+                               calendarType="ummalqura"
+                               language="en"
+                               dateFormat="yyyy/mm/dd"
+                               showOnFocus="false"
+                               readonly="readonly"
+                               required="required"
+                               disable-validation-message=""
+                               kdatepicker>
                     </div>
-                    <div class="panel-body">
+                </div>
 
-                        <div class="form-group row">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                     ng-if="buffer.hijriDate==='false'">
+                    <label for="date" class="control-label">التاريخ</label>
+                    <input id="G-date"
+                           class="form-control "
+                           type="date"
+                           name="input"
+                           ng-model="payment.date"
+                           placeholder="yyyy-MM-dd"
+                           required="required"
+                           disable-validation-message=""
+                           min="2015-01-01"
+                           max="2030-12-31"/>
+                </div>
 
-                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
-                                    <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1"
-                                           ng-model="radio.registerOption">
-                                    <span class="mdl-radio__label">حسب الفرع</span>
-                                </label>
-                            </div>
-                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
-                                    <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="2"
-                                           ng-model="radio.registerOption">
-                                    <span class="mdl-radio__label">حسب التخصص</span>
-                                </label>
-                            </div>
-                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
-                                    <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="3"
-                                           ng-model="radio.registerOption">
-                                    <span class="mdl-radio__label">حسب الدورة</span>
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                             ng-if="radio.registerOption==='1'">
-                            <label for="branchList" class="control-label">[رقم الفرع] اسم الفرع</label>
-                            <select id="branchList"
-                                    data-placeholder="ابحث عن الفرع"
-                                    no-results-text="'لا توجد فروع توافق بحثك'"
-                                    placeholder-text-single="'اختر الفرع'"
-                                    class="form-control text-right"
-                                    chosen=""
-                                    multiple
-                                    focus-autofocus="1"
-                                    ng-model="buffer.branchList"
-                                    ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                            </select>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                             ng-if="radio.registerOption==='2'">
-                            <label for="masterList" class="control-label">[رقم التخصص] اسم التخصص</label>
-                            <select id="masterList"
-                                    data-placeholder="ابحث عن التخصص"
-                                    no-results-text="'لا توجد تخصصات توافق بحثك'"
-                                    placeholder-text-single="'اختر التخصص'"
-                                    class="form-control text-right"
-                                    chosen=""
-                                    multiple
-                                    ng-model="buffer.masterList"
-                                    ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name + ' - ' + master.branch.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
-                            </select>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                             ng-if="radio.registerOption==='3'">
-                            <label for="courseList" class="control-label">رقم الدورة</label>
-                            <select id="courseList"
-                                    data-placeholder="ابحث عن رقم الدورة المتاحة"
-                                    no-results-text="'لا توجد دورات توافق بحثك'"
-                                    placeholder-text-single="'اختر رقم الدورة'"
-                                    class="form-control text-right"
-                                    chosen=""
-                                    multiple
-                                    ng-model="buffer.courseList"
-                                    ng-options="('رفم الدورة / ' + course.code + ' المدرب / ' + course.instructor + ' تخصص / ' + course.master.name) group by (course.master.branch.name) for course in courses | orderBy:'code' track by course.id">
-                            </select>
-                        </div>
-
-                        <div class="form-group row">
-
-                            <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                                <label for="firstName" class="control-label">الاسم الأول (يحتوى على) </label>
-                                <input id="firstName"
-                                       type="text"
-                                       class="form-control text-right"
-                                       placeholder="ادخل الاسم الأول او جزءاً منه"
-                                       ng-model="buffer.firstName">
-                            </div>
-
-                            <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                                <label for="secondName" class="control-label">الاسم الثاني (يحتوى على) </label>
-                                <input id="secondName"
-                                       type="text"
-                                       class="form-control text-right"
-                                       placeholder="ادخل الاسم الثاني او جزءاً منه"
-                                       ng-model="buffer.secondName">
-                            </div>
-
-                            <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                                <label for="thirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
-                                <input id="thirdName"
-                                       type="text"
-                                       class="form-control text-right"
-                                       placeholder="ادخل الاسم الثالث او جزءاً منه"
-                                       ng-model="buffer.thirdName">
-                            </div>
-
-                            <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                                <label for="forthName" class="control-label">الاسم الرابع (يحتوى على) </label>
-                                <input id="forthName"
-                                       type="text"
-                                       class="form-control text-right"
-                                       placeholder="ادخل الاسم الرابع او جزءاً منه"
-                                       ng-model="buffer.forthName">
-                            </div>
-
-                        </div>
-
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="table-responsive">
-                                <table st-table="collection1" st-safe-src="accounts"
-                                       class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-right">
-                                            <span>م</span>
-                                        </th>
-
-                                        <th st-sort="student.code" class="text-right">
-                                            <span> رقم الطالب</span>
-                                        </th>
-
-                                        <th st-sort="registerDate" class="text-right">
-                                            <span>تاريخ التسجيل</span>
-                                        </th>
-
-                                        <th st-sort="student.contact.firstName" class="text-right">
-                                            <span>الاسم</span>
-                                        </th>
-
-                                        <th st-sort="student.contact.identityNumber" class="text-right">
-                                            <span>رقم البطاقة</span>
-                                        </th>
-
-                                        <th st-sort="student.contact.mobile" class="text-right">
-                                            <span>رقم الجوال</span>
-                                        </th>
-
-                                        <th st-sort="course.master.name" class="text-right">
-                                            <span>التخصص</span>
-                                        </th>
-
-                                    </tr>
-                                    <tr>
-                                        <th colspan="7">
-                                            <input st-search=""
-                                                   class="form-control"
-                                                   placeholder="بحث شامل وسريع..."
-                                                   type="text"/>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="text-right"
-                                        ng-repeat="account in collection1"
-                                        st-select-mode="single"
-                                        ng-click="setSelected(account)"
-                                        ng-dblclick="ModalProvider.openAccountDetailsModel(account);"
-                                        ng-right-click="setSelected(account)">
-                                        <td st-select-row-custom="account">{{$index+1}}</td>
-                                        <td st-select-row-custom="account">
-                                            {{account.code}}
-                                            -
-                                            {{account.course.code}}
-                                            -
-                                            {{account.course.master.code}}
-                                            -
-                                            {{account.course.master.branch.code}}
-                                            -
-                                            {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                                        </td>
-                                        <td st-select-row-custom="account">
-                                            {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                        </td>
-                                        <td st-select-row-custom="account">
-                                            {{account.student.contact.firstName}}
-                                            {{account.student.contact.secondName}}
-                                            {{account.student.contact.thirdName}}
-                                            {{account.student.contact.forthName}}
-                                        </td>
-                                        <td st-select-row-custom="account">{{account.student.contact.identityNumber}}
-                                        </td>
-                                        <td st-select-row-custom="account">{{account.student.contact.mobile}}</td>
-                                        <td st-select-row-custom="account">
-                                            [ {{account.course.master.code}} ]
-                                            {{account.course.master.name}}
-                                        </td>
-                                    </tr>
-                                    <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                        ng-show="!collection1 || collection1.length ==0">
-                                        <td colspan="7">لا توجد بيانات</td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td colspan="7">
-                                            <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
-                                        </td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="selected.id">
-                            <table class="table table-bordered">
-                                <tbody>
-                                <tr>
-                                    <td colspan="2">
-                                        <strong>تفاصيل مالية</strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>رقم الدورة</td>
-                                    <td>
-                                        {{payment.account.course.code}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>المبلغ المطلوب</td>
-                                    <td>{{payment.account.requiredPrice}} SAR</td>
-                                </tr>
-                                <tr>
-                                    <td>المبلغ المدفوع</td>
-                                    <td>{{payment.account.paidPrice}} SAR</td>
-                                </tr>
-                                <tr>
-                                    <td>المبلغ المتبقي</td>
-                                    <td>{{payment.account.remainPrice}} SAR</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row">
-
-                            <div class="pull-right">
-                                <button uib-tooltip="بحث"
-                                        tooltip-append-to-body="true"
-                                        type="button"
-                                        ng-click="search()"
-                                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                                    <i class="material-icons">search</i>
-                                </button>
-                                <button uib-tooltip="مسح الحقول"
-                                        tooltip-append-to-body="true"
-                                        type="button"
-                                        ng-click="buffer={};"
-                                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                                    <i class="material-icons">delete</i>
-                                </button>
-                            </div>
-
-                        </div>
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <label> قيمة السند </label>
+                    <div dir="ltr" class="input-group">
+                        <span class="input-group-addon">ريال</span>
+                        <input dir="rtl"
+                               type="number"
+                               min="1"
+                               ng-max="(payment.type=='ايرادات اساسية' && payment.account.remainPrice)"
+                               class="form-control text-right "
+                               required="required"
+                               disable-validation-message=""
+                               ng-model="payment.amountNumber">
                     </div>
                 </div>
 
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="selected.id">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <div class="form-group pull-left">
-                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch">
-                                    <input type="checkbox"
-                                           id="switch"
-                                           class="mdl-switch__input"
-                                           ng-model="hijriDate">
-                                    <span class="mdl-switch__label">{{hijriDate===true ? 'تقويم هجري' : 'تقويم ميلادي'}}</span>
-                                </label>
-                            </div>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>البيانات المطلوبة</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label for="type" class="control-label">نوع السند</label>
-                            <select id="type"
-                                    style="height: 40px"
-                                    class="form-control text-right"
-                                    ng-model="payment.type"
-                                    required="required"
-                                    disable-validation-message="">
-                                <option>ايرادات اساسية</option>
-                                <option>ايرادات اضافية</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                             ng-if="hijriDate===true">
-                            <label for="date" class="control-label">التاريخ</label>
-                            <div dir="ltr" class="input-group">
-                                <input dir="rtl"
-                                       id="date"
-                                       type="text"
-                                       class="form-control text-right is-calendarPicker"
-                                       ng-model="payment.date"
-                                       calendarType="ummalqura"
-                                       language="en"
-                                       dateFormat="yyyy/mm/dd"
-                                       showOnFocus="false"
-                                       readonly="readonly"
-                                       required="required"
-                                       disable-validation-message=""
-                                       kdatepicker>
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                             ng-if="hijriDate===false">
-                            <label for="date" class="control-label">التاريخ</label>
-                            <input id="G-date"
-                                   class="form-control "
-                                   type="date"
-                                   name="input"
-                                   ng-model="payment.date"
-                                   placeholder="yyyy-MM-dd"
-                                   required="required"
-                                   disable-validation-message=""
-                                   min="2015-01-01"
-                                   max="2030-12-31"/>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label> رقم السند </label>
-                            <input id="code"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right "
-                                   required="required"
-                                   disable-validation-message=""
-                                   ng-model="payment.code">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <label> قيمة السند </label>
-                            <div dir="ltr" class="input-group">
-                                <span class="input-group-addon">ريال</span>
-                                <input dir="rtl"
-                                       type="number"
-                                       min="1"
-                                       ng-max="(payment.type=='ايرادات اساسية' && payment.account.remainPrice)"
-                                       class="form-control text-right "
-                                       required="required"
-                                       disable-validation-message=""
-                                       ng-model="payment.amountNumber">
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="note" class="control-label"> البيان </label>
-                            <textarea id="note"
-                                      type="text"
-                                      msd-elastic="\n"
-                                      class="form-control text-right"
-                                      placeholder="الملاحظات"
-                                      ng-model="payment.note">
-                            </textarea>
-                        </div>
-
-                    </div>
-                </div>
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="note" class="control-label"> البيان </label>
+                <textarea id="note"
+                          type="text"
+                          msd-elastic="\n"
+                          class="form-control text-right"
+                          placeholder="الملاحظات"
+                          ng-model="payment.note">
+                </textarea>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="selected.id">
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <input id="uploader" style="display: none" type="file"
                        onchange="angular.element(this).scope().files=this.files;"/>
                 <div class="panel panel-danger">

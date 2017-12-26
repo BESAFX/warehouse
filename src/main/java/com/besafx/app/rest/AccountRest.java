@@ -29,6 +29,7 @@ public class AccountRest {
     public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]],payments[**,attach[**,person[id,contact[id,firstName,forthName]]],lastPerson[id,contact[id,firstName,forthName]],-account],accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account],accountConditions[**,-account,person[id,contact[id,firstName,forthName]]],accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
     public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
     public static final String FILTER_ACCOUNT_INFO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
+    public static final String FILTER_ACCOUNT_KEY = "id,key,name,remainPrice";
 
     @Autowired
     private PersonService personService;
@@ -218,6 +219,13 @@ public class AccountRest {
                 accountService.findByCourseMasterBranch(branchService.findOne(branchId)));
     }
 
+    @RequestMapping(value = "findByBranchWithKey/{branchId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findByBranchWithKey(@PathVariable Long branchId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_KEY),
+                accountService.findByCourseMasterBranch(branchService.findOne(branchId)));
+    }
+
     @RequestMapping(value = "findByBranches", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByBranches(@RequestParam List<Long> branchIds) {
@@ -329,6 +337,8 @@ public class AccountRest {
                 courseCodes,
                 masterCodes,
                 branchCodes);
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_INFO), list);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_KEY), list);
     }
+
+
 }

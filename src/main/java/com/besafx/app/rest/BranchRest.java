@@ -39,6 +39,9 @@ public class BranchRest {
     private final String FILTER_BRANCH_MASTER_COURSE_COMBO = "id,code,name,masters[id,code,name,courses[id,code,instructor]]";
 
     @Autowired
+    private CompanyService companyService;
+
+    @Autowired
     private BranchService branchService;
 
     @Autowired
@@ -57,14 +60,9 @@ public class BranchRest {
         } else {
             branch.setCode(topBranch.getCode() + 1);
         }
+        branch.setCompany(companyService.findFirstBy());
         branch = branchService.save(branch);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على الفروع")
-                .message("تم اضافة فرع جديد بنجاح")
-                .type("success")
-                .icon("fa-cubes")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم اضافة فرع جديد بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), branch);
     }
 
@@ -77,14 +75,9 @@ public class BranchRest {
         }
         Branch object = branchService.findOne(branch.getId());
         if (object != null) {
+            branch.setCompany(companyService.findFirstBy());
             branch = branchService.save(branch);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على الفروع")
-                    .message("تم تعديل بيانات الفرع بنجاح")
-                    .type("success")
-                    .icon("fa-cubes")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الفرع بنجاح").type("success").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), branch);
         } else {
             return null;

@@ -41,6 +41,11 @@ app.factory("AccountService", ['$http', '$log',
                     return response.data;
                 });
             },
+            findByBranchWithKey: function (branchId) {
+                return $http.get("/api/account/findByBranchWithKey/" + branchId).then(function (response) {
+                    return response.data;
+                });
+            },
             findByBranches: function (branchIds) {
                 return $http.get("/api/account/findByBranches?branchIds=" + branchIds).then(function (response) {
                     return response.data;

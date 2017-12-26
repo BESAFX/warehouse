@@ -23,14 +23,19 @@ public class CompanyRest {
 
     private final static Logger log = LoggerFactory.getLogger(CompanyRest.class);
 
-    public static final String FILTER_TABLE = "**,branches[id]";
-    public static final String FILTER_COMPANY_COMBO = "id,name";
+    private final String FILTER_TABLE = "**,branches[id]";
 
     @Autowired
     private CompanyService companyService;
 
     @Autowired
     private NotificationService notificationService;
+
+    @RequestMapping(value = "get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String get() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), companyService.findFirstBy());
+    }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -39,29 +44,11 @@ public class CompanyRest {
         Company object = companyService.findOne(company.getId());
         if (object != null) {
             company = companyService.save(company);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على الشركات")
-                    .message("تم تعديل بيانات الشركة بنجاح")
-                    .type("warning")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الشركة بنجاح").type("warning").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), company);
         } else {
             return null;
         }
-    }
-
-    @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findAll() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(companyService.findAll()));
-    }
-
-    @RequestMapping(value = "findAllCombo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findAllCombo() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_COMPANY_COMBO), Lists.newArrayList(companyService.findAll()));
     }
 
 }

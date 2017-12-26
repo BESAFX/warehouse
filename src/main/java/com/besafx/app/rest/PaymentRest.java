@@ -54,16 +54,14 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
-        Person person = personService.findByEmail(principal.getName());
-        if (payment.getType().equals("مصروفات")) {
-            if (paymentService.findByCodeAndLastPersonBranch(payment.getCode(), person.getBranch()) != null) {
-                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات صرف خاص به");
-            }
-        } else {
-            if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
-                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
-            }
+        Account tempAccount = accountService.findOne(payment.getAccount().getId());
+        Payment topPayment = paymentService.findTopByAccountCourseMasterBranchOrderByCodeDesc(tempAccount.getCourse().getMaster().getBranch());
+        if(topPayment == null){
+            payment.setCode(Long.valueOf(1));
+        }else{
+            payment.setCode(topPayment.getCode() + Long.valueOf(1));
         }
+        Person person = personService.findByEmail(principal.getName());
         payment.setLastPerson(person);
         payment.setLastUpdate(new Date());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));

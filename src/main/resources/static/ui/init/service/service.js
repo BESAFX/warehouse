@@ -786,59 +786,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
-     * Student Model                                              *
-     *                                                            *
-     *************************************************************/
-    this.openStudentCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/student/studentCreateUpdate.html',
-            controller: 'studentCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'انشاء طالب جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                student: function () {
-                    return {};
-                }
-            }
-        });
-    };
-
-    this.openStudentUpdateModel = function (student) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/student/studentCreateUpdate.html',
-            controller: 'studentCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات طالب';
-                },
-                action: function () {
-                    return 'update';
-                },
-                student: function () {
-                    return student;
-                }
-            }
-        });
-    };
-
-    /**************************************************************
-     *                                                            *
      * Team Model                                                 *
      *                                                            *
      *************************************************************/

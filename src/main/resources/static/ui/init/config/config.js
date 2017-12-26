@@ -85,7 +85,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$cssPr
         $stateProvider.state("menu", {
             url: "/menu",
             css: [
-                '/ui/css/mdl-style.css',
+                '/ui/css/mdl-style-green-orange.css',
                 '/ui/css/theme-black.css',
                 '/ui/css/style.css'
             ],
@@ -95,221 +95,50 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$cssPr
 
         /**************************************************************
          *                                                            *
-         * Company State                                              *
+         * Admin State                                                *
          *                                                            *
          *************************************************************/
-        $stateProvider.state("company", {
-            url: "/company",
-            css: [
-                '/ui/css/mdl-style-red-deep_orange.css',
-                '/ui/css/theme-black.css',
-                '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/company/company.html",
-            controller: "companyCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Branch State                                               *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("branch", {
-            url: "/branch",
-            css : [
-                '/ui/css/mdl-style-purple-pink.css',
-                '/ui/css/theme-black.css',
-                '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/branch/branch.html",
-            controller: "branchCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Master State                                               *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("master", {
-            url: "/master",
+        $stateProvider.state("admin", {
+            url: "/admin",
             css: [
                 '/ui/css/mdl-style-green-orange.css',
                 '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
+                '/ui/css/style.css'
             ],
-            templateUrl: "/ui/partials/master/master.html",
-            controller: "masterCtrl"
+            templateUrl: "/ui/partials/admin/admin.html",
+            controller: "adminCtrl"
         });
 
         /**************************************************************
          *                                                            *
-         * Offer State                                                *
+         * Register State                                             *
          *                                                            *
          *************************************************************/
-        $stateProvider.state("offer", {
-            url: "/offer",
+        $stateProvider.state("register", {
+            url: "/register",
             css: [
-                '/ui/css/mdl-style-indigo-pink.css',
+                '/ui/css/mdl-style-green-orange.css',
                 '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
+                '/ui/css/style.css'
             ],
-            templateUrl: "/ui/partials/offer/offer.html",
-            controller: "offerCtrl"
+            templateUrl: "/ui/partials/register/register.html",
+            controller: "registerCtrl"
         });
 
         /**************************************************************
          *                                                            *
-         * Bank State                                                 *
+         * Calculate State                                            *
          *                                                            *
          *************************************************************/
-        $stateProvider.state("bank", {
-            url: "/bank",
+        $stateProvider.state("calculate", {
+            url: "/calculate",
             css: [
-                '/ui/css/mdl-style-lime-orange.css',
+                '/ui/css/mdl-style-green-orange.css',
                 '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
+                '/ui/css/style.css'
             ],
-            templateUrl: "/ui/partials/bank/bank.html",
-            controller: "bankCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Deposit State                                              *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("deposit", {
-            url: "/deposit",
-            css: [
-                '/ui/css/mdl-style-lime-orange.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/bank/deposit.html",
-            controller: "depositCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Withdraw State                                             *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("withdraw", {
-            url: "/withdraw",
-            css: [
-                '/ui/css/mdl-style-lime-orange.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/bank/withdraw.html",
-            controller: "withdrawCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * BillBuy State                                              *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("billBuy", {
-            url: "/billBuy",
-            css: [
-                '/ui/css/mdl-style-light_green-lime.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/billBuy/billBuy.html",
-            controller: "billBuyCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * BillBuyType State                                          *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("billBuyType", {
-            url: "/billBuyType",
-            css: [
-                '/ui/css/mdl-style-light_green-lime.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/billBuyType/billBuyType.html",
-            controller: "billBuyTypeCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Course State                                               *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("course", {
-            url: "/course",
-            css: [
-                '/ui/css/mdl-style-indigo-pink.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/course/course.html",
-            controller: "courseCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Student State                                              *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("student", {
-            url: "/student",
-            templateUrl: "/ui/partials/student/student.html",
-            controller: "studentCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Account State                                              *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("account", {
-            url: "/account",
-            css: [
-                '/ui/css/mdl-style-indigo-pink.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/account/account.html",
-            controller: "accountCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Payment State                                              *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("payment", {
-            url: "/payment",
-            css: [
-                '/ui/css/mdl-style-indigo-pink.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/payment/payment.html",
-            controller: "paymentCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * PaymentOut State                                           *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("paymentOut", {
-            url: "/paymentOut",
-            css: [
-                '/ui/css/mdl-style-light_green-lime.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/paymentOut/paymentOut.html",
-            controller: "paymentOutCtrl"
+            templateUrl: "/ui/partials/calculate/calculate.html",
+            controller: "calculateCtrl"
         });
 
         /**************************************************************
@@ -321,37 +150,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$cssPr
             url: "/report",
             templateUrl: "/ui/partials/report/report.html",
             controller: "reportCtrl"
-        });
-        /**************************************************************
-         *                                                            *
-         * Person State                                               *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("person", {
-            url: "/person",
-            css: [
-                '/ui/css/mdl-style.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/person/person.html",
-            controller: "personCtrl"
-        });
-
-        /**************************************************************
-         *                                                            *
-         * Team State                                                 *
-         *                                                            *
-         *************************************************************/
-        $stateProvider.state("team", {
-            url: "/team",
-            css: [
-                '/ui/css/mdl-style.css',
-                '/ui/css/theme-black.css',
-                 '/ui/css/style.css'
-            ],
-            templateUrl: "/ui/partials/team/team.html",
-            controller: "teamCtrl"
         });
 
         /**************************************************************

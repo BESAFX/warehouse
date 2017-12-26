@@ -16,6 +16,7 @@ import java.util.List;
 @Transactional
 public interface PaymentService extends PagingAndSortingRepository<Payment, Long>, JpaSpecificationExecutor<Payment> {
 
+    Payment findTopByAccountCourseMasterBranchOrderByCodeDesc(Branch branch);
     Payment findByCode(Long code);
     Payment findByCodeAndAccountCourseMasterBranch(Long code, Branch branch);
     Payment findByCodeAndAccountCourseMasterBranchAndIdNot(Long code, Branch branch, Long paymentId);

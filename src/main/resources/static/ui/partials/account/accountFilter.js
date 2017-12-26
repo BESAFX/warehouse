@@ -3,9 +3,7 @@ app.controller('accountFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $scope.modalTitle = title;
 
-        $scope.buffer = {};
-
-        $scope.buffer.branch = $scope.branches[0];
+        $scope.clear();
 
         $scope.submit = function () {
             $uibModalInstance.close($scope.buffer);

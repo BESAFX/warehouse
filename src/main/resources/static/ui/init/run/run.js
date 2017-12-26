@@ -1,5 +1,8 @@
-app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'Fullscreen' , 'ReportModelProvider', '$state', '$timeout',
-    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, Fullscreen, ReportModelProvider, $state, $timeout) {
+app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'Fullscreen' , 'ReportModelProvider', '$state', '$stateParams', '$timeout',
+    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, Fullscreen, ReportModelProvider, $state, $stateParams, $timeout) {
+
+        $rootScope.state = $state;
+        $rootScope.stateParams = $stateParams;
 
         defaultErrorMessageResolver.getErrorMessages().then(function (errorMessages) {
             errorMessages['fieldRequired'] = 'هذا الحقل مطلوب';
@@ -19,79 +22,19 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                     $rootScope.MDLIcon = 'widgets';
                     break;
                 }
-                case 'company': {
-                    $rootScope.pageTitle = 'الشركة';
-                    $rootScope.MDLIcon = 'domain';
+                case 'admin': {
+                    $rootScope.pageTitle = 'الإدارة';
+                    $rootScope.MDLIcon = 'settings';
                     break;
                 }
-                case 'branch': {
-                    $rootScope.pageTitle = 'الفروع';
-                    $rootScope.MDLIcon = 'layers';
+                case 'register': {
+                    $rootScope.pageTitle = 'القبول والتسجيل';
+                    $rootScope.MDLIcon = 'book';
                     break;
                 }
-                case 'master': {
-                    $rootScope.pageTitle = 'التخصصات';
-                    $rootScope.MDLIcon = 'import_contacts';
-                    break;
-                }
-                case 'offer': {
-                    $rootScope.pageTitle = 'العروض';
-                    $rootScope.MDLIcon = 'collections_bookmark';
-                    break;
-                }
-                case 'course': {
-                    $rootScope.pageTitle = 'الدورات';
-                    $rootScope.MDLIcon = 'card_travel';
-                    break;
-                }
-                case 'account': {
-                    $rootScope.pageTitle = 'التسجيل';
-                    $rootScope.MDLIcon = 'local_library';
-                    break;
-                }
-                case 'payment': {
-                    $rootScope.pageTitle = 'سندات القبض';
-                    $rootScope.MDLIcon = 'monetization_on';
-                    break;
-                }
-                case 'paymentOut': {
-                    $rootScope.pageTitle = 'سندات الصرف';
-                    $rootScope.MDLIcon = 'money_off';
-                    break;
-                }
-                case 'billBuyType': {
-                    $rootScope.pageTitle = 'حسابات فواتير الشراء';
-                    $rootScope.MDLIcon = 'subtitles';
-                    break;
-                }
-                case 'billBuy': {
-                    $rootScope.pageTitle = 'فواتير الشراء';
-                    $rootScope.MDLIcon = 'shopping_cart';
-                    break;
-                }
-                case 'bank': {
-                    $rootScope.pageTitle = 'الحسابات البنكية';
-                    $rootScope.MDLIcon = 'account_balance';
-                    break;
-                }
-                case 'deposit': {
-                    $rootScope.pageTitle = 'الإيداع البنكي';
-                    $rootScope.MDLIcon = 'archive';
-                    break;
-                }
-                case 'withdraw': {
-                    $rootScope.pageTitle = 'السحب البنكي';
-                    $rootScope.MDLIcon = 'unarchive';
-                    break;
-                }
-                case 'team': {
-                    $rootScope.pageTitle = 'الصلاحيات';
-                    $rootScope.MDLIcon = 'security';
-                    break;
-                }
-                case 'person': {
-                    $rootScope.pageTitle = 'حسابات المستخدمين';
-                    $rootScope.MDLIcon = 'lock';
+                case 'calculate': {
+                    $rootScope.pageTitle = 'المحاسبة';
+                    $rootScope.MDLIcon = 'attach_money';
                     break;
                 }
                 case 'profile': {
@@ -135,6 +78,11 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
         $rootScope.ReportModelProvider = ReportModelProvider;
 
         $rootScope.ModalProvider = ModalProvider;
+
+        $rootScope.toggleDrawer =function () {
+            $rootScope.drawer = document.querySelector('.mdl-layout');
+            $rootScope.drawer.MaterialLayout.toggleDrawer();
+        };
 
         $rootScope.dateType = 'H';
 
@@ -255,10 +203,10 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                 timeout: false, // [integer|boolean] delay for closing event in milliseconds. Set false for sticky notifications
                 progressBar: true, // [boolean] - displays a progress bar
                 animation: {
-                    open: 'animated tada',
-                    close: 'animated bounceOutUp',
+                    open: 'animated fadeIn',
+                    close: 'animated fadeOut',
                     easing: 'swing',
-                    speed: 500 // opening & closing animation speed
+                    speed: 100 // opening & closing animation speed
                 },
                 closeWith: ['button'], // ['click', 'button', 'hover', 'backdrop'] // backdrop click will close all notifications
                 modal: true, // [boolean] if true adds an overlay

@@ -1,11 +1,5 @@
-app.controller('branchCreateUpdateCtrl', ['BranchService', 'PersonService', 'CompanyService', 'FileUploader', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'branch',
-    function (BranchService, PersonService, CompanyService, FileUploader, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, branch) {
-
-        $timeout(function () {
-            CompanyService.findAllCombo().then(function (data) {
-                $scope.companies = data;
-            })
-        }, 1500);
+app.controller('branchCreateUpdateCtrl', ['BranchService', 'FileUploader', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'branch',
+    function (BranchService, FileUploader, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, branch) {
 
         $scope.branch = branch;
 
@@ -13,16 +7,30 @@ app.controller('branchCreateUpdateCtrl', ['BranchService', 'PersonService', 'Com
 
         $scope.action = action;
 
+        if($scope.branch.id){
+            $timeout(function () {
+                BranchService.findOne($scope.branch.id).then(function (data) {
+                    $scope.branch = data;
+                });
+            }, 1500);
+        }
+
         $scope.submit = function () {
             switch ($scope.action) {
                 case 'create' :
-                    BranchService.create($scope.branch).then(function (data) {
-                        $uibModalInstance.close(data);
+                    BranchService.uploadBranchLogo($scope.currentFile).then(function (data) {
+                        $scope.branch.logo = data;
+                        BranchService.create($scope.branch).then(function (data) {
+                            $uibModalInstance.close(data);
+                        });
                     });
                     break;
                 case 'update' :
-                    BranchService.update($scope.branch).then(function (data) {
-                        $scope.branch = data;
+                    BranchService.uploadBranchLogo($scope.currentFile).then(function (data) {
+                        $scope.branch.logo = data;
+                        BranchService.update($scope.branch).then(function (data) {
+                            $scope.branch = data;
+                        });
                     });
                     break;
             }
@@ -32,30 +40,21 @@ app.controller('branchCreateUpdateCtrl', ['BranchService', 'PersonService', 'Com
             $uibModalInstance.dismiss('cancel');
         };
 
-        var uploader = $scope.uploader = new FileUploader({
-            url: 'uploadBranchLogo'
-        });
-
-        uploader.filters.push({
-            name: 'syncFilter',
-            fn: function (item, options) {
-                return this.queue.length < 10;
-            }
-        });
-
-        uploader.filters.push({
-            name: 'asyncFilter',
-            fn: function (item, options, deferred) {
-                setTimeout(deferred.resolve, 1e3);
-            }
-        });
-
-        uploader.onAfterAddingFile = function (fileItem) {
-            uploader.uploadAll();
+        $scope.uploadFile = function () {
+            document.getElementById('uploader').click();
         };
 
-        uploader.onSuccessItem = function (fileItem, response, status, headers) {
-            $scope.branch.logo = response;
-        };
+        $scope.setFile = function(element) {
+            $scope.currentFile = element.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                $scope.branch.logo = event.target.result;
+                $scope.$apply();
+
+            };
+            // when the file is read it triggers the onload event above.
+            reader.readAsDataURL(element.files[0]);
+        }
 
     }]);

@@ -1,6 +1,13 @@
 app.factory("BranchService",
     ['$http', '$log', function ($http, $log) {
         return {
+            uploadBranchLogo: function (file) {
+                var fd = new FormData();
+                fd.append('file', file);
+                return $http.post("/uploadBranchLogo", fd, {transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(function (response) {
+                    return response.data;
+                });
+            },
             findAll: function () {
                 return $http.get("/api/branch/findAll").then(function (response) {
                     return response.data;

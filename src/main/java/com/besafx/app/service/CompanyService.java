@@ -12,5 +12,5 @@ import java.util.List;
 @Service
 @Transactional
 public interface CompanyService extends PagingAndSortingRepository<Company, Long>, JpaSpecificationExecutor<Company> {
-
+    Company findFirstBy();
 }

@@ -4762,7 +4762,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
     max-height: 1000px;
     z-index: 3;
     background-color: rgb(76, 175, 80);
-    color: rgb(66, 66, 66);
+    color: white;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
     transition-duration: .2s;
     transition-timing-function: cubic-bezier(.4, 0, .2, 1);
