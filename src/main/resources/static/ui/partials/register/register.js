@@ -641,10 +641,10 @@ function registerCtrl (
             });
         });
     };
-    $scope.newPayment = function () {
-        ModalProvider.openAccountPaymentModel($scope.selected).result.then(function (data) {
-            AccountService.findOne($scope.selected.id).then(function (data) {
-                var index = $scope.accounts.indexOf($scope.selected);
+    $scope.newPayment = function (account) {
+        ModalProvider.openAccountPaymentModel(account).result.then(function (data) {
+            AccountService.findOne(account.id).then(function (data) {
+                var index = $scope.accounts.indexOf(account);
                 $scope.accounts[index] = data;
                 $scope.setSelectedAccount(data);
             });
