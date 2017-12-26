@@ -33,6 +33,18 @@ public class ReportPaymentController {
     @Autowired
     private ReportExporter reportExporter;
 
+    @RequestMapping(value = "/report/CashReceipt/{paymentId}", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    public void printCashReceipt(@PathVariable(value = "paymentId") Long paymentId, HttpServletResponse response) throws JRException, IOException {
+        Map<String, Object> map = new HashMap<>();
+        Payment payment = paymentService.findOne(paymentId);
+        map.put("payment", payment);
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/CashReceipt.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(ExportType.PDF, response, jasperPrint);
+    }
+
 
     @RequestMapping(value = "/report/PaymentByBranches", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody

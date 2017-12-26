@@ -83,6 +83,14 @@ public class Person implements Serializable {
         }
     }
 
+    public String getName(){
+        try {
+           return this.contact.getFirstName().concat(" ").concat(this.contact.getForthName());
+        }catch (Exception ex) {
+            return "";
+        }
+    }
+
     @JsonCreator
     public static Person Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

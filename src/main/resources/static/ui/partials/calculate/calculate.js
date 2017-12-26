@@ -264,6 +264,15 @@ function calculateCtrl (
             }
         },
         {
+            html: '<div class="drop-menu"> طباعة السند <span class="fa fa-print fa-lg"></span></div>',
+            enabled: function () {
+                return true
+            },
+            click: function ($itemScope, $event, value) {
+                window.open('report/CashReceipt/' + $itemScope.payment.id);
+            }
+        },
+        {
             html: '<div class="drop-menu">طباعة تقرير بالقائمة<span class="fa fa-print fa-lg"></span></div>',
             enabled: function () {
                 return true
