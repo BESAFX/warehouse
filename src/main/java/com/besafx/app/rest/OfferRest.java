@@ -89,13 +89,7 @@ public class OfferRest {
             offer.setLastPerson(person);
             offer = offerService.save(offer);
             Branch branch = branchService.findByCode(offer.getMaster().getBranch().getCode());
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على العروض")
-                    .message("تم انشاء عرض جديد بنجاح")
-                    .type("success")
-                    .icon("fa-plus-square")
-                    .build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم انشاء عرض جديد بنجاح رقم ".concat(offer.getCode().toString())).type("success").build());
 
             StringBuffer buffer = new StringBuffer();
             buffer.append(branch.getName());
