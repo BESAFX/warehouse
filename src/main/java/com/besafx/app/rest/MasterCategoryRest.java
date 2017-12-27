@@ -57,7 +57,7 @@ public class MasterCategoryRest {
         masterCategory.setPerson(caller);
         masterCategory.setDate(new DateTime().toDate());
         masterCategory = masterCategoryService.save(masterCategory);
-        notificationService.notifyOne(Notification.builder().message("تم انشاء تصنيف جديد بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم انشاء تصنيف جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterCategory);
     }
 
@@ -75,7 +75,7 @@ public class MasterCategoryRest {
             masterCategory.setPerson(caller);
             masterCategory.setDate(new DateTime().toDate());
             masterCategory = masterCategoryService.save(masterCategory);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات التصنيف بنجاح").type("warning").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات التصنيف بنجاح").type("warning").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterCategory);
         } else {
             return null;
@@ -94,7 +94,7 @@ public class MasterCategoryRest {
                 masterService.save(master);
             });
             masterCategoryService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف التصنيف بنجاح").type("error").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف التصنيف بنجاح").type("error").build());
         }
     }
 

@@ -62,7 +62,7 @@ public class BranchRest {
         }
         branch.setCompany(companyService.findFirstBy());
         branch = branchService.save(branch);
-        notificationService.notifyOne(Notification.builder().message("تم اضافة فرع جديد بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم اضافة فرع جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), branch);
     }
 
@@ -77,7 +77,7 @@ public class BranchRest {
         if (object != null) {
             branch.setCompany(companyService.findFirstBy());
             branch = branchService.save(branch);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الفرع بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الفرع بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), branch);
         } else {
             return null;

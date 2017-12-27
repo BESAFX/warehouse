@@ -137,7 +137,7 @@ public class OfferRest {
         Offer object = offerService.findOne(offer.getId());
         if (object != null) {
             offer = offerService.save(offer);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات العرض بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات العرض بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } else {
             return null;
@@ -154,7 +154,7 @@ public class OfferRest {
                 throw new CustomException("لا يمكنك حذف عرض لم تقم بإضافته");
             }
             offerService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف العرض بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف العرض بنجاح").type("success").build());
         }
     }
 

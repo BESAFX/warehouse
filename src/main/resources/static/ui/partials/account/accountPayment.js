@@ -7,6 +7,9 @@ app.controller('accountPaymentCtrl', ['AccountService', 'PaymentService', 'Payme
 
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {
+                $rootScope.showConfirmNotify("السندات", "هل تود طباعة السند ؟", "notification", "fa-info", function () {
+                    window.open('report/CashReceipt/' + data.id);
+                });
                 $uibModalInstance.close(data);
             });
         };

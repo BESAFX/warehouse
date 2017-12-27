@@ -52,7 +52,7 @@ public class BillBuyTypeRest {
         billBuyType.setLastUpdate(new Date());
         billBuyType.setLastPerson(person);
         billBuyType = billBuyTypeService.save(billBuyType);
-        notificationService.notifyOne(Notification.builder().message("تم انشاء حساب فاتورة جديد بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم انشاء حساب فاتورة جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuyType);
     }
 
@@ -69,7 +69,7 @@ public class BillBuyTypeRest {
             billBuyType.setLastUpdate(new Date());
             billBuyType.setLastPerson(person);
             billBuyType = billBuyTypeService.save(billBuyType);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل حساب الفاتورة بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل حساب الفاتورة بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuyType);
         } else {
             return null;
@@ -83,7 +83,7 @@ public class BillBuyTypeRest {
         BillBuyType object = billBuyTypeService.findOne(id);
         if (object != null) {
             billBuyTypeService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف حساب الفاتورة بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف حساب الفاتورة بنجاح").type("success").build());
         }
     }
 

@@ -79,7 +79,7 @@ public class MasterRest {
         master.setLastUpdate(new Date());
         master.setLastPerson(person);
         master = masterService.save(master);
-        notificationService.notifyOne(Notification.builder().message("تم إنشاء تخصص جديد بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم إنشاء تخصص جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), master);
     }
 
@@ -96,7 +96,7 @@ public class MasterRest {
             master.setLastUpdate(new Date());
             master.setLastPerson(person);
             master = masterService.save(master);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات التخصص بنجاح").type("warning").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات التخصص بنجاح").type("warning").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), master);
         } else {
             return null;
@@ -120,7 +120,7 @@ public class MasterRest {
             courseService.delete(object.getCourses());
             log.info("Finally delete master...");
             masterService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف التخصصات وكل ما يتعلق بها من عروض ودورات بنجاح").type("error").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف التخصصات وكل ما يتعلق بها من عروض ودورات بنجاح").type("error").build());
         }
     }
 

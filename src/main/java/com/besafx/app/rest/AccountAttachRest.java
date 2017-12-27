@@ -75,7 +75,7 @@ public class AccountAttachRest {
         if (uploadTask.get()) {
             Future<String> shareTask = dropboxManager.shareFile("/Smart Offer/Accounts/" + accountId + "/" + fileName);
             attach.setLink(shareTask.get());
-            notificationService.notifyOne(Notification.builder().message("تم رفع الملف" + " [ " + file.getOriginalFilename() + " ] " + " بنجاح.").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم رفع الملف" + " [ " + file.getOriginalFilename() + " ] " + " بنجاح.").type("success").build());
             attach = attachService.save(attach);
             accountAttach.setAttach(attach);
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountAttachService.save(accountAttach));
@@ -93,10 +93,10 @@ public class AccountAttachRest {
             Future<Boolean> deleteTask = dropboxManager.deleteFile("/Smart Offer/Accounts/" + accountAttach.getAccount().getId() + "/" + accountAttach.getAttach().getName());
             if (deleteTask.get()) {
                 accountAttachService.delete(accountAttach);
-                notificationService.notifyOne(Notification.builder().message("تم حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.").type("success").build(), principal.getName());
+                notificationService.notifyAll(Notification.builder().message("تم حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.").type("success").build());
                 return true;
             } else {
-                notificationService.notifyOne(Notification.builder().message("لا يمكن حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] ").type("error").build(), principal.getName());
+                notificationService.notifyAll(Notification.builder().message("لا يمكن حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] ").type("error").build());
                 return false;
             }
         } else {
@@ -111,7 +111,7 @@ public class AccountAttachRest {
         AccountAttach accountAttach = accountAttachService.findOne(id);
         if (accountAttach != null) {
             accountAttachService.delete(accountAttach);
-            notificationService.notifyOne(Notification.builder().message("تم حذف المرفق" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف المرفق" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.").type("success").build());
         }
     }
 

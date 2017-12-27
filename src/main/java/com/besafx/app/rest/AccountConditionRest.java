@@ -46,7 +46,7 @@ public class AccountConditionRest {
         accountCondition.setLastUpdate(new Date());
         accountCondition.setPerson(person);
         accountCondition = accountConditionService.save(accountCondition);
-        notificationService.notifyOne(Notification.builder().message("تم انشاء حالة جديدة للطالب بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم انشاء حالة جديدة للطالب بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountCondition);
     }
 

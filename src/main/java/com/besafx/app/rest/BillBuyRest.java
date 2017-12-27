@@ -53,7 +53,7 @@ public class BillBuyRest {
         billBuy.setLastUpdate(new Date());
         billBuy.setLastPerson(person);
         billBuy = billBuyService.save(billBuy);
-        notificationService.notifyOne(Notification.builder().message("تم انشاء فاتورة جديدة بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم انشاء فاتورة جديدة بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
     }
 
@@ -67,7 +67,7 @@ public class BillBuyRest {
             billBuy.setLastUpdate(new Date());
             billBuy.setLastPerson(person);
             billBuy = billBuyService.save(billBuy);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الفاتورة بنجاح").type("warning").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الفاتورة بنجاح").type("warning").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
         } else {
             return null;
@@ -81,7 +81,7 @@ public class BillBuyRest {
         BillBuy object = billBuyService.findOne(id);
         if (object != null) {
             billBuyService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف الفاتورة بنجاح").type("error").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف الفاتورة بنجاح").type("error").build());
         }
     }
 

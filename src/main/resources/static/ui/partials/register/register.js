@@ -23,6 +23,7 @@ function registerCtrl (
         });
         BranchService.fetchBranchMasterCourse().then(function (data) {
             $scope.branches = data;
+            $scope.clearBufferAccount();
         });
         $scope.refreshMasterCategory();
         window.componentHandler.upgradeAllRegistered();

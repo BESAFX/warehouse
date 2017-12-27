@@ -56,7 +56,7 @@ public class DepositRest {
         deposit.getBank().setStock(deposit.getBank().getStock() + deposit.getAmount());
         deposit.setBank(bankService.save(deposit.getBank()));
         deposit = depositService.save(deposit);
-        notificationService.notifyOne(Notification.builder().message("تم إيداع مبلغ بمقدار " + ArabicLiteralNumberParser.literalValueOf(deposit.getAmount()) + " ريال سعودي إلي الحساب رقم " + deposit.getCode() + " بنجاح.").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم إيداع مبلغ بمقدار " + ArabicLiteralNumberParser.literalValueOf(deposit.getAmount()) + " ريال سعودي إلي الحساب رقم " + deposit.getCode() + " بنجاح.").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), deposit);
     }
 

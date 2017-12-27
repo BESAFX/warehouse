@@ -66,7 +66,7 @@ public class CourseRest {
         course.setLastUpdate(new Date());
         course.setLastPerson(person);
         course = courseService.save(course);
-        notificationService.notifyOne(Notification.builder().message("تم إنشاء دورة جديدة بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم إنشاء دورة جديدة بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), course);
     }
 
@@ -83,7 +83,7 @@ public class CourseRest {
             course.setLastUpdate(new Date());
             course.setLastPerson(person);
             course = courseService.save(course);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الدورة بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الدورة بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), course);
         } else {
             return null;
@@ -101,7 +101,7 @@ public class CourseRest {
             paymentService.delete(payments);
             accountService.delete(accounts);
             courseService.delete(object);
-            notificationService.notifyOne(Notification.builder().message("تم حذف الدورة وكل ما يتعلق بها من طلاب وسندات بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف الدورة وكل ما يتعلق بها من طلاب وسندات بنجاح").type("success").build());
         }
     }
 

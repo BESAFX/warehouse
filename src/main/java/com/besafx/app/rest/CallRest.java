@@ -43,13 +43,13 @@ public class CallRest {
         call.setPerson(person);
         call.setDate(new DateTime().toDate());
         call = callService.save(call);
-        notificationService.notifyOne(Notification
+        notificationService.notifyAll(Notification
                 .builder()
                 .title("العمليات على الاتصالات")
                 .message("تم انشاء اتصال جديد بنجاح")
                 .type("success")
                 .icon("fa-plus-square")
-                .build(), principal.getName());
+                .build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), call);
     }
 

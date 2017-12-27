@@ -54,7 +54,7 @@ public class BankRest {
         bank.setLastPerson(person);
         bank.setStock(bank.getStartAmount());
         bank = bankService.save(bank);
-        notificationService.notifyOne(Notification.builder().message("تم اضافة حساب بنك جديد بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم اضافة حساب بنك جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), bank);
     }
 
@@ -68,7 +68,7 @@ public class BankRest {
             bank.setLastUpdate(new Date());
             bank.setLastPerson(person);
             bank = bankService.save(bank);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات حساب البنك رقم " + bank.getCode() + " بنجاح.").type("warn").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات حساب البنك رقم " + bank.getCode() + " بنجاح.").type("warn").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), bank);
         } else {
             return null;
@@ -82,7 +82,7 @@ public class BankRest {
         Bank object = bankService.findOne(id);
         if (object != null) {
             bankService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف حساب بنك بنجاح").type("error").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف حساب بنك بنجاح").type("error").build());
         }
     }
 

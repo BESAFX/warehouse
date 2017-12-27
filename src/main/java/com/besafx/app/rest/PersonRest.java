@@ -71,7 +71,7 @@ public class PersonRest {
             branchAccess.setPerson(person);
             branchAccessService.save(branchAccess);
         }
-        notificationService.notifyOne(Notification.builder().message("تم إنشاء حساب شخصي بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم إنشاء حساب شخصي بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
     }
 
@@ -95,7 +95,7 @@ public class PersonRest {
                 branchAccess.setPerson(person);
                 branchAccessService.save(branchAccess);
             }
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الحساب الشخصي بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الحساب الشخصي بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
@@ -110,7 +110,7 @@ public class PersonRest {
         if (object != null) {
             person.setEnabled(true);
             person = personService.save(person);
-            notificationService.notifyOne(Notification.builder().message("تم تفعيل المستخدم بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تفعيل المستخدم بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
@@ -125,7 +125,7 @@ public class PersonRest {
         if (object != null) {
             person.setEnabled(false);
             person = personService.save(person);
-            notificationService.notifyOne(Notification.builder().message("تم تعطيل المستخدم بنجاح").type("error").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعطيل المستخدم بنجاح").type("error").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;

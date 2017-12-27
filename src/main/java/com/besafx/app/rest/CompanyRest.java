@@ -44,7 +44,7 @@ public class CompanyRest {
         Company object = companyService.findOne(company.getId());
         if (object != null) {
             company = companyService.save(company);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الشركة بنجاح").type("warning").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الشركة بنجاح").type("warning").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), company);
         } else {
             return null;

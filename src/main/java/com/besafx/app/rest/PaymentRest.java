@@ -66,7 +66,7 @@ public class PaymentRest {
         payment.setLastUpdate(new Date());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
-        notificationService.notifyOne(Notification.builder().message("تم انشاء سند قبض بنجاح").type("success").build(), principal.getName());
+        notificationService.notifyAll(Notification.builder().message("تم انشاء سند قبض بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
     }
 
@@ -84,7 +84,7 @@ public class PaymentRest {
             payment.setLastPerson(person);
             payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
             payment = paymentService.save(payment);
-            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات السند بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات السند بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
         } else {
             return null;
@@ -98,7 +98,7 @@ public class PaymentRest {
         Payment object = paymentService.findOne(id);
         if (object != null) {
             paymentService.delete(id);
-            notificationService.notifyOne(Notification.builder().message("تم حذف سند القبض رقم " + object.getCode() + " بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف سند القبض رقم " + object.getCode() + " بنجاح").type("success").build());
         }
     }
 
@@ -110,7 +110,7 @@ public class PaymentRest {
         if (!accounts.isEmpty()) {
             List<Payment> payments = paymentService.findByAccountIn(accounts);
             paymentService.delete(payments);
-            notificationService.notifyOne(Notification.builder().message("تم حذف سندات كل طلاب الدورة بنجاح").type("success").build(), principal.getName());
+            notificationService.notifyAll(Notification.builder().message("تم حذف سندات كل طلاب الدورة بنجاح").type("success").build());
         }
     }
 
