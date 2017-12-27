@@ -87,13 +87,7 @@ public class AccountRest {
         account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
         account.setStudent(studentService.save(account.getStudent()));
         account = accountService.save(account);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على تسجيل الطلاب")
-                .message("تم اضافة تسجيل جديد بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم اضافة تسجيل جديد بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), account);
     }
 
@@ -110,13 +104,7 @@ public class AccountRest {
             account.getStudent().setContact(contactService.save(account.getStudent().getContact()));
             account.setStudent(studentService.save(account.getStudent()));
             account = accountService.save(account);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على تسجيل الطلاب")
-                    .message("تم تعديل بيانات التسجيل بنجاح")
-                    .type("success")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات التسجيل بنجاح").type("success").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), account);
         } else {
             return null;
@@ -134,13 +122,7 @@ public class AccountRest {
             accountNoteService.delete(account.getAccountNotes());
             paymentService.delete(account.getPayments());
             accountService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على تسجيل الطلاب")
-                    .message("تم حذف الاشتراك وكل ما يتعلق به من سندات وحسابات بنجاح")
-                    .type("success")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف الاشتراك وكل ما يتعلق به من سندات وحسابات بنجاح").type("success").build(), principal.getName());
         }
     }
 
@@ -160,13 +142,7 @@ public class AccountRest {
             accountConditionService.delete(accountConditions);
 
             accountService.delete(accounts);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على تسجيل الطلاب")
-                    .message("تم حذف الطلاب وكل ما يتعلق بهم من سندات وحسابات بنجاح")
-                    .type("success")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف الطلاب وكل ما يتعلق بهم من سندات وحسابات بنجاح").type("success").build(), principal.getName());
         }
     }
 

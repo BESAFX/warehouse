@@ -98,13 +98,7 @@ public class PaymentRest {
         Payment object = paymentService.findOne(id);
         if (object != null) {
             paymentService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على سندات القبض")
-                    .message("تم حذف سند القبض رقم " + object.getCode() + " بنجاح")
-                    .type("success")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف سند القبض رقم " + object.getCode() + " بنجاح").type("success").build(), principal.getName());
         }
     }
 
@@ -116,13 +110,7 @@ public class PaymentRest {
         if (!accounts.isEmpty()) {
             List<Payment> payments = paymentService.findByAccountIn(accounts);
             paymentService.delete(payments);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على الدورات")
-                    .message("تم حذف سندات كل طلاب الدورة بنجاح")
-                    .type("success")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف سندات كل طلاب الدورة بنجاح").type("success").build(), principal.getName());
         }
     }
 

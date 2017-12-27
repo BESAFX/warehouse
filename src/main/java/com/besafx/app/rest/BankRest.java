@@ -43,9 +43,6 @@ public class BankRest {
     private BankSearch bankSearch;
 
     @Autowired
-    private BranchService branchService;
-
-    @Autowired
     private NotificationService notificationService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,13 +54,7 @@ public class BankRest {
         bank.setLastPerson(person);
         bank.setStock(bank.getStartAmount());
         bank = bankService.save(bank);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على قواعد البيانات")
-                .message("تم اضافة حساب بنك جديد بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم اضافة حساب بنك جديد بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), bank);
     }
 
@@ -77,13 +68,7 @@ public class BankRest {
             bank.setLastUpdate(new Date());
             bank.setLastPerson(person);
             bank = bankService.save(bank);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على قواعد البيانات")
-                    .message("تم تعديل بيانات حساب البنك رقم " + bank.getCode() + " بنجاح.")
-                    .type("warn")
-                    .icon("fa-plus-square")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات حساب البنك رقم " + bank.getCode() + " بنجاح.").type("warn").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), bank);
         } else {
             return null;
@@ -97,13 +82,7 @@ public class BankRest {
         Bank object = bankService.findOne(id);
         if (object != null) {
             bankService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على قواعد البيانات")
-                    .message("تم حذف حساب بنك بنجاح")
-                    .type("error")
-                    .icon("fa-plus-square")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف حساب بنك بنجاح").type("error").build(), principal.getName());
         }
     }
 

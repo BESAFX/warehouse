@@ -79,13 +79,7 @@ public class MasterRest {
         master.setLastUpdate(new Date());
         master.setLastPerson(person);
         master = masterService.save(master);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على التخصصات")
-                .message("تم إنشاء تخصص جديد بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم إنشاء تخصص جديد بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), master);
     }
 
@@ -102,13 +96,7 @@ public class MasterRest {
             master.setLastUpdate(new Date());
             master.setLastPerson(person);
             master = masterService.save(master);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على التخصصات")
-                    .message("تم تعديل بيانات التخصص بنجاح")
-                    .type("warning")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات التخصص بنجاح").type("warning").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), master);
         } else {
             return null;
@@ -132,13 +120,7 @@ public class MasterRest {
             courseService.delete(object.getCourses());
             log.info("Finally delete master...");
             masterService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على التخصصات")
-                    .message("تم حذف التخصصات وكل ما يتعلق بها من عروض ودورات بنجاح")
-                    .type("error")
-                    .icon("fa-ban")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف التخصصات وكل ما يتعلق بها من عروض ودورات بنجاح").type("error").build(), principal.getName());
         }
     }
 

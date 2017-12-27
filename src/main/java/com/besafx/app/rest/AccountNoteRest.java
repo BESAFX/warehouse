@@ -45,13 +45,7 @@ public class AccountNoteRest {
         accountNote.setPerson(person);
         accountNote.setDate(new DateTime().toDate());
         accountNote = accountNoteService.save(accountNote);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على ملاحظات الطلاب")
-                .message("تم حفظ ملاحظة جديدة بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم حفظ ملاحظة جديدة بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountNote);
     }
 

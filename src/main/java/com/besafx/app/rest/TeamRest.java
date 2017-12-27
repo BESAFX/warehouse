@@ -43,13 +43,7 @@ public class TeamRest {
             team.setCode(topTeam.getCode() + 1);
         }
         team = teamService.save(team);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("انشاء بيانات")
-                .message("تم انشاء مجموعة صلاحيات جديدة بنجاح")
-                .type("success")
-                .icon("fa-plus-circle")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم انشاء مجموعة صلاحيات جديدة بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
     }
 
@@ -63,13 +57,7 @@ public class TeamRest {
         Team object = teamService.findOne(team.getId());
         if (object != null) {
             team = teamService.save(team);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("تعديل بيانات")
-                    .message("تم تعديل بيانات المجموعة بنجاح")
-                    .type("success")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات المجموعة بنجاح").type("success").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
         } else {
             return null;
@@ -86,13 +74,7 @@ public class TeamRest {
                 throw new CustomException("لا يمكن حذف هذة المجموعة لإعتماد بعض المستخدمين عليها.");
             }
             teamService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("حذف بيانات")
-                    .message("تم حذف مجموعة الصلاحيات بنجاح")
-                    .type("error")
-                    .icon("fa-ban")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف مجموعة الصلاحيات بنجاح").type("error").build(), principal.getName());
         }
     }
 

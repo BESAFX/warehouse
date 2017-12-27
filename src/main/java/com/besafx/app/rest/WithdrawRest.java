@@ -56,13 +56,7 @@ public class WithdrawRest {
         withdraw.getBank().setStock(withdraw.getBank().getStock() - withdraw.getAmount());
         withdraw.setBank(bankService.save(withdraw.getBank()));
         withdraw = withdrawService.save(withdraw);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على قواعد البيانات")
-                .message("تم سحب مبلغ بمقدار " + ArabicLiteralNumberParser.literalValueOf(withdraw.getAmount()) + " ريال سعودي إلي الحساب رقم " + withdraw.getCode() + " بنجاح.")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم سحب مبلغ بمقدار " + ArabicLiteralNumberParser.literalValueOf(withdraw.getAmount()) + " ريال سعودي إلي الحساب رقم " + withdraw.getCode() + " بنجاح.").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), withdraw);
     }
 

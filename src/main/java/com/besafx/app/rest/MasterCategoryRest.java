@@ -57,13 +57,7 @@ public class MasterCategoryRest {
         masterCategory.setPerson(caller);
         masterCategory.setDate(new DateTime().toDate());
         masterCategory = masterCategoryService.save(masterCategory);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("التخصصات" )
-                .message("تم انشاء تصنيف جديد بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم انشاء تصنيف جديد بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterCategory);
     }
 
@@ -81,13 +75,7 @@ public class MasterCategoryRest {
             masterCategory.setPerson(caller);
             masterCategory.setDate(new DateTime().toDate());
             masterCategory = masterCategoryService.save(masterCategory);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("التخصصات")
-                    .message("تم تعديل بيانات التصنيف بنجاح")
-                    .type("warning")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات التصنيف بنجاح").type("warning").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterCategory);
         } else {
             return null;
@@ -106,13 +94,7 @@ public class MasterCategoryRest {
                 masterService.save(master);
             });
             masterCategoryService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("التخصصات")
-                    .message("تم حذف التصنيف بنجاح")
-                    .type("error")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف التصنيف بنجاح").type("error").build(), principal.getName());
         }
     }
 

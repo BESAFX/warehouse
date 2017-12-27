@@ -66,13 +66,7 @@ public class CourseRest {
         course.setLastUpdate(new Date());
         course.setLastPerson(person);
         course = courseService.save(course);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على الدورات")
-                .message("تم إنشاء دورة جديدة بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم إنشاء دورة جديدة بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), course);
     }
 
@@ -89,13 +83,7 @@ public class CourseRest {
             course.setLastUpdate(new Date());
             course.setLastPerson(person);
             course = courseService.save(course);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على الدورات")
-                    .message("تم تعديل بيانات الدورة بنجاح")
-                    .type("success")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات الدورة بنجاح").type("success").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), course);
         } else {
             return null;
@@ -113,13 +101,7 @@ public class CourseRest {
             paymentService.delete(payments);
             accountService.delete(accounts);
             courseService.delete(object);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على الدورات")
-                    .message("تم حذف الدورة وكل ما يتعلق بها من طلاب وسندات بنجاح")
-                    .type("success")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف الدورة وكل ما يتعلق بها من طلاب وسندات بنجاح").type("success").build(), principal.getName());
         }
     }
 

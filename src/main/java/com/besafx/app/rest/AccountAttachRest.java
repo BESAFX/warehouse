@@ -55,10 +55,10 @@ public class AccountAttachRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ACCOUNT_ATTACH_CREATE')")
     public String upload(@PathVariable(value = "accountId") Long accountId,
-                                @PathVariable(value = "attachTypeId") Long attachTypeId,
-                                @RequestParam(value = "fileName") String fileName,
-                                @RequestParam(value = "file") MultipartFile file,
-                                Principal principal)
+                         @PathVariable(value = "attachTypeId") Long attachTypeId,
+                         @RequestParam(value = "fileName") String fileName,
+                         @RequestParam(value = "file") MultipartFile file,
+                         Principal principal)
             throws ExecutionException, InterruptedException {
 
         AccountAttach accountAttach = new AccountAttach();
@@ -75,14 +75,7 @@ public class AccountAttachRest {
         if (uploadTask.get()) {
             Future<String> shareTask = dropboxManager.shareFile("/Smart Offer/Accounts/" + accountId + "/" + fileName);
             attach.setLink(shareTask.get());
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("تسجيل الطلاب")
-                    .message("تم رفع الملف" + " [ " + file.getOriginalFilename() + " ] " + " بنجاح.")
-                    .type("success")
-                    .icon("fa-upload")
-                    .build(), principal.getName());
-
+            notificationService.notifyOne(Notification.builder().message("تم رفع الملف" + " [ " + file.getOriginalFilename() + " ] " + " بنجاح.").type("success").build(), principal.getName());
             attach = attachService.save(attach);
             accountAttach.setAttach(attach);
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), accountAttachService.save(accountAttach));
@@ -100,25 +93,13 @@ public class AccountAttachRest {
             Future<Boolean> deleteTask = dropboxManager.deleteFile("/Smart Offer/Accounts/" + accountAttach.getAccount().getId() + "/" + accountAttach.getAttach().getName());
             if (deleteTask.get()) {
                 accountAttachService.delete(accountAttach);
-                notificationService.notifyOne(Notification
-                        .builder()
-                        .title("تسجيل الطلاب")
-                        .message("تم حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.")
-                        .type("success")
-                        .icon("fa-trash")
-                        .build(), principal.getName());
+                notificationService.notifyOne(Notification.builder().message("تم حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.").type("success").build(), principal.getName());
                 return true;
             } else {
-                notificationService.notifyOne(Notification
-                        .builder()
-                        .title("تسجيل الطلاب")
-                        .message("لا يمكن حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] ")
-                        .type("error")
-                        .icon("fa-trash")
-                        .build(), principal.getName());
+                notificationService.notifyOne(Notification.builder().message("لا يمكن حذف الملف" + " [ " + accountAttach.getAttach().getName() + " ] ").type("error").build(), principal.getName());
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -130,13 +111,7 @@ public class AccountAttachRest {
         AccountAttach accountAttach = accountAttachService.findOne(id);
         if (accountAttach != null) {
             accountAttachService.delete(accountAttach);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("تسجيل الطلاب")
-                    .message("تم حذف المرفق" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.")
-                    .type("success")
-                    .icon("fa-trash")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف المرفق" + " [ " + accountAttach.getAttach().getName() + " ] " + " بنجاح.").type("success").build(), principal.getName());
         }
     }
 

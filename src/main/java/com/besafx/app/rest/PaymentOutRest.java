@@ -57,13 +57,7 @@ public class PaymentOutRest {
         paymentOut.setPerson(person);
         paymentOut.setAmountString(ArabicLiteralNumberParser.literalValueOf(paymentOut.getAmountNumber()));
         paymentOut = paymentOutService.save(paymentOut);
-        notificationService.notifyOne(Notification
-                .builder()
-                .title("العمليات على سندات الصرف")
-                .message("تم انشاء سند صرف بنجاح")
-                .type("success")
-                .icon("fa-plus-square")
-                .build(), principal.getName());
+        notificationService.notifyOne(Notification.builder().message("تم انشاء سند صرف بنجاح").type("success").build(), principal.getName());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentOut);
     }
 
@@ -77,13 +71,7 @@ public class PaymentOutRest {
             paymentOut.setDate(new Date());
             paymentOut.setPerson(person);
             paymentOut = paymentOutService.save(paymentOut);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على سندات الصرف")
-                    .message("تم تعديل بيانات السند بنجاح")
-                    .type("information")
-                    .icon("fa-edit")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم تعديل بيانات السند بنجاح").type("information").build(), principal.getName());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentOut);
         } else {
             return null;
@@ -97,13 +85,7 @@ public class PaymentOutRest {
         PaymentOut object = paymentOutService.findOne(id);
         if (object != null) {
             paymentOutService.delete(id);
-            notificationService.notifyOne(Notification
-                    .builder()
-                    .title("العمليات على قواعد البيانات")
-                    .message("تم حذف حساب بنك بنجاح")
-                    .type("error")
-                    .icon("fa-plus-square")
-                    .build(), principal.getName());
+            notificationService.notifyOne(Notification.builder().message("تم حذف حساب بنك بنجاح").type("error").build(), principal.getName());
         }
     }
 
