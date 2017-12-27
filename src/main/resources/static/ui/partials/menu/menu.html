@@ -323,10 +323,24 @@
 
     </main>
 
-    <footer class="mdl-mini-footer mdl-navigation__link-active mdl-color--primary">
-        <div class="row" style="margin: auto">
-            <span dir="rtl">جميع الحقوق محفوظة للمعهد الأهلي العالي للتدريب - العروض وتسجيل الطلاب 2018</span>
+    <footer class="mdl-mega-footer mdl-navigation__link-active mdl-color--primary">
+
+        <div class="mdl-mega-footer__right-section">
+
+            <div class="row" dir="rtl">
+                <div class="news red">
+                    <ul>
+                        <li ng-repeat="message in globalMessages">{{message}}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <span dir="rtl">جميع الحقوق محفوظة للمعهد الأهلي العالي للتدريب - العروض وتسجيل الطلاب 2018</span>
+            </div>
+
         </div>
+
     </footer>
 
 </div>

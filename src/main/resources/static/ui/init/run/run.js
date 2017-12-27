@@ -232,9 +232,11 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
          * STOMP Connect                                              *
          *                                                            *
          *************************************************************/
+        $rootScope.globalMessages = [];
         $stomp.connect('/ws').then(function () {
             $stomp.subscribe('/user/queue/notify', function (payload, headers, res) {
                 $rootScope.globalMessage = payload.message;
+                $rootScope.globalMessages.push(payload.message);
                 $rootScope.$apply();
                 $rootScope.showNotify(payload.title, payload.message, payload.type, payload.icon);
             }, {'headers': 'notify'});
