@@ -7,8 +7,8 @@
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <i class="material-icons mdl-list__item-icon mdl-color-text--white">{{action==='create' ? 'add' : 'edit'}}</i>
-                <strong>{{title}}</strong>
+                <i class="material-icons mdl-list__item-icon mdl-color-text--white">add</i>
+                <strong>انشاء تسجيل جديد</strong>
             </span>
         </h3>
     </div>
@@ -394,24 +394,16 @@
     <div class="modal-footer">
 
         <div class="row">
-            <button ng-if="action=='create'"
-                    uib-tooltip="حفظ"
+            <button uib-tooltip="حفظ"
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">save</i>
-            </button>
-            <button ng-if="action=='update'"
-                    uib-tooltip="تعديل"
-                    tooltip-append-to-body="true"
-                    type="submit"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">edit</i>
+                <i class="material-icons">add</i>
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
-                    type="reset"
-                    ng-click="form.$setPristine()"
+                    type="button"
+                    ng-click="clear();form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
                 <i class="material-icons">delete</i>
             </button>

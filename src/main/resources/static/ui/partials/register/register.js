@@ -603,6 +603,7 @@ function registerCtrl (
      * Account                                                                                                    *
      *                                                                                                            *
      **************************************************************************************************************/
+    $scope.bufferAccount = {};
     $scope.account = {};
     $scope.accounts = [];
     //
@@ -624,9 +625,6 @@ function registerCtrl (
     };
     $scope.newAccount = function () {
         ModalProvider.openAccountCreateModel().result.then(function (data) {
-            $rootScope.showConfirmNotify("العروض", "هل تود طباعة العقد ؟", "notification", "fa-info", function () {
-                $scope.printAccount(data);
-            });
             $scope.accounts.splice(0,0,data);
         }, function () {
             console.info('CourseCreateModel Closed.');
@@ -672,77 +670,80 @@ function registerCtrl (
             console.info('Modal dismissed at: ' + new Date());
         });
     };
+    $scope.clearBufferAccount = function () {
+        $scope.bufferAccount = {};
+        $scope.bufferAccount.branch = $scope.branches[0];
+    };
     $scope.searchAccount = function () {
-
         var search = [];
-        if ($scope.buffer.firstName) {
+        if ($scope.bufferAccount.firstName) {
             search.push('firstName=');
-            search.push($scope.buffer.firstName);
+            search.push($scope.bufferAccount.firstName);
             search.push('&');
         }
-        if ($scope.buffer.secondName) {
+        if ($scope.bufferAccount.secondName) {
             search.push('secondName=');
-            search.push($scope.buffer.secondName);
+            search.push($scope.bufferAccount.secondName);
             search.push('&');
         }
-        if ($scope.buffer.thirdName) {
+        if ($scope.bufferAccount.thirdName) {
             search.push('thirdName=');
-            search.push($scope.buffer.thirdName);
+            search.push($scope.bufferAccount.thirdName);
             search.push('&');
         }
-        if ($scope.buffer.forthName) {
+        if ($scope.bufferAccount.forthName) {
             search.push('forthName=');
-            search.push($scope.buffer.forthName);
+            search.push($scope.bufferAccount.forthName);
             search.push('&');
         }
-        if ($scope.buffer.dateFrom) {
+        if ($scope.bufferAccount.dateFrom) {
             search.push('dateFrom=');
-            search.push(moment($scope.buffer.dateFrom).valueOf());
+            search.push(moment($scope.bufferAccount.dateFrom).valueOf());
             search.push('&');
         }
-        if ($scope.buffer.dateTo) {
+        if ($scope.bufferAccount.dateTo) {
             search.push('dateTo=');
-            search.push(moment($scope.buffer.dateTo).valueOf());
+            search.push(moment($scope.bufferAccount.dateTo).valueOf());
             search.push('&');
         }
-        if ($scope.buffer.studentIdentityNumber) {
+        if ($scope.bufferAccount.studentIdentityNumber) {
             search.push('studentIdentityNumber=');
-            search.push($scope.buffer.studentIdentityNumber);
+            search.push($scope.bufferAccount.studentIdentityNumber);
             search.push('&');
         }
-        if ($scope.buffer.studentMobile) {
+        if ($scope.bufferAccount.studentMobile) {
             search.push('studentMobile=');
-            search.push($scope.buffer.studentMobile);
+            search.push($scope.bufferAccount.studentMobile);
             search.push('&');
         }
-        if ($scope.buffer.coursePriceFrom) {
+        if ($scope.bufferAccount.coursePriceFrom) {
             search.push('coursePriceFrom=');
-            search.push($scope.buffer.coursePriceFrom);
+            search.push($scope.bufferAccount.coursePriceFrom);
             search.push('&');
         }
-        if ($scope.buffer.coursePriceTo) {
+        if ($scope.bufferAccount.coursePriceTo) {
             search.push('coursePriceTo=');
-            search.push($scope.buffer.coursePriceTo);
+            search.push($scope.bufferAccount.coursePriceTo);
             search.push('&');
         }
-        if ($scope.buffer.branch) {
+        if ($scope.bufferAccount.branch) {
             search.push('branchIds=');
             var branchIds = [];
-            branchIds.push($scope.buffer.branch.id);
+            branchIds.push($scope.bufferAccount.branch.id);
             search.push(branchIds);
             search.push('&');
         }
-        if ($scope.buffer.master) {
+        if ($scope.bufferAccount.master) {
             search.push('masterIds=');
             var masterIds = [];
-            masterIds.push($scope.buffer.master.id);
+            masterIds.push($scope.bufferAccount.master.id);
             search.push(masterIds);
             search.push('&');
         }
-        if ($scope.buffer.course) {
+        if ($scope.bufferAccount.course) {
             search.push('courseIds=');
             var courseIds = [];
-            courseIds.push($scope.buffer.course.id);
+            courseIds.push($scope.bufferAccount.course.id);
             search.push(courseIds);
             search.push('&');
         }
@@ -756,22 +757,22 @@ function registerCtrl (
             $scope.itemsAccount.push({
                 'id': 4,
                 'type': 'title',
-                'name': ' [ ' + $scope.buffer.branch.code + ' ] ' + $scope.buffer.branch.name
+                'name': ' [ ' + $scope.bufferAccount.branch.code + ' ] ' + $scope.bufferAccount.branch.name
             });
-            if ($scope.buffer.master) {
+            if ($scope.bufferAccount.master) {
                 $scope.itemsAccount.push({'id': 5, 'type': 'title', 'name': 'تخصص', 'style': 'font-weight:bold'});
                 $scope.itemsAccount.push({
                     'id': 6,
                     'type': 'title',
-                    'name': ' [ ' + $scope.buffer.master.code + ' ] ' + $scope.buffer.master.name
+                    'name': ' [ ' + $scope.bufferAccount.master.code + ' ] ' + $scope.bufferAccount.master.name
                 });
             }
-            if ($scope.buffer.course) {
+            if ($scope.bufferAccount.course) {
                 $scope.itemsAccount.push({'id': 7, 'type': 'title', 'name': 'رقم الدورة', 'style': 'font-weight:bold'});
                 $scope.itemsAccount.push({
                     'id': 8,
                     'type': 'title',
-                    'name': ' [ ' + $scope.buffer.course.code + ' ] '
+                    'name': ' [ ' + $scope.bufferAccount.course.code + ' ] '
                 });
             }
 
@@ -782,7 +783,6 @@ function registerCtrl (
         });
 
     };
-
     $scope.filterAccount = function () {
         var modalInstance = $uibModal.open({
             animation: true,
@@ -793,6 +793,7 @@ function registerCtrl (
             scope: $scope,
             backdrop: 'static',
             keyboard: false,
+            size: 'lg',
             resolve: {
                 title: function () {
                     return 'البحث فى التسجيل';
@@ -800,9 +801,9 @@ function registerCtrl (
             }
         });
 
-        modalInstance.result.then(function (buffer) {
+        modalInstance.result.then(function (bufferAccount) {
 
-            $scope.buffer = buffer;
+            $scope.bufferAccount = bufferAccount;
 
             $scope.searchAccount();
 

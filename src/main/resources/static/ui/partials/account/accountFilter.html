@@ -17,132 +17,158 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
-                <select id="branch"
-                        data-placeholder="ابحث عن الفرع"
-                        no-results-text="'لا توجد فروع توافق بحثك'"
-                        placeholder-text-single="'اختر الفرع'"
-                        class="form-control text-right"
-                        chosen=""
-                        focus-autofocus="1"
-                        ng-model="buffer.branch"
-                        ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                </select>
-            </div>
+            <div class="form-group row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
-                <select id="master"
-                        data-placeholder="ابحث عن التخصص"
-                        no-results-text="'لا توجد تخصصات توافق بحثك'"
-                        placeholder-text-single="'اختر التخصص'"
-                        class="form-control text-right"
-                        chosen=""
-                        ng-model="buffer.master"
-                        ng-options="(' [ ' + master.code + ' ] ' +  ' ' + master.name) for master in buffer.branch.masters | orderBy:'code' track by master.id">
-                </select>
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="course" class="control-label">رقم الدورة تبعاً للتخصص</label>
-                <select id="course"
-                        data-placeholder="ابحث عن رقم الدورة"
-                        no-results-text="'لا توجد ارقام توافق بحثك'"
-                        placeholder-text-single="'اختر الرقم'"
-                        class="form-control text-right"
-                        chosen=""
-                        ng-model="buffer.course"
-                        ng-options="(' [ ' + course.code + ' ] ' + course.instructor) for course in buffer.master.courses | orderBy:'code' track by course.id">
-                </select>
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="firstName" class="control-label">الاسم الأول (يحتوى على) </label>
-                <input id="firstName"
-                       type="text"
-                       class="form-control text-right"
-                       placeholder="ادخل الاسم الأول او جزءاً منه"
-                       ng-model="buffer.firstName">
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="secondName" class="control-label">الاسم الثاني (يحتوى على) </label>
-                <input id="secondName"
-                       type="text"
-                       class="form-control text-right"
-                       placeholder="ادخل الاسم الثاني او جزءاً منه"
-                       ng-model="buffer.secondName">
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="thirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
-                <input id="thirdName"
-                       type="text"
-                       class="form-control text-right"
-                       placeholder="ادخل الاسم الثالث او جزءاً منه"
-                       ng-model="buffer.thirdName">
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="forthName" class="control-label">الاسم الرابع (يحتوى على) </label>
-                <input id="forthName"
-                       type="text"
-                       class="form-control text-right"
-                       placeholder="ادخل الاسم الرابع او جزءاً منه"
-                       ng-model="buffer.forthName">
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="dateFrom" class="control-label">تاريخ التسجيل من</label>
-                <div dir="ltr" class="input-group">
-                    <input dir="rtl"
-                           id="dateFrom"
-                           type="text"
-                           class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.dateFrom"
-                           calendarType="ummalqura"
-                           language="en"
-                           dateFormat="yyyy/mm/dd"
-                           showOnFocus="false"
-                           readonly="readonly"
-                           kdatepicker>
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <label for="filterBranch" class="control-label">الفرع</label>
+                    <ui-select id="filterBranch"
+                               focus-autofocus="1"
+                               ng-model="bufferAccount.branch"
+                               theme="bootstrap">
+                        <ui-select-match placeholder="اختر الفرع">
+                            {{$select.selected.name}}
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
+                            <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="dateTo" class="control-label">تاريخ التسجيل إلى</label>
-                <div dir="ltr" class="input-group">
-                    <input dir="rtl"
-                           id="dateTo"
-                           type="text"
-                           class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.dateTo"
-                           calendarType="ummalqura"
-                           language="en"
-                           dateFormat="yyyy/mm/dd"
-                           showOnFocus="false"
-                           readonly="readonly"
-                           kdatepicker>
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <label for="filterMaster" class="control-label">التخصص</label>
+                    <ui-select id="filterMaster"
+                               ng-model="bufferAccount.master"
+                               theme="bootstrap">
+                        <ui-select-match placeholder="اختر التخصص">
+                            [{{$select.selected.code}}] {{$select.selected.name}}
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="master in bufferAccount.branch.masters | filter: $select.search | orderBy:'code' track by master.id">
+                            <div ng-bind-html="master.code | highlight: $select.search"></div>
+                            <span>اسم التخصص : </span>
+                            <span ng-bind-html="''+master.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <label for="filterCourse" class="control-label">الدورة</label>
+                    <ui-select id="filterCourse"
+                               ng-model="bufferAccount.course"
+                               theme="bootstrap">
+                        <ui-select-match placeholder="اختر الدورة">
+                            [{{$select.selected.code}}] {{$select.selected.instructor}}
+                        </ui-select-match>
+                        <ui-select-header>Header text</ui-select-header>
+                        <ui-select-choices
+                                repeat="course in bufferAccount.master.courses | filter: $select.search | orderBy:'code' track by course.id">
+                            <div ng-bind-html="course.code | highlight: $select.search"></div>
+                            <small>
+                                <span>المدرب : </span>
+                                <span ng-bind-html="''+course.instructor | highlight: $select.search"></span>
+                            </small>
+                        </ui-select-choices>
+                        <ui-select-footer>Footer text</ui-select-footer>
+                    </ui-select>
+                </div>
+
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة (يحتوى علي)</label>
-                <input id="identityNumber"
-                       type="text"
-                       class="form-control text-right "
-                       placeholder="ادخل رقم البطاقة كاملاً او جزءاً منه"
-                       ng-model="buffer.studentIdentityNumber">
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="filterFirstName" class="control-label">الاسم الأول (يحتوى على) </label>
+                    <input id="filterFirstName"
+                           type="text"
+                           class="form-control text-right"
+                           placeholder="ادخل الاسم الأول او جزءاً منه"
+                           ng-model="bufferAccount.firstName">
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="filterSecondName" class="control-label">الاسم الثاني (يحتوى على) </label>
+                    <input id="filterSecondName"
+                           type="text"
+                           class="form-control text-right"
+                           placeholder="ادخل الاسم الثاني او جزءاً منه"
+                           ng-model="bufferAccount.secondName">
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="filterThirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
+                    <input id="filterThirdName"
+                           type="text"
+                           class="form-control text-right"
+                           placeholder="ادخل الاسم الثالث او جزءاً منه"
+                           ng-model="bufferAccount.thirdName">
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="filterForthName" class="control-label">الاسم الرابع (يحتوى على) </label>
+                    <input id="filterForthName"
+                           type="text"
+                           class="form-control text-right"
+                           placeholder="ادخل الاسم الرابع او جزءاً منه"
+                           ng-model="bufferAccount.forthName">
+                </div>
+
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="mobile" class="control-label">رقم الجوال (يحتوى على)</label>
-                <input id="mobile"
-                       type="text"
-                       class="form-control text-right "
-                       placeholder="ادخل رقم الجوال كاملاً او جزءاً منه"
-                       ng-model="buffer.studentMobile">
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="dateFrom" class="control-label">تاريخ التسجيل من</label>
+                    <div dir="ltr" class="input-group">
+                        <input dir="rtl"
+                               id="dateFrom"
+                               type="text"
+                               class="form-control text-right is-calendarPicker"
+                               ng-model="bufferAccount.dateFrom"
+                               calendarType="ummalqura"
+                               language="en"
+                               dateFormat="yyyy/mm/dd"
+                               showOnFocus="false"
+                               readonly="readonly"
+                               kdatepicker>
+                    </div>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="dateTo" class="control-label">تاريخ التسجيل إلى</label>
+                    <div dir="ltr" class="input-group">
+                        <input dir="rtl"
+                               id="dateTo"
+                               type="text"
+                               class="form-control text-right is-calendarPicker"
+                               ng-model="bufferAccount.dateTo"
+                               calendarType="ummalqura"
+                               language="en"
+                               dateFormat="yyyy/mm/dd"
+                               showOnFocus="false"
+                               readonly="readonly"
+                               kdatepicker>
+                    </div>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="filterIdentityNumber" class="control-label">رقم البطاقة / الإقامة (يحتوى علي)</label>
+                    <input id="filterIdentityNumber"
+                           type="text"
+                           class="form-control text-right "
+                           placeholder="ادخل رقم البطاقة كاملاً او جزءاً منه"
+                           ng-model="bufferAccount.studentIdentityNumber">
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label for="filterMobile" class="control-label">رقم الجوال (يحتوى على)</label>
+                    <input id="filterMobile"
+                           type="text"
+                           class="form-control text-right "
+                           placeholder="ادخل رقم الجوال كاملاً او جزءاً منه"
+                           ng-model="bufferAccount.studentMobile">
+                </div>
+
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -151,7 +177,7 @@
                        type="number"
                        class="form-control text-right"
                        placeholder="ادخل المبلغ من"
-                       ng-model="buffer.coursePriceFrom">
+                       ng-model="bufferAccount.coursePriceFrom">
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -160,7 +186,7 @@
                        type="number"
                        class="form-control text-right"
                        placeholder="ادخل المبلغ إلى"
-                       ng-model="buffer.coursePriceTo">
+                       ng-model="bufferAccount.coursePriceTo">
             </div>
 
         </div>
@@ -179,7 +205,7 @@
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
-                    ng-click="form.$setPristine();"
+                    ng-click="clearBufferAccount();form.$setPristine();"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
                 <i class="material-icons">delete</i>
             </button>

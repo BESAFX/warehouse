@@ -9,22 +9,11 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountCreateUpdate.html',
-            controller: 'accountCreateUpdateCtrl',
+            templateUrl: '/ui/partials/account/accountCreate.html',
+            controller: 'accountCreateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'تسجيل طالب جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                account: function () {
-                    return undefined;
-                }
-            }
+            size: 'lg'
         });
     };
 
@@ -33,18 +22,12 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountCreateUpdate.html',
-            controller: 'accountCreateUpdateCtrl',
+            templateUrl: '/ui/partials/account/accountUpdate.html',
+            controller: 'accountUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',
             resolve: {
-                title: function () {
-                    return 'تعديل بيانات طالب';
-                },
-                action: function () {
-                    return 'update';
-                },
                 account: function () {
                     return account;
                 }
