@@ -16,23 +16,35 @@ app.controller('branchCreateUpdateCtrl', ['BranchService', 'FileUploader', '$sco
         }
 
         $scope.submit = function () {
-            switch ($scope.action) {
-                case 'create' :
-                    BranchService.uploadBranchLogo($scope.currentFile).then(function (data) {
-                        $scope.branch.logo = data;
+            if($scope.currentFile){
+                BranchService.uploadBranchLogo($scope.currentFile).then(function (data) {
+                    $scope.branch.logo = data;
+                    switch ($scope.action) {
+                        case 'create' :
+                            BranchService.create($scope.branch).then(function (data) {
+                                $uibModalInstance.close(data);
+                            });
+                            break;
+                        case 'update' :
+                            BranchService.update($scope.branch).then(function (data) {
+                                $scope.branch = data;
+                            });
+                            break;
+                    }
+                });
+            }else{
+                switch ($scope.action) {
+                    case 'create' :
                         BranchService.create($scope.branch).then(function (data) {
                             $uibModalInstance.close(data);
                         });
-                    });
-                    break;
-                case 'update' :
-                    BranchService.uploadBranchLogo($scope.currentFile).then(function (data) {
-                        $scope.branch.logo = data;
+                        break;
+                    case 'update' :
                         BranchService.update($scope.branch).then(function (data) {
                             $scope.branch = data;
                         });
-                    });
-                    break;
+                        break;
+                }
             }
         };
 

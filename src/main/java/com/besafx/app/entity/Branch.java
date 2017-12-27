@@ -55,6 +55,8 @@ public class Branch implements Serializable {
 
     private String commericalRegisteration;
 
+    private String taxCode;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String logo;
