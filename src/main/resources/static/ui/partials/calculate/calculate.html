@@ -4,6 +4,7 @@
      ng-class="{'mdl-layout--fixed-drawer' : stickSideMenu===true}">
 
     <header class="mdl-layout__header">
+
         <div class="mdl-layout__header-row">
 
             <div class="mdl-layout-icon">
@@ -130,6 +131,208 @@
             </ul>
 
         </div>
+
+        <div class="mdl-layout__header-row mdl-layout--large-screen-only">
+
+            <div class="row">
+                <div class="btn-toolbar">
+                    <div class="btn-group" data-toggle="buttons">
+
+                        <button id="toggle1-action-menu-lower-right" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                            <span>جديد</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="toggle1-action-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openOfferCreateModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">bookmark</i>
+                                    <span>عرض جديد...</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openAccountCreateModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">book</i>
+                                    <span>طالب جديد...</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openPaymentCreateModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">attach_money</i>
+                                   <span>سند قبض...</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openPaymentOutCreateModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">money_off</i>
+                                   <span>سند صرف...</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ModalProvider.openBillBuyCreateModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">shopping_cart</i>
+                                   <span>فاتورة شراء...</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <button id="toggle2-report-menu-lower-right" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                            <span>العروض</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="toggle2-report-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportOfferByBranchModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>العروض حسب الفرع</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportOfferByMasterModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>العروض حسب التخصص</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportOfferByMasterCategoryModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>العروض حسب التصنيف</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportOfferByPersonModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>العروض حسب المستخدم</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportCallByPersonModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>اتصالات العروض حسب المستخدم</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportOfferByIdModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>العروض حسب رقم العرض</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <button id="toggle3-report-menu-lower-right" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                            <span>التسجيل</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="toggle3-report-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportPrintContractModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>طباعة العقود</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportAccountByBranchModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>الطلاب المسجلين لكل فرع</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportAccountByMasterModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>الطلاب المسجلين لكل تخصص</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportAccountByMasterCategoryModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>الطلاب المسجلين حسب التصنيف</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportAccountByCourseModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>الطلاب المسجلين لكل دورة</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportBranchDetailsModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>بيانات الفروع</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportMasterDetailsModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>بيانات التخصصات</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportCourseDetailsModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                   <span>بيانات الدورات</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <button id="toggle4-report-menu-lower-right" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                            <span>الايرادات</span>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                            for="toggle4-report-menu-lower-right">
+                            <li class="mdl-menu__item mdl-list__item"
+                                ng-click="ReportModelProvider.openReportPaymentByBranchModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>تقرير ايرادات الفرع</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportPaymentByMasterModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>تقرير ايرادات التخصص</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportPaymentByCourseModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>تقرير ايرادات الدورة</span>
+                                </span>
+                            </li>
+                            <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                                ng-click="ReportModelProvider.openReportPaymentByMasterCategoryModel()">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="material-icons mdl-list__item-icon">print</i>
+                                    <span>تقرير ايرادات بارقام السندات</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </header>
 
     <div class="mdl-layout__drawer">
