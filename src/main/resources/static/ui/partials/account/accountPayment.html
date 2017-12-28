@@ -9,15 +9,7 @@
                 <i class="material-icons mdl-list__item-icon mdl-color-text--white">add</i>
                 <strong>
                     <span>دفعة سداد التسجيل رقم / </span>
-                    {{payment.account.code}}
-                    -
-                    {{payment.account.course.code}}
-                    -
-                    {{payment.account.course.master.code}}
-                    -
-                    {{payment.account.course.master.branch.code}}
-                    -
-                    {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                    {{payment.account.key}}
                 </strong>
             </span>
         </h3>

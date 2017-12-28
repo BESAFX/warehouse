@@ -3,8 +3,6 @@ package com.besafx.app.controller;
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.enums.ExportType;
-import com.besafx.app.service.AccountService;
-import com.besafx.app.service.CourseService;
 import com.besafx.app.service.PaymentService;
 import net.sf.jasperreports.engine.*;
 import org.joda.time.DateTime;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,16 +34,18 @@ public class ReportPaymentController {
 
     @RequestMapping(value = "/report/CashReceipt/{paymentId}", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printCashReceipt(@PathVariable(value = "paymentId") Long paymentId, HttpServletResponse response) throws JRException, IOException {
+    public void printCashReceipt(@PathVariable(value = "paymentId") Long paymentId,
+                                 HttpServletResponse response)
+            throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
         Payment payment = paymentService.findOne(paymentId);
+        map.put("logo", new URL(payment.getAccount().getCourse().getMaster().getBranch().getLogo()).openStream());
         map.put("payment", payment);
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/CashReceipt.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(ExportType.PDF, response, jasperPrint);
     }
-
 
     @RequestMapping(value = "/report/PaymentByBranches", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
@@ -72,7 +73,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -110,7 +111,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -142,7 +143,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -208,7 +209,7 @@ public class ReportPaymentController {
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         map.put("payments", getList(predicates));
         //End Search
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
@@ -229,7 +230,7 @@ public class ReportPaymentController {
         map.put("param1", param1.toString());
         map.put("param2", param2.toString());
         map.put("payments", paymentIds.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
-        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(ExportType.PDF, response, jasperPrint);

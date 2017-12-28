@@ -3,7 +3,10 @@ app.controller('accountPaymentCtrl', ['AccountService', 'PaymentService', 'Payme
 
         $scope.buffer = {};
         $scope.payment = {};
-        $scope.payment.account = account;
+
+        AccountService.findOne(account.id).then(function (data) {
+            $scope.payment.account = data;
+        });
 
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {

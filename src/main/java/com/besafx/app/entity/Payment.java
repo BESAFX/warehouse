@@ -1,4 +1,5 @@
 package com.besafx.app.entity;
+import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -66,5 +67,29 @@ public class Payment implements Serializable {
         ObjectMapper mapper = new ObjectMapper();
         Payment payment = mapper.readValue(jsonString, Payment.class);
         return payment;
+    }
+
+    public Double getTax() {
+        try{
+            return (this.getAmountNumber() * 5 ) / 100;
+        }catch (Exception ex){
+            return 0.0;
+        }
+    }
+
+    public Double getAmountTax() {
+        try{
+            return this.amountNumber + this.getTax();
+        }catch (Exception ex){
+            return 0.0;
+        }
+    }
+
+    public String getAmountTaxString() {
+        try{
+            return ArabicLiteralNumberParser.literalValueOf(this.getAmountTax());
+        }catch (Exception ex){
+            return "";
+        }
     }
 }
