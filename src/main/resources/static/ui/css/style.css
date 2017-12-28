@@ -675,6 +675,10 @@ WebKit inertia scrolling is being added here for any present/future devices that
     font-size: 13px !important;
 }
 
+.mdl-mini-footer{
+    padding: 5px!important;
+}
+
 /************************************
 * Feed                              *
 *************************************/
