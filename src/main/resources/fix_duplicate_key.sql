@@ -7,6 +7,7 @@ SELECT setval('attach_type_sequence', (SELECT MAX(id) FROM attach_type) + 1);
 SELECT setval('bank_sequence', (SELECT MAX(id) FROM bank) + 1);
 SELECT setval('bill_buy_sequence', (SELECT MAX(id) FROM bill_buy) + 1);
 SELECT setval('bill_buy_type_sequence', (SELECT MAX(id) FROM bill_buy_type) + 1);
+SELECT setval('branch_access_sequence', (SELECT MAX(id) FROM branch_access) + 1);
 SELECT setval('branch_sequence', (SELECT MAX(id) FROM branch) + 1);
 SELECT setval('call_sequence', (SELECT MAX(id) FROM call) + 1);
 SELECT setval('company_sequence', (SELECT MAX(id) FROM company) + 1);
