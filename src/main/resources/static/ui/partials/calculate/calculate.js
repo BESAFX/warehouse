@@ -23,6 +23,7 @@ function calculateCtrl (
         });
         BranchService.fetchBranchMasterCourse().then(function (data) {
             $scope.branches = data;
+            $scope.clear();
         });
         $scope.fetchBillBuyTypeTableData();
         window.componentHandler.upgradeAllRegistered();
@@ -72,6 +73,7 @@ function calculateCtrl (
             scope: $scope,
             backdrop: 'static',
             keyboard: false,
+            size: 'lg',
             resolve: {
                 title: function () {
                     return 'البحث فى سندات القبض';

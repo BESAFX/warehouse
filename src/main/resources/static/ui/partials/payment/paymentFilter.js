@@ -3,10 +3,6 @@ app.controller('paymentFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $scope.modalTitle = title;
 
-        $scope.buffer = {};
-
-        $scope.buffer.branch = $scope.branches[0];
-
         $scope.submit = function () {
             $uibModalInstance.close($scope.buffer);
         };
@@ -17,6 +13,6 @@ app.controller('paymentFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

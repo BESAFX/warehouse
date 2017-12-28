@@ -15,6 +15,12 @@
 
     <div class="modal-body" id="modal-body">
 
+        <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+            <div class="alert alert-danger" role="alert">
+                <strong>فضلاً اكمل الحقول المطلوبة (لاحظ أن هناك تبويبات!)</strong>
+            </div>
+        </div>
+
         <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
             <div class="mdl-tabs__tab-bar">
@@ -29,12 +35,6 @@
             <div class="mdl-tabs__panel is-active" id="panel-1-{{$index}}">
 
                 <div class="row">
-
-                    <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
-                        <div class="alert alert-danger" role="alert">
-                            <strong>فضلاً اكمل الحقول المطلوبة</strong>
-                        </div>
-                    </div>
 
                     <div class="form-group row">
 
