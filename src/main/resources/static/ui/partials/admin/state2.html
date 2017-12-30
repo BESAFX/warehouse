@@ -133,6 +133,26 @@
                             <span> اسم الفرع</span>
                         </th>
 
+                        <th st-sort="taxCode" class="text-right">
+                            <span>الرقم الضريبي</span>
+                        </th>
+
+                        <th class="text-right">
+                            <span>الهاتف</span>
+                        </th>
+
+                        <th st-sort="mobile" class="text-right">
+                            <span>الجوال</span>
+                        </th>
+
+                        <th st-sort="postalCode" class="text-right">
+                            <span>الصندوق البريدي</span>
+                        </th>
+
+                        <th st-sort="email" class="text-right">
+                            <span>البريد الرسمي</span>
+                        </th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -145,11 +165,16 @@
                         <td st-select-row-custom="branch">{{$index+1}}</td>
                         <td st-select-row-custom="branch">{{branch.code}}</td>
                         <td st-select-row-custom="branch">{{branch.name}}</td>
+                        <td st-select-row-custom="branch">{{branch.taxCode}}</td>
+                        <td st-select-row-custom="branch">{{branch.phone1}} - {{branch.phone2}}</td>
+                        <td st-select-row-custom="branch">{{branch.mobile}}</td>
+                        <td st-select-row-custom="branch">{{branch.postalCode}}</td>
+                        <td st-select-row-custom="branch">{{branch.email}}</td>
                     </tr>
                     <tr class="blank_row"
                         style="height: 10px !important; background-color: #FFFFFF;"
                         ng-show="!collection1 || collection1.length ==0">
-                        <td colspan="5">لا توجد بيانات</td>
+                        <td colspan="8">لا توجد بيانات</td>
                     </tr>
                     </tbody>
                 </table>
