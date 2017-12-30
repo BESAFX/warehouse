@@ -1,4 +1,5 @@
 package com.besafx.app.entity;
+import com.besafx.app.entity.enums.PaymentMethod;
 import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -46,6 +47,11 @@ public class Payment implements Serializable {
 
     private String type;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
+    private Long paymentMethodCode;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String note;
@@ -89,6 +95,14 @@ public class Payment implements Serializable {
         try{
             return ArabicLiteralNumberParser.literalValueOf(this.getAmountTax());
         }catch (Exception ex){
+            return "";
+        }
+    }
+
+    public String getPaymentMethodInArabic() {
+        try {
+            return this.paymentMethod.getName();
+        } catch (Exception ex) {
             return "";
         }
     }
