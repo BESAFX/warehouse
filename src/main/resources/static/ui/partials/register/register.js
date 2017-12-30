@@ -835,7 +835,7 @@ function registerCtrl (
         {
             html: '<div class="drop-menu">انشاء تسجيل جديد<span class="fa fa-pencil fa-lg"></span></div>',
             enabled: function () {
-                return true
+                return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_CREATE']);
             },
             click: function ($itemScope, $event, value) {
                 $scope.newAccount();
@@ -844,7 +844,7 @@ function registerCtrl (
         {
             html: '<div class="drop-menu">تعديل بيانات التسجيل<span class="fa fa-edit fa-lg"></span></div>',
             enabled: function () {
-                return true
+                return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_UPDATE']);
             },
             click: function ($itemScope, $event, value) {
                 ModalProvider.openAccountUpdateModel($itemScope.account);
@@ -853,7 +853,7 @@ function registerCtrl (
         {
             html: '<div class="drop-menu">تعديل رسوم الدورة<span class="fa fa-edit fa-lg"></span></div>',
             enabled: function () {
-                return true
+                return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_UPDATE']);
             },
             click: function ($itemScope, $event, value) {
                 ModalProvider.openAccountUpdatePriceModel($itemScope.account);
@@ -862,7 +862,7 @@ function registerCtrl (
         {
             html: '<div class="drop-menu">حذف التسجيل<span class="fa fa-trash fa-lg"></span></div>',
             enabled: function () {
-                return true
+                return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_DELETE']);
             },
             click: function ($itemScope, $event, value) {
                 $scope.deleteAccount($itemScope.account);
@@ -871,7 +871,7 @@ function registerCtrl (
         {
             html: '<div class="drop-menu">سند قبض<span class="fa fa-money fa-lg"></span></div>',
             enabled: function () {
-                return true
+                return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_PAYMENT_CREATE']);
             },
             click: function ($itemScope, $event, value) {
                 $scope.newPayment($itemScope.account);

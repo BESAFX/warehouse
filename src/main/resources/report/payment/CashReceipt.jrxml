@@ -444,6 +444,31 @@ $P{payment}.getAccount().getCourse().getMaster().getBranch().getPostalCode()]]><
 							</staticText>
 						</frame>
 					</frame>
+					<staticText>
+						<reportElement x="485" y="124" width="50" height="30" uuid="9dccf9f6-f24f-42e0-a4d0-9bce137cdec0">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						</reportElement>
+						<box>
+							<pen lineWidth="0.5" lineColor="#B5B5B5"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Arial" size="12" isBold="false" isUnderline="false"/>
+						</textElement>
+						<text><![CDATA[اسم الطالب]]></text>
+					</staticText>
+					<textField isBlankWhenNull="true">
+						<reportElement mode="Opaque" x="202" y="124" width="283" height="30" backcolor="#D7F3FA" uuid="89331fea-5580-4bc7-afcf-654ff2ce70f1">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						</reportElement>
+						<box>
+							<bottomPen lineWidth="1.0"/>
+						</box>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font fontName="Arial" size="10" isUnderline="false"/>
+							<paragraph rightIndent="5"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{payment}.getAccount().getName()]]></textFieldExpression>
+					</textField>
 				</frame>
 			</frame>
 		</band>
