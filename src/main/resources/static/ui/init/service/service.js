@@ -35,6 +35,24 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openAccountUpdatePriceModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountUpdatePrice.html',
+            controller: 'accountUpdatePriceCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                account: function () {
+                    return account;
+                }
+            }
+        });
+    };
+
     this.openAccountDetailsModel = function (account) {
         return $uibModal.open({
             animation: true,

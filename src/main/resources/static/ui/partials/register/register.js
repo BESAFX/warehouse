@@ -635,8 +635,8 @@ function registerCtrl (
         AccountService.create($scope.account).then(function (data) {
             AccountService.findOne(data.id).then(function (data) {
                 $scope.accounts.splice(0, 0, data);
-                $scope.account = {};
                 $scope.form1.$setPristine();
+                $scope.account = {};
             });
         });
     };
@@ -848,6 +848,15 @@ function registerCtrl (
             },
             click: function ($itemScope, $event, value) {
                 ModalProvider.openAccountUpdateModel($itemScope.account);
+            }
+        },
+        {
+            html: '<div class="drop-menu">تعديل رسوم الدورة<span class="fa fa-edit fa-lg"></span></div>',
+            enabled: function () {
+                return true
+            },
+            click: function ($itemScope, $event, value) {
+                ModalProvider.openAccountUpdatePriceModel($itemScope.account);
             }
         },
         {
