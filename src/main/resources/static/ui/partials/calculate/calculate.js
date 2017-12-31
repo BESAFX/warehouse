@@ -187,6 +187,10 @@ function calculateCtrl (
             PaymentService.filter(search.join("")).then(function (data) {
                 $scope.payments = data;
                 $scope.setSelectedPayment(data[0]);
+                $scope.totalAmount = 0;
+                angular.forEach(data, function (payment) {
+                    $scope.totalAmount+=payment.amountNumber;
+                });
                 $scope.itemsPayment = [];
                 $scope.itemsPayment.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsPayment.push({'id': 2, 'type': 'title', 'name': 'سندات القبض', 'style': 'font-weight:bold'});

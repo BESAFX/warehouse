@@ -1,13 +1,19 @@
-app.controller('paymentUpdateCtrl', ['PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'payment',
-    function (PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, payment) {
+app.controller('paymentUpdateCtrl', ['PaymentService', 'AccountService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'payment',
+    function (PaymentService, AccountService, $rootScope, $scope, $timeout, $log, $uibModalInstance, payment) {
 
         $scope.payment = payment;
         $scope.buffer = {};
         $scope.buffer.hijriDate = true;
 
+        $timeout(function () {
+            AccountService.findOne(payment.account.id).then(function (data) {
+                return $scope.payment.account = data;
+            });
+        }, 600);
+
         $scope.submit = function () {
             PaymentService.update($scope.payment).then(function (data) {
-               $scope.payment = data;
+                $uibModalInstance.close(data);
             });
         };
 
