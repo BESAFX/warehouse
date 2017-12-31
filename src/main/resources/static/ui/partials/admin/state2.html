@@ -149,6 +149,10 @@
                             <span>الصندوق البريدي</span>
                         </th>
 
+                        <th st-sort="licenceCode" class="text-right">
+                            <span>رقم الرخصة</span>
+                        </th>
+
                         <th st-sort="email" class="text-right">
                             <span>البريد الرسمي</span>
                         </th>
@@ -169,12 +173,13 @@
                         <td st-select-row-custom="branch">{{branch.phone1}} - {{branch.phone2}}</td>
                         <td st-select-row-custom="branch">{{branch.mobile}}</td>
                         <td st-select-row-custom="branch">{{branch.postalCode}}</td>
+                        <td st-select-row-custom="branch">{{branch.licenceCode}}</td>
                         <td st-select-row-custom="branch">{{branch.email}}</td>
                     </tr>
                     <tr class="blank_row"
                         style="height: 10px !important; background-color: #FFFFFF;"
                         ng-show="!collection1 || collection1.length ==0">
-                        <td colspan="8">لا توجد بيانات</td>
+                        <td colspan="9">لا توجد بيانات</td>
                     </tr>
                     </tbody>
                 </table>

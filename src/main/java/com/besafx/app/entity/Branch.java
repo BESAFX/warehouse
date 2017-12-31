@@ -55,6 +55,8 @@ public class Branch implements Serializable {
 
     private String commericalRegisteration;
 
+    private String licenceCode;
+
     private String taxCode;
 
     @Lob

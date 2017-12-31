@@ -36,9 +36,9 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="480">
+		<band height="500">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="480" uuid="6a715522-5d55-4911-a179-13a9b879e945"/>
+				<reportElement x="0" y="0" width="555" height="500" uuid="6a715522-5d55-4911-a179-13a9b879e945"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#C4C4C4"/>
 				</box>
@@ -62,11 +62,9 @@
 							<paragraph lineSpacing="AtLeast" lineSpacingSize="0.5"/>
 						</textElement>
 						<textFieldExpression><![CDATA["تحت إشراف وترخيص المؤسسة العامة" + "\n" + 
-"للتعليم الفني والتدريب المهني" + "\n" + 
-"فرع / " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getName() + "\n" + 
-"رقم ضريبي: " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getTaxCode() + "\n" + 
-"ت:  " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getPhone1() + " - " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getPhone2() + " - " + " ص.ب " + 
-$P{payment}.getAccount().getCourse().getMaster().getBranch().getPostalCode()]]></textFieldExpression>
+"للتدريب التقني والمهني" + "\n" + 
+"رقم الرخصة: " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getLicenceCode() + "\n" + 
+"رقم ضريبي: " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getTaxCode()]]></textFieldExpression>
 					</textField>
 				</frame>
 				<line>
@@ -75,7 +73,7 @@ $P{payment}.getAccount().getCourse().getMaster().getBranch().getPostalCode()]]><
 					</reportElement>
 				</line>
 				<frame>
-					<reportElement x="10" y="110" width="535" height="360" uuid="81a35fb6-575f-44ef-8d58-c0671d05431b">
+					<reportElement x="10" y="110" width="535" height="377" uuid="81a35fb6-575f-44ef-8d58-c0671d05431b">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box padding="0">
@@ -377,10 +375,10 @@ $P{payment}.getAccount().getCourse().getMaster().getBranch().getPostalCode()]]><
 					<staticText>
 						<reportElement x="0" y="220" width="535" height="39" uuid="28b7c37d-0145-404a-be0b-20ea9de64f5f"/>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
-							<font fontName="PT Bold Heading" size="10" isBold="false" isUnderline="false"/>
+							<font fontName="Arial" size="16" isBold="false" isUnderline="false"/>
 						</textElement>
 						<text><![CDATA[الرسوم المدفوعة لا تسترد مهما كان السبب والعذر
-فى حال تعدي نسبة الغياب المسموح بها سوف يتم فصل الطالب]]></text>
+فى حال تعدي نسبة الغياب المسموح بها سوف يتم فصل الطالب ولا يحق له مطالبة المعهد بأي رسوم]]></text>
 					</staticText>
 					<frame>
 						<reportElement x="202" y="29" width="131" height="39" uuid="4acebb18-7ee7-4e38-9dce-1be4c174c498"/>
@@ -470,6 +468,22 @@ $P{payment}.getAccount().getCourse().getMaster().getBranch().getPostalCode()]]><
 						<textFieldExpression><![CDATA[$P{payment}.getAccount().getName()]]></textFieldExpression>
 					</textField>
 				</frame>
+				<line>
+					<reportElement x="11" y="466" width="534" height="1" uuid="b62693af-c18a-4bee-86a5-1ca1e4f0aac9">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+				</line>
+				<textField>
+					<reportElement x="11" y="467" width="533" height="20" uuid="2e724e7f-b9b7-4716-874a-0206e9725fda"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+						<paragraph lineSpacing="AtLeast" lineSpacingSize="0.5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["فرع / " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getName() + "\n" + 
+"ت:  " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getPhone1() + " - " + 
+$P{payment}.getAccount().getCourse().getMaster().getBranch().getPhone2() + " - " +  " جوال: " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getMobile() +" - " + " ص.ب " + 
+$P{payment}.getAccount().getCourse().getMaster().getBranch().getPostalCode()]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</summary>
