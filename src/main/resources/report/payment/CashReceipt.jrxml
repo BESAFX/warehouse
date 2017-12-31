@@ -9,9 +9,9 @@
 		<![CDATA[]]>
 	</queryString>
 	<pageFooter>
-		<band height="44">
+		<band height="14">
 			<frame>
-				<reportElement x="10" y="30" width="534" height="14" uuid="a4ea05ac-c062-454a-acfb-207979ddb28e">
+				<reportElement x="10" y="0" width="534" height="14" uuid="a4ea05ac-c062-454a-acfb-207979ddb28e">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 				</reportElement>
 				<textField>
