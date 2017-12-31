@@ -77,7 +77,7 @@ public class PersonRest {
 
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_PERSON_UPDATE') or hasRole('ROLE_PROFILE_UPDATE')")
+    @PreAuthorize("hasRole('ROLE_PERSON_UPDATE')")
     public String update(@RequestBody Person person, Principal principal) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
@@ -94,6 +94,25 @@ public class PersonRest {
                 BranchAccess branchAccess = listIterator.next();
                 branchAccess.setPerson(person);
                 branchAccessService.save(branchAccess);
+            }
+            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الحساب الشخصي بنجاح").type("success").build());
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "updateProfile", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    public String updateProfile(@RequestBody Person person, Principal principal) {
+        Person object = personService.findOne(person.getId());
+        if (object != null) {
+            if (!object.getPassword().equals(person.getPassword())) {
+                person.setPassword(passwordEncoder.encode(person.getPassword()));
+            }
+            if (person.getContact() != null) {
+                person.setContact(contactService.save(person.getContact()));
             }
             notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الحساب الشخصي بنجاح").type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);

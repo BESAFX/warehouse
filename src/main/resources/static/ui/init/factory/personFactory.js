@@ -29,6 +29,11 @@ app.factory("PersonService",
                     return response.data;
                 });
             },
+            updateProfile: function (person) {
+                return $http.put("/api/person/updateProfile", person).then(function (response) {
+                    return response.data;
+                });
+            },
             enable: function (person) {
                 return $http.put("/api/person/enable", person).then(function (response) {
                     return response.data;

@@ -6,7 +6,7 @@ app.controller("profileCtrl", ['PersonService', 'FileUploader', '$rootScope', '$
         }, 1500);
 
         $scope.submit = function () {
-            PersonService.update($rootScope.me).then(function (data) {
+            PersonService.updateProfile($rootScope.me).then(function (data) {
                 $rootScope.me = data;
             });
         };
