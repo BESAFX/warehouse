@@ -1,7 +1,10 @@
 package com.besafx.app;
 
+import com.besafx.app.entity.Payment;
+import com.besafx.app.entity.enums.PaymentMethod;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.BranchService;
+import com.besafx.app.service.PaymentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -24,12 +27,14 @@ public class MainTests {
     @Autowired
     private BranchService branchService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     @Test
     public void contextLoads() throws ExecutionException, InterruptedException {
-        accountService.findByCourseMasterBranch(branchService.findByCode(2)).stream().forEach(account -> {
-            account.setCoursePaymentType("قسط شهري");
-            account.setCourseCreditAmount(1000.0);
-            accountService.save(account);
+        paymentService.findAll().forEach(a -> {
+            a.setPaymentMethod(PaymentMethod.Cash);
+            paymentService.save(a);
         });
     }
 }

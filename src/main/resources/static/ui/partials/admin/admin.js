@@ -53,7 +53,7 @@ function adminCtrl (
     $scope.selectedBranch = {};
     $scope.branches = [];
     $scope.fetchBranchTableData = function () {
-        BranchService.fetchBranchCombo().then(function (data) {
+        BranchService.fetchTableData().then(function (data) {
             $scope.branches = data;
             $scope.setSelectedBranch(data[0]);
         });

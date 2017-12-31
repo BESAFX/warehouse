@@ -143,6 +143,10 @@
                             <span>تاريخ السند</span>
                         </th>
 
+                        <th st-sort="paymentMethod" class="text-right">
+                            <span>طريقة الدفع</span>
+                        </th>
+
                         <th st-sort="amountNumber" class="text-right">
                             <span>قيمة السند</span>
                         </th>
@@ -173,7 +177,7 @@
 
                     </tr>
                     <tr>
-                        <th colspan="10">
+                        <th colspan="11">
                             <input st-search=""
                                    class="form-control"
                                    placeholder="بحث شامل وسريع..."
@@ -193,6 +197,7 @@
                         <td st-select-row-custom="payment">
                             {{payment.date | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
                         </td>
+                        <td st-select-row-custom="payment">{{payment.paymentMethodInArabic}}</td>
                         <td st-select-row-custom="payment">{{payment.amountNumber}}</td>
                         <td st-select-row-custom="payment">{{payment.type}}</td>
                         <td st-select-row-custom="payment">
@@ -225,12 +230,12 @@
                     </tr>
                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                         ng-show="!collection || collection.length ==0">
-                        <td colspan="10">لا توجد بيانات</td>
+                        <td colspan="11">لا توجد بيانات</td>
                     </tr>
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td colspan="10">
+                        <td colspan="11">
                             <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
                         </td>
                     </tr>
