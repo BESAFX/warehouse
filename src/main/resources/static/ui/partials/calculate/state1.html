@@ -103,6 +103,10 @@
                             <span>الوصف</span>
                         </th>
 
+                        <th st-sort="payments.length" class="text-right">
+                            <span>عدد السندات المدخلة</span>
+                        </th>
+
                         <th st-sort="branch.name" class="text-right">
                             <span>الفرع</span>
                         </th>
@@ -130,6 +134,7 @@
                         <td st-select-row-custom="paymentBook">{{paymentBook.toCode}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.maxCode}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.note}}</td>
+                        <td st-select-row-custom="paymentBook">{{paymentBook.payments.length}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.branch.name}}</td>
                         <td st-select-row-custom="paymentBook">
                             <span>{{paymentBook.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
@@ -142,7 +147,7 @@
                     </tr>
                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                         ng-show="!collection1 || collection1.length ==0">
-                        <td colspan="9">لا توجد بيانات</td>
+                        <td colspan="10">لا توجد بيانات</td>
                     </tr>
                     </tbody>
                 </table>

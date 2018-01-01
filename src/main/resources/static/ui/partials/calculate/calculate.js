@@ -76,6 +76,9 @@ function calculateCtrl (
             });
         });
     };
+    $scope.printPaymentBook = function (paymentBook) {
+        window.open('/report/paymentBook/payments/'+ paymentBook.id + '/PDF');
+    };
     $scope.rowMenuPaymentBook = [
         {
             html: '<div class="drop-menu"> انشاء دفتر جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
@@ -102,6 +105,15 @@ function calculateCtrl (
             },
             click: function ($itemScope, $event, value) {
                 $scope.deletePaymentBook($itemScope.paymentBook);
+            }
+        },
+        {
+            html: '<div class="drop-menu"> طباعة الدفتر <span class="fa fa-print fa-lg"></span></div>',
+            enabled: function () {
+                return true
+            },
+            click: function ($itemScope, $event, value) {
+                $scope.printPaymentBook($itemScope.paymentBook);
             }
         }
     ];
