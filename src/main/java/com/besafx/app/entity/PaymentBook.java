@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -41,6 +42,10 @@ public class PaymentBook implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String note;
 
     @ManyToOne
     private Branch branch;
