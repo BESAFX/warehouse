@@ -48,9 +48,11 @@ public class PaymentBook implements Serializable {
     private String note;
 
     @ManyToOne
+    @JoinColumn(name = "branch")
     private Branch branch;
 
     @ManyToOne
+    @JoinColumn(name = "last_person")
     private Person lastPerson;
 
     @OneToMany(mappedBy = "paymentBook", fetch = FetchType.LAZY)

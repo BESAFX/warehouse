@@ -49,8 +49,8 @@ public class Master implements Serializable {
     @JoinColumn(name = "last_person")
     private Person lastPerson;
 
-    @JoinColumn(name = "masterCategory")
     @ManyToOne
+    @JoinColumn(name = "master_category")
     private MasterCategory masterCategory;
 
     @OneToMany(mappedBy = "master", fetch = FetchType.LAZY)

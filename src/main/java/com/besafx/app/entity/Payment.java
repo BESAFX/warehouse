@@ -57,12 +57,15 @@ public class Payment implements Serializable {
     private String note;
 
     @ManyToOne
+    @JoinColumn(name = "payment_book")
     private PaymentBook paymentBook;
 
     @ManyToOne
+    @JoinColumn(name = "account")
     private Account account;
 
     @ManyToOne
+    @JoinColumn(name = "last_person")
     private Person lastPerson;
 
     @JsonCreator
@@ -74,8 +77,7 @@ public class Payment implements Serializable {
 
     public Double getTax() {
         try{
-//            return (this.getAmountNumber() * 5 ) / 100;
-            return 0.0;
+            return (this.getAmountNumber() * 5 ) / 100;
         }catch (Exception ex){
             return 0.0;
         }
