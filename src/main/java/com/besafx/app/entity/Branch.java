@@ -73,6 +73,9 @@ public class Branch implements Serializable {
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<Bank> banks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    private List<PaymentBook> paymentBooks = new ArrayList<>();
+
     @JsonCreator
     public static Branch Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

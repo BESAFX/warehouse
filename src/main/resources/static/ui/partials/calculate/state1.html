@@ -1,53 +1,51 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="panel panel-body">
-        <div class="row">
-            <ul dir="rtl" class="breadcrumb">
-                <li ng-repeat="item in itemsPayment | orderBy:'id' track by item.id">
-                    <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
-                    <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
+        <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+            <button id="billBuy-type-menu-lower-right" style="width: 100%;"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                <span>العمليات</span>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                for="billBuy-type-menu-lower-right">
+                <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                    ng-click="fetchPaymentBookTableData()">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">visibility</i>
+                        <span>عرض الدفاتر</span>
+                    </span>
+                </li>
+                <li class="mdl-menu__item mdl-list__item" ng-click="newPaymentBook()"
+                    ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_CREATE'])">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">add</i>
+                        <span>انشاء دفتر جديد</span>
+                    </span>
                 </li>
             </ul>
         </div>
-        <div class="row">
 
-            <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
-                <button id="branch-menu-lower-right" style="width: 100%;"
-                        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                    <span>عرض البيانات</span>
-                </button>
-                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                    for="branch-menu-lower-right">
-                    <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
-                        ng-click="filterPayment();">
-                        <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-icon">search</i>
-                            <span>عرض بيانات السندات</span>
-                        </span>
-                    </li>
-                    <li class="mdl-menu__item mdl-list__item"
-                        ng-click="newPayment()"
-                        ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])">
-                        <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-icon">monetization_on</i>
-                            <span>انشاء سند قبض</span>
-                        </span>
-                    </li>
-                    <li class="mdl-menu__item mdl-list__item"
-                        ng-click="ModalProvider.openPaymentHeavyWorkModel()"
-                        ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])">
-                        <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-icon">build</i>
-                            <span>انشاء دفعة من السندات</span>
-                        </span>
-                    </li>
-                </ul>
+        <div class="pull-left" ng-init="toggleList=1">
+            <div class="btn-toolbar">
+                <div class="btn-group" data-toggle="buttons">
+                    <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                            type="button" ng-click="toggleList=1"
+                            ng-class="{'active':toggleList===1}">
+                        <input type="radio" name="options"/>
+                        <i class="material-icons">reorder</i>
+                    </button>
+                    <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                            type="button" ng-click="toggleList=2"
+                            ng-class="{'active':toggleList===2}">
+                        <input type="radio" name="options"/>
+                        <i class="material-icons">view_column</i>
+                    </button>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===1">
 
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -55,150 +53,168 @@
                 style="margin-top: 2px;">
                 <li>
                     <a href=""
-                       ng-click="filterPayment()"
+                       ng-click="fetchPaymentBookTableData()"
                        tooltip-append-to-body="true"
-                       uib-tooltip="تصفية البيانات">
-                        <span class="fa fa-filter"></span>
+                       uib-tooltip="تحديث البيانات">
+                        <span class="fa fa-refresh"></span>
                     </a>
                     <a href=""
-                       ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
-                       ng-click="newPayment()"
+                       ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_CREATE'])"
+                       ng-click="newPaymentBook()"
                        tooltip-append-to-body="true"
-                       uib-tooltip="انشاء سند جديد">
+                       uib-tooltip="انشاء دفتر جديد">
                         <span class="fa fa-plus-square"></span>
                     </a>
                 </li>
             </ul>
             <div class="panel-title-box pull-right">
-                <h3>قائمة سندات القبض</h3>
+                <h3>قائمة الدفاتر</h3>
+                <span>يتم عرض الدفاتر حسب الفرع  التابع له المستخدم الفعال</span>
             </div>
         </div>
         <div class="panel-body panel-body-table">
             <div class="table-responsive">
-                <table st-table="collection" st-safe-src="payments"
+                <table st-table="collection1" st-safe-src="paymentBooks"
                        class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="text-right">
+
+                        <th class="text-center">
                             <span>م</span>
                         </th>
 
-                        <th st-sort="code" class="text-right">
-                            <span>رقم السند</span>
+                        <th st-sort="code" lass="text-right">
+                            <span> رقم الدفتر</span>
                         </th>
 
-                        <th st-sort="date" class="text-right">
-                            <span>تاريخ السند</span>
+                        <th st-sort="fromCode" class="text-right">
+                            <span>رقم الدفتر من</span>
                         </th>
 
-                        <th st-sort="paymentMethod" class="text-right">
-                            <span>طريقة الدفع</span>
+                        <th st-sort="toCode" class="text-right">
+                            <span>رقم الدفتر إلى</span>
                         </th>
 
-                        <th st-sort="amountNumber" class="text-right danger">
-                            <span>قيمة السند</span>
+                        <th st-sort="branch.name" class="text-right">
+                            <span>الفرع</span>
                         </th>
 
-                        <th st-sort="type" class="text-right">
-                            <span>نوع السند</span>
-                        </th>
-
-                        <th st-sort="account.id" class="text-right">
-                            <span>رقم الطالب</span>
-                        </th>
-
-                        <th st-sort="account.student.contact.firstName" class="text-right">
-                            <span>اسم الطالب</span>
-                        </th>
-
-                        <th st-sort="account.course.master.name" class="text-right">
-                            <span>التخصص</span>
-                        </th>
-
-                        <th st-sort="note" class="text-right">
-                            <span>بيان السند</span>
+                        <th st-sort="lastUpdate" class="text-right">
+                            <span>تاريخ آخر تعديل</span>
                         </th>
 
                         <th st-sort="lastPerson.contact.firstName" class="text-right">
-                            <span>مدخل السند</span>
+                            <span> مدخل الدفتر</span>
                         </th>
 
-                    </tr>
-                    <tr>
-                        <th colspan="11">
-                            <input st-search=""
-                                   class="form-control"
-                                   placeholder="بحث شامل وسريع..."
-                                   type="text"/>
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="text-right"
-                        ng-repeat="payment in collection"
+                        ng-repeat="paymentBook in collection1"
                         st-select-mode="single"
-                        context-menu="rowMenuPayment"
-                        ng-click="setSelectedPayment(payment)"
-                        ng-right-click="setSelectedPayment(payment)">
-                        <td st-select-row-custom="payment">{{$index+1}}</td>
-                        <td st-select-row-custom="payment">{{payment.code}}</td>
-                        <td st-select-row-custom="payment">
-                            {{payment.date | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                        context-menu="rowMenuPaymentBook"
+                        ng-click="setSelectedPaymentBook(paymentBook)"
+                        ng-right-click="setSelectedPaymentBook(paymentBook)">
+                        <td st-select-row-custom="paymentBook">{{$index+1}}</td>
+                        <td st-select-row-custom="paymentBook">{{paymentBook.code}}</td>
+                        <td st-select-row-custom="paymentBook">{{paymentBook.fromCode}}</td>
+                        <td st-select-row-custom="paymentBook">{{paymentBook.toCode}}</td>
+                        <td st-select-row-custom="paymentBook">{{paymentBook.branch.name}}</td>
+                        <td st-select-row-custom="paymentBook">
+                            <span>{{paymentBook.lastUpdate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span class="label label-success">{{paymentBook.lastUpdate | date:'h:m a'}}</span>
                         </td>
-                        <td st-select-row-custom="payment">{{payment.paymentMethodInArabic}}</td>
-                        <td st-select-row-custom="payment" class="danger">{{payment.amountNumber}}</td>
-                        <td st-select-row-custom="payment">{{payment.type}}</td>
-                        <td st-select-row-custom="payment">
-                            {{payment.account.code}}
-                            -
-                            {{payment.account.course.code}}
-                            -
-                            {{payment.account.course.master.code}}
-                            -
-                            {{payment.account.course.master.branch.code}}
-                            -
-                            {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                        </td>
-                        <td st-select-row-custom="payment">
-                            {{payment.account.student.contact.firstName}}
-                            {{payment.account.student.contact.secondName}}
-                            {{payment.account.student.contact.thirdName}}
-                            {{payment.account.student.contact.forthName}}
-                        </td>
-                        <td>
-                            <span class="label label-info">{{payment.account.course.master.masterCategory.name}}</span>
-                            [ {{payment.account.course.master.code}} ]
-                            {{payment.account.course.master.name}}
-                        </td>
-                        <td st-select-row-custom="payment">{{payment.note}}</td>
-                        <td st-select-row-custom="payment">
-                            {{payment.lastPerson.contact.firstName}}
-                            {{payment.lastPerson.contact.forthName}}
+                        <td st-select-row-custom="paymentBook">
+                            {{paymentBook.lastPerson.contact.firstName}}
+                            {{paymentBook.lastPerson.contact.forthName}}
                         </td>
                     </tr>
                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                        ng-show="!collection || collection.length ==0">
-                        <td colspan="11">لا توجد بيانات</td>
+                        ng-show="!collection1 || collection1.length ==0">
+                        <td colspan="7">لا توجد بيانات</td>
                     </tr>
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <td colspan="11">
-                            <div st-pagination="" st-items-by-page="5" st-displayed-pages="10"></div>
-                        </td>
-                    </tr>
-                    </tfoot>
                 </table>
-            </div>
-        </div>
-        <div class="panel-footer">
-            <div class="row">
-                <h3 class="text-center col-xs-12 col-sm-12 col-md-12 col-lg-12 box-danger" ng-if="totalAmount>=0">
-                    <span>إجمالي المبالغ المحصلة</span>
-                    <span>{{totalAmount}} SAR</span>
-                </h3>
             </div>
         </div>
     </div>
 
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="toggleList===2">
+    <div st-table="collection2" st-safe-src="paymentBooks">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="paymentBook in collection2">
+            <!-- CONTACT ITEM -->
+            <div class="panel panel-default">
+                <div class="panel-body profile">
+                    <div class="profile-image">
+                        <img width="100" height="100"
+                             src="/ui/img/no-image.jpg"
+                             alt="{{paymentBook.name}}"/>
+                    </div>
+                    <div class="profile-data">
+                        <div class="profile-data-name">{{paymentBook.name}}</div>
+                    </div>
+                    <div class="profile-controls">
+                        <!--<a href="" class="profile-control-left"><span class="fa fa-info-circle"></span></a>-->
+                        <!--<a href="" class="profile-control-right"><span class="fa fa-phone"></span></a>-->
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="contact-info">
+                        <p>
+                            <strong>رقم الدفتر</strong>
+                            {{paymentBook.code}}
+                        </p>
+                        <hr>
+                        <p>
+                            <strong>من رقم</strong>
+                            {{paymentBook.fromCode}}
+                        </p>
+                        <hr>
+                        <p>
+                            <strong>إلى رقم</strong>
+                            {{paymentBook.toCode}}
+                        </p>
+                        <hr>
+                        <p>
+                            <strong>بواسطة</strong>
+                            {{paymentBook.lastPerson.contact.firstName}}
+                            {{paymentBook.lastPerson.contact.forthName}}
+                        </p>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <button uib-tooltip="دفتر جديد"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_CREATE'])"
+                                ng-click="newPaymentBook();"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <i class="material-icons">add</i>
+                        </button>
+                        <button uib-tooltip="تعديل"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_UPDATE'])"
+                                ng-click="ModalProvider.openPaymentBookUpdateModel(paymentBook)"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button uib-tooltip="حذف"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_DELETE'])"
+                                ng-click="deletePaymentBook(paymentBook)"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTACT ITEM -->
+        </div>
+    </div>
 </div>

@@ -160,6 +160,57 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
+     * PaymentBook Model                                          *
+     *                                                            *
+     *************************************************************/
+    this.openPaymentBookCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/paymentBook/paymentBookCreateUpdate.html',
+            controller: 'paymentBookCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'انشاء دفتر سندات جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                paymentBook: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openPaymentBookUpdateModel = function (paymentBook) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/paymentBook/paymentBookCreateUpdate.html',
+            controller: 'paymentBookCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات دفتر السندات';
+                },
+                action: function () {
+                    return 'update';
+                },
+                paymentBook: function () {
+                    return paymentBook;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
      * Bank Model                                                 *
      *                                                            *
      *************************************************************/

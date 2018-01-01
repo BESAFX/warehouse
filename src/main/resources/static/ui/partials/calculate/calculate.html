@@ -19,37 +19,44 @@
             <nav class="mdl-navigation mdl-layout--large-screen-only" ng-init="toggleState=1">
                 <a class="mdl-navigation__link"
                    href=""
-                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE'])"
+                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_CREATE', 'ROLE_PAYMENT_BOOK_UPDATE', 'ROLE_PAYMENT_BOOK_DELETE'])"
                    ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===1}"
                    ng-click="toggleState=1">
+                    <span>دفاتر السندات</span>
+                </a>
+                <a class="mdl-navigation__link"
+                   href=""
+                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE'])"
+                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===2}"
+                   ng-click="toggleState=2">
                     <span>سندات القبض</span>
                 </a>
                 <a class="mdl-navigation__link"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_OUT_CREATE', 'ROLE_PAYMENT_OUT_UPDATE', 'ROLE_PAYMENT_OUT_DELETE'])"
-                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===2}"
-                   ng-click="toggleState=2">
+                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===3}"
+                   ng-click="toggleState=3">
                     <span>سندات الصرف</span>
                 </a>
                 <a class="mdl-navigation__link"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_BILL_BUY_TYPE_CREATE', 'ROLE_BILL_BUY_TYPE_UPDATE', 'ROLE_BILL_BUY_TYPE_DELETE'])"
-                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===3}"
-                   ng-click="toggleState=3">
+                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===4}"
+                   ng-click="toggleState=4">
                     <span>حسابات فواتير الشراء</span>
                 </a>
                 <a class="mdl-navigation__link"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE', 'ROLE_BILL_BUY_UPDATE', 'ROLE_BILL_BUY_DELETE'])"
-                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===4}"
-                   ng-click="toggleState=4">
+                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===5}"
+                   ng-click="toggleState=5">
                     <span>فواتير الشراء</span>
                 </a>
                 <a class="mdl-navigation__link"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_BANK_CREATE', 'ROLE_BANK_UPDATE', 'ROLE_BANK_DELETE'])"
-                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===5}"
-                   ng-click="toggleState=5">
+                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===6}"
+                   ng-click="toggleState=6">
                     <span>البنك</span>
                 </a>
             </nav>
@@ -440,9 +447,20 @@
 
                 <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                    href=""
-                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE'])"
+                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_CREATE', 'ROLE_PAYMENT_BOOK_UPDATE', 'ROLE_PAYMENT_BOOK_DELETE'])"
                    ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===1}"
                    ng-click="toggleState=1">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">business</i>
+                        <span>دفاتر السندات</span>
+                    </span>
+                </a>
+
+                <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
+                   href=""
+                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE'])"
+                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===2}"
+                   ng-click="toggleState=2">
                     <span class="mdl-list__item-primary-content">
                         <i class="material-icons mdl-list__item-icon">business</i>
                         <span>سندات القبض</span>
@@ -452,8 +470,8 @@
                 <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_OUT_CREATE', 'ROLE_PAYMENT_OUT_UPDATE', 'ROLE_PAYMENT_OUT_DELETE'])"
-                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===2}"
-                   ng-click="toggleState=2">
+                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===3}"
+                   ng-click="toggleState=3">
                     <span class="mdl-list__item-primary-content">
                         <i class="material-icons mdl-list__item-icon">layers</i>
                         <span>سندات الصرف</span>
@@ -463,8 +481,8 @@
                 <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_BILL_BUY_TYPE_CREATE', 'ROLE_BILL_BUY_TYPE_UPDATE', 'ROLE_BILL_BUY_TYPE_DELETE'])"
-                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===3}"
-                   ng-click="toggleState=3">
+                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===4}"
+                   ng-click="toggleState=4">
                     <span class="mdl-list__item-primary-content">
                         <i class="material-icons mdl-list__item-icon">security</i>
                         <span>حسابات فواتير الشراء</span>
@@ -474,8 +492,8 @@
                 <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE', 'ROLE_BILL_BUY_UPDATE', 'ROLE_BILL_BUY_DELETE'])"
-                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===4}"
-                   ng-click="toggleState=4">
+                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===5}"
+                   ng-click="toggleState=5">
                     <span class="mdl-list__item-primary-content">
                         <i class="material-icons mdl-list__item-icon">person_pin_circle</i>
                          <span>فواتير الشراء</span>
@@ -485,8 +503,8 @@
                 <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                    href=""
                    ng-show="contains(me.team.authorities, ['ROLE_BANK_CREATE', 'ROLE_BANK_UPDATE', 'ROLE_BANK_DELETE'])"
-                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===5}"
-                   ng-click="toggleState=5">
+                   ng-class="{'mdl-color-text--white mdl-color--primary mdl-navigation__link-active' : toggleState===6}"
+                   ng-click="toggleState=6">
                     <span class="mdl-list__item-primary-content">
                         <i class="material-icons mdl-list__item-icon">person_pin_circle</i>
                          <span>البنك</span>
@@ -526,6 +544,12 @@
         <div ng-show="toggleState===5" class="row" style="margin-top: 10px">
 
             <div ng-include="'ui/partials/calculate/state5.html'"></div>
+
+        </div>
+
+        <div ng-show="toggleState===6" class="row" style="margin-top: 10px">
+
+            <div ng-include="'ui/partials/calculate/state6.html'"></div>
 
         </div>
 

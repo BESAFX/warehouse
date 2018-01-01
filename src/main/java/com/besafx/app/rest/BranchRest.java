@@ -33,7 +33,7 @@ public class BranchRest {
 
     private final static Logger log = LoggerFactory.getLogger(BranchRest.class);
 
-    private final String FILTER_TABLE = "**,-masters,-banks,company[id,code,name]";
+    private final String FILTER_TABLE = "**,-paymentBooks,-masters,-banks,company[id,code,name]";
     private final String FILTER_BRANCH_COMBO = "id,code,name";
     private final String FILTER_BRANCH_MASTER_COMBO = "id,code,name,masters[id,code,name]";
     private final String FILTER_BRANCH_MASTER_COURSE_COMBO = "id,code,name,masters[id,code,name,courses[id,code,instructor]]";

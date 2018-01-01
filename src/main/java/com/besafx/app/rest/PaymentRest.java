@@ -3,10 +3,11 @@ package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Payment;
+import com.besafx.app.entity.PaymentBook;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.PaymentSearch;
 import com.besafx.app.service.AccountService;
-import com.besafx.app.service.BranchService;
+import com.besafx.app.service.PaymentBookService;
 import com.besafx.app.service.PaymentService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.ArabicLiteralNumberParser;
@@ -33,13 +34,16 @@ public class PaymentRest {
 
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
 
-    public static final String FILTER_TABLE = "**,attach[**,person[id,contact[id,firstName,forthName]]],lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
+    public static final String FILTER_TABLE = "**,paymentBook[id,code,fromCode,toCode,maxCode],lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
 
     @Autowired
     private PersonService personService;
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private PaymentBookService paymentBookService;
 
     @Autowired
     private AccountService accountService;
@@ -54,18 +58,25 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
-        Account tempAccount = accountService.findOne(payment.getAccount().getId());
-        Payment topPayment = paymentService.findTopByAccountCourseMasterBranchOrderByCodeDesc(tempAccount.getCourse().getMaster().getBranch());
-        if(topPayment == null){
-            payment.setCode(Long.valueOf(1));
-        }else{
-            payment.setCode(topPayment.getCode() + Long.valueOf(1));
+        PaymentBook paymentBook = paymentBookService.findOne(payment.getPaymentBook().getId());
+        if(paymentBook.getMaxCode().equals(paymentBook.getToCode())){
+            throw new CustomException("عفواً، تم إغلاق هذا الدفتر");
         }
+        if (paymentBook.getMaxCode() == 0) {
+            payment.setCode(paymentBook.getFromCode());
+        } else {
+            payment.setCode(paymentBook.getMaxCode() + 1);
+        }
+        //
+        paymentBook.setMaxCode(payment.getCode());
+        payment.setPaymentBook(paymentBookService.save(paymentBook));
+        //
         Person person = personService.findByEmail(principal.getName());
         payment.setLastPerson(person);
         payment.setLastUpdate(new Date());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
+        //
         notificationService.notifyAll(Notification.builder().message("تم انشاء سند قبض بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
     }

@@ -1,13 +1,11 @@
-app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
-    function (BranchService, AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
+app.controller('paymentCreateCtrl', ['BranchService', 'PaymentBookService', 'AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
+    function (BranchService, PaymentBookService, AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
 
         $scope.payment = {};
 
         $scope.buffer = {};
 
         $scope.accounts = [];
-
-        $scope.files = [];
 
         $scope.title = title;
 
@@ -21,6 +19,9 @@ app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'Payment
             AccountService.findByBranchWithKey($scope.buffer.branch.id).then(function (data) {
                 $scope.accounts = data;
             });
+            PaymentBookService.findByBranchCombo($scope.buffer.branch.id).then(function (data) {
+                $scope.paymentBooks = data;
+            });
         };
 
         $scope.submit = function () {
@@ -28,14 +29,17 @@ app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'Payment
                 $rootScope.showConfirmNotify("السندات", "هل تود طباعة السند ؟", "notification", "fa-info", function () {
                     window.open('report/CashReceipt/' + data.id);
                 });
-                /**REFRESH ACCOUNT OBJECT**/
-                AccountService.findOne(data.account.id).then(function (data) {
-                    var index = $scope.accounts.indexOf(data.account);
-                    $scope.accounts[index] = data;
-                    $scope.payment = {};
-                    $scope.files = [];
-                    $scope.payment.account = data;
-                    $scope.form.$setPristine();
+                PaymentBookService.findByBranchCombo($scope.buffer.branch.id).then(function (data) {
+                    $scope.paymentBooks = data;
+                    /**REFRESH ACCOUNT OBJECT**/
+                    AccountService.findOne(data.account.id).then(function (data) {
+                        var index = $scope.accounts.indexOf(data.account);
+                        $scope.accounts[index] = data;
+                        $scope.payment = {};
+                        $scope.payment.paymentMethod='Cash';
+                        $scope.payment.account = data;
+                        $scope.form.$setPristine();
+                    });
                 });
             });
         };

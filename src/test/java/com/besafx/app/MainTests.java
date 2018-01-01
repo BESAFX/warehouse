@@ -1,7 +1,5 @@
 package com.besafx.app;
 
-import com.besafx.app.entity.Payment;
-import com.besafx.app.entity.enums.PaymentMethod;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.PaymentService;
@@ -32,9 +30,6 @@ public class MainTests {
 
     @Test
     public void contextLoads() throws ExecutionException, InterruptedException {
-        paymentService.findAll().forEach(a -> {
-            a.setPaymentMethod(PaymentMethod.Cash);
-            paymentService.save(a);
-        });
+
     }
 }

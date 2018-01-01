@@ -57,15 +57,12 @@ public class Payment implements Serializable {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "account")
-    private Account account;
-
-    @OneToOne
-    @JoinColumn(name = "attach")
-    private Attach attach;
+    private PaymentBook paymentBook;
 
     @ManyToOne
-    @JoinColumn(name = "last_person")
+    private Account account;
+
+    @ManyToOne
     private Person lastPerson;
 
     @JsonCreator
