@@ -95,6 +95,10 @@
                             <span>رقم الدفتر إلى</span>
                         </th>
 
+                        <th st-sort="maxCode" class="text-right">
+                            <span>أكبر رقم فعال</span>
+                        </th>
+
                         <th st-sort="note" class="text-right">
                             <span>الوصف</span>
                         </th>
@@ -124,6 +128,7 @@
                         <td st-select-row-custom="paymentBook">{{paymentBook.code}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.fromCode}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.toCode}}</td>
+                        <td st-select-row-custom="paymentBook">{{paymentBook.maxCode}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.note}}</td>
                         <td st-select-row-custom="paymentBook">{{paymentBook.branch.name}}</td>
                         <td st-select-row-custom="paymentBook">
@@ -137,7 +142,7 @@
                     </tr>
                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                         ng-show="!collection1 || collection1.length ==0">
-                        <td colspan="8">لا توجد بيانات</td>
+                        <td colspan="9">لا توجد بيانات</td>
                     </tr>
                     </tbody>
                 </table>
