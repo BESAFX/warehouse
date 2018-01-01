@@ -55,6 +55,9 @@
                             <span>إلى رقم : </span>
                             <span ng-bind-html="''+paymentBook.toCode | highlight: $select.search"></span>
                             <br/>
+                            <span>الوصف : </span>
+                            <span ng-bind-html="''+paymentBook.note | highlight: $select.search"></span>
+                            <br/>
                             <span>آخر رقم حالياً : </span>
                             <span ng-bind-html="''+paymentBook.maxCode | highlight: $select.search"></span>
                         </small>
