@@ -21,7 +21,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="Arial" size="8" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Printing Date: " + DateConverter.getHijriStringFromDateLTRWithTime(new java.util.Date())]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Printing Date: " + DateConverter.getDateInFormatWithTime(new java.util.Date())]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="349" y="0" width="185" height="14" backcolor="#754C29" uuid="b895c8ce-38fc-4d20-af14-7e8fb4d6e91a">
@@ -98,7 +98,7 @@
 							<font fontName="Arial" size="12" isUnderline="false"/>
 							<paragraph rightIndent="5"/>
 						</textElement>
-						<textFieldExpression><![CDATA[DateConverter.getHijriStringFromDateRTL($P{payment}.getDate())]]></textFieldExpression>
+						<textFieldExpression><![CDATA[DateConverter.getDateInFormat($P{payment}.getDate())]]></textFieldExpression>
 					</textField>
 					<staticText>
 						<reportElement x="485" y="184" width="50" height="30" uuid="4f3e81e3-4f7f-4dc4-9e0b-d0007511d9df"/>

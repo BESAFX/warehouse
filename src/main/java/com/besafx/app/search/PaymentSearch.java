@@ -3,6 +3,7 @@ import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.service.PaymentService;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -45,16 +46,16 @@ public class PaymentSearch {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(paymentCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(paymentCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
-        Optional.ofNullable(paymentDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new Date(value))));
-        Optional.ofNullable(paymentDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new Date(value))));
+        Optional.ofNullable(paymentDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(paymentDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(amountFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("amountNumber"), value)));
         Optional.ofNullable(amountTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("amountNumber"), value)));
         Optional.ofNullable(firstName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("firstName"), "%" + value + "%")));
         Optional.ofNullable(secondName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("secondName"), "%" + value + "%")));
         Optional.ofNullable(thirdName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("thirdName"), "%" + value + "%")));
         Optional.ofNullable(forthName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("forthName"), "%" + value + "%")));
-        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("account").get("registerDate"), new Date(value))));
-        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("account").get("registerDate"), new Date(value))));
+        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("account").get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("account").get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(studentIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("identityNumber"), "%" + value + "%")));
         Optional.ofNullable(studentMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("account").get("student").get("contact").get("mobile"), "%" + value + "%")));
         Optional.ofNullable(coursePriceFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("account").get("coursePrice"), value)));
@@ -69,9 +70,10 @@ public class PaymentSearch {
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            return Lists.newArrayList(paymentService.findAll(result));
+            List<Payment> list = paymentService.findAll(result);
+            return list;
         } else {
-            throw new CustomException("فضلاً ادخل على الاقل عنصر واحد للبحث");
+            return new ArrayList<>();
         }
 
     }

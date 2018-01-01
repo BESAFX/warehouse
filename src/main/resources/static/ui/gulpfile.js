@@ -22,7 +22,8 @@ gulp.task('css', function () {
         './css/font-awesome-animation.css',
         './kdate/css/jquery.calendars.picker.css',
         './css/select.css',
-        './chosen/chosen.css'
+        './chosen/chosen.css',
+        './css/marquee.css'
     ])
         .pipe(concat('app.css'))
         .pipe(cssMin())
@@ -66,6 +67,7 @@ gulp.task('scripts', function () {
         './js/ui-bootstrap-tpls.js',
 
         './js/select.js',
+        './js/marquee.js',
 
         './sockjs/sockjs.js',
         './stomp-websocket/lib/stomp.js',
