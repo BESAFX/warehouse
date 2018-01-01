@@ -50,7 +50,6 @@ public class PaymentBookRest {
     @PreAuthorize("hasRole('ROLE_PAYMENT_BOOK_CREATE')")
     public String create(@RequestBody PaymentBook paymentBook, Principal principal) {
         Person person = personService.findByEmail(principal.getName());
-        paymentBook.setMaxCode(Long.valueOf(0));
         paymentBook.setLastUpdate(new Date());
         paymentBook.setLastPerson(person);
         paymentBook = paymentBookService.save(paymentBook);
