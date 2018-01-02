@@ -171,6 +171,7 @@ gulp.task('scripts', function () {
         './partials/payment/paymentUpdate.js',
         './partials/payment/paymentFilter.js',
         './partials/payment/paymentHeavyWork.js',
+        './partials/payment/paymentMoveToBook.js',
         './partials/paymentOut/paymentOut.js',
         './partials/paymentOut/paymentOutCreate.js',
         './partials/paymentOut/paymentOutFilter.js',

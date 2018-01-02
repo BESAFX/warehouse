@@ -57,7 +57,8 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             {id: 52, name: 'إرسال الرسائل القصيرة', value: 'ROLE_SEND_SMS', selected: false},
             {id: 53, name: 'إنشاء دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_CREATE', selected: false},
             {id: 54, name: 'تعديل بيانات دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_UPDATE', selected: false},
-            {id: 55, name: 'حذف دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_DELETE', selected: false}
+            {id: 55, name: 'حذف دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_DELETE', selected: false},
+            {id: 56, name: 'نقل السندات إلى الدفاتر', value: 'ROLE_PAYMENT_MOVE_TO_BOOK', selected: false}
         ];
 
 

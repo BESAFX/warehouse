@@ -31,7 +31,7 @@ public class PaymentBookRest {
     private final static Logger log = LoggerFactory.getLogger(PaymentBookRest.class);
 
     private final String FILTER_TABLE = "**,branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]],payments[id,code]";
-    private final String FILTER_PAYMENT_BOOK_COMBO = "id,code,fromCode,toCode,maxCode,note";
+    private final String FILTER_PAYMENT_BOOK_COMBO = "id,code,fromCode,toCode,maxCode,note,branch[id,name]";
 
     @Autowired
     private PersonService personService;

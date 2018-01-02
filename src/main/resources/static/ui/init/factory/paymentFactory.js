@@ -31,6 +31,11 @@ app.factory("PaymentService",
                     return response.data;
                 });
             },
+            moveToBook: function (paymentWrapper) {
+                return $http.put("/api/payment/moveToBook", paymentWrapper).then(function (response) {
+                    return response.data;
+                });
+            },
             findByAccount: function (accountId) {
                 return $http.get("/api/payment/findByAccount/" + accountId).then(function (response) {
                     return response.data;

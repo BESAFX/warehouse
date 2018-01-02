@@ -5,6 +5,7 @@ import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.PaymentBook;
 import com.besafx.app.entity.Person;
+import com.besafx.app.entity.wrapper.PaymentWrapper;
 import com.besafx.app.search.PaymentSearch;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.PaymentBookService;
@@ -100,6 +101,20 @@ public class PaymentRest {
         } else {
             return null;
         }
+    }
+
+    @RequestMapping(value = "moveToBook", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PAYMENT_MOVE_TO_BOOK')")
+    public String moveToBook(@RequestBody PaymentWrapper paymentWrapper, Principal principal) {
+        paymentWrapper.getPayments().stream().forEach(payment -> {
+            Person person = personService.findByEmail(principal.getName());
+            payment.setLastUpdate(new Date());
+            payment.setLastPerson(person);
+        });
+        List<Payment> payments = Lists.newArrayList(paymentService.save(paymentWrapper.getPayments()));
+        notificationService.notifyAll(Notification.builder().message("تم نقل كافة السندات إلى الدفتر بنجاح بنجاح").type("success").build());
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payments);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)

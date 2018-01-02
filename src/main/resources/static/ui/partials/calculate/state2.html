@@ -140,20 +140,18 @@
                     <tbody>
                     <tr class="text-right"
                         ng-repeat="payment in collection"
-                        st-select-mode="single"
-                        context-menu="rowMenuPayment"
-                        ng-click="setSelectedPayment(payment)"
-                        ng-right-click="setSelectedPayment(payment)">
-                        <td st-select-row-custom="payment">{{$index+1}}</td>
-                        <td st-select-row-custom="payment">{{payment.paymentBook.code}}</td>
-                        <td st-select-row-custom="payment">{{payment.code}}</td>
-                        <td st-select-row-custom="payment">
+                        st-select-mode="multiple"
+                        context-menu="rowMenuPayment">
+                        <td st-select-row-multi="payment">{{$index+1}}</td>
+                        <td st-select-row-multi="payment">{{payment.paymentBook.code}}</td>
+                        <td st-select-row-multi="payment">{{payment.code}}</td>
+                        <td st-select-row-multi="payment">
                             {{payment.date | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
                         </td>
-                        <td st-select-row-custom="payment">{{payment.paymentMethodInArabic}}</td>
-                        <td st-select-row-custom="payment" class="danger">{{payment.amountNumber}}</td>
-                        <td st-select-row-custom="payment">{{payment.type}}</td>
-                        <td st-select-row-custom="payment">
+                        <td st-select-row-multi="payment">{{payment.paymentMethodInArabic}}</td>
+                        <td st-select-row-multi="payment" class="danger">{{payment.amountNumber}}</td>
+                        <td st-select-row-multi="payment">{{payment.type}}</td>
+                        <td st-select-row-multi="payment">
                             {{payment.account.code}}
                             -
                             {{payment.account.course.code}}
@@ -164,7 +162,7 @@
                             -
                             {{payment.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
                         </td>
-                        <td st-select-row-custom="payment">
+                        <td st-select-row-multi="payment">
                             {{payment.account.student.contact.firstName}}
                             {{payment.account.student.contact.secondName}}
                             {{payment.account.student.contact.thirdName}}
@@ -175,8 +173,8 @@
                             [ {{payment.account.course.master.code}} ]
                             {{payment.account.course.master.name}}
                         </td>
-                        <td st-select-row-custom="payment">{{payment.note}}</td>
-                        <td st-select-row-custom="payment">
+                        <td st-select-row-multi="payment">{{payment.note}}</td>
+                        <td st-select-row-multi="payment">
                             {{payment.lastPerson.contact.firstName}}
                             {{payment.lastPerson.contact.forthName}}
                         </td>

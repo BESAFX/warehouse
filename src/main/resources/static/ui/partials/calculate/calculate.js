@@ -128,18 +128,6 @@ function calculateCtrl (
     $scope.itemsPayment.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
     $scope.itemsPayment.push({'id': 2, 'type': 'title', 'name': 'سندات القبض'});
     //
-    $scope.setSelectedPayment = function (object) {
-        if (object) {
-            angular.forEach($scope.payments, function (payment) {
-                if (object.id == payment.id) {
-                    $scope.selected = payment;
-                    return payment.isSelected = true;
-                } else {
-                    return payment.isSelected = false;
-                }
-            });
-        }
-    };
     $scope.deletePayment = function (payment) {
         $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف السند فعلاً؟", "error", "fa-ban", function () {
             PaymentService.remove(payment.id).then(function () {
@@ -272,7 +260,6 @@ function calculateCtrl (
             }
             PaymentService.filter(search.join("")).then(function (data) {
                 $scope.payments = data;
-                $scope.setSelectedPayment(data[0]);
                 $scope.totalAmount = 0;
                 angular.forEach(data, function (payment) {
                     $scope.totalAmount+=payment.amountNumber;
@@ -313,17 +300,39 @@ function calculateCtrl (
 
         });
     };
+    $scope.moveToBook = function () {
+        $scope.paymentWrapper = {};
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/payment/paymentMoveToBook.html',
+            controller: 'paymentMoveToBookCtrl',
+            scope: $scope,
+            backdrop: 'static',
+            keyboard: false
+        });
+        modalInstance.result.then(function (paymentWrapper) {
+            PaymentService.moveToBook(paymentWrapper).then(function (data) {
+
+            });
+        });
+    };
     $scope.printList = function () {
         var paymentIds = [];
         angular.forEach($scope.payments, function (payment) {
-            paymentIds.push(payment.id);
+            if(payment.isSelected){
+                paymentIds.push(payment.id);
+            }
         });
         window.open('/report/PaymentsByList?' + "paymentIds=" + paymentIds + "&isSummery=" + false);
     };
     $scope.printListSummery = function () {
         var paymentIds = [];
         angular.forEach($scope.payments, function (payment) {
-            paymentIds.push(payment.id);
+            if(payment.isSelected){
+                paymentIds.push(payment.id);
+            }
         });
         window.open('/report/PaymentsByList?' + "paymentIds=" + paymentIds + "&isSummery=" + true);
     };
@@ -365,7 +374,7 @@ function calculateCtrl (
             }
         },
         {
-            html: '<div class="drop-menu">طباعة تقرير بالقائمة<span class="fa fa-print fa-lg"></span></div>',
+            html: '<div class="drop-menu">طباعة تقرير مفصل<span class="fa fa-print fa-lg"></span></div>',
             enabled: function () {
                 return true
             },
@@ -374,12 +383,21 @@ function calculateCtrl (
             }
         },
         {
-            html: '<div class="drop-menu">طباعة تقرير مختصر بالقائمة<span class="fa fa-print fa-lg"></span></div>',
+            html: '<div class="drop-menu">طباعة تقرير مختصر<span class="fa fa-print fa-lg"></span></div>',
             enabled: function () {
                 return true
             },
             click: function ($itemScope, $event, value) {
                 $scope.printListSummery();
+            }
+        },
+        {
+            html: '<div class="drop-menu">نقل إلى دفتر<span class="fa fa-book fa-lg"></span></div>',
+            enabled: function () {
+                return true
+            },
+            click: function ($itemScope, $event, value) {
+                $scope.moveToBook();
             }
         }
     ];
