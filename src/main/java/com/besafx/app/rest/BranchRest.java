@@ -1,12 +1,10 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Branch;
-import com.besafx.app.entity.BranchAccess;
-import com.besafx.app.entity.Person;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.CompanyService;
 import com.besafx.app.service.PersonService;
-import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,11 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value = "/api/branch/")

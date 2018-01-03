@@ -1,7 +1,6 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.PaymentOut;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.PaymentOutSearch;
@@ -113,7 +112,7 @@ public class PaymentOutRest {
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo", required = false) final Long dateTo,
             @RequestParam(value = "branchId", required = false) final Long branchId) {
-        List<PaymentOut> list =  paymentOutSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, dateFrom, dateTo, branchId);
+        List<PaymentOut> list = paymentOutSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, dateFrom, dateTo, branchId);
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
     }
 

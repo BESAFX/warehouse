@@ -1,13 +1,18 @@
-package com.besafx.app.controller;
+package com.besafx.app.report;
+
 import com.besafx.app.component.ReportExporter;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.Branch;
+import com.besafx.app.entity.PaymentOut;
+import com.besafx.app.entity.Person;
 import com.besafx.app.enums.ExportType;
-import com.besafx.app.rest.AccountRest;
-import com.besafx.app.service.*;
+import com.besafx.app.service.BranchService;
+import com.besafx.app.service.PaymentOutService;
+import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DateConverter;
-import com.besafx.app.util.WrapperUtil;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -15,10 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 public class ReportPaymentOutController {

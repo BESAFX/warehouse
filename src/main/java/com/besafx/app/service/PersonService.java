@@ -1,4 +1,5 @@
 package com.besafx.app.service;
+
 import com.besafx.app.entity.Person;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,6 +13,7 @@ import java.util.List;
 public interface PersonService extends PagingAndSortingRepository<Person, Long>, JpaSpecificationExecutor<Person> {
 
     Person findByEmail(String email);
+
     List<Person> findByEnabledIsTrue();
 }
 

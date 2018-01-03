@@ -1,6 +1,5 @@
 package com.besafx.app.search;
 
-import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.OfferService;
@@ -13,7 +12,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class OfferSearch {

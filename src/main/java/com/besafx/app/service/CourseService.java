@@ -1,4 +1,5 @@
 package com.besafx.app.service;
+
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Course;
 import com.besafx.app.entity.Master;
@@ -14,13 +15,21 @@ import java.util.List;
 public interface CourseService extends PagingAndSortingRepository<Course, Long>, JpaSpecificationExecutor<Course> {
 
     Course findTopByMasterOrderByCodeDesc(Master master);
+
     Course findByCodeAndMaster(Integer code, Master master);
+
     Course findByCodeAndMasterCode(Integer code, Integer masterCode);
+
     Course findByCodeAndMasterAndIdIsNot(Integer code, Master master, Long id);
+
     Course findByCodeAndMasterCodeAndMasterBranch(Integer courseCode, Integer masterCode, Branch branch);
+
     Course findByCodeAndMasterCodeAndMasterBranchCode(Integer courseCode, Integer masterCode, Integer branchCode);
+
     Long countByMaster(Master master);
+
     Long countByMasterBranch(Branch branch);
+
     List<Course> findByMaster(Master master);
 
 }

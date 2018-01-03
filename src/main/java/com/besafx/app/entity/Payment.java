@@ -1,9 +1,8 @@
 package com.besafx.app.entity;
+
 import com.besafx.app.entity.enums.PaymentMethod;
 import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -76,25 +75,25 @@ public class Payment implements Serializable {
     }
 
     public Double getTax() {
-        try{
-            return (this.getAmountNumber() * 5 ) / 100;
-        }catch (Exception ex){
+        try {
+            return (this.getAmountNumber() * 5) / 100;
+        } catch (Exception ex) {
             return 0.0;
         }
     }
 
     public Double getAmountTax() {
-        try{
+        try {
             return this.amountNumber + this.getTax();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }
 
     public String getAmountTaxString() {
-        try{
+        try {
             return ArabicLiteralNumberParser.literalValueOf(this.getAmountTax());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "";
         }
     }

@@ -1,7 +1,7 @@
-package com.besafx.app.component;
+package com.besafx.app.schedule;
+
 import com.besafx.app.config.EmailSender;
-import com.besafx.app.controller.ReportOfferController;
-import com.besafx.app.service.CompanyService;
+import com.besafx.app.report.ReportOfferController;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;

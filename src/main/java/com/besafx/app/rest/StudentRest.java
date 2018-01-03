@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/student/")
 public class StudentRest {
 
-    private final static Logger log = LoggerFactory.getLogger(StudentRest.class);
-
     public static final String FILTER_TABLE = "**";
-
+    private final static Logger log = LoggerFactory.getLogger(StudentRest.class);
     @Autowired
     private StudentService studentService;
 

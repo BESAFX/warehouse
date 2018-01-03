@@ -17,20 +17,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/account/")
 public class AccountRest {
 
-    private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
-
     public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]],payments[**,paymentBook[id,code],-account,lastPerson[id,contact[id,firstName,forthName]],lastPerson[id,contact[id,firstName,forthName]],-account],accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account],accountConditions[**,-account,person[id,contact[id,firstName,forthName]]],accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
     public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
     public static final String FILTER_ACCOUNT_INFO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
     public static final String FILTER_ACCOUNT_KEY = "id,key,name,remainPrice";
-
+    private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
     @Autowired
     private PersonService personService;
 
@@ -214,12 +213,12 @@ public class AccountRest {
     public String fetchTableData(Principal principal) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                 personService.findByEmail(principal.getName())
-                .getBranch().getMasters().stream()
-                .flatMap(master -> master.getCourses().stream())
-                .collect(Collectors.toList())
-                .stream()
-                .flatMap(course -> course.getAccounts().stream())
-                .collect(Collectors.toList()));
+                        .getBranch().getMasters().stream()
+                        .flatMap(master -> master.getCourses().stream())
+                        .collect(Collectors.toList())
+                        .stream()
+                        .flatMap(course -> course.getAccounts().stream())
+                        .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "fetchTableDataAccountComboBox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

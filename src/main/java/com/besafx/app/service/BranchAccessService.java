@@ -13,5 +13,6 @@ import java.util.List;
 @Transactional
 public interface BranchAccessService extends PagingAndSortingRepository<BranchAccess, Long>, JpaSpecificationExecutor<BranchAccess> {
     List<BranchAccess> findByPerson(Person person);
+
     List<BranchAccess> findByPersonId(Long personId);
 }

@@ -1,4 +1,5 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Withdraw;
 import com.besafx.app.search.WithdrawSearch;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/withdraw/")

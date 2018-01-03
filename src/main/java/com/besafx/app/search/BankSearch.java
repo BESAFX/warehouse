@@ -1,17 +1,14 @@
 package com.besafx.app.search;
+
 import com.besafx.app.entity.Bank;
-import com.besafx.app.entity.BillBuy;
 import com.besafx.app.service.BankService;
-import com.besafx.app.service.BillBuyService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

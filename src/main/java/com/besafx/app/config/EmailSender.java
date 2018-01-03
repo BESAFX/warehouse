@@ -1,4 +1,5 @@
 package com.besafx.app.config;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -43,17 +44,17 @@ public class EmailSender {
 
     @PostConstruct
     public void init() {
-//        log.info("Preparing email service...");
-//        Properties props = new Properties();
-//        props.put("mail.transport.protocol", "smtps");
-//        props.put("mail.smtps.host", SMTP_HOST_NAME);
-//        props.put("mail.smtps.auth", "true");
-//        mailSession = Session.getDefaultInstance(props);
-//        mailSession.setDebug(true);
-//        log.info("Preparing email service successfully");
+        log.info("Preparing email service...");
+        Properties props = new Properties();
+        props.put("mail.transport.protocol", "smtps");
+        props.put("mail.smtps.host", SMTP_HOST_NAME);
+        props.put("mail.smtps.auth", "true");
+        mailSession = Session.getDefaultInstance(props);
+        mailSession.setDebug(true);
+        log.info("Preparing email service successfully");
     }
 
-    @Async("threadPoolEmailSender")
+    @Async("threadSinglePool")
     public void send(String title, String content, List<String> toEmailList) {
         try {
             log.info("Sleeping for 10 seconds");
@@ -82,7 +83,7 @@ public class EmailSender {
         }
     }
 
-    @Async("threadPoolEmailSender")
+    @Async("threadSinglePool")
     public void send(String title, String content, List<String> toEmailList, List<File> files) {
         try {
             log.info("Sleeping for 10 seconds");
@@ -124,7 +125,7 @@ public class EmailSender {
         }
     }
 
-    @Async("threadPoolEmailSender")
+    @Async("threadSinglePool")
     public void send(String title, String content, String email) {
         try {
             log.info("Sleeping for 10 seconds");
@@ -147,7 +148,7 @@ public class EmailSender {
         }
     }
 
-    @Async("threadPoolEmailSender")
+    @Async("threadSinglePool")
     public Future<Boolean> send(String title, String content, String email, List<File> files) {
         try {
             log.info("Sleeping for 10 seconds");

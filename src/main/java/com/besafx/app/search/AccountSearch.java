@@ -1,6 +1,5 @@
 package com.besafx.app.search;
 
-import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Account;
 import com.besafx.app.service.AccountService;
 import com.google.common.collect.Lists;
@@ -12,7 +11,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AccountSearch {

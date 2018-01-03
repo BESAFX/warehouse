@@ -1,4 +1,5 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Team;
 import com.besafx.app.service.TeamService;
@@ -16,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/team/")

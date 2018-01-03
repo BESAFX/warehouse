@@ -1,15 +1,13 @@
 package com.besafx.app.entity;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.swing.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,29 +70,29 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private List<BranchAccess> branchAccesses = new ArrayList<>();
 
-    public List<Branch> getBranches(){
-        try{
-            List<Branch> list = new ArrayList<>();
-            list.add(this.branch);
-            list.addAll(this.branchAccesses.stream().map(BranchAccess::getBranch).collect(Collectors.toList()));
-            return list.stream().distinct().collect(Collectors.toList());
-        }catch (Exception ex){
-            return null;
-        }
-    }
-
-    public String getName(){
-        try {
-           return this.contact.getFirstName().concat(" ").concat(this.contact.getForthName());
-        }catch (Exception ex) {
-            return "";
-        }
-    }
-
     @JsonCreator
     public static Person Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Person person = mapper.readValue(jsonString, Person.class);
         return person;
+    }
+
+    public List<Branch> getBranches() {
+        try {
+            List<Branch> list = new ArrayList<>();
+            list.add(this.branch);
+            list.addAll(this.branchAccesses.stream().map(BranchAccess::getBranch).collect(Collectors.toList()));
+            return list.stream().distinct().collect(Collectors.toList());
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public String getName() {
+        try {
+            return this.contact.getFirstName().concat(" ").concat(this.contact.getForthName());
+        } catch (Exception ex) {
+            return "";
+        }
     }
 }

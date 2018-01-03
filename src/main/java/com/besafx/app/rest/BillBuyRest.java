@@ -46,7 +46,7 @@ public class BillBuyRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BILL_BUY_CREATE')")
     public String create(@RequestBody BillBuy billBuy, Principal principal) {
-        if(billBuyService.findByCode(billBuy.getCode()) != null){
+        if (billBuyService.findByCode(billBuy.getCode()) != null) {
             throw new CustomException("رقم الفاتورة مسجل سابقاً");
         }
         Person person = personService.findByEmail(principal.getName());

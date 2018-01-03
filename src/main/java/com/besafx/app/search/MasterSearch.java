@@ -1,4 +1,5 @@
 package com.besafx.app.search;
+
 import com.besafx.app.entity.Master;
 import com.besafx.app.service.MasterService;
 import com.google.common.collect.Lists;

@@ -35,17 +35,6 @@ public class Offer implements Serializable {
 
     @Transient
     private static OfferService offerService;
-
-    @PostConstruct
-    public void init() {
-        try {
-            accountService = BeanUtil.getBean(AccountService.class);
-            offerService = BeanUtil.getBean(OfferService.class);
-        } catch (Exception ex) {
-
-        }
-    }
-
     @GenericGenerator(
             name = "offerSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
@@ -58,66 +47,63 @@ public class Offer implements Serializable {
     @Id
     @GeneratedValue(generator = "offerSequenceGenerator")
     private Long id;
-
     private Integer code;
-
     private String note;
-
     private String customerName;
-
     private String customerIdentityNumber;
-
     private String customerMobile;
-
     private String customerEmail;
-
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String messageBody;
-
     private String masterPaymentType;
-
     private Boolean sendSMS;
-
     private String messageSid;
-
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String smsBody;
-
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterPrice;
-
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterDiscountAmount;
-
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterProfitAmount;
-
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterCreditAmount;
-
     private Boolean registered;
-
     @ManyToOne
     @JoinColumn(name = "master")
     private Master master;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-
     @ManyToOne
     @JoinColumn(name = "last_person")
     private Person lastPerson;
-
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     private List<Call> calls = new ArrayList<>();
 
+    @JsonCreator
+    public static Offer Create(String jsonString) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Offer offer = mapper.readValue(jsonString, Offer.class);
+        return offer;
+    }
+
+    @PostConstruct
+    public void init() {
+        try {
+            accountService = BeanUtil.getBean(AccountService.class);
+            offerService = BeanUtil.getBean(OfferService.class);
+        } catch (Exception ex) {
+
+        }
+    }
+
     public List<Account> getAccountsByMobile() {
         try {
-            if(this.customerMobile != null){
+            if (this.customerMobile != null) {
                 return accountService.findByStudentContactMobileContaining(this.customerMobile);
-            }else{
+            } else {
                 return new ArrayList<>();
             }
         } catch (Exception ex) {
@@ -163,12 +149,5 @@ public class Offer implements Serializable {
         } catch (Exception ex) {
             return 0.0;
         }
-    }
-
-    @JsonCreator
-    public static Offer Create(String jsonString) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Offer offer = mapper.readValue(jsonString, Offer.class);
-        return offer;
     }
 }

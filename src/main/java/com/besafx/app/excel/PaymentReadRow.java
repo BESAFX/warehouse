@@ -23,7 +23,7 @@ public class PaymentReadRow {
     @Autowired
     private PaymentService paymentService;
 
-    @Async("threadPoolPaymentExcel")
+    @Async("threadMultiplePool")
     public Future<Payment> readRow(Payment payment) throws Exception {
         log.info("////////////////////////////////بداية العملية/////////////////////////////////");
         log.info("فحص هل تبقي مبالغ لم تسدد لهذا الحساب");

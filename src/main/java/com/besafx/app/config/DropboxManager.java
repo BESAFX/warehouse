@@ -1,4 +1,5 @@
 package com.besafx.app.config;
+
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.sharing.SharedLinkMetadata;
@@ -28,10 +29,10 @@ public class DropboxManager {
     @PostConstruct
     public void init() {
         // Create Dropbox client
-//        log.info("Preparing dropbox client...");
-//        config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").withUserLocale("en_US").build();
-//        client = new DbxClientV2(config, ACCESS_TOKEN);
-//        log.info("Connecting with dropbox client successfully");
+        log.info("Preparing dropbox client...");
+        config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").withUserLocale("en_US").build();
+        client = new DbxClientV2(config, ACCESS_TOKEN);
+        log.info("Connecting with dropbox client successfully");
     }
 
     public void createFolder(String path) {
@@ -42,7 +43,7 @@ public class DropboxManager {
         }
     }
 
-    @Async("threadPoolFileUploader")
+    @Async("threadMultiplePool")
     public Future<Boolean> uploadFile(MultipartFile file, String path) {
         try {
             log.info("Trying to upload file: " + file.getOriginalFilename());
@@ -56,7 +57,7 @@ public class DropboxManager {
         }
     }
 
-    @Async("threadPoolFileUploader")
+    @Async("threadMultiplePool")
     public Future<Boolean> uploadFile(File file, String path) {
         try {
             log.info("Trying to upload file: " + file.getName());
@@ -70,7 +71,7 @@ public class DropboxManager {
         }
     }
 
-    @Async("threadPoolFileUploader")
+    @Async("threadMultiplePool")
     public Future<Boolean> deleteFile(String path) {
         try {
             log.info("Trying to delete file from path: " + path);
@@ -84,7 +85,7 @@ public class DropboxManager {
         }
     }
 
-    @Async("threadPoolFileSharing")
+    @Async("threadMultiplePool")
     public Future<String> shareFile(String path) {
         SharedLinkMetadata metadata;
         String link = null;

@@ -1,7 +1,6 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Payment;
 import com.besafx.app.entity.PaymentBook;
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.PaymentBookService;
@@ -63,7 +62,7 @@ public class PaymentBookRest {
     public String update(@RequestBody PaymentBook paymentBook, Principal principal) {
         PaymentBook object = paymentBookService.findOne(paymentBook.getId());
         if (object != null) {
-            if(!object.getPayments().isEmpty()){
+            if (!object.getPayments().isEmpty()) {
                 throw new CustomException("لا يمكن التعديل على دفتر سندات تم تفعيله سابقاً");
             }
             Person person = personService.findByEmail(principal.getName());

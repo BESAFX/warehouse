@@ -1,4 +1,4 @@
-package com.besafx.app.controller;
+package com.besafx.app.report;
 
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.entity.Offer;
@@ -83,7 +83,7 @@ public class ReportOfferController {
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(registerOption).ifPresent(value -> {
-            switch (value){
+            switch (value) {
                 case 2:
                     predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
                     break;
@@ -130,7 +130,7 @@ public class ReportOfferController {
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(registerOption).ifPresent(value -> {
-            switch (value){
+            switch (value) {
                 case 2:
                     predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
                     break;
@@ -175,7 +175,7 @@ public class ReportOfferController {
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(registerOption).ifPresent(value -> {
-            switch (value){
+            switch (value) {
                 case 2:
                     predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
                     break;
@@ -220,7 +220,7 @@ public class ReportOfferController {
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("lastUpdate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(registerOption).ifPresent(value -> {
-            switch (value){
+            switch (value) {
                 case 2:
                     predicates.add((root, cq, cb) -> cb.isTrue(root.get("registered")));
                     break;
@@ -239,7 +239,7 @@ public class ReportOfferController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @Async("threadPoolReportGenerator")
+    @Async("threadMultiplePool")
     public Future<byte[]> reportOffersToday() {
         Map<String, Object> map = new HashMap<>();
         StringBuilder param1 = new StringBuilder();

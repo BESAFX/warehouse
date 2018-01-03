@@ -1,12 +1,14 @@
 package com.besafx.app.rest;
+
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.Account;
+import com.besafx.app.entity.Branch;
+import com.besafx.app.entity.Master;
+import com.besafx.app.entity.Person;
 import com.besafx.app.search.MasterSearch;
 import com.besafx.app.service.*;
-import com.besafx.app.util.DistinctFilter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
@@ -18,10 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.View;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -13,5 +13,6 @@ import java.util.List;
 @Transactional
 public interface AccountConditionService extends PagingAndSortingRepository<AccountCondition, Long>, JpaSpecificationExecutor<AccountCondition> {
     List<AccountCondition> findByAccountId(Long id);
+
     List<AccountCondition> findByAccountIn(List<Account> accounts);
 }

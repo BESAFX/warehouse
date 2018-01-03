@@ -1,9 +1,7 @@
 package com.besafx.app.rest;
 
-import com.besafx.app.config.BulkSMSManager;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
-import com.besafx.app.config.TwilioManager;
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
@@ -12,40 +10,32 @@ import com.besafx.app.service.BranchService;
 import com.besafx.app.service.MasterService;
 import com.besafx.app.service.OfferService;
 import com.besafx.app.service.PersonService;
-import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
-import com.twilio.rest.api.v2010.account.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/offer/")
 public class OfferRest {
 
-    private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
-
     public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
-
+    private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
     @Autowired
     private PersonService personService;
 
@@ -67,16 +57,10 @@ public class OfferRest {
     @Autowired
     private EmailSender emailSender;
 
-    @Autowired
-    private TwilioManager twilioManager;
-
-    @Autowired
-    private BulkSMSManager bulkSMSManager;
-
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
-    public String create(@RequestBody Offer offer , Principal principal) {
+    public String create(@RequestBody Offer offer, Principal principal) {
         try {
             Person person = personService.findByEmail(principal.getName());
             Offer topOffer = offerService.findTopByMasterBranchOrderByCodeDesc(person.getBranch());
@@ -106,7 +90,7 @@ public class OfferRest {
             buffer.append("سعر ");
             buffer.append(offer.getNet().toString().concat("SAR"));
 
-            if(offer.getCustomerEmail() != null){
+            if (offer.getCustomerEmail() != null) {
                 ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
                 String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
                 message = message.replaceAll("BRANCH_LOGO", branch.getLogo());
@@ -114,12 +98,6 @@ public class OfferRest {
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
             }
-            bulkSMSManager.send(offer.getCustomerMobile(), buffer.toString()).get();
-//            if(offer.getSendSMS()){
-//                Message message = twilioManager.send(offer.getCustomerMobile(), buffer.toString()).get();
-//                offer.setMessageSid(message.getSid());
-//                offer = offerService.save(offer);
-//            }
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -150,7 +128,7 @@ public class OfferRest {
     public void delete(@PathVariable Long id, Principal principal) {
         Offer object = offerService.findOne(id);
         if (object != null) {
-            if(!principal.getName().equals(object.getLastPerson().getEmail())){
+            if (!principal.getName().equals(object.getLastPerson().getEmail())) {
                 throw new CustomException("لا يمكنك حذف عرض لم تقم بإضافته");
             }
             offerService.delete(id);

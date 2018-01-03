@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/masterCategory/")
 public class MasterCategoryRest {
-    
+
     public static final String FILTER_TABLE = "**,masters[id],person[id,contact[id,firstName,forthName]]";
     public static final String FILTER_MASTER_CATEGORY_COMBO = "id,code,name";
 

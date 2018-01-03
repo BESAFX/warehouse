@@ -2,8 +2,6 @@ package com.besafx.app.entity;
 
 import com.besafx.app.util.DateConverter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -42,16 +40,16 @@ public class Account implements Serializable {
 
     private String coursePaymentType;
 
-    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
     private Double coursePrice = 0.0;
 
-    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
     private Double courseDiscountAmount = 0.0;
 
-    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
     private Double courseProfitAmount = 0.0;
 
-    @Column(columnDefinition="Decimal(10,2) default '0.00'")
+    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
     private Double courseCreditAmount = 0.0;
 
     @Lob
@@ -85,14 +83,21 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<AccountNote> accountNotes = new ArrayList<>();
 
+    @JsonCreator
+    public static Account Create(String jsonString) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(jsonString, Account.class);
+        return account;
+    }
+
     public Double getRequiredPrice() {
-        try{
+        try {
             if (this.coursePaymentType.equals("نقدي")) {
                 return (this.coursePrice - (this.coursePrice * this.courseDiscountAmount / 100));
             } else {
                 return (this.coursePrice + (this.coursePrice * this.courseProfitAmount / 100));
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }
@@ -104,20 +109,20 @@ public class Account implements Serializable {
                     .filter(payment -> payment.getType().equals("ايرادات اساسية"))
                     .mapToDouble(Payment::getAmountNumber)
                     .sum();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }
 
     public Double getRemainPrice() {
-        try{
+        try {
             return this.getRequiredPrice() - this.getPaidPrice();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }
 
-    public String getKey(){
+    public String getKey() {
         try {
             StringBuilder builder = new StringBuilder();
             builder.append(DateConverter.getYearShortcut(this.getRegisterDate()));
@@ -130,12 +135,12 @@ public class Account implements Serializable {
             builder.append("-");
             builder.append(this.getCode());
             return builder.toString();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "";
         }
     }
 
-    public String getKeyRTL(){
+    public String getKeyRTL() {
         try {
             StringBuilder builder = new StringBuilder();
             builder.append(this.getCode());
@@ -148,12 +153,12 @@ public class Account implements Serializable {
             builder.append("-");
             builder.append(DateConverter.getYearShortcut(this.getRegisterDate()));
             return builder.toString();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "";
         }
     }
 
-    public String getName(){
+    public String getName() {
         try {
             StringBuilder builder = new StringBuilder();
             builder.append(this.student.getContact().getFirstName());
@@ -164,15 +169,8 @@ public class Account implements Serializable {
             builder.append(" ");
             builder.append(this.student.getContact().getForthName());
             return builder.toString();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "";
         }
-    }
-
-    @JsonCreator
-    public static Account Create(String jsonString) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Account account = mapper.readValue(jsonString, Account.class);
-        return account;
     }
 }

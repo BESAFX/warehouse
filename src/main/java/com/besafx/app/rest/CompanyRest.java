@@ -7,7 +7,6 @@ import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

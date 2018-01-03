@@ -4,7 +4,6 @@ import com.besafx.app.entity.Bank;
 import com.besafx.app.entity.Person;
 import com.besafx.app.search.BankSearch;
 import com.besafx.app.service.BankService;
-import com.besafx.app.service.BranchService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -20,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 

@@ -13,5 +13,6 @@ import java.util.List;
 @Transactional
 public interface AccountNoteService extends PagingAndSortingRepository<AccountNote, Long>, JpaSpecificationExecutor<AccountNote> {
     List<AccountNote> findByAccount(Account account);
+
     List<AccountNote> findByAccountId(Long accountId);
 }

@@ -1,12 +1,17 @@
-package com.besafx.app.controller;
+package com.besafx.app.report;
 
 import com.besafx.app.component.ReportExporter;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.Call;
+import com.besafx.app.entity.Person;
 import com.besafx.app.enums.ExportType;
-import com.besafx.app.service.*;
+import com.besafx.app.service.CallService;
+import com.besafx.app.service.PersonService;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.util.WrapperUtil;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -14,13 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.concurrent.Future;
 
 @RestController
 public class ReportCallController {
@@ -92,13 +94,13 @@ public class ReportCallController {
     private List<WrapperUtil> initDateList(List<Call> calls) {
         List<WrapperUtil> list = new ArrayList<>();
         ListIterator<Call> listIterator = calls.listIterator();
-        while (listIterator.hasNext()){
-        Call call = listIterator.next();
+        while (listIterator.hasNext()) {
+            Call call = listIterator.next();
             WrapperUtil wrapperUtil = new WrapperUtil();
             wrapperUtil.setObj1(call);
             list.add(wrapperUtil);
         }
-        list.sort(Comparator.comparing(wrapperUtil -> ((Call)wrapperUtil.getObj1()).getOffer().getCustomerName()));
+        list.sort(Comparator.comparing(wrapperUtil -> ((Call) wrapperUtil.getObj1()).getOffer().getCustomerName()));
         return list;
     }
 

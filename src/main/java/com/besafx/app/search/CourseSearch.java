@@ -1,4 +1,5 @@
 package com.besafx.app.search;
+
 import com.besafx.app.entity.Course;
 import com.besafx.app.service.CourseService;
 import com.google.common.collect.Lists;

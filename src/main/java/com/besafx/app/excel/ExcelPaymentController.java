@@ -19,13 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.html.Option;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +32,7 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 import java.util.concurrent.Future;
 
 @RestController

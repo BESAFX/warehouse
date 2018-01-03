@@ -1,4 +1,5 @@
 package com.besafx.app.config;
+
 import com.besafx.app.entity.Person;
 import com.besafx.app.service.PersonService;
 import org.slf4j.Logger;
@@ -49,22 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/ui/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/company").access("hasRole('ROLE_COMPANY_UPDATE')")
-                .antMatchers("/branch").access("hasRole('ROLE_BRANCH_CREATE') or hasRole('ROLE_BRANCH_UPDATE') or hasRole('ROLE_BRANCH_DELETE')")
-                .antMatchers("/master").access("hasRole('ROLE_MASTER_CREATE') or hasRole('ROLE_MASTER_UPDATE') or hasRole('ROLE_MASTER_DELETE')")
-                .antMatchers("/offer").access("hasRole('ROLE_OFFER_CREATE') or hasRole('ROLE_OFFER_UPDATE') or hasRole('ROLE_OFFER_DELETE')")
-                .antMatchers("/course").access("hasRole('ROLE_COURSE_CREATE') or hasRole('ROLE_COURSE_UPDATE') or hasRole('ROLE_COURSE_DELETE')")
-                .antMatchers("/student").access("hasRole('ROLE_STUDENT_CREATE') or hasRole('ROLE_STUDENT_UPDATE') or hasRole('ROLE_STUDENT_DELETE')")
-                .antMatchers("/account").access("hasRole('ROLE_ACCOUNT_CREATE') or hasRole('ROLE_ACCOUNT_UPDATE') or hasRole('ROLE_ACCOUNT_DELETE')")
-                .antMatchers("/payment").access("hasRole('ROLE_PAYMENT_CREATE') or hasRole('ROLE_PAYMENT_UPDATE') or hasRole('ROLE_PAYMENT_DELETE')")
-                .antMatchers("/paymentOut").access("hasRole('ROLE_PAYMENT_OUT_CREATE') or hasRole('ROLE_PAYMENT_OUT_UPDATE') or hasRole('ROLE_PAYMENT_OUT_DELETE')")
-                .antMatchers("/team").access("hasRole('ROLE_TEAM_CREATE') or hasRole('ROLE_TEAM_UPDATE') or hasRole('ROLE_TEAM_DELETE')")
-                .antMatchers("/person").access("hasRole('ROLE_PERSON_CREATE') or hasRole('ROLE_PERSON_UPDATE') or hasRole('ROLE_PERSON_DELETE')")
-                .antMatchers("/bank").access("hasRole('ROLE_BANK_CREATE') or hasRole('ROLE_BANK_UPDATE') or hasRole('ROLE_BANK_DELETE')")
-                .antMatchers("/deposit").access("hasRole('ROLE_DEPOSIT_CREATE') or hasRole('ROLE_DEPOSIT_UPDATE') or hasRole('ROLE_DEPOSIT_DELETE')")
-                .antMatchers("/withdraw").access("hasRole('ROLE_WITHDRAW_CREATE') or hasRole('ROLE_WITHDRAW_UPDATE') or hasRole('ROLE_WITHDRAW_DELETE')")
-                .antMatchers("/billBuy").access("hasRole('ROLE_BILL_BUY_CREATE') or hasRole('ROLE_BILL_BUY_UPDATE') or hasRole('ROLE_BILL_BUY_DELETE')")
-                .antMatchers("/billBuyType").access("hasRole('ROLE_BILL_BUY_TYPE_CREATE') or hasRole('ROLE_BILL_BUY_TYPE_UPDATE') or hasRole('ROLE_BILL_BUY_TYPE_DELETE')")
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/login")

@@ -1,4 +1,5 @@
-package com.besafx.app.controller;
+package com.besafx.app.report;
+
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Master;
 import com.besafx.app.service.BranchService;

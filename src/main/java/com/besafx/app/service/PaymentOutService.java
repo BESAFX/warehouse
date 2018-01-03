@@ -18,25 +18,38 @@ import java.util.List;
 @Transactional
 public interface PaymentOutService extends PagingAndSortingRepository<PaymentOut, Long>, JpaSpecificationExecutor<PaymentOut> {
     PaymentOut findByCode(Long code);
+
     Payment findByCodeAndBranch(Long code, Branch branch);
 
     List<PaymentOut> findByBranch(Branch branch);
+
     List<PaymentOut> findByBranchId(Long branchId);
+
     List<PaymentOut> findByBranchIn(List<Branch> branches);
+
     List<PaymentOut> findByBranchIdIn(List<Long> branchIds);
 
     List<PaymentOut> findByBranchAndDateBetween(Branch branch, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<PaymentOut> findByBranchIdAndDateBetween(Long branchId, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<PaymentOut> findByBranchInAndDateBetween(List<Branch> branches, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<PaymentOut> findByBranchIdInAndDateBetween(List<Long> branchIds, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 
     List<PaymentOut> findByPerson(Person person);
+
     List<PaymentOut> findByPersonId(Long personId);
+
     List<PaymentOut> findByPersonIn(List<Person> persons);
+
     List<PaymentOut> findByPersonIdIn(List<Long> personIds);
 
     List<PaymentOut> findByPersonAndDateBetween(Person person, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<PaymentOut> findByPersonIdAndDateBetween(Long personId, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<PaymentOut> findByPersonInAndDateBetween(List<Person> persons, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<PaymentOut> findByPersonIdInAndDateBetween(List<Long> personIds, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 }

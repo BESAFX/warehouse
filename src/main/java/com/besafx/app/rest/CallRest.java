@@ -23,10 +23,8 @@ import java.security.Principal;
 @RequestMapping(value = "/api/call/")
 public class CallRest {
 
-    private final static Logger log = LoggerFactory.getLogger(CallRest.class);
-
     public static final String FILTER_TABLE = "**,person[id,contact[id,firstName,forthName]],offer[id]";
-
+    private final static Logger log = LoggerFactory.getLogger(CallRest.class);
     @Autowired
     private CallService callService;
 

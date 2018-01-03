@@ -1,4 +1,5 @@
 package com.besafx.app.util;
+
 import org.joda.time.chrono.IslamicChronology;
 import org.joda.time.format.DateTimeFormat;
 
@@ -136,8 +137,8 @@ public class DateConverter {
         return IsoChronology.INSTANCE.date(date).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
-    public static Date parseHijriDateStringWithFormat(String date, String format) throws Exception{
-        org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(format).withChronology( IslamicChronology.getInstance());
+    public static Date parseHijriDateStringWithFormat(String date, String format) throws Exception {
+        org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(format).withChronology(IslamicChronology.getInstance());
         return formatter.parseDateTime(date).toDate();
     }
 }

@@ -33,10 +33,8 @@ import java.util.List;
 @RequestMapping(value = "/api/payment")
 public class PaymentRest {
 
-    private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
-
     public static final String FILTER_TABLE = "**,paymentBook[id,code,fromCode,toCode,maxCode],lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
-
+    private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
     @Autowired
     private PersonService personService;
 
@@ -60,7 +58,7 @@ public class PaymentRest {
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
         PaymentBook paymentBook = paymentBookService.findOne(payment.getPaymentBook().getId());
-        if(paymentBook.getMaxCode().equals(paymentBook.getToCode())){
+        if (paymentBook.getMaxCode().equals(paymentBook.getToCode())) {
             throw new CustomException("عفواً، تم إغلاق هذا الدفتر");
         }
         if (paymentBook.getMaxCode() == 0) {

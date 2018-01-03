@@ -17,13 +17,22 @@ import java.util.List;
 @Transactional
 public interface CallService extends PagingAndSortingRepository<Call, Long>, JpaSpecificationExecutor<Call> {
     List<Call> findByOffer(Offer offer);
+
     List<Call> findByOfferId(Long offerId);
+
     List<Call> findByPersonId(Long personId);
+
     List<Call> findByPersonIdIn(List<Long> personsId);
+
     List<Call> findByPersonIdAndDateBetween(Long personId, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<Call> findByPersonIdInAndDateBetween(List<Long> personsId, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<Call> findByPerson(Person person);
+
     List<Call> findByPersonIn(List<Person> persons);
+
     List<Call> findByPersonAndDateBetween(Person person, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<Call> findByPersonInAndDateBetween(List<Person> persons, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 }

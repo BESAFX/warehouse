@@ -1,12 +1,12 @@
 package com.besafx.app.async;
 
 import com.besafx.app.entity.Account;
-import com.besafx.app.entity.Person;
 import com.besafx.app.entity.enums.ContractType;
 import com.besafx.app.service.AccountService;
-import com.besafx.app.service.PersonService;
-import com.besafx.app.util.WrapperUtil;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
@@ -29,8 +28,8 @@ public class AsyncMultiAccountInOneFile {
     @Autowired
     private AccountService accountService;
 
-    @Async("JasperPrintGenerator")
-    public Future<JasperPrint> getJasperPrint(Long accountId, ContractType contractType, boolean hijriDate) throws Exception{
+    @Async("threadMultiplePool")
+    public Future<JasperPrint> getJasperPrint(Long accountId, ContractType contractType, boolean hijriDate) throws Exception {
         log.info("العمل على التسجيل رقم/ " + accountId);
         Account account = accountService.findOne(accountId);
         Map<String, Object> map = new HashMap<>();

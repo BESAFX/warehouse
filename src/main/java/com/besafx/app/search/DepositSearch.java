@@ -1,4 +1,5 @@
 package com.besafx.app.search;
+
 import com.besafx.app.entity.Deposit;
 import com.besafx.app.service.DepositService;
 import com.google.common.collect.Lists;

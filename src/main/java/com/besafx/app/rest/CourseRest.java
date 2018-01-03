@@ -1,9 +1,11 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.Account;
+import com.besafx.app.entity.Course;
+import com.besafx.app.entity.Payment;
+import com.besafx.app.entity.Person;
 import com.besafx.app.search.CourseSearch;
-import com.besafx.app.search.MasterSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -19,7 +21,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

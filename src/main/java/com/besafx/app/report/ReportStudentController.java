@@ -1,4 +1,5 @@
-package com.besafx.app.controller;
+package com.besafx.app.report;
+
 import com.besafx.app.entity.Student;
 import com.besafx.app.service.StudentService;
 import com.besafx.app.util.DateConverter;
