@@ -46,11 +46,6 @@
 			<variableExpression><![CDATA[$F{code}]]></variableExpression>
 		</variable>
 	</subDataset>
-	<subDataset name="Dataset1" uuid="d9aad8a2-e6db-4578-97d7-ac1ce70260ab">
-		<queryString>
-			<![CDATA[]]>
-		</queryString>
-	</subDataset>
 	<parameter name="paymentBook" class="com.besafx.app.entity.PaymentBook"/>
 	<queryString>
 		<![CDATA[]]>
