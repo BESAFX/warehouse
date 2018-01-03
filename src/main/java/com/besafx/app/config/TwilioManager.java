@@ -27,7 +27,7 @@ public class TwilioManager {
 
     @PostConstruct
     public void init() {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+//        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
     }
 
     public List<Message> getMessages(){

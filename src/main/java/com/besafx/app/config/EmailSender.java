@@ -43,14 +43,14 @@ public class EmailSender {
 
     @PostConstruct
     public void init() {
-        log.info("Preparing email service...");
-        Properties props = new Properties();
-        props.put("mail.transport.protocol", "smtps");
-        props.put("mail.smtps.host", SMTP_HOST_NAME);
-        props.put("mail.smtps.auth", "true");
-        mailSession = Session.getDefaultInstance(props);
-        mailSession.setDebug(true);
-        log.info("Preparing email service successfully");
+//        log.info("Preparing email service...");
+//        Properties props = new Properties();
+//        props.put("mail.transport.protocol", "smtps");
+//        props.put("mail.smtps.host", SMTP_HOST_NAME);
+//        props.put("mail.smtps.auth", "true");
+//        mailSession = Session.getDefaultInstance(props);
+//        mailSession.setDebug(true);
+//        log.info("Preparing email service successfully");
     }
 
     @Async("threadPoolEmailSender")
