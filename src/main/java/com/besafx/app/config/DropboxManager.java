@@ -28,10 +28,10 @@ public class DropboxManager {
     @PostConstruct
     public void init() {
         // Create Dropbox client
-        log.info("Preparing dropbox client...");
-        config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").withUserLocale("en_US").build();
-        client = new DbxClientV2(config, ACCESS_TOKEN);
-        log.info("Connecting with dropbox client successfully");
+//        log.info("Preparing dropbox client...");
+//        config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").withUserLocale("en_US").build();
+//        client = new DbxClientV2(config, ACCESS_TOKEN);
+//        log.info("Connecting with dropbox client successfully");
     }
 
     public void createFolder(String path) {
