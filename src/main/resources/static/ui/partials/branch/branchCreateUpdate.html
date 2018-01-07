@@ -51,6 +51,7 @@
             </div>
 
             <div class="form-group row">
+
                 <div class="form-group text-right col-xs-12 col-sm-4 col-md-4 col-lg-4">
                     <label for="code" class="control-label">رقم الفرع</label>
                     <input id="code"
@@ -75,6 +76,22 @@
                 </div>
 
                 <div class="form-group text-right col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <label for="subName" class="control-label">عنوان فرعي للتقرير</label>
+                    <input id="subName"
+                           type="text"
+                           required="required"
+                           disable-validation-message=""
+                           class="form-control text-right"
+                           placeholder="عنوان فرعي للتقرير"
+                           ng-model="branch.subName">
+                </div>
+
+
+            </div>
+
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label for="address" class="control-label">العنوان</label>
                     <input id="address"
                            type="text"
@@ -84,6 +101,7 @@
                            placeholder="العنوان"
                            ng-model="branch.address">
                 </div>
+
             </div>
 
             <div class="form-group row">

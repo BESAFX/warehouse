@@ -35,6 +35,8 @@ public class Branch implements Serializable {
 
     private String name;
 
+    private String subName;
+
     private String address;
 
     private String phone1;

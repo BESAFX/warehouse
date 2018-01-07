@@ -49,14 +49,13 @@
 						<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 					</image>
 					<textField>
-						<reportElement x="301" y="0" width="234" height="70" uuid="1db6c9b9-ab0d-4fa3-905d-da6f1a01317e"/>
+						<reportElement x="227" y="0" width="308" height="70" uuid="1db6c9b9-ab0d-4fa3-905d-da6f1a01317e"/>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font fontName="Arial" size="12" isBold="true"/>
 							<paragraph lineSpacing="AtLeast" lineSpacingSize="0.5"/>
 						</textElement>
-						<textFieldExpression><![CDATA["المعهد الأهلي العالي للتدريب" + "\n" + 
-"تحت إشراف وترخيص المؤسسة العامة" + "\n" + 
-"للتدريب التقني والمهني" + "\n" + 
+						<textFieldExpression><![CDATA[$P{payment}.getAccount().getCourse().getMaster().getBranch().getName()  + "\n" + 
+$P{payment}.getAccount().getCourse().getMaster().getBranch().getSubName() + "\n" + 
 "رقم الرخصة: " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getLicenceCode() + "\n" + 
 "رقم ضريبي: " + $P{payment}.getAccount().getCourse().getMaster().getBranch().getTaxCode()]]></textFieldExpression>
 					</textField>
