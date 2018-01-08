@@ -42,7 +42,6 @@ public class EmailSender {
 
     private MimeMessage message;
 
-    @PostConstruct
     public void init() {
         log.info("Preparing email service...");
         Properties props = new Properties();

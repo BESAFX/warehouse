@@ -26,7 +26,6 @@ public class DropboxManager {
 
     private DbxClientV2 client;
 
-    @PostConstruct
     public void init() {
         // Create Dropbox client
         log.info("Preparing dropbox client...");

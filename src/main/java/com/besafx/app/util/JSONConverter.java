@@ -32,7 +32,6 @@ public class JSONConverter {
         }
     }
 
-    @PostConstruct
     public void init() {
         mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
