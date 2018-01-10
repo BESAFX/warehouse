@@ -33,16 +33,15 @@ import java.util.List;
 @RequestMapping(value = "/api/payment")
 public class PaymentRest {
 
-    public static final String FILTER_TABLE = "**,paymentBook[id,code,fromCode,toCode,maxCode],lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
+
+    public static final String FILTER_TABLE = "**,paymentBook[id,code,fromCode,toCode,maxCode],lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
+
     @Autowired
     private PersonService personService;
 
     @Autowired
     private PaymentService paymentService;
-
-    @Autowired
-    private PaymentBookService paymentBookService;
 
     @Autowired
     private AccountService accountService;
@@ -57,26 +56,15 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
-        PaymentBook paymentBook = paymentBookService.findOne(payment.getPaymentBook().getId());
-        if (paymentBook.getMaxCode().equals(paymentBook.getToCode())) {
-            throw new CustomException("عفواً، تم إغلاق هذا الدفتر");
+        if(paymentService.findByCode(payment.getCode()) != null){
+            throw new CustomException("عفوا، تم ادخال هذا السند سابقاً");
         }
-        if (paymentBook.getMaxCode() == 0) {
-            payment.setCode(paymentBook.getFromCode());
-        } else {
-            payment.setCode(paymentBook.getMaxCode() + 1);
-        }
-        //
-        paymentBook.setMaxCode(payment.getCode());
-        payment.setPaymentBook(paymentBookService.save(paymentBook));
-        //
         Person person = personService.findByEmail(principal.getName());
         payment.setLastPerson(person);
         payment.setLastUpdate(new Date());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
-        //
-        notificationService.notifyAll(Notification.builder().message("تم انشاء سند قبض بنجاح").type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم انشاء سند قبض رقم " + payment.getCode()).type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
     }
 
@@ -86,8 +74,8 @@ public class PaymentRest {
     public String update(@RequestBody Payment payment, Principal principal) {
         Payment object = paymentService.findOne(payment.getId());
         if (object != null) {
-            if (paymentService.findByCodeAndAccountCourseMasterBranchAndIdNot(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch(), payment.getId()) != null) {
-                throw new CustomException("لا يمكن تكرار رقم السند على مستوى الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
+            if (paymentService.findByCodeAndPaymentBookAndIdNot(payment.getCode(), payment.getPaymentBook(), payment.getId()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند داخل الدفتر الواحد، حيث لكل دفتر سندات قبض خاص به");
             }
             Person person = personService.findByEmail(principal.getName());
             payment.setLastUpdate(new Date());

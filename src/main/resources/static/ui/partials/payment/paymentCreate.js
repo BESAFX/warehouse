@@ -26,20 +26,20 @@ app.controller('paymentCreateCtrl', ['BranchService', 'PaymentBookService', 'Acc
 
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {
-                $rootScope.showConfirmNotify("السندات", "هل تود طباعة السند ؟", "notification", "fa-info", function () {
-                    window.open('report/CashReceipt/' + data.id);
-                });
                 PaymentBookService.findByBranchCombo($scope.buffer.branch.id).then(function (data) {
                     $scope.paymentBooks = data;
-                    /**REFRESH ACCOUNT OBJECT**/
-                    AccountService.findOne(data.account.id).then(function (data) {
-                        var index = $scope.accounts.indexOf(data.account);
-                        $scope.accounts[index] = data;
-                        $scope.payment = {};
-                        $scope.payment.paymentMethod='Cash';
-                        $scope.payment.account = data;
-                        $scope.form.$setPristine();
-                    });
+                });
+                /**REFRESH ACCOUNT OBJECT**/
+                AccountService.findOne(data.account.id).then(function (data) {
+                    var index = $scope.accounts.indexOf(data.account);
+                    $scope.accounts[index] = data;
+                    $scope.payment = {};
+                    $scope.payment.paymentMethod='Cash';
+                    $scope.payment.account = data;
+                    $scope.form.$setPristine();
+                });
+                $rootScope.showConfirmNotify("السندات", "هل تود طباعة السند ؟", "notification", "fa-info", function () {
+                    window.open('report/CashReceipt/' + data.id);
                 });
             });
         };
