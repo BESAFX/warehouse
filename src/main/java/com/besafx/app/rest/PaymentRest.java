@@ -44,6 +44,9 @@ public class PaymentRest {
     private PaymentService paymentService;
 
     @Autowired
+    private PaymentBookService paymentBookService;
+
+    @Autowired
     private AccountService accountService;
 
     @Autowired
@@ -56,9 +59,19 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
-        if(paymentService.findByCode(payment.getCode()) != null){
-            throw new CustomException("عفوا، تم ادخال هذا السند سابقاً");
+        PaymentBook paymentBook = paymentBookService.findOne(payment.getPaymentBook().getId());
+        if (paymentBook.getMaxCode().equals(paymentBook.getToCode())) {
+            throw new CustomException("عفواً، تم إغلاق هذا الدفتر");
         }
+        if (paymentBook.getMaxCode() == 0) {
+            payment.setCode(paymentBook.getFromCode());
+        } else {
+            payment.setCode(paymentBook.getMaxCode() + 1);
+        }
+        //
+        paymentBook.setMaxCode(payment.getCode());
+        payment.setPaymentBook(paymentBookService.save(paymentBook));
+        //
         Person person = personService.findByEmail(principal.getName());
         payment.setLastPerson(person);
         payment.setLastUpdate(new Date());
