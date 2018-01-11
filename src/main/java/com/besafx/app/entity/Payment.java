@@ -56,10 +56,6 @@ public class Payment implements Serializable {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "payment_book")
-    private PaymentBook paymentBook;
-
-    @ManyToOne
     @JoinColumn(name = "account")
     private Account account;
 

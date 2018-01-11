@@ -1,7 +1,6 @@
 function calculateCtrl (
     PersonService,
     BranchService,
-    PaymentBookService,
     PaymentService,
     PaymentOutService,
     BillBuyTypeService,
@@ -27,96 +26,12 @@ function calculateCtrl (
             $scope.clear();
         });
         $scope.fetchBillBuyTypeTableData();
-        $scope.fetchPaymentBookTableData();
         window.componentHandler.upgradeAllRegistered();
     }, 1500);
     $scope.clear = function () {
         $scope.buffer = {};
         $scope.buffer.branch = $scope.branches[0];
     };
-
-    /**************************************************************************************************************
-     *                                                                                                            *
-     * PaymentBook                                                                                                *
-     *                                                                                                            *
-     **************************************************************************************************************/
-    $scope.selectedPaymentBook = {};
-    $scope.paymentBooks = [];
-    $scope.setSelectedPaymentBook = function (object) {
-        if (object) {
-            angular.forEach($scope.paymentBooks, function (paymentBook) {
-                if (object.id == paymentBook.id) {
-                    $scope.selectedPaymentBook = paymentBook;
-                    return paymentBook.isSelected = true;
-                } else {
-                    return paymentBook.isSelected = false;
-                }
-            });
-        }
-    };
-    $scope.fetchPaymentBookTableData = function () {
-        PaymentBookService.fetchTableData().then(function (data) {
-            $scope.paymentBooks = data;
-            $scope.setSelectedPaymentBook(data[0]);
-        })
-    };
-    $scope.newPaymentBook = function () {
-        ModalProvider.openPaymentBookCreateModel().result.then(function (data) {
-            $scope.paymentBooks.splice(0,0,data);
-        }, function () {
-            console.info('PaymentBookCreateModel Closed.');
-        });
-    };
-    $scope.deletePaymentBook = function (paymentBook) {
-        $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الدفتر فعلاً؟", "error", "fa-ban", function () {
-            PaymentBookService.remove(paymentBook.id).then(function () {
-                var index = $scope.paymentBooks.indexOf(paymentBook);
-                $scope.paymentBooks.splice(index, 1);
-                $scope.setSelectedPaymentBook($scope.paymentBooks[0]);
-            });
-        });
-    };
-    $scope.printPaymentBook = function (paymentBook) {
-        window.open('/report/paymentBook/payments/'+ paymentBook.id + '/PDF');
-    };
-    $scope.rowMenuPaymentBook = [
-        {
-            html: '<div class="drop-menu"> انشاء دفتر جديد <span class="fa fa-plus-square-o fa-lg"></span></div>',
-            enabled: function () {
-                return true
-            },
-            click: function ($itemScope, $event, value) {
-                $scope.newPaymentBook();
-            }
-        },
-        {
-            html: '<div class="drop-menu"> تعديل بيانات الدفتر <span class="fa fa-edit fa-lg"></span></div>',
-            enabled: function () {
-                return true
-            },
-            click: function ($itemScope, $event, value) {
-                ModalProvider.openPaymentBookUpdateModel($itemScope.paymentBook);
-            }
-        },
-        {
-            html: '<div class="drop-menu"> حذف الدفتر <span class="fa fa-minus-square-o fa-lg"></span></div>',
-            enabled: function () {
-                return true
-            },
-            click: function ($itemScope, $event, value) {
-                $scope.deletePaymentBook($itemScope.paymentBook);
-            }
-        },
-        {
-            html: '<div class="drop-menu"> طباعة الدفتر <span class="fa fa-print fa-lg"></span></div>',
-            enabled: function () {
-                return true
-            },
-            click: function ($itemScope, $event, value) {
-                $scope.printPaymentBook($itemScope.paymentBook);
-            }
-        }
-    ];
 
     /**************************************************************************************************************
      *                                                                                                            *
@@ -300,24 +215,6 @@ function calculateCtrl (
 
         });
     };
-    $scope.moveToBook = function () {
-        $scope.paymentWrapper = {};
-        var modalInstance = $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/payment/paymentMoveToBook.html',
-            controller: 'paymentMoveToBookCtrl',
-            scope: $scope,
-            backdrop: 'static',
-            keyboard: false
-        });
-        modalInstance.result.then(function (paymentWrapper) {
-            PaymentService.moveToBook(paymentWrapper).then(function (data) {
-
-            });
-        });
-    };
     $scope.printList = function () {
         var paymentIds = [];
         angular.forEach($scope.payments, function (payment) {
@@ -391,15 +288,6 @@ function calculateCtrl (
                 $scope.printListSummery();
             }
         },
-        {
-            html: '<div class="drop-menu">نقل إلى دفتر<span class="fa fa-book fa-lg"></span></div>',
-            enabled: function () {
-                return true
-            },
-            click: function ($itemScope, $event, value) {
-                $scope.moveToBook();
-            }
-        }
     ];
 
     /**************************************************************************************************************
@@ -933,7 +821,6 @@ function calculateCtrl (
 calculateCtrl.$inject = [
     'PersonService',
     'BranchService',
-    'PaymentBookService',
     'PaymentService',
     'PaymentOutService',
     'BillBuyTypeService',

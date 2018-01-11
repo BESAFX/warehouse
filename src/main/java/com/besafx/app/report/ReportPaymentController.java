@@ -36,10 +36,14 @@ public class ReportPaymentController {
     @ResponseBody
     public void printCashReceipt(@PathVariable(value = "paymentId") Long paymentId,
                                  HttpServletResponse response)
-            throws JRException, IOException {
+            throws Exception {
         Map<String, Object> map = new HashMap<>();
         Payment payment = paymentService.findOne(paymentId);
-        map.put("logo", new URL(payment.getAccount().getCourse().getMaster().getBranch().getLogo()).openStream());
+        try {
+            map.put("logo", new URL(payment.getAccount().getCourse().getMaster().getBranch().getLogo()).openStream());
+        } catch (IOException e) {
+            map.put("logo", null);
+        }
         map.put("payment", payment);
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/CashReceipt.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());

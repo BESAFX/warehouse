@@ -19,13 +19,6 @@
             <nav class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link"
                    href=""
-                   ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_BOOK_CREATE', 'ROLE_PAYMENT_BOOK_UPDATE', 'ROLE_PAYMENT_BOOK_DELETE'])"
-                   ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===1}"
-                   ng-click="toggleState=1">
-                    <span>دفاتر السندات</span>
-                </a>
-                <a class="mdl-navigation__link"
-                   href=""
                    ng-show="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE', 'ROLE_PAYMENT_UPDATE', 'ROLE_PAYMENT_DELETE'])"
                    ng-class="{'mdl-color-text--black mdl-color--blue-grey-50' : toggleState===2}"
                    ng-click="toggleState=2">
@@ -516,12 +509,6 @@
     </div>
 
     <main class="mdl-layout__content">
-
-        <div ng-show="toggleState===1" class="row" style="margin-top: 10px">
-
-            <div ng-include="'ui/partials/calculate/state1.html'"></div>
-
-        </div>
 
         <div ng-show="toggleState===2" class="row" style="margin-top: 10px">
 

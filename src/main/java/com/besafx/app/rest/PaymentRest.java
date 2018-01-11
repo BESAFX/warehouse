@@ -3,12 +3,10 @@ package com.besafx.app.rest;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Account;
 import com.besafx.app.entity.Payment;
-import com.besafx.app.entity.PaymentBook;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.wrapper.PaymentWrapper;
 import com.besafx.app.search.PaymentSearch;
 import com.besafx.app.service.AccountService;
-import com.besafx.app.service.PaymentBookService;
 import com.besafx.app.service.PaymentService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.ArabicLiteralNumberParser;
@@ -35,16 +33,13 @@ public class PaymentRest {
 
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
 
-    public static final String FILTER_TABLE = "**,paymentBook[id,code,fromCode,toCode,maxCode],lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
+    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
 
     @Autowired
     private PersonService personService;
 
     @Autowired
     private PaymentService paymentService;
-
-    @Autowired
-    private PaymentBookService paymentBookService;
 
     @Autowired
     private AccountService accountService;
@@ -59,19 +54,16 @@ public class PaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
-        PaymentBook paymentBook = paymentBookService.findOne(payment.getPaymentBook().getId());
-        if (paymentBook.getMaxCode().equals(paymentBook.getToCode())) {
-            throw new CustomException("عفواً، تم إغلاق هذا الدفتر");
+        payment.setAccount(accountService.findOne(payment.getAccount().getId()));
+        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
+            throw new CustomException("عفواً، هذا السند مدخل سابقاً");
         }
-        if (paymentBook.getMaxCode() == 0) {
-            payment.setCode(paymentBook.getFromCode());
+        Payment topPayment = paymentService.findTopByAccountCourseMasterBranchOrderByCodeDesc(payment.getAccount().getCourse().getMaster().getBranch());
+        if (topPayment == null) {
+            payment.setCode(Long.valueOf(1));
         } else {
-            payment.setCode(paymentBook.getMaxCode() + 1);
+            payment.setCode(topPayment.getCode() + 1);
         }
-        //
-        paymentBook.setMaxCode(payment.getCode());
-        payment.setPaymentBook(paymentBookService.save(paymentBook));
-        //
         Person person = personService.findByEmail(principal.getName());
         payment.setLastPerson(person);
         payment.setLastUpdate(new Date());
@@ -87,8 +79,11 @@ public class PaymentRest {
     public String update(@RequestBody Payment payment, Principal principal) {
         Payment object = paymentService.findOne(payment.getId());
         if (object != null) {
-            if (paymentService.findByCodeAndPaymentBookAndIdNot(payment.getCode(), payment.getPaymentBook(), payment.getId()) != null) {
-                throw new CustomException("لا يمكن تكرار رقم السند داخل الدفتر الواحد، حيث لكل دفتر سندات قبض خاص به");
+            if (paymentService.findByCodeAndAccountCourseMasterBranchAndIdNot(
+                    payment.getCode(),
+                    payment.getAccount().getCourse().getMaster().getBranch(),
+                    payment.getId()) != null) {
+                throw new CustomException("لا يمكن تكرار رقم السند داخل الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
             }
             Person person = personService.findByEmail(principal.getName());
             payment.setLastUpdate(new Date());
@@ -100,20 +95,6 @@ public class PaymentRest {
         } else {
             return null;
         }
-    }
-
-    @RequestMapping(value = "moveToBook", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @PreAuthorize("hasRole('ROLE_PAYMENT_MOVE_TO_BOOK')")
-    public String moveToBook(@RequestBody PaymentWrapper paymentWrapper, Principal principal) {
-        paymentWrapper.getPayments().stream().forEach(payment -> {
-            Person person = personService.findByEmail(principal.getName());
-            payment.setLastUpdate(new Date());
-            payment.setLastPerson(person);
-        });
-        List<Payment> payments = Lists.newArrayList(paymentService.save(paymentWrapper.getPayments()));
-        notificationService.notifyAll(Notification.builder().message("تم نقل كافة السندات إلى الدفتر بنجاح بنجاح").type("success").build());
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payments);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)

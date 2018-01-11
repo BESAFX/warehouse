@@ -1,5 +1,5 @@
-app.controller('paymentCreateCtrl', ['BranchService', 'PaymentBookService', 'AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
-    function (BranchService, PaymentBookService, AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
+app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'PaymentService', '$rootScope', '$scope', '$timeout', '$log', '$uibModalInstance', 'title',
+    function (BranchService, AccountService, PaymentService, $rootScope, $scope, $timeout, $log, $uibModalInstance, title) {
 
         $scope.payment = {};
 
@@ -19,16 +19,10 @@ app.controller('paymentCreateCtrl', ['BranchService', 'PaymentBookService', 'Acc
             AccountService.findByBranchWithKey($scope.buffer.branch.id).then(function (data) {
                 $scope.accounts = data;
             });
-            PaymentBookService.findByBranchCombo($scope.buffer.branch.id).then(function (data) {
-                $scope.paymentBooks = data;
-            });
         };
 
         $scope.submit = function () {
             PaymentService.create($scope.payment).then(function (data) {
-                PaymentBookService.findByBranchCombo($scope.buffer.branch.id).then(function (data) {
-                    $scope.paymentBooks = data;
-                });
                 /**REFRESH ACCOUNT OBJECT**/
                 AccountService.findOne(data.account.id).then(function (data) {
                     var index = $scope.accounts.indexOf(data.account);
