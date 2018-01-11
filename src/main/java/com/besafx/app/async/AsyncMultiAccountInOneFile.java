@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +30,17 @@ public class AsyncMultiAccountInOneFile {
     private AccountService accountService;
 
     @Async("threadMultiplePool")
-    public Future<JasperPrint> getJasperPrint(Long accountId, ContractType contractType, boolean hijriDate) throws Exception {
+    public Future<JasperPrint> getJasperPrint(Long accountId, ContractType contractType, boolean hijriDate) throws Exception{
         log.info("العمل على التسجيل رقم/ " + accountId);
         Account account = accountService.findOne(accountId);
         Map<String, Object> map = new HashMap<>();
         map.put("ACCOUNT", account);
         map.put("HIJRI_DATE", hijriDate);
-        map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
+        try {
+            map.put("LOGO", new URL(account.getCourse().getMaster().getBranch().getLogo()).openStream());
+        } catch (IOException e) {
+            map.put("LOGO", null);
+        }
         map.put("TITLE", "عقد إشتراك ب".concat(account.getCourse().getMaster().getMasterCategory().getName()));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/account/" + contractType + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());

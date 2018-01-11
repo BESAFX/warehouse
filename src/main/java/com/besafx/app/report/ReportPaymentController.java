@@ -34,9 +34,7 @@ public class ReportPaymentController {
 
     @RequestMapping(value = "/report/CashReceipt/{paymentId}", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    public void printCashReceipt(@PathVariable(value = "paymentId") Long paymentId,
-                                 HttpServletResponse response)
-            throws Exception {
+    public void printCashReceipt(@PathVariable(value = "paymentId") Long paymentId, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<>();
         Payment payment = paymentService.findOne(paymentId);
         try {
