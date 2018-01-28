@@ -65,8 +65,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe();
         http.csrf().disable();
         http.sessionManagement()
-                .maximumSessions(2)
-                .sessionRegistry(sessionRegistry());
+                .invalidSessionUrl("/logout")
+                .maximumSessions(3)
+                .sessionRegistry(sessionRegistry())
+                .expiredUrl("/logout");
     }
 
     @Bean
