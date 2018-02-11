@@ -28,6 +28,11 @@ app.factory("BranchService",
                     return response.data;
                 });
             },
+            duplicate: function (branch) {
+                return $http.post("/api/branch/duplicate", branch).then(function (response) {
+                    return response.data;
+                });
+            },
             remove: function (id) {
                 return $http.delete("/api/branch/delete/" + id);
             },

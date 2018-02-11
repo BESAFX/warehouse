@@ -55,15 +55,15 @@ public class PaymentRest {
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
         payment.setAccount(accountService.findOne(payment.getAccount().getId()));
-        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
-            throw new CustomException("عفواً، هذا السند مدخل سابقاً");
-        }
-        Payment topPayment = paymentService.findTopByAccountCourseMasterBranchOrderByCodeDesc(payment.getAccount().getCourse().getMaster().getBranch());
-        if (topPayment == null) {
-            payment.setCode(Long.valueOf(1));
-        } else {
-            payment.setCode(topPayment.getCode() + 1);
-        }
+//        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
+//            throw new CustomException("عفواً، هذا السند مدخل سابقاً");
+//        }
+//        Payment topPayment = paymentService.findTopByAccountCourseMasterBranchOrderByCodeDesc(payment.getAccount().getCourse().getMaster().getBranch());
+//        if (topPayment == null) {
+//            payment.setCode(Long.valueOf(1));
+//        } else {
+//            payment.setCode(topPayment.getCode() + 1);
+//        }
         Person person = personService.findByEmail(principal.getName());
         payment.setLastPerson(person);
         payment.setLastUpdate(new Date());
@@ -79,12 +79,12 @@ public class PaymentRest {
     public String update(@RequestBody Payment payment, Principal principal) {
         Payment object = paymentService.findOne(payment.getId());
         if (object != null) {
-            if (paymentService.findByCodeAndAccountCourseMasterBranchAndIdNot(
-                    payment.getCode(),
-                    payment.getAccount().getCourse().getMaster().getBranch(),
-                    payment.getId()) != null) {
-                throw new CustomException("لا يمكن تكرار رقم السند داخل الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
-            }
+//            if (paymentService.findByCodeAndAccountCourseMasterBranchAndIdNot(
+//                    payment.getCode(),
+//                    payment.getAccount().getCourse().getMaster().getBranch(),
+//                    payment.getId()) != null) {
+//                throw new CustomException("لا يمكن تكرار رقم السند داخل الفرع، حيث لكل فرع دفتر سندات قبض خاص به");
+//            }
             Person person = personService.findByEmail(principal.getName());
             payment.setLastUpdate(new Date());
             payment.setLastPerson(person);

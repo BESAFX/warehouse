@@ -59,6 +59,23 @@ public class BranchRest {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), branch);
     }
 
+    @RequestMapping(value = "duplicate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_BRANCH_CREATE')")
+    public String duplicate(@RequestBody Branch branch, Principal principal) {
+        Branch topBranch = branchService.findTopByOrderByCodeDesc();
+        if (topBranch == null) {
+            branch.setCode(1);
+        } else {
+            branch.setCode(topBranch.getCode() + 1);
+        }
+        branch.setId(null);
+        branch.setCompany(companyService.findFirstBy());
+        branch = branchService.save(branch);
+        notificationService.notifyAll(Notification.builder().message("تم تكرار الفرع بنجاح").type("success").build());
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), branch);
+    }
+
     @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_BRANCH_UPDATE')")

@@ -37,7 +37,17 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <label for="code" class="control-label">رقم السند </label>
+                    <input id="code"
+                           type="number"
+                           required="required"
+                           disable-validation-message=""
+                           class="form-control text-right"
+                           ng-model="payment.code">
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <label for="type" class="control-label">نوع السند</label>
                     <select id="type"
                             style="height: 40px"
@@ -50,7 +60,7 @@
                     </select>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="buffer.hijriDate='true'">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-init="buffer.hijriDate='true'">
                     <label for="hijriDate" class="control-label">نوع التقويم</label>
                     <select id="hijriDate"
                             style="height: 40px"

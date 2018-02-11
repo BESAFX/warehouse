@@ -12,7 +12,7 @@ gulp.task('css', function () {
         './css/creative.css',
 
         './css/animate.css',
-        './css/animation.css',
+        // './css/animation.css',
         './css/bootstrap.css',
         './css/fonts.css',
         './css/md-icons.css',
@@ -53,7 +53,7 @@ gulp.task('scripts', function () {
 
         './js/jquery-ui.js',
         './js/angular.js',
-        './js/angular-locale_ar.js',
+        // './js/angular-locale_ar.js',
         './js/angular-sanitize.js',
         './js/angular-ui-router.js',
         './js/angular-animate.js',

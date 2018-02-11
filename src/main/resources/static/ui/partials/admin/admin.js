@@ -75,6 +75,11 @@ function adminCtrl (
             return $scope.branches.splice(0, 0, data);
         });
     };
+    $scope.duplicate = function (branch) {
+        BranchService.duplicate(branch).then(function (data) {
+            return $scope.branches.splice(0, 0, data);
+        });
+    };
     $scope.deleteBranch = function (branch) {
         $rootScope.showConfirmNotify("حذف البيانات", "هل تود حذف الفرع فعلاً؟", "error", "fa-ban", function () {
             BranchService.remove(branch.id).then(function () {
@@ -101,6 +106,15 @@ function adminCtrl (
             },
             click: function ($itemScope, $event, value) {
                 ModalProvider.openBranchUpdateModel($itemScope.branch);
+            }
+        },
+        {
+            html: '<div class="drop-menu">نسخ الفرع<span class="fa fa-edit fa-lg"></span></div>',
+            enabled: function () {
+                return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_BRANCH_CREATE']);
+            },
+            click: function ($itemScope, $event, value) {
+                $scope.duplicate($itemScope.branch);
             }
         },
         {

@@ -26,7 +26,7 @@
             <div class="form-group row">
 
                 <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label for="branch" class="control-label">الفرع</label>
+                    <label class="control-label">الفرع</label>
                     <ui-select id="branch"
                                focus-autofocus="1"
                                ng-model="buffer.branch"
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label for="account" class="control-label">الطالب</label>
+                    <label class="control-label">الطالب</label>
                     <ui-select id="account"
                                ng-model="payment.account"
                                required="required"
@@ -81,7 +81,17 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <label for="code" class="control-label">رقم السند </label>
+                    <input id="code"
+                           type="number"
+                           required="required"
+                           disable-validation-message=""
+                           class="form-control text-right"
+                           ng-model="payment.code">
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <label for="type" class="control-label">نوع السند</label>
                     <select id="type"
                             style="height: 40px"
@@ -94,7 +104,7 @@
                     </select>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="buffer.hijriDate='true'">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-init="buffer.hijriDate='true'">
                     <label for="hijriDate" class="control-label">نوع التقويم</label>
                     <select id="hijriDate"
                             style="height: 40px"
