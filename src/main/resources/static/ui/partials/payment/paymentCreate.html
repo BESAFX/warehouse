@@ -81,7 +81,7 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="code" class="control-label">رقم السند </label>
                     <input id="code"
                            type="number"
@@ -91,7 +91,7 @@
                            ng-model="payment.code">
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="type" class="control-label">نوع السند</label>
                     <select id="type"
                             style="height: 40px"
@@ -104,59 +104,11 @@
                     </select>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-init="buffer.hijriDate='true'">
-                    <label for="hijriDate" class="control-label">نوع التقويم</label>
-                    <select id="hijriDate"
-                            style="height: 40px"
-                            class="form-control text-right"
-                            ng-model="buffer.hijriDate"
-                            required="required"
-                            disable-validation-message="">
-                        <option value="true">تقويم هجري</option>
-                        <option value="false">تقويم ميلادي</option>
-                    </select>
-                </div>
-
             </div>
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                     ng-if="buffer.hijriDate==='true'">
-                    <label for="date" class="control-label">التاريخ</label>
-                    <div dir="ltr" class="input-group">
-                        <input dir="rtl"
-                               id="date"
-                               type="text"
-                               class="form-control text-right is-calendarPicker"
-                               ng-model="payment.date"
-                               calendarType="ummalqura"
-                               language="en"
-                               dateFormat="yyyy/mm/dd"
-                               showOnFocus="false"
-                               readonly="readonly"
-                               required="required"
-                               disable-validation-message=""
-                               kdatepicker>
-                    </div>
-                </div>
-
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                     ng-if="buffer.hijriDate==='false'">
-                    <label for="date" class="control-label">التاريخ</label>
-                    <input id="G-date"
-                           class="form-control "
-                           type="date"
-                           name="input"
-                           ng-model="payment.date"
-                           placeholder="yyyy-MM-dd"
-                           required="required"
-                           disable-validation-message=""
-                           min="2015-01-01"
-                           max="2030-12-31"/>
-                </div>
-
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label> قيمة السند </label>
                     <div dir="ltr" class="input-group">
                         <span class="input-group-addon">ريال</span>

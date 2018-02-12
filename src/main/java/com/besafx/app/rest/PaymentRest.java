@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,10 @@ public class PaymentRest {
     @PreAuthorize("hasRole('ROLE_PAYMENT_CREATE')")
     public String create(@RequestBody Payment payment, Principal principal) {
         payment.setAccount(accountService.findOne(payment.getAccount().getId()));
+        DateTime dateTime = new DateTime();
+        if (dateTime.getHourOfDay() > 22 && dateTime.getHourOfDay() < 8) {
+            throw new CustomException("عفواً، تم الإغلاق");
+        }
 //        if (paymentService.findByCodeAndAccountCourseMasterBranch(payment.getCode(), payment.getAccount().getCourse().getMaster().getBranch()) != null) {
 //            throw new CustomException("عفواً، هذا السند مدخل سابقاً");
 //        }
@@ -65,8 +71,9 @@ public class PaymentRest {
 //            payment.setCode(topPayment.getCode() + 1);
 //        }
         Person person = personService.findByEmail(principal.getName());
+        payment.setDate(new DateTime().toDate());
         payment.setLastPerson(person);
-        payment.setLastUpdate(new Date());
+        payment.setLastUpdate(new DateTime().toDate());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
         notificationService.notifyAll(Notification.builder().message("تم انشاء سند قبض رقم " + payment.getCode()).type("success").build());
