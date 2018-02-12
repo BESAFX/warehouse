@@ -1,5 +1,6 @@
 package com.besafx.app.util;
 
+import org.joda.time.*;
 import org.joda.time.chrono.IslamicChronology;
 import org.joda.time.format.DateTimeFormat;
 
@@ -10,10 +11,7 @@ import java.time.chrono.HijrahChronology;
 import java.time.chrono.HijrahDate;
 import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.*;
 
 public class DateConverter {
 
@@ -140,5 +138,59 @@ public class DateConverter {
     public static Date parseHijriDateStringWithFormat(String date, String format) throws Exception {
         org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(format).withChronology(IslamicChronology.getInstance());
         return formatter.parseDateTime(date).toDate();
+    }
+
+    public static Date getCurrentWeekStart() {
+        Calendar cal = GregorianCalendar.getInstance(Locale.forLanguageTag("ar"));
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        return cal.getTime();
+    }
+
+    public static Date getCurrentWeekEnd() {
+        Calendar cal = GregorianCalendar.getInstance(Locale.forLanguageTag("ar"));
+        cal.setTime(getCurrentWeekStart());
+        cal.add(Calendar.DATE, 6);
+        return cal.getTime();
+    }
+
+    public static List<Interval> getDaysOfThisWeek() {
+        List<Interval> dates = new ArrayList<>();
+        DateTime startDate = new DateTime(DateConverter.getCurrentWeekStart());
+        DateTime endDate = new DateTime(DateConverter.getCurrentWeekEnd());
+        int days = Days.daysBetween(startDate, endDate).getDays() + 1;
+        for (int i = 0; i < days; i++) {
+            DateTime start = startDate.withFieldAdded(DurationFieldType.days(), i).withTimeAtStartOfDay();
+            DateTime end = start.plusDays(1).withTimeAtStartOfDay();
+            dates.add(new Interval(start, end));
+        }
+        return dates;
+    }
+
+    public static List<Interval> getMonthsOfThisYear() {
+        List<Interval> dates = new ArrayList<>();
+        DateTime startDate = new DateTime().withMonthOfYear(1).withDayOfMonth(1);
+        DateTime endDate = startDate.plusYears(1).minusMonths(1);
+        int days = Months.monthsBetween(startDate, endDate).getMonths() + 1;
+        for (int i = 0; i < days; i++) {
+            DateTime start = startDate.withFieldAdded(DurationFieldType.months(), i).withTimeAtStartOfDay();
+            DateTime end = start.plusMonths(1).withTimeAtStartOfDay();
+            dates.add(new Interval(start, end));
+        }
+        return dates;
+    }
+
+    public static String getNowFileName() {
+        StringBuilder builder = new StringBuilder();
+        DateTime dateTime = new DateTime();
+        builder.append(dateTime.getDayOfMonth());
+        builder.append("_");
+        builder.append(dateTime.getMonthOfYear());
+        builder.append("_");
+        builder.append(dateTime.getYear());
+        return builder.toString();
     }
 }

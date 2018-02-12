@@ -2,6 +2,7 @@ package com.besafx.app.config;
 
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.WriteMode;
 import com.dropbox.core.v2.sharing.SharedLinkMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,18 +11,16 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.concurrent.Future;
 
 @Service
 public class DropboxManager {
 
     private static final String ACCESS_TOKEN = "lwXbn73MQTAAAAAAAAAACtvJCtgSD7Rp5hwd7V8jM2V4O9I8c9javetzqM49b1-Y";
-
     private final Logger log = LoggerFactory.getLogger(DropboxManager.class);
-
     private DbxRequestConfig config;
 
     private DbxClientV2 client;
@@ -45,7 +44,7 @@ public class DropboxManager {
     @Async("threadMultiplePool")
     public Future<Boolean> uploadFile(MultipartFile file, String path) {
         try {
-            log.info("Trying to upload file: " + file.getOriginalFilename());
+            log.info("Trying to upload file: " + file.getName());
             log.info("Sleeping for 1 seconds...");
             Thread.sleep(1000);
             client.files().uploadBuilder(path).uploadAndFinish(file.getInputStream());
@@ -65,7 +64,21 @@ public class DropboxManager {
             client.files().uploadBuilder(path).uploadAndFinish(new FileInputStream(file));
             return new AsyncResult<>(true);
         } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+            ex.printStackTrace();
+            return new AsyncResult<>(false);
+        }
+    }
+
+    @Async("threadMultiplePool")
+    public Future<Boolean> uploadFile(InputStream inputStream, String fileName, String path) {
+        try {
+            log.info("Trying to upload file: " + fileName);
+            log.info("Sleeping for 5 seconds...");
+            Thread.sleep(5000);
+            client.files().uploadBuilder(path).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
+            return new AsyncResult<>(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return new AsyncResult<>(false);
         }
     }

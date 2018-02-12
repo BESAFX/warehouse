@@ -72,8 +72,7 @@ public class Payment implements Serializable {
 
     public Double getTax() {
         try {
-//            return (this.getAmountNumber() * 5) / 100;
-            return 0.0;
+            return (this.getAmountNumber() * 5) / 100;
         } catch (Exception ex) {
             return 0.0;
         }

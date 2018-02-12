@@ -60,14 +60,8 @@ public class ReportPaymentController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
+        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("branch").get("id").in(value)));
@@ -95,14 +89,8 @@ public class ReportPaymentController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
+        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("branch").get("id").in(value)));
@@ -130,14 +118,8 @@ public class ReportPaymentController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
+        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(masterIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("id").in(value)));
@@ -163,14 +145,8 @@ public class ReportPaymentController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
+        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(courseIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("id").in(value)));
@@ -196,14 +172,8 @@ public class ReportPaymentController {
             @RequestParam(value = "endDate", required = false) Long endDate,
             HttpServletResponse response) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
+        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(accountIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("id").in(value)));
@@ -227,10 +197,10 @@ public class ReportPaymentController {
         param1.append("المعهد الأهلي العالي للتدريب");
         param1.append("\n");
         param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        StringBuilder param2 = new StringBuilder();
-        param2.append("قائمة سندات مخصصة");
+        StringBuilder title = new StringBuilder();
+        title.append("قائمة سندات مخصصة");
         map.put("param1", param1.toString());
-        map.put("param2", param2.toString());
+        map.put("title", title.toString());
         map.put("payments", paymentIds.stream().map(id -> paymentService.findOne(id)).collect(Collectors.toList()));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
