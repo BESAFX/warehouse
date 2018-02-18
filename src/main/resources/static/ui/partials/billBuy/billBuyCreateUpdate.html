@@ -42,7 +42,21 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="buffer.hijriDate='true'">
+                    <label for="hijriDate" class="control-label">نوع التقويم</label>
+                    <select id="hijriDate"
+                            style="height: 40px"
+                            class="form-control text-right"
+                            ng-model="buffer.hijriDate"
+                            required="required"
+                            disable-validation-message="">
+                        <option value="true">تقويم هجري</option>
+                        <option value="false">تقويم ميلادي</option>
+                    </select>
+                </div>
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                     ng-if="buffer.hijriDate==='true'">
                     <label for="date" class="control-label">
                         <span> تاريخ الفاتورة</span>
                     </label>
@@ -63,7 +77,28 @@
                     </div>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                     ng-if="buffer.hijriDate==='false'">
+                    <label for="date" class="control-label">
+                        <span> تاريخ الفاتورة</span>
+                    </label>
+                    <input id="G-date"
+                           class="form-control "
+                           type="date"
+                           name="input"
+                           ng-model="billBuy.date"
+                           placeholder="yyyy-MM-dd"
+                           required="required"
+                           disable-validation-message=""
+                           min="2015-01-01"
+                           max="2030-12-31"/>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="code" class="control-label">رقم الفاتورة</label>
                     <input id="code"
                            type="number"
@@ -74,26 +109,7 @@
                            ng-model="billBuy.code">
                 </div>
 
-            </div>
-
-            <div class="form-group row">
-
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    <label for="bank" class="control-label">[رقم الحساب] اسم الحساب</label>
-                    <select id="bank"
-                            data-placeholder="ابحث عن الحساب"
-                            no-results-text="'لا توجد حسابات توافق بحثك'"
-                            placeholder-text-single="'اختر الحساب'"
-                            class="form-control text-right"
-                            chosen=""
-                            ng-model="billBuy.billBuyType"
-                            required="required"
-                            disable-validation-message=""
-                            ng-options="( ' [ ' + billBuyType.code + ' ] ' + billBuyType.name ) for billBuyType in billBuyTypes | orderBy:'code' track by billBuyType.id">
-                    </select>
-                </div>
-
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="masterCreditAmount" class="control-label"> قيمة الفاتورة </label>
                 <div dir="ltr" class="input-group" id="masterCreditAmount">
                     <span class="input-group-addon">ريال سعودي</span>
@@ -107,6 +123,21 @@
                 </div>
             </div>
 
+            </div>
+
+            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="bank" class="control-label">[رقم الحساب] اسم الحساب</label>
+                <select id="bank"
+                        data-placeholder="ابحث عن الحساب"
+                        no-results-text="'لا توجد حسابات توافق بحثك'"
+                        placeholder-text-single="'اختر الحساب'"
+                        class="form-control text-right"
+                        chosen=""
+                        ng-model="billBuy.billBuyType"
+                        required="required"
+                        disable-validation-message=""
+                        ng-options="( ' [ ' + billBuyType.code + ' ] ' + billBuyType.name ) for billBuyType in billBuyTypes | orderBy:'code' track by billBuyType.id">
+                </select>
             </div>
 
             <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
