@@ -2,12 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" class="body-full-height" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!-- META SECTION -->
-    <title>Smart Offer | شاشة الدخول</title>
+    <title>Smart Offer | العروض وتسجيل الطلاب</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <link rel="icon" th:href="@{~/ui/img/favicon.ico}" type="image/x-icon"/>
+    <!-- FAV ICON -->
+    <link rel="apple-touch-icon" sizes="57x57" th:href="@{~/ui/img/favicon/apple-icon-57x57.png}"/>
+    <link rel="apple-touch-icon" sizes="60x60" th:href="@{~/ui/img/favicon/apple-icon-60x60.png}"/>
+    <link rel="apple-touch-icon" sizes="72x72" th:href="@{~/ui/img/favicon/apple-icon-72x72.png}"/>
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{~/ui/img/favicon/apple-icon-76x76.png}"/>
+    <link rel="apple-touch-icon" sizes="114x114" th:href="@{~/ui/img/favicon/apple-icon-114x114.png}"/>
+    <link rel="apple-touch-icon" sizes="120x120" th:href="@{~/ui/img/favicon/apple-icon-120x120.png}"/>
+    <link rel="apple-touch-icon" sizes="144x144" th:href="@{~/ui/img/favicon/apple-icon-144x144.png}"/>
+    <link rel="apple-touch-icon" sizes="152x152" th:href="@{~/ui/img/favicon/apple-icon-152x152.png}"/>
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{~/ui/img/favicon/apple-icon-180x180.png}"/>
+    <link rel="icon" type="image/png" sizes="192x192"  th:href="@{~/ui/img/favicon/android-icon-192x192.png}"/>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{~/ui/img/favicon/favicon-32x32.png}"/>
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{~/ui/img/favicon/favicon-96x96.png}"/>
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{~/ui/img/favicon/favicon-16x16.png}"/>
+    <!--<link rel="manifest" th:href="@{~/ui/img/favicon/manifest.json}"/>-->
+    <meta name="msapplication-TileColor" content="#ffffff"/>
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"/>
+    <meta name="theme-color" content="#ffffff"/>
     <!-- END META SECTION -->
 
     <!-- Bootstrap -->
@@ -50,7 +67,7 @@
             font-family: "Jomhuria", cursive;
             text-transform: uppercase;
             outline: 0;
-            background: #4CAF50;
+            background: #424242;
             width: 100%;
             border: 0;
             padding: 15px;
@@ -61,7 +78,7 @@
             cursor: pointer;
         }
         .form button:hover,.form button:active,.form button:focus {
-            background: #43A047;
+            background: #212121;
         }
         .form .message {
             margin: 15px 0 0;
@@ -69,7 +86,7 @@
             font-size: 12px;
         }
         .form .message a {
-            color: #4CAF50;
+            color: #424242;
             text-decoration: none;
         }
         .form .register-form {
@@ -110,10 +127,10 @@
         }
         body {
             background: #76b852; /* fallback for old browsers */
-            background: -webkit-linear-gradient(right, #76b852, #8DC26F);
-            background: -moz-linear-gradient(right, #76b852, #8DC26F);
-            background: -o-linear-gradient(right, #76b852, #8DC26F);
-            background: linear-gradient(to left, #76b852, #8DC26F);
+            background: -webkit-linear-gradient(right, #212121, #424242);
+            background: -moz-linear-gradient(right, #212121, #424242);
+            background: -o-linear-gradient(right, #212121, #424242);
+            background: linear-gradient(to left, #212121, #424242);
             font-family: "Jomhuria", cursive;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -125,8 +142,8 @@
 
 <div dir="rtl" class="login-page col-xs-12 col-sm-12 col-md-4 col-md-4 col-md-push-4 col-lg-push-4">
     <div class="form">
-        <h1>المعهد الأهلي العالي للتدريب | برنامج المعهد</h1>
-        <div th:if="${param.error}" class="text-right">
+        <h1>المعهد الأهلي العالي للتدريب | العروض وتسجيل الطلاب</h1>
+        <div th:if="${param.error}">
             <div class="alert alert-danger" role="alert">
                 <strong>هناك خطأ فى الدخول: </strong>
                 <ul>
