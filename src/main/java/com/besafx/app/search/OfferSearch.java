@@ -8,6 +8,9 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
@@ -25,10 +28,7 @@ public class OfferSearch {
     @Autowired
     private OfferService offerService;
 
-    @Autowired
-    private AccountService accountService;
-
-    public List<Offer> search(
+    public Page<Offer> search(
             final Long codeFrom,
             final Long codeTo,
             final Long dateFrom,
@@ -40,7 +40,8 @@ public class OfferSearch {
             final Long masterPriceTo,
             final Long branch,
             final Long master,
-            final Long personId
+            final Long personId,
+            final Pageable pageRequest
     ) {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
@@ -60,21 +61,9 @@ public class OfferSearch {
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            List<Offer> list = Lists.newArrayList(offerService.findAll(result));
-            list.sort(Comparator.comparing(Offer::getCustomerName));
-//            log.info("فحص العروض وتحديث حالات التسجيل");
-//            list.stream().forEach(offer -> {
-//                List<Account> accounts = accountService.findByStudentContactMobileContaining(offer.getCustomerMobile());
-//                if (accounts.isEmpty()) {
-//                    offer.setRegistered(false);
-//                } else {
-//                    offer.setRegistered(true);
-//                }
-//                offerService.save(offer);
-//            });
-            return list;
+            return offerService.findAll(result, pageRequest);
         } else {
-            return null;
+            return new PageImpl<>(new ArrayList<>());
         }
     }
 }

@@ -2,117 +2,153 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
-        <h3 class="modal-title text-center" id="modal-title">
-            <span>تفاصيل التسجيل رقم / </span>
-            {{account.code}}
-            -
-            {{account.course.code}}
-            -
-            {{account.course.master.code}}
-            -
-            {{account.course.master.branch.code}}
-            -
-            {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
+            <span class="mdl-list__item-primary-content">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/account.{{iconSetType}}" width="24" height="24">
+                <span>تفاصيل التسجيل رقم / </span>&nbsp;
+                <span class="label label-info">{{account.key}}</span>
+            </span>
         </h3>
     </div>
 
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body modal-body-free" id="modal-body">
 
-        <div class="row">
+        <div class="form-group row">
+            <button uib-tooltip="تحديث"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="refreshAccount()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+            </button>
+            <button uib-tooltip="تعديل بيانات الطالب"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
+                    ng-click="updateAccount()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24" height="24">
+            </button>
+            <button uib-tooltip="ملاحظة جديدة"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="newNote()"
+                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_NOTE_CREATE'])"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/note.{{iconSetType}}" width="24" height="24">
+            </button>
+            <button uib-tooltip="تغير حالة الطالب"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="newCondition()"
+                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CONDITION_CREATE'])"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/student-case.{{iconSetType}}" width="24" height="24">
+            </button>
+            <button uib-tooltip="دفعة جديدة"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
+                    ng-click="newPayment()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-2 col-md-2 col-lg-2">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/paymentIn.{{iconSetType}}" width="24" height="24">
+            </button>
+        </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href="" ng-click="refreshAccount()" tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث البيانات">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>البيانات الاساسية</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
+        <div class="form-group row">
+
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#panel-1-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3 is-active">
+                        <span>بيانات التسجيل</span>
+                    </a>
+                    <a href="#panel-2-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>بيانات الاتصال</span>
+                    </a>
+                    <a href="#panel-3-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>رسوم الدورة</span>
+                    </a>
+                    <a href="#panel-4-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>المستندات</span>
+                    </a>
+                </div>
+
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#panel-5-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>حالة الطالب</span>
+                    </a>
+                    <a href="#panel-6-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>العروض</span>
+                    </a>
+                    <a href="#panel-7-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>السندات</span>
+                    </a>
+                    <a href="#panel-8-account" class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <span>الملاحظات</span>
+                    </a>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="panel-1-account">
+
+                    <div class="row">
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <tbody>
-                                    <tr>
-                                        <td>رقم الطالب</td>
-                                        <td>
-                                            {{account.code}}
-                                            -
-                                            {{account.course.code}}
-                                            -
-                                            {{account.course.master.code}}
-                                            -
-                                            {{account.course.master.branch.code}}
-                                            -
-                                            {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>الفرع</td>
-                                        <td>[ {{account.course.master.branch.code}} ] {{account.course.master.branch.name}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>التخصص</td>
-                                        <td>[ {{account.course.master.code}} ] {{account.course.master.name}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>رقم الدورة</td>
-                                        <td>{{account.course.code}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>تاريخ التسجيل</td>
-                                        <td>
-                                            {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                            <span class="label label-success">{{account.registerDate | date:'h:m a'}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>مدخل التسجيل</td>
-                                        <td>
+                                <tr>
+                                    <td>رقم الطالب</td>
+                                    <td>
+                                        {{account.code}}
+                                        -
+                                        {{account.course.code}}
+                                        -
+                                        {{account.course.master.code}}
+                                        -
+                                        {{account.course.master.branch.code}}
+                                        -
+                                        {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>الفرع</td>
+                                    <td>[ {{account.course.master.branch.code}} ] {{account.course.master.branch.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>التخصص</td>
+                                    <td>[ {{account.course.master.code}} ] {{account.course.master.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>رقم الدورة</td>
+                                    <td>{{account.course.code}}</td>
+                                </tr>
+                                <tr>
+                                    <td>تاريخ التسجيل</td>
+                                    <td>
+                                        {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
+                                        <span class="label label-success">{{account.registerDate | date:'h:m a'}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>مدخل التسجيل</td>
+                                    <td>
                                             <span class="label label-success">
                                                 {{account.lastPerson.contact.firstName}}
                                                 {{account.lastPerson.contact.forthName}}
                                             </span>
-                                        </td>
-                                    </tr>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href="" ng-click="refreshAccount()" tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث البيانات">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                                <a href=""
-                                   ng-click="ModalProvider.openAccountUpdateModel(account)"
-                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="تعديل البيانات">
-                                    <span class="fa fa-edit"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>بيانات الطالب</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-2-account">
+
+                    <div class="row">
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <tbody>
@@ -175,25 +211,12 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href="" ng-click="refreshAccount()" tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث البيانات">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>بيانات سعر الدورة</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body">
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-3-account">
+
+                    <div class="row">
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <tbody>
@@ -203,7 +226,7 @@
                                 </tr>
                                 <tr>
                                     <td>سعر الدورة</td>
-                                    <td>{{account.coursePrice | currency:'SAR':0}}</td>
+                                    <td>{{account.coursePrice | currency:' SAR ':2}}</td>
                                 </tr>
                                 <tr>
                                     <td>قيمة الخصم</td>
@@ -215,16 +238,16 @@
                                 </tr>
                                 <tr>
                                     <td>قيمة القسط الشهري</td>
-                                    <td>{{account.courseCreditAmount | currency:'SAR':0}}</td>
+                                    <td>{{account.courseCreditAmount | currency:' SAR ':2}}</td>
                                 </tr>
                                 <tr>
                                     <td class="fit">المبلغ النهائي المطلوب</td>
                                     <td>
                                             <span ng-if="account.coursePaymentType==='نقدي'">
-                                                {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:'SAR':0}}
+                                                {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:' SAR ':2}}
                                             </span>
                                         <span ng-if="account.coursePaymentType!=='نقدي'">
-                                                {{account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100) | currency:'SAR':0}}
+                                                {{account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100) | currency:' SAR ':2}}
                                             </span>
                                     </td>
                                 </tr>
@@ -232,137 +255,97 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <input id="uploader" style="display: none" type="file" onchange="angular.element(this).scope().uploadAll(this.files)" multiple/>
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href=""
-                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_CREATE'])"
-                                   ng-click="uploadFiles()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="مرفق جديد">
-                                    <span class="fa fa-paperclip"></span>
-                                </a>
-                                <a href=""
-                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_CREATE'])"
-                                   ng-click="scanToJpg()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="فحص">
-                                    <span class="fa fa-file-image-o"></span>
-                                </a>
-                                <a href=""
-                                   ng-click="refreshAccountAttaches()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>مستندات وملفات الطالب</h3>
-                        </div>
-                    </div>
-                    <div class="panel-body panel-body-table">
-                        <div class="table-responsive">
-                            <table st-table="collectionAccountAttaches" st-safe-src="account.accountAttaches" class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th st-sort="attach.name" class="text-center">اسم الملف</th>
-                                    <th st-sort="attachType.name" class="text-center">نوع الملف</th>
-                                    <th st-sort="attach.size" class="text-center">حجم الملف</th>
-                                    <th st-sort="attach.date" st-sort-default="reverse" class="text-center">تاريخ الانشاء</th>
-                                    <th st-sort="attach.person" class="text-center">مدخل الملف</th>
-                                    <th class="text-center">العمليات</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="accountAttach in collectionAccountAttaches">
-                                    <td>{{accountAttach.attach.name}}</td>
-                                    <td>{{accountAttach.attachType.name}}</td>
-                                    <td>{{accountAttach.attach.size/1024/1024|number:2}} MB</td>
-                                    <td>
-                                        <span>{{accountAttach.attach.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                        <span class="label label-success">{{accountAttach.attach.date | date:'h:m a'}}</span>
-                                    </td>
-                                    <td>
-                                        {{accountAttach.attach.person.contact.firstName}}
-                                        {{accountAttach.attach.person.contact.forthName}}
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <a uib-tooltip="عرض"
-                                                tooltip-append-to-body="true"
-                                                type="button"
-                                                ng-href="{{accountAttach.attach.link ? accountAttach.attach.link : ''}}"
-                                                target="_blank"
-                                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <i class="material-icons md-18">visibility</i>
-                                            </a>
-                                            <a uib-tooltip="حذف"
-                                                tooltip-append-to-body="true"
-                                                type="button"
-                                                href=""
-                                                ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_UPDATE'])"
-                                                ng-click="updateFile(accountAttach);"
-                                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <i class="material-icons md-18">delete</i>
-                                            </a>
-                                            <a uib-tooltip="حذف"
-                                               tooltip-append-to-body="true"
-                                               type="button"
-                                               href=""
-                                               ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_ATTACH_DELETE'])"
-                                               ng-click="deleteFile(accountAttach);"
-                                               class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <i class="material-icons md-18">delete</i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionAccountAttaches || collectionAccountAttaches.length ==0">
-                                    <td colspan="6">لا توجد مستندات حالياً</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href="" ng-click="findConditionByAccount()"
-                                   tooltip-append-to-body="true" uib-tooltip="تحديث">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                                <a href=""
-                                   ng-click="openAccountConditionCreate()"
-                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CONDITION_CREATE'])"
-                                   tooltip-append-to-body="true" uib-tooltip="انشاء حالة">
-                                    <span class="fa fa-bookmark"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>حالة الطالب</h3>
-                        </div>
+                <div class="mdl-tabs__panel" id="panel-4-account">
+
+                    <input id="uploader" style="display: none" type="file" onchange="angular.element(this).scope().files=this.files;" multiple/>
+
+                    <div class="form-group row">
+                        <button uib-tooltip="تحديث"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="refreshAttaches()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+                        </button>
+                        <button uib-tooltip="رفع ملفات"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="uploadFiles()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/upload.{{iconSetType}}" width="24" height="24">
+                        </button>
                     </div>
-                    <div class="panel-body panel-body-table">
+
+                    <div class="form-group row">
+                        <table st-table="collectionAccountAttaches"
+                               st-safe-src="account.accountAttaches"
+                               class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th st-sort="attach.name">اسم الملف</th>
+                                <th st-sort="attachType.name">نوع الملف</th>
+                                <th st-sort="attach.size">حجم الملف</th>
+                                <th st-sort="attach.date" st-sort-default="reverse">تاريخ الانشاء</th>
+                                <th st-sort="attach.person">مدخل الملف</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="accountAttach in collectionAccountAttaches">
+                                <td>{{accountAttach.attach.name}}</td>
+                                <td>
+                                    <ui-select ng-model="accountAttach.attachType"
+                                               ng-change="setAccountAttachType(accountAttach)"
+                                               theme="bootstrap">
+                                        <ui-select-match placeholder="اختر نوع الملف">
+                                            <span>{{$select.selected.name}}</span>
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="attachType in attachTypes | filter: $select.search | orderBy:'name' track by attachType.id">
+                                            <div ng-bind-html="attachType.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td>{{accountAttach.attach.size/1024/1024|number:2}} MB</td>
+                                <td>
+                                    <span>{{accountAttach.attach.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                    {{accountAttach.attach.date | date:'h:m a'}}
+                                </td>
+                                <td>
+                                    {{accountAttach.attach.person.contact.shortName}}
+                                </td>
+                            </tr>
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionAccountAttaches || collectionAccountAttaches.length ==0">
+                                <td colspan="6">لا توجد مستندات حالياً</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-5-account">
+
+                    <div class="form-group row">
+                        <button uib-tooltip="تحديث"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="refreshConditions()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+                        </button>
+                    </div>
+
+                    <div class="form-group row">
                         <div class="table-responsive">
                             <table st-table="collectionCondition" st-safe-src="account.accountConditions" class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th st-sort="condition" class="text-center">الحالة</th>
-                                    <th st-sort="date" st-sort-default="reverse" class="text-center">تاريخ الحالة</th>
-                                    <th st-sort="person" class="text-center">مدخل الحالة</th>
+                                    <th st-sort="condition">الحالة</th>
+                                    <th st-sort="date" st-sort-default="reverse">تاريخ الحالة</th>
+                                    <th st-sort="person">مدخل الحالة</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -392,31 +375,29 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href="" ng-click="refreshOffersByAccountMobile()" tooltip-append-to-body="true" uib-tooltip="تحديث">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>العروض حسب رقم الجوال</h3>
-                        </div>
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-6-account">
+
+                    <div class="form-group row">
+                        <button uib-tooltip="تحديث"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="refreshOffers()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+                        </button>
                     </div>
-                    <div class="panel-body panel-body-table">
+
+                    <div class="form-group row">
                         <div class="table-responsive">
                             <table st-table="collectionOffers" st-safe-src="offers" class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th st-sort="code" class="text-center">رقم العرض</th>
-                                    <th st-sort="date" st-sort-default="reverse" class="text-center">تاريخ العرض</th>
-                                    <th st-sort="lastPerson" class="text-center">مدخل العرض</th>
+                                    <th st-sort="code">رقم العرض</th>
+                                    <th st-sort="date" st-sort-default="reverse">تاريخ العرض</th>
+                                    <th st-sort="lastPerson">مدخل العرض</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -440,43 +421,31 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href=""
-                                   ng-click="refreshAccountPayments()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                                <a href=""
-                                   ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
-                                   ng-click="ModalProvider.openAccountPaymentModel(account)"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="دفعة جديدة">
-                                    <span class="fa fa-money"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>السندات</h3>
-                        </div>
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-7-account">
+
+                    <div class="form-group row">
+                        <button uib-tooltip="تحديث"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="refreshPayments()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+                        </button>
                     </div>
-                    <div class="panel-body panel-body-table">
+
+                    <div class="form-group row">
                         <div class="table-responsive">
                             <table st-table="collectionPayments" st-safe-src="account.payments" class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th st-sort="code" class="text-center">رقم السند</th>
-                                    <th st-sort="date" st-sort-default="reverse" class="text-center">تاريخ السند</th>
-                                    <th st-sort="amountNumber" class="text-center">قية السند</th>
-                                    <th st-sort="type" class="text-center">نوع الإيراد</th>
-                                    <th st-sort="lastPerson" class="text-center">مدخل السند</th>
+                                    <th st-sort="code">رقم السند</th>
+                                    <th st-sort="date" st-sort-default="reverse">تاريخ السند</th>
+                                    <th st-sort="amountNumber">قية السند</th>
+                                    <th st-sort="type">نوع الإيراد</th>
+                                    <th st-sort="lastPerson">مدخل السند</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -492,7 +461,7 @@
                                         <span class="label label-success">{{payment.date | date:'h:m a'}}</span>
                                     </td>
                                     <td>
-                                        {{payment.amountNumber | currency:'SAR':0}}
+                                        {{payment.amountNumber | currency:' SAR ':2}}
                                         <span class="label label-warning">{{payment.amountString}}</span>
                                     </td>
                                     <td>{{payment.type}}</td>
@@ -508,34 +477,22 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                            <li>
-                                <a href=""
-                                   ng-click="findNotesByAccount()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="تحديث">
-                                    <span class="fa fa-refresh"></span>
-                                </a>
-                                <a href=""
-                                   ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_NOTE_CREATE'])"
-                                   ng-click="openAccountNoteCreate()"
-                                   tooltip-append-to-body="true"
-                                   uib-tooltip="انشاء">
-                                    <span class="fa fa-sticky-note"></span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="panel-title-box pull-right">
-                            <h3>الملاحظات</h3>
-                        </div>
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-8-account">
+
+                    <div class="form-group row">
+                        <button uib-tooltip="تحديث"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="refreshNotes()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+                        </button>
                     </div>
-                    <div class="panel-body panel-body-table">
+
+                    <div class="form-group row">
                         <div class="table-responsive">
                             <table st-table="collectionAccountNotes" st-safe-src="account.accountNotes" class="table table-bordered">
                                 <tbody>
@@ -572,7 +529,9 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
+
             </div>
 
         </div>
@@ -582,44 +541,12 @@
     <div class="modal-footer">
 
         <div class="row">
-            <button uib-tooltip="تعديل بيانات الطالب"
-                    tooltip-append-to-body="true"
-                    type="button"
-                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_UPDATE'])"
-                    ng-click="ModalProvider.openAccountUpdateModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
-                <i class="material-icons">contact_phone</i>
-            </button>
-            <button uib-tooltip="ملاحظة جديدة"
-                    tooltip-append-to-body="true"
-                    type="button"
-                    ng-click="openAccountNoteCreate()"
-                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_NOTE_CREATE'])"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
-                <i class="material-icons">note</i>
-            </button>
-            <button uib-tooltip="تغير حالة الطالب"
-                    tooltip-append-to-body="true"
-                    type="button"
-                    ng-click="openAccountConditionCreate()"
-                    ng-if="contains(me.team.authorities, ['ROLE_ACCOUNT_CONDITION_CREATE'])"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-2 col-md-2 col-lg-2">
-                <i class="material-icons">bookmark</i>
-            </button>
-            <button uib-tooltip="دفعة جديدة"
-                    tooltip-append-to-body="true"
-                    type="button"
-                    ng-if="contains(me.team.authorities, ['ROLE_PAYMENT_CREATE'])"
-                    ng-click="ModalProvider.openAccountPaymentModel(account)"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-2 col-md-2 col-lg-2">
-                <i class="material-icons">attach_money</i>
-            </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                <i class="material-icons">power_settings_new</i>
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect pull-left">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

@@ -3,7 +3,7 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
@@ -17,13 +17,13 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-md-12" ng-show="form.$invalid && form.$submitted">
+            <div class="form-group col-md-12" ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="type" class="control-label">طريقة الدفع</label>
                 <select id="type"
                         class="form-control text-right"
@@ -35,7 +35,7 @@
                 </select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="coursePrice" class="control-label"> المبلغ نقدا </label>
                 <div dir="ltr"
                      class="input-group"
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType==='نقدي'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType==='نقدي'">
                 <label for="courseDiscountAmount" class="control-label"> نسبة الخصم </label>
                 <div dir="ltr"
                      class="input-group"
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType!=='نقدي'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType!=='نقدي'">
                 <label for="courseProfitAmount" class="control-label"> نسبة الفائدة </label>
                 <div dir="ltr"
                      class="input-group"
@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType!=='نقدي'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType!=='نقدي'">
                 <label for="courseCreditAmount" class="control-label"> قيمة القسط </label>
                 <div dir="ltr"
                      class="input-group"
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType==='نقدي'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType==='نقدي'">
                 <label for="priceAfterDiscount" class="control-label"> المبلغ بعد الخصم </label>
                 <div dir="ltr" class="input-group"
                      id="priceAfterDiscount">
@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType!=='نقدي'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="account.coursePaymentType!=='نقدي'">
                 <label for="priceAfterProfit" class="control-label"> المبلغ بعد الفائدة </label>
                 <div dir="ltr"
                      class="input-group"
@@ -131,15 +131,15 @@
             <button uib-tooltip="تعديل"
                     tooltip-append-to-body="true"
                     type="submit"
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">edit</i>
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

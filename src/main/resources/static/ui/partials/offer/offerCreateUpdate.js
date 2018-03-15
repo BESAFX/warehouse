@@ -5,12 +5,6 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
 
         $scope.action = action;
 
-        $timeout(function () {
-            MasterService.fetchMasterBranchCombo().then(function (data) {
-                $scope.masters = data;
-            });
-        }, 2000);
-
         $scope.groupByBranch = function (item) {
             return item.branch.name;
         };
@@ -22,28 +16,16 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
             $scope.offer.masterDiscountAmount = 0.0;
             $scope.offer.masterProfitAmount = 0.0;
             $scope.offer.masterCreditAmount = 0.0;
-            $scope.showBox = true;
-            if ($scope.form) {
-                $scope.form.$setPristine()
-            }
+            $scope.offer.masterPaymentType = 'نقدي';
         };
 
         if (offer) {
             $scope.offer = offer;
-            $scope.showBox = (offer.masterPaymentType == 'نقدي');
         } else {
             $scope.clear();
         }
 
         $scope.submit = function () {
-            if ($scope.showBox) {
-                $scope.offer.masterPaymentType = 'نقدي';
-                $scope.offer.masterProfitAmount = 0.0;
-                $scope.offer.masterCreditAmount = 0.0;
-            } else {
-                $scope.offer.masterPaymentType = 'قسط شهري';
-                $scope.offer.masterDiscountAmount = 0.0;
-            }
             switch ($scope.action) {
                 case 'create' :
                     OfferService.create($scope.offer).then(function (data) {
@@ -63,6 +45,9 @@ app.controller('offerCreateUpdateCtrl', ['OfferService', 'MasterService', '$scop
         };
 
         $timeout(function () {
+            MasterService.fetchMasterBranchCombo().then(function (data) {
+                $scope.masters = data;
+            });
             window.componentHandler.upgradeAllRegistered();
         }, 800);
 

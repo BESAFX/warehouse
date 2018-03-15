@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,22 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/offer/")
 public class OfferRest {
 
-    public static final String FILTER_TABLE = "**,accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name]]]],master[id,code,name,branch[id,code,name]],lastPerson[id,contact[id,firstName,forthName]],calls[**,person[id,contact[id,firstName,forthName]],-offer]";
+    public static final String FILTER_TABLE = "" +
+            "**," +
+            "master[id,code,name]," +
+            "lastPerson[id,contact[id,firstName,forthName]]," +
+            "-accountsByMobile," +
+            "-calls";
+
+    public static final String FILTER_DETAILS = "" +
+            "**," +
+            "accountsByMobile[id,registerDate,course[id,code,name,master[id,code,name,branch[id,code,name]]]]," +
+            "master[id,code,name,branch[id,code,name]]," +
+            "lastPerson[id,contact[id,firstName,forthName]]," +
+            "calls[**,person[id,contact[id,firstName,forthName]],-offer]";
+
     private final static Logger log = LoggerFactory.getLogger(OfferRest.class);
+
     @Autowired
     private PersonService personService;
 
@@ -73,7 +88,7 @@ public class OfferRest {
             offer.setLastPerson(person);
             offer = offerService.save(offer);
             Branch branch = branchService.findByCode(offer.getMaster().getBranch().getCode());
-            notificationService.notifyAll(Notification.builder().message("تم انشاء عرض جديد بنجاح رقم ".concat(offer.getCode().toString())).type("success").build());
+            notificationService.notifyAll(Notification.builder().message("تم عرض جديد بنجاح رقم ".concat(offer.getCode().toString())).type("success").build());
 
             StringBuffer buffer = new StringBuffer();
             buffer.append(branch.getName());
@@ -128,9 +143,6 @@ public class OfferRest {
     public void delete(@PathVariable Long id, Principal principal) {
         Offer object = offerService.findOne(id);
         if (object != null) {
-            if (!principal.getName().equals(object.getLastPerson().getEmail())) {
-                throw new CustomException("لا يمكنك حذف عرض لم تقم بإضافته");
-            }
             offerService.delete(id);
             notificationService.notifyAll(Notification.builder().message("تم حذف العرض بنجاح").type("success").build());
         }
@@ -184,12 +196,6 @@ public class OfferRest {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
     }
 
-    @RequestMapping(value = "count", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Long count() {
-        return offerService.count();
-    }
-
     @RequestMapping(value = "filter", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String filter(
@@ -204,8 +210,22 @@ public class OfferRest {
             @RequestParam(value = "masterPriceTo", required = false) final Long masterPriceTo,
             @RequestParam(value = "branch", required = false) final Long branch,
             @RequestParam(value = "master", required = false) final Long master,
-            @RequestParam(value = "personId", required = false) final Long personId) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                offerSearch.search(codeFrom, codeTo, dateFrom, dateTo, customerName, customerIdentityNumber, customerMobile, masterPriceFrom, masterPriceTo, branch, master, personId));
+            @RequestParam(value = "personId", required = false) final Long personId,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), "**,".concat("content[").concat(FILTER_TABLE).concat("]")),
+                offerSearch.search(
+                        codeFrom,
+                        codeTo,
+                        dateFrom,
+                        dateTo,
+                        customerName,
+                        customerIdentityNumber,
+                        customerMobile,
+                        masterPriceFrom,
+                        masterPriceTo,
+                        branch,
+                        master,
+                        personId,
+                        pageable));
     }
 }

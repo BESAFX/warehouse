@@ -144,7 +144,7 @@ app.controller("withdrawCtrl", ['WithdrawService', 'BranchService', 'ModalProvid
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
 
     }]);

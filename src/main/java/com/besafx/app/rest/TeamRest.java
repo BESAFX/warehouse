@@ -43,7 +43,7 @@ public class TeamRest {
             team.setCode(topTeam.getCode() + 1);
         }
         team = teamService.save(team);
-        notificationService.notifyAll(Notification.builder().message("تم انشاء مجموعة صلاحيات جديدة بنجاح").type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم مجموعة صلاحيات جديدة بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
     }
 

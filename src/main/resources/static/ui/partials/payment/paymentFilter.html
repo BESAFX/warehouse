@@ -3,307 +3,389 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <i class="material-icons mdl-list__item-icon mdl-color-text--white">search</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/paymentIn.{{iconSetType}}" width="24" height="24">
                 <strong>{{modalTitle}}</strong>
             </span>
         </h3>
     </div>
 
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body modal-body-free" id="modal-body">
 
         <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
             <div class="mdl-tabs__tab-bar">
-                <a href="#panel-1-{{$index}}" class="mdl-tabs__tab is-active">
+                <a href="#panel-1-paymentIn-filter" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4 is-active">
                     <span>بيانات الطالب</span>
                 </a>
-                <a href="#panel-2-{{$index}}" class="mdl-tabs__tab">
+                <a href="#panel-2-paymentIn-filter" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <span>بيانات السند</span>
+                </a>
+                <a href="#panel-3-paymentIn-filter" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <span>خيارات</span>
                 </a>
             </div>
 
-            <div class="mdl-tabs__panel is-active" id="panel-1-{{$index}}">
+            <div class="mdl-tabs__panel is-active" id="panel-1-paymentIn-filter">
 
                 <div class="row">
 
-                    <div class="form-group row">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <label for="branch" class="control-label">الفرع</label>
+                        <ui-select id="branch"
+                                   focus-autofocus="1"
+                                   ng-model="paramPaymentIn.branch"
+                                   theme="bootstrap">
+                            <ui-select-match placeholder="اختر الفرع">
+                                {{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label for="filterBranch" class="control-label">الفرع</label>
-                            <ui-select id="filterBranch"
-                                       focus-autofocus="1"
-                                       ng-model="buffer.branch"
-                                       theme="bootstrap">
-                                <ui-select-match placeholder="اختر الفرع">
-                                    {{$select.selected.name}}
-                                </ui-select-match>
-                                <ui-select-choices
-                                        repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
-                                    <div ng-bind-html="branch.name | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
+                                <div class="mdl-menu__item--full-bleed-divider"></div>
+                                <li class="mdl-list__item mdl-list__item--two-line"
+                                    style="padding: unset;cursor: pointer">
+                                        <span class="mdl-list__item-primary-content">
+                                        <span class="material-icons mdl-list__item-avatar"
+                                              style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
+                                        <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                                        <span class="mdl-list__item-sub-title">
+                                            <span>رقم الفرع / </span>
+                                            {{branch.code}}
+                                        </span>
+                                        </span>
+                                </li>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label for="filterMaster" class="control-label">التخصص</label>
-                            <ui-select id="filterMaster"
-                                       ng-model="buffer.master"
-                                       theme="bootstrap">
-                                <ui-select-match placeholder="اختر التخصص">
-                                    [{{$select.selected.code}}] {{$select.selected.name}}
-                                </ui-select-match>
-                                <ui-select-choices
-                                        repeat="master in buffer.branch.masters | filter: $select.search | orderBy:'code' track by master.id">
-                                    <div ng-bind-html="master.code | highlight: $select.search"></div>
-                                    <span>اسم التخصص : </span>
-                                    <span ng-bind-html="''+master.name | highlight: $select.search"></span>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label for="filterCourse" class="control-label">الدورة</label>
-                            <ui-select id="filterCourse"
-                                       ng-model="buffer.course"
-                                       theme="bootstrap">
-                                <ui-select-match placeholder="اختر الدورة">
-                                    [{{$select.selected.code}}] {{$select.selected.instructor}}
-                                </ui-select-match>
-                                <ui-select-header>Header text</ui-select-header>
-                                <ui-select-choices
-                                        repeat="course in buffer.master.courses | filter: $select.search | orderBy:'code' track by course.id">
-                                    <div ng-bind-html="course.code | highlight: $select.search"></div>
-                                    <small>
-                                        <span>المدرب : </span>
-                                        <span ng-bind-html="''+course.instructor | highlight: $select.search"></span>
-                                    </small>
-                                </ui-select-choices>
-                                <ui-select-footer>Footer text</ui-select-footer>
-                            </ui-select>
-                        </div>
-
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <label for="master" class="control-label">التخصص</label>
+                        <ui-select id="master"
+                                   ng-model="paramPaymentIn.master"
+                                   theme="bootstrap">
+                            <ui-select-match placeholder="اختر التخصص">
+                                [{{$select.selected.code}}] {{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="master in paramPaymentIn.branch.masters | filter: $select.search | orderBy:'code' track by master.id">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="filterFirstName" class="control-label">الاسم الأول (يحتوى على) </label>
-                            <input id="filterFirstName"
-                                   type="text"
-                                   class="form-control text-right"
-                                   placeholder="ادخل الاسم الأول او جزءاً منه"
-                                   ng-model="buffer.firstName">
-                        </div>
+                                <div class="mdl-menu__item--full-bleed-divider"></div>
+                                <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
+                                        <span class="mdl-list__item-primary-content">
+                                            <span class="material-icons mdl-list__item-avatar"
+                                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/master.{{iconSetType}}')"></span>
+                                            <div ng-bind-html="master.name | highlight: $select.search"></div>
+                                            <span class="mdl-list__item-sub-title">
+                                                <span>رقم التخصص / </span>
+                                                {{master.code}}
+                                            </span>
+                                        </span>
+                                </li>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="filterSecondName" class="control-label">الاسم الثاني (يحتوى على) </label>
-                            <input id="filterSecondName"
-                                   type="text"
-                                   class="form-control text-right"
-                                   placeholder="ادخل الاسم الثاني او جزءاً منه"
-                                   ng-model="buffer.secondName">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="filterThirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
-                            <input id="filterThirdName"
-                                   type="text"
-                                   class="form-control text-right"
-                                   placeholder="ادخل الاسم الثالث او جزءاً منه"
-                                   ng-model="buffer.thirdName">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="filterForthName" class="control-label">الاسم الرابع (يحتوى على) </label>
-                            <input id="filterForthName"
-                                   type="text"
-                                   class="form-control text-right"
-                                   placeholder="ادخل الاسم الرابع او جزءاً منه"
-                                   ng-model="buffer.forthName">
-                        </div>
-
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <label for="course" class="control-label">الدورة</label>
+                        <ui-select id="course"
+                                   ng-model="paramPaymentIn.course"
+                                   theme="bootstrap">
+                            <ui-select-match placeholder="اختر الدورة">
+                                [{{$select.selected.code}}] {{$select.selected.instructor}}
+                            </ui-select-match>
+                            <ui-select-header>Header text</ui-select-header>
+                            <ui-select-choices repeat="course in paramPaymentIn.master.courses | filter: $select.search | orderBy:'code' track by course.id">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="dateFrom" class="control-label">تاريخ التسجيل من</label>
-                            <div dir="ltr" class="input-group">
-                                <input dir="rtl"
-                                       id="dateFrom"
-                                       type="text"
-                                       class="form-control text-right is-calendarPicker"
-                                       ng-model="buffer.dateFrom"
-                                       calendarType="ummalqura"
-                                       language="en"
-                                       dateFormat="yyyy/mm/dd"
-                                       showOnFocus="false"
-                                       readonly="readonly"
-                                       kdatepicker>
-                            </div>
-                        </div>
+                                <div class="mdl-menu__item--full-bleed-divider"></div>
+                                <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
+                                        <span class="mdl-list__item-primary-content">
+                                            <span class="material-icons mdl-list__item-avatar"
+                                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/course.{{iconSetType}}')"></span>
+                                            <div ng-bind-html="course.code | highlight: $select.search"></div>
+                                            <span class="mdl-list__item-sub-title">
+                                                <span>المدرب / </span>
+                                                {{course.instructor}}
+                                            </span>
+                                        </span>
+                                </li>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="dateTo" class="control-label">تاريخ التسجيل إلى</label>
-                            <div dir="ltr" class="input-group">
-                                <input dir="rtl"
-                                       id="dateTo"
-                                       type="text"
-                                       class="form-control text-right is-calendarPicker"
-                                       ng-model="buffer.dateTo"
-                                       calendarType="ummalqura"
-                                       language="en"
-                                       dateFormat="yyyy/mm/dd"
-                                       showOnFocus="false"
-                                       readonly="readonly"
-                                       kdatepicker>
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="filterIdentityNumber" class="control-label">رقم البطاقة / الإقامة </label>
-                            <input id="filterIdentityNumber"
-                                   type="text"
-                                   class="form-control text-right "
-                                   placeholder="ادخل رقم البطاقة كاملاً او جزءاً منه"
-                                   ng-model="buffer.studentIdentityNumber">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <label for="filterMobile" class="control-label">رقم الجوال (يحتوى على)</label>
-                            <input id="filterMobile"
-                                   type="text"
-                                   class="form-control text-right "
-                                   placeholder="ادخل رقم الجوال كاملاً او جزءاً منه"
-                                   ng-model="buffer.studentMobile">
-                        </div>
-
+                            </ui-select-choices>
+                            <ui-select-footer>Footer text</ui-select-footer>
+                        </ui-select>
                     </div>
 
-                    <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="filterFirstName" class="control-label">الاسم الأول (يحتوى على) </label>
+                        <input id="filterFirstName"
+                               type="text"
+                               class="form-control text-right"
+                               placeholder="ادخل الاسم الأول او جزءاً منه"
+                               ng-model="paramPaymentIn.firstName">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="filterSecondName" class="control-label">الاسم الثاني (يحتوى على) </label>
+                        <input id="filterSecondName"
+                               type="text"
+                               class="form-control text-right"
+                               placeholder="ادخل الاسم الثاني او جزءاً منه"
+                               ng-model="paramPaymentIn.secondName">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="filterThirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
+                        <input id="filterThirdName"
+                               type="text"
+                               class="form-control text-right"
+                               placeholder="ادخل الاسم الثالث او جزءاً منه"
+                               ng-model="paramPaymentIn.thirdName">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="filterForthName" class="control-label">الاسم الرابع (يحتوى على) </label>
+                        <input id="filterForthName"
+                               type="text"
+                               class="form-control text-right"
+                               placeholder="ادخل الاسم الرابع او جزءاً منه"
+                               ng-model="paramPaymentIn.forthName">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="dateFrom" class="control-label">تاريخ التسجيل من</label>
+                        <div dir="ltr" class="input-group">
+                            <input dir="rtl"
+                                   id="dateFrom"
+                                   type="text"
+                                   class="form-control text-right is-calendarPicker"
+                                   ng-model="paramPaymentIn.dateFrom"
+                                   calendarType="ummalqura"
+                                   language="en"
+                                   dateFormat="yyyy/mm/dd"
+                                   showOnFocus="false"
+                                   readonly="readonly"
+                                   kdatepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="dateTo" class="control-label">تاريخ التسجيل إلى</label>
+                        <div dir="ltr" class="input-group">
+                            <input dir="rtl"
+                                   id="dateTo"
+                                   type="text"
+                                   class="form-control text-right is-calendarPicker"
+                                   ng-model="paramPaymentIn.dateTo"
+                                   calendarType="ummalqura"
+                                   language="en"
+                                   dateFormat="yyyy/mm/dd"
+                                   showOnFocus="false"
+                                   readonly="readonly"
+                                   kdatepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="filterIdentityNumber" class="control-label">رقم البطاقة / الإقامة </label>
+                        <input id="filterIdentityNumber"
+                               type="text"
+                               class="form-control text-right "
+                               placeholder="ادخل رقم البطاقة كاملاً او جزءاً منه"
+                               ng-model="paramPaymentIn.studentIdentityNumber">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="filterMobile" class="control-label">رقم الجوال (يحتوى على)</label>
+                        <input id="filterMobile"
+                               type="text"
+                               class="form-control text-right "
+                               placeholder="ادخل رقم الجوال كاملاً او جزءاً منه"
+                               ng-model="paramPaymentIn.studentMobile">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         <label for="coursePriceFrom" class="control-label">المبلغ نقداً من </label>
                         <input id="coursePriceFrom"
                                type="number"
                                class="form-control text-right"
                                placeholder="ادخل المبلغ من"
-                               ng-model="buffer.coursePriceFrom">
+                               ng-model="paramPaymentIn.coursePriceFrom">
                     </div>
 
-                    <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         <label for="coursePriceTo" class="control-label">المبلغ نقداً إلى </label>
                         <input id="coursePriceTo"
                                type="number"
                                class="form-control text-right"
                                placeholder="ادخل المبلغ إلى"
-                               ng-model="buffer.coursePriceTo">
+                               ng-model="paramPaymentIn.coursePriceTo">
                     </div>
 
                 </div>
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-2-{{$index}}">
+            <div class="mdl-tabs__panel" id="panel-2-paymentIn-filter">
 
                 <div class="row">
 
-                    <div class="form-group row">
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="paymentCodeFrom" class="control-label">رقم السند من</label>
-                            <input id="paymentCodeFrom"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right"
-                                   placeholder="ادخل الرقم من"
-                                   ng-model="buffer.paymentCodeFrom">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="paymentCodeTo" class="control-label">رقم السند إلى</label>
-                            <input id="paymentCodeTo"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right"
-                                   placeholder="ادخل الرقم إلى"
-                                   ng-model="buffer.paymentCodeTo">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="paymentDateFrom" class="control-label">تاريخ السند من</label>
-                            <div dir="ltr" class="input-group">
-                                <input dir="rtl"
-                                       id="paymentDateFrom"
-                                       type="text"
-                                       class="form-control text-right is-calendarPicker"
-                                       ng-model="buffer.paymentDateFrom"
-                                       calendarType="ummalqura"
-                                       language="en"
-                                       dateFormat="yyyy/mm/dd"
-                                       showOnFocus="false"
-                                       readonly="readonly"
-                                       kdatepicker>
-                            </div>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="paymentDateTo" class="control-label">تاريخ السند إلى</label>
-                            <div dir="ltr" class="input-group">
-                                <input dir="rtl"
-                                       id="paymentDateTo"
-                                       type="text"
-                                       class="form-control text-right is-calendarPicker"
-                                       ng-model="buffer.paymentDateTo"
-                                       calendarType="ummalqura"
-                                       language="en"
-                                       dateFormat="yyyy/mm/dd"
-                                       showOnFocus="false"
-                                       readonly="readonly"
-                                       kdatepicker>
-                            </div>
-                        </div>
-
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="paymentCodeFrom" class="control-label">رقم السند من</label>
+                        <input id="paymentCodeFrom"
+                               type="number"
+                               min="1"
+                               class="form-control text-right"
+                               placeholder="ادخل الرقم من"
+                               ng-model="paramPaymentIn.paymentCodeFrom">
                     </div>
 
-                    <div class="form-group row">
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="type" class="control-label">نوع السند</label>
-                            <select id="type"
-                                    style="height: 40px"
-                                    class="form-control text-right"
-                                    ng-model="buffer.type">
-                                <option>ايرادات اساسية</option>
-                                <option>ايرادات اضافية</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="amountFrom" class="control-label">قيمة السند من </label>
-                            <input id="amountFrom"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right"
-                                   placeholder="ادخل القيمة من"
-                                   ng-model="buffer.amountFrom">
-                        </div>
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                            <label for="amountTo" class="control-label">قيمة السند إلى </label>
-                            <input id="amountTo"
-                                   type="number"
-                                   min="1"
-                                   class="form-control text-right"
-                                   placeholder="ادخل القيمة إلى"
-                                   ng-model="buffer.amountTo">
-                        </div>
-
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="paymentCodeTo" class="control-label">رقم السند إلى</label>
+                        <input id="paymentCodeTo"
+                               type="number"
+                               min="1"
+                               class="form-control text-right"
+                               placeholder="ادخل الرقم إلى"
+                               ng-model="paramPaymentIn.paymentCodeTo">
                     </div>
 
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="paymentDateFrom" class="control-label">تاريخ السند من</label>
+                        <div dir="ltr" class="input-group">
+                            <input dir="rtl"
+                                   id="paymentDateFrom"
+                                   type="text"
+                                   class="form-control text-right is-calendarPicker"
+                                   ng-model="paramPaymentIn.paymentDateFrom"
+                                   calendarType="ummalqura"
+                                   language="en"
+                                   dateFormat="yyyy/mm/dd"
+                                   showOnFocus="false"
+                                   readonly="readonly"
+                                   kdatepicker>
+                        </div>
+                    </div>
 
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="paymentDateTo" class="control-label">تاريخ السند إلى</label>
+                        <div dir="ltr" class="input-group">
+                            <input dir="rtl"
+                                   id="paymentDateTo"
+                                   type="text"
+                                   class="form-control text-right is-calendarPicker"
+                                   ng-model="paramPaymentIn.paymentDateTo"
+                                   calendarType="ummalqura"
+                                   language="en"
+                                   dateFormat="yyyy/mm/dd"
+                                   showOnFocus="false"
+                                   readonly="readonly"
+                                   kdatepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="type" class="control-label">نوع السند</label>
+                        <select id="type"
+                                style="height: 40px"
+                                class="form-control text-right"
+                                ng-model="paramPaymentIn.type">
+                            <option>ايرادات اساسية</option>
+                            <option>ايرادات اضافية</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="amountFrom" class="control-label">قيمة السند من </label>
+                        <input id="amountFrom"
+                               type="number"
+                               min="1"
+                               class="form-control text-right"
+                               placeholder="ادخل القيمة من"
+                               ng-model="paramPaymentIn.amountFrom">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="amountTo" class="control-label">قيمة السند إلى </label>
+                        <input id="amountTo"
+                               type="number"
+                               min="1"
+                               class="form-control text-right"
+                               placeholder="ادخل القيمة إلى"
+                               ng-model="paramPaymentIn.amountTo">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mdl-tabs__panel" id="panel-3-paymentIn-filter">
+
+                <div class="form-group row">
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="currentPage" class="control-label">رقم الصفحة </label>
+                        <input id="currentPage"
+                               type="number"
+                               min="1"
+                               class="form-control"
+                               ng-model="pagePayment.currentPage">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label for="page" class="control-label">عدد الصفوف بالصفحة الواحدة </label>
+                        <input id="page"
+                               type="number"
+                               min="1"
+                               class="form-control"
+                               ng-model="pagePayment.size">
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <th class="info" colspan="4">
+                                <span>ترتيب السندات حسب : </span>
+                                <a href="" ng-click="addSortBy()">اضافة...</a>
+                            </th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="sortBy in pagePayment.sorts">
+                                <td>
+                                    <select class="form-control"
+                                            ng-model="sortBy.name">
+                                        <option value="account.student.contact.firstName">الاسم الأول</option>
+                                        <option value="account.student.contact.secondName">الاسم الثاني</option>
+                                        <option value="account.student.contact.thirdName">الاسم الثالث</option>
+                                        <option value="account.student.contact.forthName">الاسم الرابع</option>
+                                        <option value="account.student.contact.identityNumber">رقم البطاقة</option>
+                                        <option value="account.student.contact.mobile">رقم الجوال</option>
+                                        <option value="account.course.master.branch.id">الفرع</option>
+                                        <option value="account.course.master.id">التخصص</option>
+                                        <option value="account.course.id">الدورة</option>
+                                        <option value="lastPerson.id">مدخل السند</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control"
+                                            ng-model="sortBy.direction">
+                                        <option value="asc">تصاعدي</option>
+                                        <option value="desc">تنازلي</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a href="" ng-click="pagePayment.sorts.splice($index, 1)">حذف</a>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                 </div>
 
@@ -320,21 +402,21 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">search</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="clear();form.$setPristine();"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

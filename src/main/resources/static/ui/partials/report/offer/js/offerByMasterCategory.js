@@ -68,7 +68,7 @@ app.controller('offerByMasterCategoryCtrl', ['BranchService' ,'MasterCategorySer
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
 
     }]);

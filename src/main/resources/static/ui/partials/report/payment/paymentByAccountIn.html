@@ -9,7 +9,7 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
                 <select id="branch"
                         data-placeholder="ابحث عن الفرع"
@@ -27,7 +27,7 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label for="accountCode" class="control-label">رقم الطالب</label>
                     <select id="accountCode" data-placeholder="ابحث عن الرقم"
                             no-results-text="'لا توجد بيانات توافق بحثك'"
@@ -42,7 +42,7 @@
                     </select>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label for="studentName" class="control-label">اسم الطالب</label>
                     <select id="studentName" data-placeholder="ابحث عن الاسم"
                             no-results-text="'لا توجد بيانات توافق بحثك'"
@@ -61,7 +61,7 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label for="studentMobile" class="control-label">رقم الجوال</label>
                     <select id="studentMobile" data-placeholder="ابحث عن الرقم"
                             no-results-text="'لا توجد بيانات توافق بحثك'"
@@ -76,7 +76,7 @@
                     </select>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label for="studentIdentityNumber" class="control-label">رقم البطاقة</label>
                     <select id="studentIdentityNumber" data-placeholder="ابحث عن الرقم"
                             no-results-text="'لا توجد بيانات توافق بحثك'"
@@ -93,7 +93,7 @@
 
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <label for="startDate" class="control-label">التاريخ من</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
@@ -110,7 +110,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <label for="endDate" class="control-label">التاريخ إلى</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
@@ -127,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="exportType" class="control-label">نوع الملف المستخرج</label>
                 <select id="exportType"
                         style="height: 40px"
@@ -168,7 +168,7 @@
                 </select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="title" class="control-label">عنوان التقرير</label>
                 <input id="title"
                        type="text"
@@ -207,14 +207,14 @@
                     type="reset"
                     ng-click="form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

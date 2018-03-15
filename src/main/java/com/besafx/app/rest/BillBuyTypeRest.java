@@ -52,7 +52,7 @@ public class BillBuyTypeRest {
         billBuyType.setLastUpdate(new Date());
         billBuyType.setLastPerson(person);
         billBuyType = billBuyTypeService.save(billBuyType);
-        notificationService.notifyAll(Notification.builder().message("تم انشاء حساب فاتورة جديد بنجاح").type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم حساب فاتورة جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuyType);
     }
 

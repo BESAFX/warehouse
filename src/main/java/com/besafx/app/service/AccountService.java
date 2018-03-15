@@ -1,6 +1,7 @@
 package com.besafx.app.service;
 
 import com.besafx.app.entity.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -45,6 +46,8 @@ public interface AccountService extends PagingAndSortingRepository<Account, Long
     List<Account> findByCourseMasterAndRegisterDateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 
     List<Account> findByCourseMasterBranch(Branch branch);
+
+    List<Account> findByCourseMasterBranchId(Long branchId, Pageable pageable);
 
     List<Account> findByCourseMasterBranchIdIn(List<Long> branchIds);
 

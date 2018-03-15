@@ -17,6 +17,6 @@ app.controller('accountConditionCreateCtrl', ['AccountConditionService', 'ModalP
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

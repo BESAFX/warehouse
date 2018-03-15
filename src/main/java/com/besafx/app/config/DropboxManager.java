@@ -84,6 +84,20 @@ public class DropboxManager {
     }
 
     @Async("threadMultiplePool")
+    public Future<Boolean> renameFile(String oldPath, String newPath) {
+        try {
+            log.info("Trying to rename file from path: " + oldPath);
+            log.info("Sleeping for 1 seconds...");
+            Thread.sleep(1000);
+            client.files().move(oldPath, newPath);
+            return new AsyncResult<>(true);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+            return new AsyncResult<>(false);
+        }
+    }
+
+    @Async("threadMultiplePool")
     public Future<Boolean> deleteFile(String path) {
         try {
             log.info("Trying to delete file from path: " + path);

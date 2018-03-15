@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,11 @@ public class BillBuyRest {
 
     private final static Logger log = LoggerFactory.getLogger(BillBuyRest.class);
 
-    private final String FILTER_TABLE = "**,billBuyType[**,-lastPerson],branch[id,code,name],lastPerson[id,contact[id,firstName,forthName]]";
+    private final String FILTER_TABLE = "" +
+            "**," +
+            "billBuyType[**,-lastPerson]," +
+            "branch[id,code,name]," +
+            "lastPerson[id,contact[id,shortName]]";
 
     @Autowired
     private PersonService personService;
@@ -53,7 +58,7 @@ public class BillBuyRest {
         billBuy.setLastUpdate(new Date());
         billBuy.setLastPerson(person);
         billBuy = billBuyService.save(billBuy);
-        notificationService.notifyAll(Notification.builder().message("تم انشاء فاتورة جديدة بنجاح").type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم فاتورة جديدة بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuy);
     }
 
@@ -106,8 +111,19 @@ public class BillBuyRest {
             @RequestParam(value = "dateTo", required = false) final Long dateTo,
             @RequestParam(value = "amountFrom", required = false) final Long amountFrom,
             @RequestParam(value = "amountTo", required = false) final Long amountTo,
-            @RequestParam(value = "branchId", required = false) final Long branchId) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billBuySearch.search(codeFrom, codeTo, dateFrom, dateTo, amountFrom, amountTo, branchId));
+            @RequestParam(value = "branchId", required = false) final Long branchId,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), "**,".concat("content[").concat(FILTER_TABLE).concat("]")),
+                billBuySearch.search(
+                        codeFrom,
+                        codeTo,
+                        dateFrom,
+                        dateTo,
+                        amountFrom,
+                        amountTo,
+                        branchId,
+                        pageable
+                ));
     }
 
 }

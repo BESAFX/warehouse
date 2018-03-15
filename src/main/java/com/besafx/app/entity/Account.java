@@ -2,6 +2,7 @@ package com.besafx.app.entity;
 
 import com.besafx.app.util.DateConverter;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Data
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -160,15 +162,7 @@ public class Account implements Serializable {
 
     public String getName() {
         try {
-            StringBuilder builder = new StringBuilder();
-            builder.append(this.student.getContact().getFirstName());
-            builder.append(" ");
-            builder.append(this.student.getContact().getSecondName());
-            builder.append(" ");
-            builder.append(this.student.getContact().getThirdName());
-            builder.append(" ");
-            builder.append(this.student.getContact().getForthName());
-            return builder.toString();
+            return this.student.getContact().getFullName();
         } catch (Exception ex) {
             return "";
         }

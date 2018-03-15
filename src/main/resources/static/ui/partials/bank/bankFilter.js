@@ -17,6 +17,6 @@ app.controller('bankFilterCtrl', ['PersonService', 'BranchService', '$scope', '$
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

@@ -103,14 +103,14 @@
                             <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
                                 ng-click="filter()">
                                 <span class="mdl-list__item-primary-content">
-                                    <i class="material-icons mdl-list__item-icon">visibility</i>
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
                                     <span>عرض السحبيات البنكية</span>
                                 </span>
                             </li>
                             <li class="mdl-menu__item mdl-list__item" ng-click="newWithdraw()"
                                 ng-if="contains(me.team.authorities, ['ROLE_WITHDRAW_CREATE'])">
                                 <span class="mdl-list__item-primary-content">
-                                    <i class="material-icons mdl-list__item-icon">add</i>
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
                                     <span>ايداع جديد</span>
                                 </span>
                             </li>
@@ -342,15 +342,15 @@
                                 <a href=""
                                    ng-click="filter()"
                                    tooltip-append-to-body="true"
-                                   uib-tooltip="تصفية البيانات">
-                                    <span class="fa fa-filter"></span>
+                                   uib-tooltip="بحث">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
                                 </a>
                                 <a href=""
                                    ng-if="contains(me.team.authorities, ['ROLE_WITHDRAW_CREATE'])"
                                    ng-click="newWithdraw()"
                                    tooltip-append-to-body="true"
                                    uib-tooltip="سحب">
-                                    <span class="fa fa-plus-square"></span>
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
                                 </a>
                             </li>
                         </ul>
@@ -366,7 +366,7 @@
                                 <tr>
 
                                     <th class="text-right">
-                                        <span>م</span>
+                                        <span>#</span>
                                     </th>
 
                                     <th st-sort="code" class="text-right">
@@ -404,17 +404,17 @@
                                     ng-repeat="withdraw in collection1"
                                     ng-click="setSelected(withdraw)"
                                     ng-right-click="setSelected(withdraw)"
-                                    st-select-mode="single"
+                                    st-select-mode="multiple"
                                     ng-class="{'mdl-color--brown-100':withdraw.isSelected}">
-                                    <td st-select-row-custom="withdraw">{{$index+1}}</td>
-                                    <td st-select-row-custom="withdraw">{{withdraw.code}}</td>
-                                    <td st-select-row-custom="withdraw">{{withdraw.amount | currency:'SAR':0}}</td>
-                                    <td st-select-row-custom="withdraw">{{withdraw.fromName}}</td>
-                                    <td st-select-row-custom="withdraw">{{withdraw.date | kdate: 'yyyy-mm-dd' : 'ar' :
+                                    <td st-select-row-multi="withdraw">{{$index+1}}</td>
+                                    <td st-select-row-multi="withdraw">{{withdraw.code}}</td>
+                                    <td st-select-row-multi="withdraw">{{withdraw.amount | currency:' SAR ':2}}</td>
+                                    <td st-select-row-multi="withdraw">{{withdraw.fromName}}</td>
+                                    <td st-select-row-multi="withdraw">{{withdraw.date | kdate: 'yyyy-mm-dd' : 'ar' :
                                         'ummalqura'}}
                                     </td>
-                                    <td st-select-row-custom="withdraw">{{withdraw.bank.code}}</td>
-                                    <td st-select-row-custom="withdraw">{{withdraw.lastPerson.contact.firstName}}
+                                    <td st-select-row-multi="withdraw">{{withdraw.bank.code}}</td>
+                                    <td st-select-row-multi="withdraw">{{withdraw.lastPerson.contact.firstName}}
                                         {{withdraw.lastPerson.contact.forthName}}
                                     </td>
                                 </tr>

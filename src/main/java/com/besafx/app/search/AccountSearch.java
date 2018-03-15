@@ -3,14 +3,19 @@ package com.besafx.app.search;
 import com.besafx.app.entity.Account;
 import com.besafx.app.service.AccountService;
 import com.google.common.collect.Lists;
+import org.hibernate.criterion.SimpleProjection;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,28 +29,33 @@ public class AccountSearch {
     @Autowired
     private AccountService accountService;
 
-    public List<Account> search(String firstName,
-                                String secondName,
-                                String thirdName,
-                                String forthName,
-                                Long dateFrom,
-                                Long dateTo,
-                                String studentIdentityNumber,
-                                String studentMobile,
-                                Long coursePriceFrom,
-                                Long coursePriceTo,
-                                List<Long> courseIds,
-                                List<Long> masterIds,
-                                List<Long> branchIds,
-                                List<Integer> courseCodes,
-                                List<Integer> masterCodes,
-                                List<Integer> branchCodes) {
+    public Page<Account> search(
+            final String firstName,
+            final String secondName,
+            final String thirdName,
+            final String forthName,
+            final String fullName,
+            final Long dateFrom,
+            final Long dateTo,
+            final String studentIdentityNumber,
+            final String studentMobile,
+            final Long coursePriceFrom,
+            final Long coursePriceTo,
+            final List<Long> courseIds,
+            final List<Long> masterIds,
+            final List<Long> branchIds,
+            final List<Integer> courseCodes,
+            final List<Integer> masterCodes,
+            final List<Integer> branchCodes,
+            final String searchType,
+            final Pageable pageRequest) {
 
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(firstName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("firstName"), "%" + value.trim() + "%")));
         Optional.ofNullable(secondName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("secondName"), "%" + value.trim() + "%")));
         Optional.ofNullable(thirdName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("thirdName"), "%" + value.trim() + "%")));
         Optional.ofNullable(forthName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("forthName"), "%" + value.trim() + "%")));
+        Optional.ofNullable(fullName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.<String>get("student").get("contact").get("fullName"), "%" + value.trim() + "%")));
         Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay())));
         Optional.ofNullable(studentIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("student").get("contact").get("identityNumber"), "%" + value.trim() + "%")));
@@ -61,13 +71,11 @@ public class AccountSearch {
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
-                result = Specifications.where(result).and(predicates.get(i));
+                result = searchType.equals("and") ? Specifications.where(result).and(predicates.get(i)) : Specifications.where(result).or(predicates.get(i));
             }
-            List<Account> list = Lists.newArrayList(accountService.findAll(result));
-            list.sort(Comparator.comparing(account -> account.getCourse().getCode()));
-            return list;
+            return accountService.findAll(result, pageRequest);
         } else {
-            return new ArrayList<>();
+            return new PageImpl<>(new ArrayList<>());
         }
     }
 }

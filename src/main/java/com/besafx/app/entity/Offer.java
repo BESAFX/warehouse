@@ -4,6 +4,7 @@ import com.besafx.app.component.BeanUtil;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.OfferService;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.decimal4j.util.DoubleRounder;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Data
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Component
 public class Offer implements Serializable {
 
@@ -35,6 +37,7 @@ public class Offer implements Serializable {
 
     @Transient
     private static OfferService offerService;
+
     @GenericGenerator(
             name = "offerSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
@@ -47,38 +50,58 @@ public class Offer implements Serializable {
     @Id
     @GeneratedValue(generator = "offerSequenceGenerator")
     private Long id;
+
     private Integer code;
+
     private String note;
+
     private String customerName;
+
     private String customerIdentityNumber;
+
     private String customerMobile;
+
     private String customerEmail;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String messageBody;
+
     private String masterPaymentType;
+
     private Boolean sendSMS;
+
     private String messageSid;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String smsBody;
+
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterPrice;
+
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterDiscountAmount;
+
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterProfitAmount;
+
     @Column(columnDefinition = "Decimal(10,1) default '0.0'", nullable = false)
     private Double masterCreditAmount;
+
     private Boolean registered;
+
     @ManyToOne
     @JoinColumn(name = "master")
     private Master master;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
+
     @ManyToOne
     @JoinColumn(name = "last_person")
     private Person lastPerson;
+
     @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY)
     private List<Call> calls = new ArrayList<>();
 

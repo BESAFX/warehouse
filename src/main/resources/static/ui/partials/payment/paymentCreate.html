@@ -2,7 +2,7 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
@@ -16,149 +16,171 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
                  ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">الفرع</label>
+                <ui-select id="branch"
+                           focus-autofocus="1"
+                           ng-model="buffer.branch"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الفرع">
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="branch in branches | filter: $select.search | orderBy:'name' track by branch.id">
+                        <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
+                            <span class="mdl-list__item-primary-content">
+                                <span class="material-icons mdl-list__item-avatar"
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
+                                <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>رقم الفرع / </span>
+                                    {{branch.code}}
+                                </span>
+                            </span>
+                        </li>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label class="control-label">الفرع</label>
-                    <ui-select id="branch"
-                               focus-autofocus="1"
-                               ng-model="buffer.branch"
-                               required="required"
-                               disable-validation-message=""
-                               ng-change="onBranchSelect()"
-                               theme="bootstrap">
-                        <ui-select-match placeholder="اختر الفرع">
-                            {{$select.selected.name}}
-                        </ui-select-match>
-                        <ui-select-choices
-                                repeat="branch in branches | filter: $select.search | orderBy:'name' track by branch.id">
-                            <div ng-bind-html="branch.name | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="searchBy" class="control-label">بحث بواسطة</label>
+                <select id="searchBy"
+                        style="height: 40px"
+                        required="required"
+                        disable-validation-message=""
+                        class="form-control text-right"
+                        ng-model="buffer.searchBy">
+                    <option value="fullName">اسم الطالب</option>
+                    <option value="studentIdentityNumber">رقم البطاقة</option>
+                    <option value="studentMobile">رقم الجوال</option>
+                </select>
+            </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label class="control-label">الطالب</label>
-                    <ui-select id="account"
-                               ng-model="payment.account"
-                               required="required"
-                               disable-validation-message=""
-                               theme="bootstrap">
-                        <ui-select-match placeholder="اختر الطالب">
-                            {{$select.selected.key}}
-                        </ui-select-match>
-                        <ui-select-choices
-                                repeat="account in accounts | filter: $select.search | orderBy:'key' track by account.id">
-                            <div ng-bind-html="account.key | highlight: $select.search"></div>
-                            <small>
-                                <span>الاسم : </span>
-                                <span ng-bind-html="''+account.name | highlight: $select.search"></span>
-                                <br/>
-                                <span>المتبقي من الرسوم بالريال : </span>
-                                <span ng-bind-html="''+account.remainPrice | highlight: $select.search"></span>
-                            </small>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">الطالب</label>
+                <ui-select id="account"
+                           ng-model="payment.account"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الطالب">
+                        {{$select.selected.key}}
+                    </ui-select-match>
+                    <ui-select-choices
+                            refresh="searchAccount($select)"
+                            refresh-delay="300"
+                            repeat="account in accounts | filter: $select.search | orderBy:'key' track by account.id">
 
+                        <div class="mdl-menu__item--full-bleed-divider"></div>
+                        <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
+                            <span class="mdl-list__item-primary-content">
+                                <span class="material-icons mdl-list__item-avatar"
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/account.{{iconSetType}}')"></span>
+                                <div ng-bind-html="account.name | highlight: $select.search"></div>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>رقم الجوال / </span>
+                                    {{account.student.contact.mobile}}
+                                </span>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>رقم البطاقة / </span>
+                                    {{account.student.contact.identityNumber}}
+                                </span>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>التخصص / </span>
+                                    {{account.course.master.name}}
+                                </span>
+                            </span>
+                        </li>
+
+                    </ui-select-choices>
+                </ui-select>
             </div>
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="payment.account.id">
-                <p>
+                <h4 class="box-info">
                     <span>مديونية الطالب / </span>
                     {{payment.account.name}}
                     <span>لهذا التسجيل = </span>
                     {{payment.account.remainPrice}} SAR
-                </p>
+                </h4>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="code" class="control-label">رقم السند </label>
+                <input id="code"
+                       type="number"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       ng-model="payment.code">
+            </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label for="code" class="control-label">رقم السند </label>
-                    <input id="code"
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-init="payment.type='ايرادات اساسية'">
+                <label for="type" class="control-label">نوع السند</label>
+                <select id="type"
+                        style="height: 40px"
+                        class="form-control text-right"
+                        ng-model="payment.type"
+                        required="required"
+                        disable-validation-message="">
+                    <option>ايرادات اساسية</option>
+                    <option>ايرادات اضافية</option>
+                </select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="payment.paymentMethod='Cash'">
+                <label for="paymentMethod" class="control-label">
+                    <span>طريقة الدفع</span>
+                </label>
+                <select id="paymentMethod"
+                        class="form-control"
+                        required="required"
+                        disable-validation-message=""
+                        ng-model="payment.paymentMethod">
+                    <option value="Cash">نقدي</option>
+                    <option value="Check">شيك</option>
+                    <option value="Visa">فيزا</option>
+                </select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label> قيمة السند </label>
+                <div dir="ltr" class="input-group">
+                    <span class="input-group-addon">ريال</span>
+                    <input dir="rtl"
                            type="number"
+                           min="0"
+                           ng-max="(payment.type=='ايرادات اساسية' && payment.account.remainPrice)"
+                           class="form-control text-right "
                            required="required"
                            disable-validation-message=""
-                           class="form-control text-right"
-                           ng-model="payment.code">
+                           ng-model="payment.amountNumber">
                 </div>
-
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label for="type" class="control-label">نوع السند</label>
-                    <select id="type"
-                            style="height: 40px"
-                            class="form-control text-right"
-                            ng-model="payment.type"
-                            required="required"
-                            disable-validation-message="">
-                        <option>ايرادات اساسية</option>
-                        <option>ايرادات اضافية</option>
-                    </select>
-                </div>
-
             </div>
 
-            <div class="form-group row">
-
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <label> قيمة السند </label>
-                    <div dir="ltr" class="input-group">
-                        <span class="input-group-addon">ريال</span>
-                        <input dir="rtl"
-                               type="number"
-                               min="0"
-                               ng-max="(payment.type=='ايرادات اساسية' && payment.account.remainPrice)"
-                               class="form-control text-right "
-                               required="required"
-                               disable-validation-message=""
-                               ng-model="payment.amountNumber">
-                    </div>
-                </div>
-
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="payment.paymentMethod!=='Cash'">
+                <label for="checkCode" class="control-label">
+                    <span ng-if="payment.paymentMethod==='Check'">رقم الشيك</span>
+                    <span ng-if="payment.paymentMethod==='Visa'">رقم الفيزا</span>
+                </label>
+                <input id="checkCode"
+                       type="number"
+                       ng-required="payment.paymentMethod!=='Cash'"
+                       ng-disabled="payment.paymentMethod==='Cash'"
+                       disable-validation-message=""
+                       class="form-control"
+                       ng-model="payment.paymentMethodCode">
             </div>
 
-            <div class="form-group row" ng-init="payment.paymentMethod='Cash'">
-
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <label for="paymentMethod" class="control-label">
-                        <span>طريقة الدفع</span>
-                    </label>
-                    <select id="paymentMethod"
-                            class="form-control"
-                            required="required"
-                            disable-validation-message=""
-                            ng-model="payment.paymentMethod">
-                        <option value="Cash">نقدي</option>
-                        <option value="Check">شيك</option>
-                        <option value="Visa">فيزا</option>
-                    </select>
-                </div>
-
-                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="payment.paymentMethod!=='Cash'">
-                    <label for="checkCode" class="control-label">
-                        <span ng-if="payment.paymentMethod==='Check'">رقم الشيك</span>
-                        <span ng-if="payment.paymentMethod==='Visa'">رقم الفيزا</span>
-                    </label>
-                    <input id="checkCode"
-                           type="number"
-                           ng-required="payment.paymentMethod!=='Cash'"
-                           ng-disabled="payment.paymentMethod==='Cash'"
-                           disable-validation-message=""
-                           class="form-control"
-                           ng-model="payment.paymentMethodCode">
-                </div>
-
-            </div>
-
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="note" class="control-label"> البيان </label>
                 <textarea id="note"
                           type="text"
@@ -180,21 +202,21 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">add</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
                     ng-click="form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

@@ -5,20 +5,58 @@ app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'Payment
 
         $scope.buffer = {};
 
+        $scope.buffer.searchBy = 'fullName';
+
         $scope.accounts = [];
 
         $scope.title = title;
 
-        $timeout(function () {
-            BranchService.fetchBranchCombo().then(function (data) {
-                $scope.branches = data;
-            });
-        }, 1000);
+        $scope.searchAccount = function ($select, $event) {
 
-        $scope.onBranchSelect = function () {
-            AccountService.findByBranchWithKey($scope.buffer.branch.id).then(function (data) {
-                $scope.accounts = data;
+            // no event means first load!
+            if (!$event) {
+                $scope.accounts = [];
+            } else {
+                $event.stopPropagation();
+                $event.preventDefault();
+            }
+
+            var search = [];
+
+            switch ($scope.buffer.searchBy){
+                case "fullName":{
+                    search.push('fullName=');
+                    search.push($select.search);
+                    search.push('&');
+                    break;
+                }
+                case "studentIdentityNumber":
+                    search.push('studentIdentityNumber=');
+                    search.push($select.search);
+                    search.push('&');
+                    break;
+                case "studentMobile":
+                    search.push('studentMobile=');
+                    search.push($select.search);
+                    search.push('&');
+                    break;
+
+            }
+
+            search.push('branchIds=');
+            var branchIds = [];
+            branchIds.push($scope.buffer.branch.id);
+            search.push(branchIds);
+            search.push('&');
+
+            search.push('searchType=');
+            search.push('or');
+            search.push('&');
+
+            return AccountService.filterWithInfo(search.join("")).then(function (data) {
+                return $scope.accounts = data.content;
             });
+
         };
 
         $scope.submit = function () {
@@ -43,7 +81,10 @@ app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'Payment
         };
 
         $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            });
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 800);
 
     }]);

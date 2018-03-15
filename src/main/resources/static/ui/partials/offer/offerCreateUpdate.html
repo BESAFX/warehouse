@@ -3,193 +3,144 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <i class="material-icons mdl-list__item-icon mdl-color-text--white">{{action==='create' ? 'add' : 'edit'}}</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/offer.{{iconSetType}}" width="24" height="24">
                 <strong>{{title}}</strong>
             </span>
         </h3>
     </div>
 
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body modal-body-free" id="modal-body">
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            <div class="form-group row"
                  ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">البيانات الاساسية</div>
-                    <div class="panel-body">
+            <div class="form-group row">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                             ng-show="action==='update'">
-                            <label for="code" class="control-label">رقم العرض</label>
-                            <input id="code"
-                                   type="text"
-                                   focus-autofocus="1"
-                                   ng-required="action==='update'"
-                                   disable-validation-message=""
-                                   class="form-control text-right"
-                                   placeholder="رقم العرض الغير مكرر على مستوى الفروع"
-                                   ng-model="offer.code">
-                        </div>
+                <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="master1" class="control-label">التخصص</label>
-                            <ui-select id="master1"
-                                       focus-autofocus="2"
-                                       ng-model="offer.master"
-                                       theme="bootstrap">
-                                <ui-select-match placeholder="اختر التخصص">
-                                    [{{$select.selected.code}}] {{$select.selected.name}}
-                                </ui-select-match>
-                                <ui-select-choices
-                                        group-by="groupByBranch"
-                                        repeat="master in masters | filter: $select.search | orderBy:'code' track by master.id">
-                                    <div ng-bind-html="master.name | highlight: $select.search"></div>
-                                    <span>رقم التخصص : </span>
-                                    <span ng-bind-html="''+master.code | highlight: $select.search"></span>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
+                    <div class="mdl-tabs__tab-bar">
+                        <a href="#panel-1-offer" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6 is-active">
+                            <span>البيانات الاساسية</span>
+                        </a>
+                        <a href="#panel-2-offer" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <span>طريقة الدفع</span>
+                        </a>
+                    </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="customerName" class="control-label">اسم العميل </label>
-                            <input id="customerName"
-                                   type="text"
-                                   required="required"
-                                   disable-validation-message=""
-                                   class="form-control text-right"
-                                   placeholder="اسم العميل..."
-                                   ng-model="offer.customerName">
-                        </div>
+                    <div class="mdl-tabs__panel is-active" id="panel-1-offer">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة</label>
-                            <input id="identityNumber"
-                                   type="text"
-                                   class="form-control text-right "
-                                   placeholder="رقم البطاقة..."
-                                   ng-model="offer.customerIdentityNumber">
-                        </div>
+                        <div class="form-group row">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="mobile" class="control-label">رقم الجوال</label>
-                            <input id="mobile"
-                                   type="text"
-                                   required="required"
-                                   disable-validation-message=""
-                                   class="form-control text-right "
-                                   placeholder="رقم الجوال..."
-                                   ng-model="offer.customerMobile">
-                        </div>
-
-                        <div class="form-group row" ng-if="action=='create'">
-
-                            <div class="form-group row" ng-if="contains(me.team.authorities, ['ROLE_SEND_SMS'])">
-
-                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
-                                        <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input"
-                                               ng-model="offer.sendSMS">
-                                        <span class="mdl-checkbox__label">ارسال رسالة قصيرة</span>
-                                    </label>
-                                </div>
-
-                                <div hidden class="form-group row" ng-if="offer.sendSMS">
-
-                                    <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <label for="smsBody" class="control-label">محتوي الرسالة القصيرة</label>
-                                        <textarea id="smsBody"
-                                                  type="text"
-                                                  msd-elastic=""
-                                                  class="form-control text-right"
-                                                  placeholder="اذكر باختصار نص الرسالة القصيرة"
-                                                  ng-model="offer.smsBody">
-                                    </textarea>
-                                    </div>
-
-                                </div>
-
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 ng-show="action==='update'">
+                                <label for="code" class="control-label">رقم العرض</label>
+                                <input id="code"
+                                       type="text"
+                                       focus-autofocus="1"
+                                       ng-required="action==='update'"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="رقم العرض الغير مكرر على مستوى الفروع"
+                                       ng-model="offer.code">
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
-                                    <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input"
-                                           ng-model="offer.sendByEmail">
-                                    <span class="mdl-checkbox__label">ارسال رسالة إلى البريد الإلكتروني</span>
-                                </label>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="master" class="control-label">التخصص</label>
+                                <ui-select id="master"
+                                           focus-autofocus="2"
+                                           ng-model="offer.master"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="اختر التخصص">
+                                        [{{$select.selected.code}}] {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            group-by="groupByBranch"
+                                            repeat="master in masters | filter: $select.search | orderBy:'code' track by master.id">
+                                        <div ng-bind-html="master.name | highlight: $select.search"></div>
+                                        <span>رقم التخصص : </span>
+                                        <span ng-bind-html="''+master.code | highlight: $select.search"></span>
+                                    </ui-select-choices>
+                                </ui-select>
                             </div>
 
-                            <div class="form-group row" ng-if="offer.sendByEmail">
-
-                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <label for="customerEmail" class="control-label">البريد الإلكتروني</label>
-                                    <input id="customerEmail"
-                                           dir="ltr"
-                                           type="email"
-                                           disable-validation-message=""
-                                           class="form-control text-left"
-                                           ng-model="offer.customerEmail">
-                                </div>
-
-                                <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <label for="messageBody" class="control-label">محتوي الرسالة</label>
-                                    <textarea id="messageBody"
-                                              type="text"
-                                              msd-elastic=""
-                                              class="form-control text-right"
-                                              placeholder="اذكر باختصار موضوع الرسالة"
-                                              ng-model="offer.messageBody">
-                                </textarea>
-                                </div>
-
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="customerName" class="control-label">اسم العميل </label>
+                                <input id="customerName"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right"
+                                       placeholder="اسم العميل..."
+                                       ng-model="offer.customerName">
                             </div>
 
-                        </div>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة</label>
+                                <input id="identityNumber"
+                                       type="text"
+                                       class="form-control text-right "
+                                       placeholder="رقم البطاقة..."
+                                       ng-model="offer.customerIdentityNumber">
+                            </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="note" class="control-label">ملاحظات </label>
-                            <textarea id="note"
-                                      type="text"
-                                      msd-elastic="\n"
-                                      class="form-control text-right"
-                                      placeholder="اذكر باختصار ملاحظات العرض"
-                                      ng-model="offer.note">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="mobile" class="control-label">رقم الجوال</label>
+                                <input id="mobile"
+                                       type="text"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control text-right "
+                                       placeholder="رقم الجوال..."
+                                       ng-model="offer.customerMobile">
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label for="note" class="control-label">ملاحظات </label>
+                                <textarea id="note"
+                                          type="text"
+                                          msd-elastic="\n"
+                                          class="form-control text-right"
+                                          placeholder="اذكر باختصار ملاحظات العرض"
+                                          ng-model="offer.note">
                             </textarea>
+                            </div>
+
                         </div>
 
                     </div>
-                </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading" style="height: 50px;">
-                        <span class="col-sm-6">طريقة الدفع</span>
-                        <div class="col-sm-6">
-                            <toggle-switch
-                                    dir="ltr"
-                                    style="width: 100%"
-                                    ng-model="showBox"
-                                    class="switch-danger"
-                                    on-label="نقدي"
-                                    off-label="قسط شهري">
-                            </toggle-switch>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
+                    <div class="mdl-tabs__panel" id="panel-2-offer">
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group row">
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="masterPaymentType" class="control-label">طريقة الدفع</label>
+                                <select id="masterPaymentType"
+                                        style="height: 40px"
+                                        required="required"
+                                        disable-validation-message=""
+                                        class="form-control text-right"
+                                        ng-model="offer.masterPaymentType">
+                                    <option value="نقدي">
+                                        <span>نقدي</span>
+                                    </option>
+                                    <option value="قسط شهري">
+                                        <span>قسط شهري</span>
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="masterPrice"> المبلغ نقدا </label>
                                 <div dir="ltr" class="input-group" id="masterPrice">
                                     <span class="input-group-addon">ريال سعودي</span>
@@ -202,13 +153,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                                 ng-show="showBox">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 ng-show="offer.masterPaymentType==='نقدي'">
                                 <label for="masterDiscountAmount"> نسبة الخصم </label>
                                 <div dir="ltr" class="input-group" id="masterDiscountAmount">
                                     <span class="input-group-addon">%</span>
                                     <input
-                                            ng-required="showBox"
+                                            ng-required="offer.masterPaymentType==='نقدي'"
                                             disable-validation-message=""
                                             type="number"
                                             min="0"
@@ -218,13 +169,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                                 ng-show="!showBox">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 ng-show="offer.masterPaymentType!='نقدي'">
                                 <label for="masterProfitAmount"> نسبة الفائدة </label>
                                 <div dir="ltr" class="input-group" id="masterProfitAmount">
                                     <span class="input-group-addon">%</span>
                                     <input
-                                            ng-required="!showBox"
+                                            ng-required="offer.masterPaymentType!='نقدي'"
                                             disable-validation-message=""
                                             type="number"
                                             min="0"
@@ -234,8 +185,8 @@
                                 </div>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                                 ng-show="!showBox">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 ng-show="offer.masterPaymentType!='نقدي'">
                                 <label for="masterCreditAmount"> قيمة القسط </label>
                                 <div dir="ltr" class="input-group" id="masterCreditAmount">
                                     <span class="input-group-addon">ريال سعودي</span>
@@ -244,13 +195,13 @@
                                            max="{{offer.masterPrice}}"
                                            class="form-control text-right "
                                            ng-model="offer.masterCreditAmount"
-                                           ng-required="!showBox"
+                                           ng-required="offer.masterPaymentType!='نقدي'"
                                            disable-validation-message="">
                                 </div>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                                 ng-show="showBox">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 ng-show="offer.masterPaymentType==='نقدي'">
                                 <label for="priceAfterDiscount"> المبلغ بعد الخصم </label>
                                 <div dir="ltr" class="input-group"
                                      id="priceAfterDiscount">
@@ -262,8 +213,8 @@
                                 </div>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                                 ng-show="!showBox">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 ng-show="offer.masterPaymentType!='نقدي'">
                                 <label for="priceAfterProfit"> المبلغ بعد الفائدة </label>
                                 <div dir="ltr" class="input-group" id="priceAfterProfit">
                                     <span class="input-group-addon">ريال سعودي</span>
@@ -274,8 +225,11 @@
                             </div>
 
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
         </div>
@@ -290,28 +244,28 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">add</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
             </button>
             <button ng-if="action=='update'"
                     uib-tooltip="تعديل"
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">edit</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
-                    ng-click="form.$setPristine()"
+                    ng-click="clear();form.$setPristine();"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

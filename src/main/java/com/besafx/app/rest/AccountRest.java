@@ -12,6 +12,9 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +28,54 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/account/")
 public class AccountRest {
 
-    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]],payments[**,-account,lastPerson[id,contact[id,firstName,forthName]],lastPerson[id,contact[id,firstName,forthName]],-account],accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account],accountConditions[**,-account,person[id,contact[id,firstName,forthName]]],accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
-    public static final String FILTER_ACCOUNT_COMBO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
-    public static final String FILTER_ACCOUNT_INFO = "id,code,registerDate,requiredPrice,paidPrice,remainPrice,course[id,code,master[id,code,name,branch[id,code,name]]],student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
-    public static final String FILTER_ACCOUNT_KEY = "id,key,name,remainPrice";
+    public static final String FILTER_TABLE = "" +
+            "**," +
+            "lastPerson[id,contact[id,firstName,forthName]]," +
+            "course[id,code,master[id,code,name,branch[id,code,name]]]," +
+            "student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]," +
+            "payments[**,lastPerson[id,contact[id,firstName,forthName]],-account]," +
+            "accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account]," +
+            "accountConditions[**,-account,person[id,contact[id,firstName,forthName]]]," +
+            "accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
+
+    public static final String FILTER_ACCOUNT_COMBO = "" +
+            "id," +
+            "code," +
+            "key," +
+            "name," +
+            "registerDate," +
+            "requiredPrice," +
+            "paidPrice," +
+            "remainPrice," +
+            "course[id,code,master[id,code,name,branch[id,code,name]]]," +
+            "student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
+
+    public static final String FILTER_ACCOUNT_ATTACH = "" +
+            "id," +
+            "key," +
+            "name," +
+            "course[id,master[id,name]]," +
+            "student[id,contact[id,mobile,identityNumber]]," +
+            "accountAttaches[**,attach[**,person[id,contact[id,shortName]]],-account]";
+
+    public static final String FILTER_ACCOUNT_INFO = "" +
+            "id," +
+            "code," +
+            "registerDate," +
+            "requiredPrice," +
+            "paidPrice," +
+            "remainPrice," +
+            "course[id,code,master[id,code,name,branch[id,code,name]]]," +
+            "student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]";
+
+    public static final String FILTER_ACCOUNT_KEY = "" +
+            "id," +
+            "key," +
+            "name," +
+            "remainPrice";
+
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
+
     @Autowired
     private PersonService personService;
 
@@ -198,7 +244,7 @@ public class AccountRest {
     @ResponseBody
     public String findByBranchWithKey(@PathVariable Long branchId) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_KEY),
-                accountService.findByCourseMasterBranch(branchService.findOne(branchId)));
+                accountService.findByCourseMasterBranchId(branchId, new PageRequest(0, 10)));
     }
 
     @RequestMapping(value = "findByBranches", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -244,6 +290,7 @@ public class AccountRest {
             @RequestParam(value = "secondName", required = false) final String secondName,
             @RequestParam(value = "thirdName", required = false) final String thirdName,
             @RequestParam(value = "forthName", required = false) final String forthName,
+            @RequestParam(value = "fullName", required = false) final String fullName,
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo", required = false) final Long dateTo,
             @RequestParam(value = "studentIdentityNumber", required = false) final String studentIdentityNumber,
@@ -255,25 +302,31 @@ public class AccountRest {
             @RequestParam(value = "branchIds", required = false) final List<Long> branchIds,
             @RequestParam(value = "courseCodes", required = false) final List<Integer> courseCodes,
             @RequestParam(value = "masterCodes", required = false) final List<Integer> masterCodes,
-            @RequestParam(value = "branchCodes", required = false) final List<Integer> branchCodes) {
-        List<Account> list = accountSearch.search(
-                firstName,
-                secondName,
-                thirdName,
-                forthName,
-                dateFrom,
-                dateTo,
-                studentIdentityNumber,
-                studentMobile,
-                coursePriceFrom,
-                coursePriceTo,
-                courseIds,
-                masterIds,
-                branchIds,
-                courseCodes,
-                masterCodes,
-                branchCodes);
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), list);
+            @RequestParam(value = "branchCodes", required = false) final List<Integer> branchCodes,
+            @RequestParam(value = "searchType") final String searchType,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(),
+                "**,".concat("content[").concat(FILTER_TABLE).concat("]")),
+                accountSearch.search(
+                        firstName,
+                        secondName,
+                        thirdName,
+                        forthName,
+                        fullName,
+                        dateFrom,
+                        dateTo,
+                        studentIdentityNumber,
+                        studentMobile,
+                        coursePriceFrom,
+                        coursePriceTo,
+                        courseIds,
+                        masterIds,
+                        branchIds,
+                        courseCodes,
+                        masterCodes,
+                        branchCodes,
+                        searchType,
+                        pageable));
     }
 
     @RequestMapping(value = "filterWithInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -283,6 +336,7 @@ public class AccountRest {
             @RequestParam(value = "secondName", required = false) final String secondName,
             @RequestParam(value = "thirdName", required = false) final String thirdName,
             @RequestParam(value = "forthName", required = false) final String forthName,
+            @RequestParam(value = "fullName", required = false) final String fullName,
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo", required = false) final Long dateTo,
             @RequestParam(value = "studentIdentityNumber", required = false) final String studentIdentityNumber,
@@ -294,25 +348,75 @@ public class AccountRest {
             @RequestParam(value = "branchIds", required = false) final List<Long> branchIds,
             @RequestParam(value = "courseCodes", required = false) final List<Integer> courseCodes,
             @RequestParam(value = "masterCodes", required = false) final List<Integer> masterCodes,
-            @RequestParam(value = "branchCodes", required = false) final List<Integer> branchCodes) {
-        List<Account> list = accountSearch.search(
-                firstName,
-                secondName,
-                thirdName,
-                forthName,
-                dateFrom,
-                dateTo,
-                studentIdentityNumber,
-                studentMobile,
-                coursePriceFrom,
-                coursePriceTo,
-                courseIds,
-                masterIds,
-                branchIds,
-                courseCodes,
-                masterCodes,
-                branchCodes);
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_ACCOUNT_INFO), list);
+            @RequestParam(value = "branchCodes", required = false) final List<Integer> branchCodes,
+            @RequestParam(value = "searchType") final String searchType,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), "**,".concat("content[").concat(FILTER_ACCOUNT_COMBO).concat("]")),
+                accountSearch.search(
+                        firstName,
+                        secondName,
+                        thirdName,
+                        forthName,
+                        fullName,
+                        dateFrom,
+                        dateTo,
+                        studentIdentityNumber,
+                        studentMobile,
+                        coursePriceFrom,
+                        coursePriceTo,
+                        courseIds,
+                        masterIds,
+                        branchIds,
+                        courseCodes,
+                        masterCodes,
+                        branchCodes,
+                        searchType,
+                        pageable));
+    }
+
+    @RequestMapping(value = "filterWithAttaches", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String filterWithAttaches(
+            @RequestParam(value = "firstName", required = false) final String firstName,
+            @RequestParam(value = "secondName", required = false) final String secondName,
+            @RequestParam(value = "thirdName", required = false) final String thirdName,
+            @RequestParam(value = "forthName", required = false) final String forthName,
+            @RequestParam(value = "fullName", required = false) final String fullName,
+            @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
+            @RequestParam(value = "dateTo", required = false) final Long dateTo,
+            @RequestParam(value = "studentIdentityNumber", required = false) final String studentIdentityNumber,
+            @RequestParam(value = "studentMobile", required = false) final String studentMobile,
+            @RequestParam(value = "coursePriceFrom", required = false) final Long coursePriceFrom,
+            @RequestParam(value = "coursePriceTo", required = false) final Long coursePriceTo,
+            @RequestParam(value = "courseIds", required = false) final List<Long> courseIds,
+            @RequestParam(value = "masterIds", required = false) final List<Long> masterIds,
+            @RequestParam(value = "branchIds", required = false) final List<Long> branchIds,
+            @RequestParam(value = "courseCodes", required = false) final List<Integer> courseCodes,
+            @RequestParam(value = "masterCodes", required = false) final List<Integer> masterCodes,
+            @RequestParam(value = "branchCodes", required = false) final List<Integer> branchCodes,
+            @RequestParam(value = "searchType") final String searchType,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), "**,".concat("content[").concat(FILTER_ACCOUNT_ATTACH).concat("]")),
+                accountSearch.search(
+                        firstName,
+                        secondName,
+                        thirdName,
+                        forthName,
+                        fullName,
+                        dateFrom,
+                        dateTo,
+                        studentIdentityNumber,
+                        studentMobile,
+                        coursePriceFrom,
+                        coursePriceTo,
+                        courseIds,
+                        masterIds,
+                        branchIds,
+                        courseCodes,
+                        masterCodes,
+                        branchCodes,
+                        searchType,
+                        pageable));
     }
 
 

@@ -17,6 +17,6 @@ app.controller('accountNoteCreateCtrl', ['AccountNoteService', 'ModalProvider', 
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

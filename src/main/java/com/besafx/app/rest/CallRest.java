@@ -44,7 +44,7 @@ public class CallRest {
         notificationService.notifyAll(Notification
                 .builder()
                 .title("العمليات على الاتصالات")
-                .message("تم انشاء اتصال جديد بنجاح")
+                .message("تم اتصال جديد بنجاح")
                 .type("success")
                 .icon("fa-plus-square")
                 .build());

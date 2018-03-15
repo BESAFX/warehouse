@@ -30,3 +30,11 @@
     unicode-range: U+0-10FFFF;
 }
 
+@font-face {
+    font-family: 'Traditional Arabic';
+    font-style: normal;
+    font-weight: 900;
+    src: url(font/trado.ttf) format('woff');
+    unicode-range: U+0-10FFFF;
+}
+

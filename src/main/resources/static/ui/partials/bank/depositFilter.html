@@ -3,7 +3,7 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
@@ -26,7 +26,7 @@
 
                     <div class="row">
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
                             <select id="branch"
                                     data-placeholder="ابحث عن الفرع"
@@ -41,7 +41,7 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="bankCode" class="control-label">رقم الحساب </label>
                                 <input id="bankCode"
                                        type="number"
@@ -51,7 +51,7 @@
                                        ng-model="buffer.bankCode">
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="bankName" class="control-label">اسم البنك </label>
                                 <input id="bankName"
                                        type="text"
@@ -62,7 +62,7 @@
 
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <label for="bankBranchName" class="control-label">فرع البنك (يحتوى على) </label>
                             <input id="bankBranchName"
                                    type="text"
@@ -73,7 +73,7 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="bankStockTo" class="control-label">الرصيد الحالي إلى </label>
                                 <input id="bankStockTo"
                                        type="number"
@@ -82,7 +82,7 @@
                                        ng-model="buffer.bankStockTo">
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="bankStockFrom" class="control-label">الرصيد الحالي من </label>
                                 <input id="bankStockFrom"
                                        type="number"
@@ -105,7 +105,7 @@
                     <div class="row">
 
                         <div class="row">
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="code" class="control-label">رقم الإيداع </label>
                                 <input id="code"
                                        type="number"
@@ -115,7 +115,7 @@
                                        ng-model="buffer.code">
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="fromName" class="control-label">اسم المودع </label>
                                 <input id="fromName"
                                        type="text"
@@ -127,7 +127,7 @@
 
 
                         <div class="row">
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="amountTo" class="control-label">قيمة الإيداع من </label>
                                 <input id="amountTo"
                                        type="number"
@@ -136,7 +136,7 @@
                                        ng-model="buffer.amountTo">
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="amountFrom" class="control-label">قيمة الإيداع إلى </label>
                                 <input id="amountFrom"
                                        type="number"
@@ -147,7 +147,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="dateFrom" class="control-label">تاريخ الإيداع من</label>
                                 <div dir="ltr" class="input-group">
                                     <input dir="rtl"
@@ -164,7 +164,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="dateTo" class="control-label">تاريخ الإيداع إلى</label>
                                 <div dir="ltr" class="input-group">
                                     <input dir="rtl"
@@ -198,21 +198,21 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">search</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
                     ng-click="form.$setPristine();"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

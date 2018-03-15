@@ -1,109 +1,4 @@
 app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
-    /**************************************************************
-     *                                                            *
-     * Account Model                                              *
-     *                                                            *
-     *************************************************************/
-    this.openAccountCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountCreate.html',
-            controller: 'accountCreateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg'
-        });
-    };
-
-    this.openAccountUpdateModel = function (account) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountUpdate.html',
-            controller: 'accountUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                account: function () {
-                    return account;
-                }
-            }
-        });
-    };
-
-    this.openAccountUpdatePriceModel = function (account) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountUpdatePrice.html',
-            controller: 'accountUpdatePriceCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                account: function () {
-                    return account;
-                }
-            }
-        });
-    };
-
-    this.openAccountDetailsModel = function (account) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountDetails.html',
-            controller: 'accountDetailsCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                account: function () {
-                    return account;
-                }
-            }
-        });
-    };
-
-    this.openAccountPaymentModel = function (account) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountPayment.html',
-            controller: 'accountPaymentCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                account: function () {
-                    return account;
-                }
-            }
-        });
-    };
-
-    this.openAccountHeavyWorkModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/account/accountHeavyWork.html',
-            controller: 'accountHeavyWorkCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تسجيل دفعة من الطلاب';
-                }
-            }
-        });
-    };
 
     /**************************************************************
      *                                                            *
@@ -122,7 +17,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             size: 'lg',
             resolve: {
                 title: function () {
-                    return 'انشاء فرع جديد';
+                    return 'فرع جديد';
                 },
                 action: function () {
                     return 'create';
@@ -160,267 +55,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
-     * Bank Model                                                 *
-     *                                                            *
-     *************************************************************/
-    this.openBankCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/bank/bankCreateUpdate.html',
-            controller: 'bankCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'انشاء حساب بنكي جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                bank: function () {
-                    return {};
-                }
-            }
-        });
-    };
-
-    this.openBankUpdateModel = function (bank) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/bank/bankCreateUpdate.html',
-            controller: 'bankCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات حساب بنكي';
-                },
-                action: function () {
-                    return 'update';
-                },
-                bank: function () {
-                    return bank;
-                }
-            }
-        });
-    };
-
-    this.openDepositCreateModel = function (bank) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/bank/depositCreate.html',
-            controller: 'depositCreateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'إيداع جديد';
-                },
-                bank: function () {
-                    return bank;
-                }
-            }
-        });
-    };
-
-    this.openWithdrawCreateModel = function (bank) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/bank/withdrawCreate.html',
-            controller: 'withdrawCreateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'سحب جديد';
-                },
-                bank: function () {
-                    return bank;
-                }
-            }
-        });
-    };
-
-    /**************************************************************
-     *                                                            *
-     * BillBuyType Model                                          *
-     *                                                            *
-     *************************************************************/
-    this.openBillBuyTypeCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billBuyType/billBuyTypeCreateUpdate.html',
-            controller: 'billBuyTypeCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'انشاء حساب فواتير شراء جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                billBuyType: function () {
-                    return {};
-                }
-            }
-        });
-    };
-
-    this.openBillBuyTypeUpdateModel = function (billBuyType) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billBuyType/billBuyTypeCreateUpdate.html',
-            controller: 'billBuyTypeCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات حساب فواتير شراء';
-                },
-                action: function () {
-                    return 'update';
-                },
-                billBuyType: function () {
-                    return billBuyType;
-                }
-            }
-        });
-    };
-
-    /**************************************************************
-     *                                                            *
-     * BillBuy Model                                              *
-     *                                                            *
-     *************************************************************/
-    this.openBillBuyCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billBuy/billBuyCreateUpdate.html',
-            controller: 'billBuyCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'انشاء فاتورة شراء جديدة';
-                },
-                action: function () {
-                    return 'create';
-                },
-                billBuy: function () {
-                    return {};
-                }
-            }
-        });
-    };
-
-    this.openBillBuyUpdateModel = function (billBuy) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billBuy/billBuyCreateUpdate.html',
-            controller: 'billBuyCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات فاتورة شراء';
-                },
-                action: function () {
-                    return 'update';
-                },
-                billBuy: function () {
-                    return billBuy;
-                }
-            }
-        });
-    };
-
-    /**************************************************************
-     *                                                            *
-     * Course Model                                               *
-     *                                                            *
-     *************************************************************/
-    this.openCourseCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/course/courseCreateUpdate.html',
-            controller: 'courseCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'انشاء دورة جديد';
-                },
-                action: function () {
-                    return 'create';
-                },
-                course: function () {
-                    return {};
-                }
-            }
-        });
-    };
-
-    this.openCourseHeavyWorkModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/course/courseHeavyWork.html',
-            controller: 'courseHeavyWorkCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تسجيل دفعة من الدورات';
-                }
-            }
-        });
-    };
-
-    this.openCourseUpdateModel = function (course) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/course/courseCreateUpdate.html',
-            controller: 'courseCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات دورة';
-                },
-                action: function () {
-                    return 'update';
-                },
-                course: function () {
-                    return course;
-                }
-            }
-        });
-    };
-
-    /**************************************************************
-     *                                                            *
      * MasterCategory Model                                       *
      *                                                            *
      *************************************************************/
@@ -429,13 +63,13 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/master/masterCategoryCreateUpdate.html',
+            templateUrl: '/ui/partials/masterCategory/masterCategoryCreateUpdate.html',
             controller: 'masterCategoryCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'انشاء تصنيف جديد';
+                    return 'تصنيف جديد';
                 },
                 action: function () {
                     return 'create';
@@ -452,7 +86,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/master/masterCategoryCreateUpdate.html',
+            templateUrl: '/ui/partials/masterCategory/masterCategoryCreateUpdate.html',
             controller: 'masterCategoryCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
@@ -486,7 +120,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'انشاء تخصص جديد';
+                    return 'تخصص جديد';
                 },
                 action: function () {
                     return 'create';
@@ -538,7 +172,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             size: 'lg',
             resolve: {
                 title: function () {
-                    return 'انشاء عرض جديد';
+                    return 'عرض جديد';
                 },
                 action: function () {
                     return 'create';
@@ -647,7 +281,250 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'انشاء دفعة من العروض';
+                    return 'دفعة من العروض';
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Course Model                                               *
+     *                                                            *
+     *************************************************************/
+    this.openCourseCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/course/courseCreateUpdate.html',
+            controller: 'courseCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'دورة جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                course: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openCourseHeavyWorkModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/course/courseHeavyWork.html',
+            controller: 'courseHeavyWorkCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تسجيل دفعة من الدورات';
+                }
+            }
+        });
+    };
+
+    this.openCourseUpdateModel = function (course) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/course/courseCreateUpdate.html',
+            controller: 'courseCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات دورة';
+                },
+                action: function () {
+                    return 'update';
+                },
+                course: function () {
+                    return course;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Account Model                                              *
+     *                                                            *
+     *************************************************************/
+    this.openAccountCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountCreate.html',
+            controller: 'accountCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg'
+        });
+    };
+
+    this.openAccountUpdateModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountUpdate.html',
+            controller: 'accountUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                account: function () {
+                    return account;
+                }
+            }
+        });
+    };
+
+    this.openAccountUpdatePriceModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountUpdatePrice.html',
+            controller: 'accountUpdatePriceCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                account: ['AccountService', function (AccountService) {
+                    return AccountService.findOne(account.id).then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openAccountDetailsModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountDetails.html',
+            controller: 'accountDetailsCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                account: ['AccountService', function (AccountService) {
+                    return AccountService.findOne(account.id).then(function (data) {
+                        return data;
+                    });
+                }],
+                attachTypes: ['AttachTypeService', function (AttachTypeService) {
+                    return AttachTypeService.findAll().then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openAccountPaymentModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountPayment.html',
+            controller: 'accountPaymentCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                account: ['AccountService', function (AccountService) {
+                    return AccountService.findOne(account.id).then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openAccountConditionCreateModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountConditionCreate.html',
+            controller: 'accountConditionCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                account: ['AccountService', function (AccountService) {
+                    return AccountService.findOne(account.id).then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openAccountNoteCreateModel = function (account) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountNoteCreate.html',
+            controller: 'accountNoteCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                account: ['AccountService', function (AccountService) {
+                    return AccountService.findOne(account.id).then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openAccountAttachCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountAttachCreate.html',
+            controller: 'accountAttachCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                attachTypes: ['AttachTypeService', function (AttachTypeService) {
+                    return AttachTypeService.findAll().then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openAccountHeavyWorkModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/account/accountHeavyWork.html',
+            controller: 'accountHeavyWorkCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تسجيل دفعة من الطلاب';
                 }
             }
         });
@@ -667,10 +544,9 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'paymentCreateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
             resolve: {
                 title: function () {
-                    return 'انشاء سند قبض جديد';
+                    return 'سند قبض جديد';
                 }
             }
         });
@@ -726,7 +602,253 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'انشاء سند صرف جديد';
+                    return 'سند صرف جديد';
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * BillBuyType Model                                          *
+     *                                                            *
+     *************************************************************/
+    this.openBillBuyTypeCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billBuyType/billBuyTypeCreateUpdate.html',
+            controller: 'billBuyTypeCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'حساب فواتير شراء جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                billBuyType: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openBillBuyTypeUpdateModel = function (billBuyType) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billBuyType/billBuyTypeCreateUpdate.html',
+            controller: 'billBuyTypeCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات حساب فواتير شراء';
+                },
+                action: function () {
+                    return 'update';
+                },
+                billBuyType: function () {
+                    return billBuyType;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * BillBuy Model                                              *
+     *                                                            *
+     *************************************************************/
+    this.openBillBuyCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billBuy/billBuyCreateUpdate.html',
+            controller: 'billBuyCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'فاتورة شراء جديدة';
+                },
+                action: function () {
+                    return 'create';
+                },
+                billBuy: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openBillBuyUpdateModel = function (billBuy) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billBuy/billBuyCreateUpdate.html',
+            controller: 'billBuyCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات فاتورة شراء';
+                },
+                action: function () {
+                    return 'update';
+                },
+                billBuy: function () {
+                    return billBuy;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Bank Model                                                 *
+     *                                                            *
+     *************************************************************/
+    this.openBankCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bank/bankCreateUpdate.html',
+            controller: 'bankCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'حساب بنكي جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                bank: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openBankUpdateModel = function (bank) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bank/bankCreateUpdate.html',
+            controller: 'bankCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات حساب بنكي';
+                },
+                action: function () {
+                    return 'update';
+                },
+                bank: function () {
+                    return bank;
+                }
+            }
+        });
+    };
+
+    this.openDepositCreateModel = function (bank) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bank/depositCreate.html',
+            controller: 'depositCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'إيداع جديد';
+                },
+                bank: function () {
+                    return bank;
+                }
+            }
+        });
+    };
+
+    this.openWithdrawCreateModel = function (bank) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bank/withdrawCreate.html',
+            controller: 'withdrawCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'سحب جديد';
+                },
+                bank: function () {
+                    return bank;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Team Model                                                 *
+     *                                                            *
+     *************************************************************/
+    this.openTeamCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/team/teamCreateUpdate.html',
+            controller: 'teamCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                title: function () {
+                    return 'مجموعة جديدة';
+                },
+                action: function () {
+                    return 'create';
+                },
+                team: function () {
+                    return undefined;
+                }
+            }
+        });
+    };
+
+    this.openTeamUpdateModel = function (team) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/team/teamCreateUpdate.html',
+            controller: 'teamCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات مجموعة';
+                },
+                action: function () {
+                    return 'update';
+                },
+                team: function () {
+                    return team;
                 }
             }
         });
@@ -749,7 +871,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             size: 'lg',
             resolve: {
                 title: function () {
-                    return 'انشاء مستخدم جديد';
+                    return 'مستخدم جديد';
                 },
                 action: function () {
                     return 'create';
@@ -787,52 +909,27 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
-     * Team Model                                                 *
+     * Confirm Model                                              *
      *                                                            *
      *************************************************************/
-    this.openTeamCreateModel = function () {
+    this.openConfirmModel = function (title, icon, message) {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/team/teamCreateUpdate.html',
-            controller: 'teamCreateUpdateCtrl',
+            templateUrl: '/ui/partials/modal/confirmModal.html',
+            controller: 'confirmModalCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
             resolve: {
                 title: function () {
-                    return 'انشاء مجموعة جديدة';
+                    return title;
                 },
-                action: function () {
-                    return 'create';
+                icon: function () {
+                    return icon;
                 },
-                team: function () {
-                    return undefined;
-                }
-            }
-        });
-    };
-
-    this.openTeamUpdateModel = function (team) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/team/teamCreateUpdate.html',
-            controller: 'teamCreateUpdateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                title: function () {
-                    return 'تعديل بيانات مجموعة';
-                },
-                action: function () {
-                    return 'update';
-                },
-                team: function () {
-                    return team;
+                message: function () {
+                    return message;
                 }
             }
         });

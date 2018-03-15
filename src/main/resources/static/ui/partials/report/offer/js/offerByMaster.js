@@ -55,6 +55,6 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
     }]);

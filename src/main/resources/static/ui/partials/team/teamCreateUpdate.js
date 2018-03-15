@@ -1,65 +1,320 @@
 app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'team',
     function (TeamService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, team) {
 
-        $scope.roles = [
-            {id: 1, name: 'تعديل بيانات الشركة', value: 'ROLE_COMPANY_UPDATE', selected: false},
-            {id: 2, name: 'إنشاء الفروع', value: 'ROLE_BRANCH_CREATE', selected: false},
-            {id: 3, name: 'تعديل بيانات الفروع', value: 'ROLE_BRANCH_UPDATE', selected: false},
-            {id: 4, name: 'حذف الفروع', value: 'ROLE_BRANCH_DELETE', selected: false},
-            {id: 5, name: 'إنشاء التخصصات', value: 'ROLE_MASTER_CREATE', selected: false},
-            {id: 6, name: 'تعديل بيانات التخصصات', value: 'ROLE_MASTER_UPDATE', selected: false},
-            {id: 7, name: 'حذف التخصصات', value: 'ROLE_MASTER_DELETE', selected: false},
-            {id: 8, name: 'إنشاء العروض', value: 'ROLE_OFFER_CREATE', selected: false},
-            {id: 9, name: 'تعديل العروض', value: 'ROLE_OFFER_UPDATE', selected: false},
-            {id: 10, name: 'حذف العروض', value: 'ROLE_OFFER_DELETE', selected: false},
-            {id: 11, name: 'إنشاء الدورات', value: 'ROLE_COURSE_CREATE', selected: false},
-            {id: 12, name: 'تعديل الدورات', value: 'ROLE_COURSE_UPDATE', selected: false},
-            {id: 13, name: 'حذف الدورات', value: 'ROLE_COURSE_DELETE', selected: false},
-            {id: 14, name: 'إنشاء حسابات الطلاب', value: 'ROLE_STUDENT_CREATE', selected: false},
-            {id: 15, name: 'تعديل حسابات الطلاب', value: 'ROLE_STUDENT_UPDATE', selected: false},
-            {id: 16, name: 'حذف حسابات الطلاب', value: 'ROLE_STUDENT_DELETE', selected: false},
-            {id: 17, name: 'إنشاء التسجيلات', value: 'ROLE_ACCOUNT_CREATE', selected: false},
-            {id: 18, name: 'تعديل التسجيلات', value: 'ROLE_ACCOUNT_UPDATE', selected: false},
-            {id: 19, name: 'حذف التسجيلات', value: 'ROLE_ACCOUNT_DELETE', selected: false},
-            {id: 20, name: 'إنشاء سندات القبض', value: 'ROLE_PAYMENT_CREATE', selected: false},
-            {id: 21, name: 'تعديل سندات القبض', value: 'ROLE_PAYMENT_UPDATE', selected: false},
-            {id: 22, name: 'حذف سندات القبض', value: 'ROLE_PAYMENT_DELETE', selected: false},
-            {id: 23, name: 'إنشاء سندات الصرف', value: 'ROLE_PAYMENT_OUT_CREATE', selected: false},
-            {id: 24, name: 'تعديل سندات الصرف', value: 'ROLE_PAYMENT_OUT_UPDATE', selected: false},
-            {id: 25, name: 'حذف سندات الصرف', value: 'ROLE_PAYMENT_OUT_DELETE', selected: false},
-            {id: 26, name: 'إنشاء حسابات البنوك', value: 'ROLE_BANK_CREATE', selected: false},
-            {id: 27, name: 'تعديل حسابات البنوك', value: 'ROLE_BANK_UPDATE', selected: false},
-            {id: 28, name: 'حذف حسابات البنوك', value: 'ROLE_BANK_DELETE', selected: false},
-            {id: 29, name: 'إيداع الي الحساب البنكي', value: 'ROLE_DEPOSIT_CREATE', selected: false},
-            {id: 30, name: 'سحب من الحساب البنكي', value: 'ROLE_WITHDRAW_CREATE', selected: false},
-            {id: 31, name: 'إنشاء انواع فواتير الشراء', value: 'ROLE_BILL_BUY_TYPE_CREATE', selected: false},
-            {id: 32, name: 'تعديل انواع فواتير الشراء', value: 'ROLE_BILL_BUY_TYPE_UPDATE', selected: false},
-            {id: 33, name: 'حذف انواع فواتير الشراء', value: 'ROLE_BILL_BUY_TYPE_DELETE', selected: false},
-            {id: 34, name: 'إنشاء فاتورة شراء', value: 'ROLE_BILL_BUY_CREATE', selected: false},
-            {id: 35, name: 'تعديل فاتورة شراء', value: 'ROLE_BILL_BUY_UPDATE', selected: false},
-            {id: 36, name: 'حذف فاتورة شراء', value: 'ROLE_BILL_BUY_DELETE', selected: false},
-            {id: 37, name: 'إنشاء الصلاحيات', value: 'ROLE_TEAM_CREATE', selected: false},
-            {id: 38, name: 'تعديل بيانات الصلاحيات', value: 'ROLE_TEAM_UPDATE', selected: false},
-            {id: 39, name: 'حذف الصلاحيات', value: 'ROLE_TEAM_DELETE', selected: false},
-            {id: 40, name: 'إنشاء المستخدمون', value: 'ROLE_PERSON_CREATE', selected: false},
-            {id: 41, name: 'تعديل بيانات المستخدمون', value: 'ROLE_PERSON_UPDATE', selected: false},
-            {id: 42, name: 'تفعيل المستخدمون', value: 'ROLE_PERSON_ENABLE', selected: false},
-            {id: 43, name: 'تعطيل المستخدمون', value: 'ROLE_PERSON_DISABLE', selected: false},
-            {id: 44, name: 'حذف المستخدمون', value: 'ROLE_PERSON_DELETE', selected: false},
-            {id: 45, name: 'انشاء حالة للطالب', value: 'ROLE_ACCOUNT_CONDITION_CREATE', selected: false},
-            {id: 46, name: 'اضافة مستندات طالب', value: 'ROLE_ACCOUNT_ATTACH_CREATE', selected: false},
-            {id: 47, name: 'حذف مستندات طالب', value: 'ROLE_ACCOUNT_ATTACH_DELETE', selected: false},
-            {id: 48, name: 'انشاء ملاحظات طالب', value: 'ROLE_ACCOUNT_NOTE_CREATE', selected: false},
-            {id: 49, name: 'إنشاء تصنيفات التخصصات', value: 'ROLE_MASTER_CATEGORY_CREATE', selected: false},
-            {id: 50, name: 'تعديل بيانات تصنيفات التخصصات', value: 'ROLE_MASTER_CATEGORY_UPDATE', selected: false},
-            {id: 51, name: 'حذف تصنيفات التخصصات', value: 'ROLE_MASTER_CATEGORY_DELETE', selected: false},
-            {id: 52, name: 'تعديل رسوم تسجيل الطالب', value: 'ROLE_ACCOUNT_FEES_UPDATE', selected: false},
-            {id: 52, name: 'إرسال الرسائل القصيرة', value: 'ROLE_SEND_SMS', selected: false},
-            {id: 53, name: 'إنشاء دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_CREATE', selected: false},
-            {id: 54, name: 'تعديل بيانات دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_UPDATE', selected: false},
-            {id: 55, name: 'حذف دفاتر السندات', value: 'ROLE_PAYMENT_BOOK_DELETE', selected: false},
-            {id: 56, name: 'نقل السندات إلى الدفاتر', value: 'ROLE_PAYMENT_MOVE_TO_BOOK', selected: false}
-        ];
+        $scope.title = title;
+
+        $scope.action = action;
+
+        $scope.roles = [];
+
+        //////////////////////////Company////////////////////////////////////////
+        $scope.roles.push({
+            name: 'تعديل بيانات الشركة',
+            value: 'ROLE_COMPANY_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Branch////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء الفروع',
+            value: 'ROLE_BRANCH_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل الفروع',
+            value: 'ROLE_BRANCH_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف الفروع',
+            value: 'ROLE_BRANCH_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Master Category////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء تصنيفات التخصصات',
+            value: 'ROLE_MASTER_CATEGORY_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل تصنيفات التخصصات',
+            value: 'ROLE_MASTER_CATEGORY_UPDATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حذف تصنيفات التخصصات',
+            value: 'ROLE_MASTER_CATEGORY_DELETE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        //////////////////////////Master////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء التخصصات',
+            value: 'ROLE_MASTER_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل التخصصات',
+            value: 'ROLE_MASTER_UPDATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حذف التخصصات',
+            value: 'ROLE_MASTER_DELETE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        //////////////////////////Offer////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء العروض',
+            value: 'ROLE_OFFER_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل العروض',
+            value: 'ROLE_OFFER_UPDATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حذف العروض',
+            value: 'ROLE_OFFER_DELETE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        //////////////////////////Course////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء الدورات',
+            value: 'ROLE_COURSE_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل الدورات',
+            value: 'ROLE_COURSE_UPDATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حذف الدورات',
+            value: 'ROLE_COURSE_DELETE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        //////////////////////////Account////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء حسابات الطلاب',
+            value: 'ROLE_ACCOUNT_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل حسابات الطلاب',
+            value: 'ROLE_ACCOUNT_UPDATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حذف حسابات الطلاب',
+            value: 'ROLE_ACCOUNT_DELETE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حالة الطالب',
+            value: 'ROLE_ACCOUNT_CONDITION_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'ملاحظات الطالب',
+            value: 'ROLE_ACCOUNT_NOTE_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل رسوم تسجيل الطالب',
+            value: 'ROLE_ACCOUNT_FEES_UPDATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'اضافة مستندات طالب',
+            value: 'ROLE_ACCOUNT_ATTACH_CREATE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل اسم مستند طالب',
+            value: 'ROLE_ACCOUNT_ATTACH_SET_NAME',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'تعديل نوع مستند طالب',
+            value: 'ROLE_ACCOUNT_ATTACH_SET_TYPE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        $scope.roles.push({
+            name: 'حذف مستندات طالب',
+            value: 'ROLE_ACCOUNT_ATTACH_DELETE',
+            selected: false,
+            category: 'التسجيل'
+        });
+        //////////////////////////Payment In////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء سندات القبض',
+            value: 'ROLE_PAYMENT_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'تعديل سندات القبض',
+            value: 'ROLE_PAYMENT_UPDATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'حذف سندات القبض',
+            value: 'ROLE_PAYMENT_DELETE',
+            selected: false,
+            category: 'المالية'
+        });
+        //////////////////////////Payment Out////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء سندات الصرف',
+            value: 'ROLE_PAYMENT_OUT_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'تعديل سندات الصرف',
+            value: 'ROLE_PAYMENT_OUT_UPDATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'حذف سندات الصرف',
+            value: 'ROLE_PAYMENT_OUT_DELETE',
+            selected: false,
+            category: 'المالية'
+        });
+        //////////////////////////Bill Buy Type////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء حسابات فواتير الشراء',
+            value: 'ROLE_BILL_BUY_TYPE_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'تعديل حسابات فواتير الشراء',
+            value: 'ROLE_BILL_BUY_TYPE_UPDATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'حذف حسابات فواتير الشراء',
+            value: 'ROLE_BILL_BUY_TYPE_DELETE',
+            selected: false,
+            category: 'المالية'
+        });
+        //////////////////////////Bill Buy////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء فواتير الشراء',
+            value: 'ROLE_BILL_BUY_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'تعديل فواتير الشراء',
+            value: 'ROLE_BILL_BUY_UPDATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'حذف فواتير الشراء',
+            value: 'ROLE_BILL_BUY_DELETE',
+            selected: false,
+            category: 'المالية'
+        });
+        //////////////////////////Bank////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء الحسابات البنكية',
+            value: 'ROLE_BANK_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'تعديل الحسابات البنكية',
+            value: 'ROLE_BANK_UPDATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'حذف الحسابات البنكية',
+            value: 'ROLE_BANK_DELETE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'إيداع بنكي',
+            value: 'ROLE_DEPOSIT_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        $scope.roles.push({
+            name: 'سحب بنكي',
+            value: 'ROLE_WITHDRAW_CREATE',
+            selected: false,
+            category: 'المالية'
+        });
+        //////////////////////////Person//////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء حسابات المستخدمين',
+            value: 'ROLE_PERSON_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل حسابات المستخدمين',
+            value: 'ROLE_PERSON_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف حسابات المستخدمين',
+            value: 'ROLE_PERSON_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Team////////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء الصلاحيات',
+            value: 'ROLE_TEAM_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل الصلاحيات',
+            value: 'ROLE_TEAM_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف الصلاحيات',
+            value: 'ROLE_TEAM_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
 
 
         if (team) {
@@ -78,10 +333,6 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
         } else {
             $scope.team = {};
         }
-
-        $scope.title = title;
-
-        $scope.action = action;
 
         $scope.submit = function () {
             $scope.team.authorities = [];
@@ -109,5 +360,9 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 600);
 
     }]);

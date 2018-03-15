@@ -24,6 +24,6 @@ app.controller('accountContractCtrl', ['$scope', '$rootScope', '$timeout', '$uib
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
     }]);

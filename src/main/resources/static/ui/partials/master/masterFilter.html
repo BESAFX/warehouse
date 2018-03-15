@@ -3,7 +3,7 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
@@ -17,51 +17,55 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
-                <select id="branch"
-                        data-placeholder="ابحث عن الفرع"
-                        no-results-text="'لا توجد فروع توافق بحثك'"
-                        placeholder-text-single="'اختر الفرع'"
-                        class="form-control text-right"
-                        chosen=""
-                        focus-autofocus="1"
-                        ng-model="buffer.branch"
-                        ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                </select>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="branch" class="control-label">الفرع</label>
+                <ui-select id="branch"
+                           focus-autofocus="1"
+                           ng-model="paramMaster.branch"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الفرع">
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices
+                            repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
+                        <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="codeFrom" class="control-label">رقم التخصص من</label>
                     <input id="codeFrom"
                            type="number"
                            min="1"
                            class="form-control text-right"
                            placeholder="ادخل رقم التخصص من"
-                           ng-model="buffer.codeFrom">
+                           ng-model="paramMaster.codeFrom">
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="codeTo" class="control-label">رقم التخصص إلى</label>
                     <input id="codeTo"
                            type="number"
                            min="1"
                            class="form-control text-right"
                            placeholder="ادخل رقم التخصص إلى"
-                           ng-model="buffer.codeTo">
+                           ng-model="paramMaster.codeTo">
                 </div>
 
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="name" class="control-label">اسم التخصص (يحتوى على) </label>
                 <input id="name"
                        type="text"
                        class="form-control text-right"
                        placeholder="ادخل اسم التخصص كاملاً او جزءاً منه"
-                       ng-model="buffer.name">
+                       ng-model="paramMaster.name">
             </div>
 
         </div>
@@ -75,21 +79,21 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">search</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
                     ng-click="form.$setPristine();"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

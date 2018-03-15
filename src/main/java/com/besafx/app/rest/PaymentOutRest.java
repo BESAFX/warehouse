@@ -56,7 +56,7 @@ public class PaymentOutRest {
         paymentOut.setPerson(person);
         paymentOut.setAmountString(ArabicLiteralNumberParser.literalValueOf(paymentOut.getAmountNumber()));
         paymentOut = paymentOutService.save(paymentOut);
-        notificationService.notifyAll(Notification.builder().message("تم انشاء سند صرف بنجاح").type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم سند صرف بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentOut);
     }
 

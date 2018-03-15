@@ -17,6 +17,6 @@ app.controller('callCreateCtrl', ['CallService', 'ModalProvider', '$scope', '$ro
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

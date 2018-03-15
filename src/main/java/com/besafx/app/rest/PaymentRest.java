@@ -21,6 +21,7 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,10 @@ public class PaymentRest {
 
     private final static Logger log = LoggerFactory.getLogger(AccountRest.class);
 
-    public static final String FILTER_TABLE = "**,lastPerson[id,contact[id,firstName,forthName]],account[id,registerDate,code,student[id,contact[id,firstName,secondName,thirdName,forthName]],course[id,code,master[id,code,name,masterCategory[id,name],branch[id,code]]]]";
+    public static final String FILTER_TABLE = "" +
+            "**," +
+            "lastPerson[id,contact[id,shortName]]," +
+            "account[id,key,name,course[id,code,master[id,code,name,masterCategory[id,name]]]]";
 
     @Autowired
     private PersonService personService;
@@ -76,7 +80,7 @@ public class PaymentRest {
         payment.setLastUpdate(new DateTime().toDate());
         payment.setAmountString(ArabicLiteralNumberParser.literalValueOf(payment.getAmountNumber()));
         payment = paymentService.save(payment);
-        notificationService.notifyAll(Notification.builder().message("تم انشاء سند قبض رقم " + payment.getCode()).type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم سند قبض رقم " + payment.getCode()).type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), payment);
     }
 
@@ -168,7 +172,33 @@ public class PaymentRest {
             @RequestParam(value = "master", required = false) final Long master,
             @RequestParam(value = "branch", required = false) final Long branch,
             @RequestParam(value = "personBranch", required = false) final Long personBranch,
-            @RequestParam(value = "type", required = false) final String type) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), paymentSearch.search(paymentCodeFrom, paymentCodeTo, paymentDateFrom, paymentDateTo, amountFrom, amountTo, firstName, secondName, thirdName, forthName, dateFrom, dateTo, studentIdentityNumber, studentMobile, coursePriceFrom, coursePriceTo, course, master, branch, personBranch, type));
+            @RequestParam(value = "type", required = false) final String type,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(
+                Squiggly.init(new ObjectMapper(), "**,".concat("content[").concat(FILTER_TABLE).concat("]")),
+                paymentSearch.search(
+                        paymentCodeFrom,
+                        paymentCodeTo,
+                        paymentDateFrom,
+                        paymentDateTo,
+                        amountFrom,
+                        amountTo,
+                        firstName,
+                        secondName,
+                        thirdName,
+                        forthName,
+                        dateFrom,
+                        dateTo,
+                        studentIdentityNumber,
+                        studentMobile,
+                        coursePriceFrom,
+                        coursePriceTo,
+                        course,
+                        master,
+                        branch,
+                        personBranch,
+                        type,
+                        pageable
+                ));
     }
 }

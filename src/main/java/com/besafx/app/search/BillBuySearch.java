@@ -5,6 +5,9 @@ import com.besafx.app.service.BillBuyService;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
@@ -20,14 +23,15 @@ public class BillBuySearch {
     @Autowired
     private BillBuyService billBuyService;
 
-    public List<BillBuy> search(
+    public Page<BillBuy> search(
             final Long codeFrom,
             final Long codeTo,
             final Long dateFrom,
             final Long dateTo,
             final Long amountFrom,
             final Long amountTo,
-            final Long branchId
+            final Long branchId,
+            final Pageable pageRequest
     ) {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
@@ -42,11 +46,9 @@ public class BillBuySearch {
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            List<BillBuy> list = Lists.newArrayList(billBuyService.findAll(result));
-            list.sort(Comparator.comparing(BillBuy::getCode));
-            return list;
+           return billBuyService.findAll(result, pageRequest);
         } else {
-            return new ArrayList<>();
+            return new PageImpl<>(new ArrayList<>());
         }
     }
 }

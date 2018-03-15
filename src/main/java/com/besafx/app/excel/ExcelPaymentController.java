@@ -425,7 +425,7 @@ public class ExcelPaymentController {
                 }
                 if (accept) {
 
-                    List<Account> accounts = accountSearch.search(
+                    List<Account> accounts = new ArrayList<>();/*accountSearch.search(
                             firstName,
                             secondName,
                             thirdName,
@@ -441,7 +441,7 @@ public class ExcelPaymentController {
                             null,
                             Lists.newArrayList(courseCode),
                             Lists.newArrayList(masterCode),
-                            Lists.newArrayList(branchCode));
+                            Lists.newArrayList(branchCode));*/
 
                     if (accounts.isEmpty()) {
                         log.info("لا توجد تسجيلات لهذا الصف");

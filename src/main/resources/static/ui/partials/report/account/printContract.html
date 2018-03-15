@@ -3,7 +3,7 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
@@ -30,19 +30,19 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
                                     <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" ng-model="radio.registerOption">
                                     <span class="mdl-radio__label">حسب الفرع</span>
                                 </label>
                             </div>
-                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
                                     <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="2" ng-model="radio.registerOption">
                                     <span class="mdl-radio__label">حسب التخصص</span>
                                 </label>
                             </div>
-                            <div class="form-group text-right col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
                                     <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="3" ng-model="radio.registerOption">
                                     <span class="mdl-radio__label">حسب الدورة</span>
@@ -51,7 +51,7 @@
 
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='1'">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='1'">
                             <label for="branchList" class="control-label">[رقم الفرع] اسم الفرع</label>
                             <select id="branchList"
                                     data-placeholder="ابحث عن الفرع"
@@ -67,7 +67,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='2'">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='2'">
                             <label for="masterList" class="control-label">[رقم التخصص] اسم التخصص</label>
                             <select id="masterList"
                                     data-placeholder="ابحث عن التخصص"
@@ -82,7 +82,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='3'">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="radio.registerOption==='3'">
                             <label for="courseList" class="control-label">رقم الدورة</label>
                             <select id="courseList"
                                     data-placeholder="ابحث عن رقم الدورة المتاحة"
@@ -99,7 +99,7 @@
 
                         <div class="form-group row" ng-if="buffer.branchList.length > 0">
 
-                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                     <label for="firstName" class="control-label">الاسم الأول (يحتوى على) </label>
                                     <input id="firstName"
                                            type="text"
@@ -109,7 +109,7 @@
                                            ng-model="buffer.firstName">
                                 </div>
 
-                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                     <label for="secondName" class="control-label">الاسم الثاني (يحتوى على) </label>
                                     <input id="secondName"
                                            type="text"
@@ -119,7 +119,7 @@
                                            ng-model="buffer.secondName">
                                 </div>
 
-                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                     <label for="thirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
                                     <input id="thirdName"
                                            type="text"
@@ -129,7 +129,7 @@
                                            ng-model="buffer.thirdName">
                                 </div>
 
-                                <div class="form-group text-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                     <label for="forthName" class="control-label">الاسم الرابع (يحتوى على) </label>
                                     <input id="forthName"
                                            type="text"
@@ -149,7 +149,7 @@
                                     <thead>
                                     <tr>
                                         <th>
-                                            <span>م</span>
+                                            <span>#</span>
                                         </th>
 
                                         <th st-sort="student.code">
@@ -248,7 +248,7 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                 <label for="contractType" class="control-label">نوع العقد المطلوب</label>
                                 <select id="contractType"
                                         style="height: 40px"
@@ -268,7 +268,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                 <label for="reportType" class="control-label">نوع التقرير</label>
                                 <select id="reportType"
                                         style="height: 40px"
@@ -287,7 +287,7 @@
 
                             <div class="form-group row">
 
-                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                     <label for="reportFileName" class="control-label">اسم الملف النهائي</label>
                                     <input id="reportFileName"
                                            type="text"
@@ -298,7 +298,7 @@
                                            ng-model="buffer.reportFileName">
                                 </div>
 
-                                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                     <label for="hijriDate" class="control-label">نوع التقويم</label>
                                     <select id="hijriDate"
                                             style="height: 40px"
@@ -342,14 +342,14 @@
                     type="reset"
                     ng-click="form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

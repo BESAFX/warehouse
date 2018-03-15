@@ -23,6 +23,6 @@ app.controller('paymentUpdateCtrl', ['PaymentService', 'AccountService', '$rootS
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

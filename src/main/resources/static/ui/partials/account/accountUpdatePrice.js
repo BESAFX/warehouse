@@ -1,15 +1,11 @@
 app.controller('accountUpdatePriceCtrl', ['AccountService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', '$uibModal', 'account',
     function (AccountService, $scope, $rootScope, $timeout, $log, $uibModalInstance, $uibModal, account) {
 
-        $timeout(function () {
-            AccountService.findOne(account.id).then(function (data) {
-                $scope.account = data;
-            });
-        }, 600);
+        $scope.account = account;
 
         $scope.submit = function () {
             AccountService.update($scope.account).then(function (data) {
-                $scope.account = data;
+                $uibModalInstance.close(data);
             });
         };
 

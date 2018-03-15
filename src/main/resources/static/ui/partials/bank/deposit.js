@@ -144,7 +144,7 @@ app.controller("depositCtrl", ['DepositService', 'BranchService', 'ModalProvider
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
 
     }]);

@@ -12,7 +12,6 @@ gulp.task('css', function () {
         './css/creative.css',
 
         './css/animate.css',
-        // './css/animation.css',
         './css/bootstrap.css',
         './css/fonts.css',
         './css/md-icons.css',
@@ -53,11 +52,11 @@ gulp.task('scripts', function () {
 
         './js/jquery-ui.js',
         './js/angular.js',
-        // './js/angular-locale_ar.js',
         './js/angular-sanitize.js',
         './js/angular-ui-router.js',
         './js/angular-animate.js',
         './js/angular-touch.js',
+        './js/angular-filter.js',
 
         './angular-spinner/spin.js',
         './angular-spinner/angular-spinner.js',
@@ -103,6 +102,7 @@ gulp.task('scripts', function () {
         './js/creative.js',
         './angular-chart/Chart.js',
         './angular-chart/angular-chart.js',
+        './js/datetime.js',
 
         './init/config/config.js',
         './init/factory/accountAttachFactory.js',
@@ -117,6 +117,7 @@ gulp.task('scripts', function () {
         './init/factory/companyFactory.js',
         './init/factory/courseFactory.js',
         './init/factory/depositFactory.js',
+        './init/factory/errorHandleFactory.js',
         './init/factory/fileFactory.js',
         './init/factory/masterCategoryFactory.js',
         './init/factory/masterFactory.js',
@@ -144,7 +145,7 @@ gulp.task('scripts', function () {
         './partials/calculate/calculate.js',
         './partials/branch/branchCreateUpdate.js',
         './partials/master/masterCreateUpdate.js',
-        './partials/master/masterCategoryCreateUpdate.js',
+        './partials/masterCategory/masterCategoryCreateUpdate.js',
         './partials/master/masterFilter.js',
         './partials/offer/offerFilter.js',
         './partials/offer/offerCreateUpdate.js',
@@ -162,9 +163,9 @@ gulp.task('scripts', function () {
         './partials/account/accountHeavyWork.js',
         './partials/account/accountDetails.js',
         './partials/account/accountPayment.js',
-        './partials/account/accountAttachUpload.js',
         './partials/account/accountConditionCreate.js',
         './partials/account/accountNoteCreate.js',
+        './partials/account/accountAttachCreate.js',
         './partials/payment/paymentCreate.js',
         './partials/payment/paymentUpdate.js',
         './partials/payment/paymentFilter.js',
@@ -230,9 +231,9 @@ gulp.task('scripts', function () {
         './partials/person/person.js',
         './partials/person/personCreateUpdate.js',
 
-        './partials/help/help.js',
         './partials/profile/profile.js',
-        './partials/about/about.js'
+
+        './partials/modal/confirmModal.js'
 
     ])
         .pipe(concat('app.js'))

@@ -34,6 +34,13 @@ app.factory("PersonService",
                     return response.data;
                 });
             },
+            uploadContactPhoto: function (file) {
+                var fd = new FormData();
+                fd.append('file', file);
+                return $http.post("/uploadContactPhoto", fd, {transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(function (response) {
+                    return response.data;
+                });
+            },
             enable: function (person) {
                 return $http.put("/api/person/enable", person).then(function (response) {
                     return response.data;
@@ -46,6 +53,16 @@ app.factory("PersonService",
             },
             setDateType: function (dateType) {
                 return $http.get("/api/person/setDateType/" + dateType).then(function (response) {
+                    return response.data;
+                });
+            },
+            setStyle: function (style) {
+                return $http.get("/api/person/setStyle/" + style).then(function (response) {
+                    return response.data;
+                });
+            },
+            setIconSet: function (iconSet, iconSetType) {
+                return $http.get("/api/person/setIconSet/" + iconSet + "/" + iconSetType).then(function (response) {
                     return response.data;
                 });
             },

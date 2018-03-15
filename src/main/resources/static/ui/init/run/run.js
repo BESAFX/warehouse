@@ -1,5 +1,32 @@
-app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'defaultErrorMessageResolver', 'ModalProvider', 'Fullscreen' , 'ReportModelProvider', '$state', '$stateParams', '$timeout',
-    function ($http, $window, PersonService, $rootScope, $log, $stomp, defaultErrorMessageResolver, ModalProvider, Fullscreen, ReportModelProvider, $state, $stateParams, $timeout) {
+app.run([
+    '$http',
+    '$window',
+    'PersonService',
+    '$rootScope',
+    '$log',
+    '$css',
+    '$stomp',
+    'defaultErrorMessageResolver',
+    'ModalProvider',
+    'Fullscreen',
+    'ReportModelProvider',
+    '$state',
+    '$stateParams',
+    '$timeout',
+    function ($http,
+              $window,
+              PersonService,
+              $rootScope,
+              $log,
+              $css,
+              $stomp,
+              defaultErrorMessageResolver,
+              ModalProvider,
+              Fullscreen,
+              ReportModelProvider,
+              $state,
+              $stateParams,
+              $timeout) {
 
         $rootScope.state = $state;
         $rootScope.stateParams = $stateParams;
@@ -8,66 +35,8 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
             errorMessages['fieldRequired'] = 'هذا الحقل مطلوب';
         });
 
-        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
-            $.noty.clearQueue(); // Clears the notification queue
-            $.noty.closeAll(); // Close all notifications
-            switch (toState.name) {
-                case 'home': {
-                    $rootScope.pageTitle = 'الرئيسية';
-                    $rootScope.MDLIcon = 'dashboard';
-                    break;
-                }
-                case 'menu': {
-                    $rootScope.pageTitle = 'برنامج العروض وتسجيل الطلاب';
-                    $rootScope.MDLIcon = 'widgets';
-                    break;
-                }
-                case 'admin': {
-                    $rootScope.pageTitle = 'الإدارة';
-                    $rootScope.MDLIcon = 'settings';
-                    break;
-                }
-                case 'register': {
-                    $rootScope.pageTitle = 'القبول والتسجيل';
-                    $rootScope.MDLIcon = 'book';
-                    break;
-                }
-                case 'calculate': {
-                    $rootScope.pageTitle = 'المحاسبة';
-                    $rootScope.MDLIcon = 'attach_money';
-                    break;
-                }
-                case 'profile': {
-                    $rootScope.pageTitle = 'الملف الشخصي';
-                    $rootScope.MDLIcon = 'account_circle';
-                    break;
-                }
-                case 'about': {
-                    $rootScope.pageTitle = 'عن البرنامج';
-                    $rootScope.MDLIcon = 'info';
-                    break;
-                }
-                case 'report': {
-                    $rootScope.pageTitle = 'التقارير';
-                    $rootScope.MDLIcon = 'print';
-                    break;
-                }
-                case 'help': {
-                    $rootScope.pageTitle = 'المساعدة';
-                    $rootScope.MDLIcon = 'info';
-                    break;
-                }
-            }
-        });
-
         $rootScope.contains = function (list, values) {
             return list ? _.intersection(values, list.split(',')).length > 0 : false;
-        };
-
-        $rootScope.refreshGUI = function () {
-            $timeout(function () {
-                window.componentHandler.upgradeAllRegistered();
-            }, 600);
         };
 
         $rootScope.logout = function () {
@@ -75,11 +44,31 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
             $window.location.href = '/logout';
         };
 
+        $rootScope.style = 'mdl-style';
+        $rootScope.setStyle = function (style) {
+            $rootScope.style = style ? style : 'mdl-style';
+            $css.removeAll();
+            $css.add([
+                '/ui/css/'+ $rootScope.style +'.css',
+                '/ui/css/theme-black.css',
+                '/ui/css/style.css'
+            ], $rootScope);
+            PersonService.setStyle($rootScope.style);
+        };
+
+        $rootScope.iconSet = 'icon-set-1';
+        $rootScope.iconSetType = 'png';
+        $rootScope.setIconSet = function (iconSet, iconSetType) {
+            $rootScope.iconSet = iconSet ? iconSet : 'icon-set-1';
+            $rootScope.iconSetType = iconSetType ? iconSetType : 'png';
+            PersonService.setIconSet($rootScope.iconSet, $rootScope.iconSetType);
+        };
+
         $rootScope.ReportModelProvider = ReportModelProvider;
 
         $rootScope.ModalProvider = ModalProvider;
 
-        $rootScope.toggleDrawer =function () {
+        $rootScope.toggleDrawer = function () {
             $rootScope.drawer = document.querySelector('.mdl-layout');
             $rootScope.drawer.MaterialLayout.toggleDrawer();
         };
@@ -95,6 +84,15 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
             $rootScope.me = data;
             $rootScope.options = JSON.parse($rootScope.me.options);
             $rootScope.dateType = $rootScope.options.dateType;
+            $rootScope.style = $rootScope.options.style ? $rootScope.options.style : 'mdl-style';
+            $rootScope.iconSet = $rootScope.options.iconSet ? $rootScope.options.iconSet : 'icon-set-1';
+            $rootScope.iconSetType = $rootScope.options.iconSetType ? $rootScope.options.iconSetType : 'png';
+            $css.removeAll();
+            $css.add([
+                '/ui/css/'+ $rootScope.style +'.css',
+                '/ui/css/theme-black.css',
+                '/ui/css/style.css'
+            ], $rootScope);
         });
 
         $rootScope.goFullscreen = function () {
@@ -177,14 +175,14 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                 buttons: [
                     {
                         addClass: 'btn btn-primary', text: 'نعم', onClick: function ($noty) {
-                        $noty.close();
-                        callback();
-                    }
+                            $noty.close();
+                            callback();
+                        }
                     },
                     {
                         addClass: 'btn btn-danger', text: 'إلغاء', onClick: function ($noty) {
-                        $noty.close();
-                    }
+                            $noty.close();
+                        }
                     }
                 ]
             });
@@ -214,14 +212,14 @@ app.run(['$http', '$window', 'PersonService', '$rootScope', '$log', '$stomp', 'd
                 buttons: [
                     {
                         addClass: 'btn btn-primary', text: 'إعادة تحميل الصفحة', onClick: function ($noty) {
-                        $noty.close();
-                        location.reload(true);
-                    }
+                            $noty.close();
+                            location.reload(true);
+                        }
                     },
                     {
                         addClass: 'btn btn-danger', text: 'إغلاق', onClick: function ($noty) {
-                        $noty.close();
-                    }
+                            $noty.close();
+                        }
                     }
                 ]
             });

@@ -9,7 +9,7 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
                 <select id="master"
                         data-placeholder="ابحث عن التخصص"
@@ -28,7 +28,7 @@
 
             <div class="form-group row">
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label for="offerCode" class="control-label">رقم العرض</label>
                     <select id="offerCode"
                             data-placeholder="ابحث عن رقم العرض المتاحة"
@@ -43,7 +43,7 @@
                     </select>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label for="offerCustomerMobile" class="control-label">رقم الجوال</label>
                     <select id="offerCustomerMobile"
                             data-placeholder="ابحث عن رقم الجوال المتاحة"
@@ -60,7 +60,7 @@
 
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="offerCustomerName" class="control-label">اسم العميل</label>
                 <select id="offerCustomerName"
                         data-placeholder="ابحث عن اسم العميل المتاحة"
@@ -75,7 +75,7 @@
                 </select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="exportType" class="control-label">نوع الملف المستخرج</label>
                 <select id="exportType"
                         style="height: 40px"
@@ -134,14 +134,14 @@
                     type="reset"
                     ng-click="buffer={};form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

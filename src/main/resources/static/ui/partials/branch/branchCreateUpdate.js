@@ -69,4 +69,8 @@ app.controller('branchCreateUpdateCtrl', ['BranchService', 'FileUploader', '$sco
             reader.readAsDataURL(element.files[0]);
         }
 
+        $timeout(function () {
+            window.componentHandler.upgradeAllRegistered();
+        }, 600);
+
     }]);

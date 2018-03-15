@@ -3,12 +3,8 @@ app.controller('masterFilterCtrl', ['$scope', '$rootScope', '$timeout', '$log', 
 
         $scope.modalTitle = title;
 
-        $scope.buffer = {};
-
-        $scope.buffer.branch = $scope.branches[0];
-
         $scope.submit = function () {
-            $uibModalInstance.close($scope.buffer);
+            $uibModalInstance.close($scope.paramMaster);
         };
 
         $scope.cancel = function () {
@@ -17,6 +13,6 @@ app.controller('masterFilterCtrl', ['$scope', '$rootScope', '$timeout', '$log', 
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

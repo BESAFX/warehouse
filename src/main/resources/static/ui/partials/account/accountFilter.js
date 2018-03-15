@@ -3,8 +3,14 @@ app.controller('accountFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $scope.modalTitle = title;
 
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.pageAccount.sorts.push(sortBy);
+        };
+
         $scope.submit = function () {
-            $uibModalInstance.close($scope.bufferAccount);
+            $scope.pageAccount.page = $scope.pageAccount.currentPage - 1;
+            $uibModalInstance.close($scope.paramAccount);
         };
 
         $scope.cancel = function () {
@@ -13,6 +19,6 @@ app.controller('accountFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

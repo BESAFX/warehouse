@@ -1,15 +1,6 @@
 app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'PersonService', 'FileUploader', 'FileService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'person',
     function (TeamService, BranchService, PersonService, FileUploader, FileService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, person) {
 
-        $timeout(function () {
-            TeamService.findAll().then(function (data) {
-                $scope.teams = data;
-            });
-            BranchService.findAllCombo().then(function (data) {
-                $scope.branches = data;
-            });
-        }, 2000);
-
         $scope.buffer = {};
         $scope.buffer.branchList = [];
         $scope.person = person;
@@ -48,5 +39,15 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'BranchService', 'Perso
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            TeamService.findAll().then(function (data) {
+                $scope.teams = data;
+            });
+            BranchService.findAllCombo().then(function (data) {
+                $scope.branches = data;
+            });
+            window.componentHandler.upgradeAllRegistered();
+        }, 800);
 
     }]);

@@ -13,24 +13,22 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
-import java.util.*;
 
 @Configuration
 @EnableWebSecurity
@@ -43,14 +41,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private PersonService personService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserAuthenticationProvider userAuthenticationProvider;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userAuthenticationProvider).passwordEncoder(passwordEncoder());
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
         http.authorizeRequests()
                 .antMatchers("/ui/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated();
+        http.httpBasic();
         http.formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")
@@ -65,15 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe();
         http.csrf().disable();
         http.sessionManagement()
-                .invalidSessionUrl("/logout")
-                .maximumSessions(3)
-                .sessionRegistry(sessionRegistry())
-                .expiredUrl("/logout");
-    }
-
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
+                .maximumSessions(1)
+                .sessionRegistry(sessionRegistry());
     }
 
     @Bean
@@ -95,28 +93,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         });
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService((String email) -> {
-                    Person person = personService.findByEmail(email);
-                    List<GrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority("ROLE_PROFILE_UPDATE"));
-                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                        log.info("فحص وجود المستخدم");
-                        if (person == null) {
-                            log.info("هذا المستخدم غير موجود");
-                            throw new UsernameNotFoundException("هذا المستخدم غير موجود");
-                        }
-                        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-                        person.setLastLoginDate(new Date());
-                        person.setActive(true);
-                        person.setIpAddress(request.getRemoteAddr());
-                        personService.save(person);
-                        Optional.ofNullable(person.getTeam().getAuthorities()).ifPresent(value -> Arrays.asList(value.split(",")).stream().forEach(s -> authorities.add(new SimpleGrantedAuthority(s))));
-                    }
-                    return new User(person.getEmail(), person.getPassword(), person.getEnabled(), true, true, true, authorities);
-                }
-        ).passwordEncoder(passwordEncoder);
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .maxAge(3600);
+            }
+        };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(11);
+    }
 }

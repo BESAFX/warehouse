@@ -4,6 +4,9 @@ import com.besafx.app.entity.Payment;
 import com.besafx.app.service.PaymentService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
@@ -18,7 +21,7 @@ public class PaymentSearch {
     @Autowired
     private PaymentService paymentService;
 
-    public List<Payment> search(
+    public Page<Payment> search(
             final String paymentCodeFrom,
             final String paymentCodeTo,
             final Long paymentDateFrom,
@@ -39,7 +42,8 @@ public class PaymentSearch {
             final Long master,
             final Long branch,
             final Long personBranch,
-            final String type
+            final String type,
+            final Pageable pageRequest
     ) {
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(paymentCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
@@ -68,10 +72,9 @@ public class PaymentSearch {
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            List<Payment> list = paymentService.findAll(result);
-            return list;
+            return paymentService.findAll(result, pageRequest);
         } else {
-            return new ArrayList<>();
+            return new PageImpl<>(new ArrayList<>());
         }
 
     }

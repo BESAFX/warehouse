@@ -1,12 +1,6 @@
 app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'course',
     function (MasterService, CourseService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, course) {
 
-        $timeout(function () {
-            MasterService.fetchMasterBranchCombo().then(function (data) {
-                $scope.masters = data;
-            });
-        }, 2000);
-
         $scope.course = course;
 
         $scope.title = title;
@@ -34,8 +28,11 @@ app.controller('courseCreateUpdateCtrl', ['MasterService', 'CourseService', '$sc
 
 
         $timeout(function () {
+            MasterService.fetchMasterBranchCombo().then(function (data) {
+                $scope.masters = data;
+            });
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
 
     }]);

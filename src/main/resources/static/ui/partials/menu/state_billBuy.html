@@ -1,0 +1,331 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-body">
+
+        <div class="row">
+            <ul dir="rtl" class="breadcrumb">
+                <li ng-repeat="item in itemsBillBuy | orderBy:'id' track by item.id">
+                    <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
+                    <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 pull-right">
+                <button id="billBuy-menu-lower-right" style="width: 100%;"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                    <span>العمليات</span>
+                </button>
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                    for="billBuy-menu-lower-right">
+                    <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
+                        ng-click="openFilterBillBuy()">
+                        <span class="mdl-list__item-primary-content">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
+                            <span>عرض بيانات الفواتير</span>
+                        </span>
+                    </li>
+                    <li class="mdl-menu__item mdl-list__item" ng-click="newBillBuy()"
+                        ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])">
+                        <span class="mdl-list__item-primary-content">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                            <span>فاتورة جديد</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pull-left" ng-init="toggleList=1">
+                <div class="btn-toolbar">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                type="button" ng-click="toggleList=1"
+                                ng-class="{'mdl-color--primary-dark':toggleList===1}">
+                            <input type="radio" name="options"/>
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/reorder.{{iconSetType}}" width="24" height="24">
+                        </button>
+                        <button class="btn btn-default mdl-button mdl-js-button mdl-js-ripple-effect"
+                                type="button" ng-click="toggleList=2"
+                                ng-class="{'mdl-color--primary-dark':toggleList===2}">
+                            <input type="radio" name="options"/>
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/module.{{iconSetType}}" width="24" height="24">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <ul class="panel-controls pull-left"
+                style="margin-top: 2px;">
+                <li>
+                    <a href=""
+                       ng-click="openFilterBillBuy()"
+                       tooltip-append-to-body="true"
+                       uib-tooltip="بحث">
+                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
+                    </a>
+                    <a href=""
+                       ng-click="newBillBuy()"
+                       ng-show="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])"
+                       tooltip-append-to-body="true"
+                       uib-tooltip="فاتورة جديدة">
+                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                    </a>
+                </li>
+            </ul>
+            <div class="panel-title-box pull-right">
+                <h3>قائمة فواتير الشراء</h3>
+            </div>
+        </div>
+        <div class="panel-body">
+
+            <div class="form-group row">
+                <button uib-tooltip="طباعة"
+                        tooltip-append-to-body="true"
+                        type="button"
+                        ng-click="printToCart('printThisElement')"
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                </button>
+            </div>
+
+            <div class="form-group row" ng-if="pageBillBuy.totalElements > 0">
+
+                <div class="btn-toolbar pull-right">
+
+                    <div class="btn-group" data-toggle="buttons">
+
+                        <button uib-tooltip="السابق"
+                                tooltip-append-to-body="true"
+                                ng-disabled="pageBillBuy.first"
+                                type="button"
+                                ng-click="selectPrevBillBuysPage()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
+                            <i class="material-icons">keyboard_arrow_right</i>
+                        </button>
+
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-left">
+                            <input dir="rtl"
+                                   type="text"
+                                   readonly
+                                   class="form-control"
+                                   ng-model="pageBillBuy.currentPageString">
+                        </div>
+
+                        <button uib-tooltip="التالي"
+                                tooltip-append-to-body="true"
+                                ng-disabled="pageBillBuy.last"
+                                type="button"
+                                ng-click="selectNextBillBuysPage()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
+                            <i class="material-icons">keyboard_arrow_left</i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group row" ng-show="toggleList===1" id="printThisElement">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+
+                            <th class="fit no-print">
+                                <label id ="checkAllBillBuys" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-0">
+                                    <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input" ng-model="billBuys.checkAll" ng-change="checkAllBillBuys()">
+                                </label>
+                            </th>
+
+                            <th>
+                                <span>#</span>
+                            </th>
+
+                            <th>
+                                <span> رقم الفاتورة</span>
+                            </th>
+
+                            <th>
+                                <span> تاريخ الفاتورة</span>
+                            </th>
+
+                            <th>
+                                <span>قيمة الفاتورة</span>
+                            </th>
+
+                            <th>
+                                <span>نوع الحساب</span>
+                            </th>
+
+                            <th>
+                                <span>مصدر الفاتورة</span>
+                            </th>
+
+                            <th>
+                                <span>بيان الفاتورة</span>
+                            </th>
+
+                            <th>
+                                <span>الفرع</span>
+                            </th>
+
+                            <th>
+                                <span> مدخل الفاتورة</span>
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="billBuy in billBuys"
+                            ng-class="{'mdl-color--primary-dark' : billBuy.isSelected, 'mdl-color-text--white' : billBuy.isSelected}"
+                            context-menu="rowMenuBillBuy">
+                            <td class="fit no-print">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check" for="checkbox-billBuy-{{billBuy.id}}">
+                                    <input type="checkbox" id="checkbox-billBuy-{{billBuy.id}}" class="mdl-checkbox__input" ng-model="billBuy.isSelected" ng-click="checkBillBuy()">
+                                </label>
+                            </td>
+                            <td>{{$index+1}}</td>
+                            <td class="fit">{{billBuy.code}}</td>
+                            <td class="fit">
+                                <span ng-class="{'no-print': dateType==='G'}" ng-show="dateType==='H'">{{billBuy.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-class="{'no-print': dateType==='H'}" ng-show="dateType==='G'">{{billBuy.date | date: 'yyyy-MM-dd'}}</span>
+                            </td>
+                            <td class="fit">{{billBuy.amount | currency:' SAR ':2}}</td>
+                            <td>{{billBuy.billBuyType.name}}</td>
+                            <td>{{billBuy.fromName}}</td>
+                            <td>{{billBuy.note}}</td>
+                            <td>[ {{billBuy.branch.code}} ] {{billBuy.branch.name}}</td>
+                            <td>{{billBuy.lastPerson.contact.shortName}}</td>
+                        </tr>
+                        <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
+                            ng-show="!billBuys || billBuys.length ==0">
+                            <td colspan="9">لا توجد بيانات</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="form-group row" ng-show="toggleList===2">
+
+                <div st-table="collection2" st-safe-src="billBuys">
+
+                    <div class="form-group row">
+
+                        <div class="col-xs-1 col-sm-1 col-md-2 col-lg-4" ng-repeat="billBuy in collection2">
+                            <!-- CONTACT ITEM -->
+                            <div class="panel panel-default">
+                                <div class="panel-body profile">
+                                    <div class="profile-image">
+                                        <img width="100" height="100"
+                                             ng-src="/ui/img/{{iconSet}}/billBuy.{{iconSetType}}"
+                                             alt="{{billBuy.code}}"/>
+                                    </div>
+                                    <div class="profile-data">
+                                        <div class="profile-data-name">{{billBuy.code}}</div>
+                                    </div>
+                                    <div class="profile-controls">
+                                        <!--<a href="" class="profile-control-left"><span class="fa fa-info-circle"></span></a>-->
+                                        <!--<a href="" class="profile-control-right"><span class="fa fa-phone"></span></a>-->
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="contact-info">
+                                        <p>
+                                            <strong>نوع الحساب</strong>
+                                            {{billBuy.billBuyType.name}}
+                                        </p>
+                                        <hr>
+                                        <p>
+                                            <strong>قيمة الفاتورة</strong>
+                                            {{billBuy.amount | currency:' SAR ':2}}
+                                        </p>
+                                        <hr>
+                                        <p>
+                                            <strong>تاريخ الفاتورة</strong>
+                                            {{billBuy.date | kdate: 'dd-mm-yyyy' : 'ar' : 'ummalqura'}}
+                                        </p>
+                                        <hr>
+                                        <p>
+                                            <strong>بواسطة</strong>
+                                            {{billBuy.lastPerson.contact.firstName}}
+                                            {{billBuy.lastPerson.contact.forthName}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <button uib-tooltip="فاتورة جديدة"
+                                                tooltip-append-to-body="true"
+                                                type="button"
+                                                ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_CREATE'])"
+                                                ng-click="newBillBuy();"
+                                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                                        </button>
+                                        <button uib-tooltip="حذف"
+                                                tooltip-append-to-body="true"
+                                                type="button"
+                                                ng-if="contains(me.team.authorities, ['ROLE_BILL_BUY_DELETE'])"
+                                                ng-click="deleteBillBuy(billBuy)"
+                                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END CONTACT ITEM -->
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+
+                        <tfoot>
+                        <tr>
+                            <td>
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                        </tfoot>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="panel-footer">
+
+            <div class="row">
+
+                <h3 class="text-center col-xs-12 col-sm-12 col-md-3 col-lg-3 box-success">
+                    <span>عدد الفواتير = </span>
+                    <span>{{billBuys.length}}</span>
+                </h3>
+
+                <h3 class="text-center col-xs-12 col-sm-12 col-md-3 col-lg-3 box-info">
+                    <span>إجمالي الفواتير = </span>
+                    <span>{{billBuys | sumByKey:'amount' | currency:' SAR ':2}}</span>
+                </h3>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -57,7 +57,7 @@ public class MasterCategoryRest {
         masterCategory.setPerson(caller);
         masterCategory.setDate(new DateTime().toDate());
         masterCategory = masterCategoryService.save(masterCategory);
-        notificationService.notifyAll(Notification.builder().message("تم انشاء تصنيف جديد بنجاح").type("success").build());
+        notificationService.notifyAll(Notification.builder().message("تم تصنيف جديد بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), masterCategory);
     }
 

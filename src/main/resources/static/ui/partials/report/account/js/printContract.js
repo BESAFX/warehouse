@@ -107,6 +107,9 @@ app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseSe
                 search.push($scope.buffer.studentMobile);
                 search.push('&');
             }
+            search.push('searchType=');
+            search.push('and');
+            search.push('&');
             AccountService.filterWithInfo(search.join("")).then(function (data) {
                 $scope.accounts = data;
             });
@@ -135,6 +138,6 @@ app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseSe
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
     }]);

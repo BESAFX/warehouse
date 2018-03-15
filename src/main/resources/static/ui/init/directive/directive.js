@@ -27,35 +27,6 @@ app.directive('loading', ['$http', function ($http) {
 
 }]);
 
-app.directive('besaDate', function () {
-    return {
-        restrict: 'AE',
-        replace: true,
-        require: 'ngModel',
-        scope: {
-            date: '=ngModel'
-        },
-        template: '<div></div>',
-        link: function (scope, iEmlement, iAttrs) {
-            scope.scope = scope;
-            var calender = new Calendar(true, 0, false, true);
-            var calenderMode = calender.isHijriMode();
-            iEmlement[0].appendChild(calender.getElement());
-            calender.show();
-            calender.callback = function () {
-                if (calenderMode !== calender.isHijriMode()) {
-                    calenderMode = calender.isHijriMode();
-                }
-                scope.date = calender.getDate().getGregorianDate();
-            };
-            scope.$watch('date', function (newValue, oldValue) {
-                calender.setTime(new Date(scope.date).getTime());
-            }, true);
-
-        }
-    };
-});
-
 app.directive('ngEnter', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
@@ -64,19 +35,6 @@ app.directive('ngEnter', function () {
                     scope.$eval(attrs.ngEnter);
                 });
 
-                event.preventDefault();
-            }
-        });
-    };
-});
-
-app.directive('ngEnter', function () {
-    return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if (event.which === 13) {
-                scope.$apply(function () {
-                    scope.$eval(attrs.ngEnter);
-                });
                 event.preventDefault();
             }
         });
@@ -125,19 +83,6 @@ app.directive('resize', ['$window',
     }
 ]);
 
-app.directive("formatDate", function () {
-    return {
-        require: 'ngModel',
-        link: function (scope, elem, attr, modelCtrl) {
-            modelCtrl.$formatters.push(function (modelValue) {
-                if (modelValue) {
-                    return new Date(modelValue);
-                }
-            })
-        }
-    }
-});
-
 app.directive('ngThumb', ['$window', function ($window) {
     var helper = {
         support: !!($window.FileReader && $window.CanvasRenderingContext2D),
@@ -183,99 +128,6 @@ app.directive('ngThumb', ['$window', function ($window) {
     };
 }]);
 
-app.directive('stSelectRowCustom',['$timeout',
-    function ($timeout) {
-    return {
-        restrict: 'A',
-        require: '^stTable',
-        scope: {
-            row: '=stSelectRowCustom',
-            callback: '&stSelected' // ADDED THIS
-        },
-        link: function (scope, element, attr, ctrl) {
-            var mode = attr.stSelectMode || 'single';
-            element.bind('click', function ($event) {
-                scope.$apply(function () {
-                    ctrl.select(scope.row, mode, $event.shiftKey);
-                    scope.callback(); // AND THIS
-                    $timeout(function () {
-                        window.componentHandler.upgradeAllRegistered();
-                    }, 500);
-                });
-            });
-
-            element.bind('contextmenu', function ($event) {
-                scope.$apply(function () {
-                    ctrl.select(scope.row, mode, $event.shiftKey);
-                    scope.callback(); // AND THIS
-                    $timeout(function () {
-                        window.componentHandler.upgradeAllRegistered();
-                    }, 500);
-                });
-            });
-
-            scope.$watch('row.isSelected', function (newValue) {
-                if (newValue === true) {
-                    element.parent().addClass('success');
-                } else {
-                    element.parent().removeClass('success');
-                }
-                $timeout(function () {
-                    window.componentHandler.upgradeAllRegistered();
-                }, 500);
-            });
-        }
-    };
-}
-]);
-
-app.directive('stSelectRowMulti', ['$timeout',
-    function ($timeout) {
-        return {
-            restrict: 'A',
-            require: '^stTable',
-            scope: {
-                row: '=stSelectRowMulti',
-                callback: '&stSelected' // ADDED THIS
-            },
-            link: function (scope, element, attr, ctrl) {
-                element.bind('click', function (eventType) {
-                    scope.$apply(function () {
-                        // ctrl.select(scope.row, 'multiple');
-                        ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
-                        scope.callback(); // AND THIS
-                        $timeout(function () {
-                            window.componentHandler.upgradeAllRegistered();
-                        }, 500);
-                    });
-                });
-
-                element.bind('contextmenu', function (eventType) {
-                    scope.$apply(function () {
-                        // ctrl.select(scope.row, 'multiple');
-                        ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
-                        scope.callback(); // AND THIS
-                        $timeout(function () {
-                            window.componentHandler.upgradeAllRegistered();
-                        }, 500);
-                    });
-                });
-
-                scope.$watch('row.isSelected', function (newValue) {
-                    if (newValue === true) {
-                        element.parent().addClass('success');
-                    } else {
-                        element.parent().removeClass('success');
-                    }
-                    $timeout(function () {
-                        window.componentHandler.upgradeAllRegistered();
-                    }, 500);
-                });
-            }
-        };
-    }
-]);
-
 app.directive('stDefaultValue', function () {
     return {
         restrict: 'A',
@@ -293,20 +145,6 @@ app.directive('stDefaultValue', function () {
         }
     };
 });
-
-app.directive('ngRightClick', ['$parse',
-    function ($parse) {
-        return function (scope, element, attrs) {
-            var fn = $parse(attrs.ngRightClick);
-            element.bind('contextmenu', function (event) {
-                scope.$apply(function () {
-                    event.preventDefault();
-                    fn(scope, {$event: event});
-                });
-            });
-        };
-    }
-]);
 
 app.directive('arrowSelector',['$document',function($document){
     return{
@@ -381,6 +219,285 @@ app.directive('csSelect', function () {
             });
         }
     };
+});
+
+app.directive('stSelectRowCustom',['$timeout',
+    function ($timeout) {
+        return {
+            restrict: 'A',
+            require: '^stTable',
+            scope: {
+                row: '=stSelectRowCustom',
+                callback: '&stSelected' // ADDED THIS
+            },
+            link: function (scope, element, attr, ctrl) {
+                var mode = attr.stSelectMode || 'single';
+                element.bind('click', function ($event) {
+                    scope.$apply(function () {
+                        ctrl.select(scope.row, mode, $event.shiftKey);
+                        scope.callback(); // AND THIS
+                        $timeout(function () {
+                            window.componentHandler.upgradeAllRegistered();
+                        }, 500);
+                    });
+                });
+
+                element.bind('contextmenu', function ($event) {
+                    scope.$apply(function () {
+                        ctrl.select(scope.row, mode, $event.shiftKey);
+                        scope.callback(); // AND THIS
+                        $timeout(function () {
+                            window.componentHandler.upgradeAllRegistered();
+                        }, 500);
+                    });
+                });
+
+                scope.$watch('row.isSelected', function (newValue) {
+                    if (newValue === true) {
+                        element.parent().addClass('success');
+                    } else {
+                        element.parent().removeClass('success');
+                    }
+                    $timeout(function () {
+                        window.componentHandler.upgradeAllRegistered();
+                    }, 500);
+                });
+            }
+        };
+    }
+]);
+
+app.directive('stSelectRowMulti', ['$timeout',
+    function ($timeout) {
+        return {
+            restrict: 'A',
+            require: '^stTable',
+            scope: {
+                row: '=stSelectRowMulti',
+                callback: '&stSelected' // ADDED THIS
+            },
+            link: function (scope, element, attr, ctrl) {
+                element.bind('click', function (eventType) {
+                    scope.$apply(function () {
+                        // ctrl.select(scope.row, 'multiple');
+                        ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
+                        scope.callback(); // AND THIS
+                        $timeout(function () {
+                            window.componentHandler.upgradeAllRegistered();
+                        }, 500);
+                    });
+                });
+
+                element.bind('contextmenu', function (eventType) {
+                    scope.$apply(function () {
+                        // ctrl.select(scope.row, 'multiple');
+                        ctrl.select(scope.row, 'multiKey', eventType.shiftKey, eventType.ctrlKey);
+                        scope.callback(); // AND THIS
+                        $timeout(function () {
+                            window.componentHandler.upgradeAllRegistered();
+                        }, 500);
+                    });
+                });
+
+                scope.$watch('row.isSelected', function (newValue) {
+                    if (newValue === true) {
+                        element.parent().addClass('mdl-color--primary-dark');
+                        element.parent().addClass('mdl-color-text--white');
+                    } else {
+                        element.parent().removeClass('mdl-color--primary-dark');
+                        element.parent().removeClass('mdl-color-text--white');
+                    }
+                    $timeout(function () {
+                        window.componentHandler.upgradeAllRegistered();
+                    }, 500);
+                });
+            }
+        };
+    }
+]);
+
+app.directive('stDefaultValue', function () {
+    return {
+        restrict: 'A',
+        require: '^stTable',
+        scope: {
+            selectedRow: '=stDefaultValue',
+            stSafeSrc: '='
+        },
+        link: function (scope, element, attr, ctrl) {
+            scope.$watch('stSafeSrc', function (newValue, oldValue) {
+                if (typeof newValue !== 'undefined') {
+                    ctrl.select(newValue[scope.selectedRow], 'single', false);
+                }
+            });
+        }
+    };
+});
+
+app.directive('ngRightClick', ['$parse',
+    function ($parse) {
+        return function (scope, element, attrs) {
+            var fn = $parse(attrs.ngRightClick);
+            element.bind('contextmenu', function (event) {
+                scope.$apply(function () {
+                    event.preventDefault();
+                    fn(scope, {$event: event});
+                });
+            });
+        };
+    }
+]);
+
+app.directive("fileModel", [function () {
+    return {
+        scope: {
+            fileModel: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileModel = changeEvent.target.files[0];
+                });
+            });
+        }
+    }
+}]);
+
+app.directive("filesModel", [function () {
+    return {
+        scope: {
+            filesModel: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.filesModel = changeEvent.target.files;
+                });
+            });
+        }
+    }
+}]);
+
+app.directive('ngFileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var model = $parse(attrs.ngFileModel);
+            var isMultiple = attrs.multiple;
+            var modelSetter = model.assign;
+            element.bind('change', function () {
+                var values = [];
+                angular.forEach(element[0].files, function (item) {
+                    var value = {
+                        // File Name
+                        name: item.name,
+                        //File Size
+                        size: item.size,
+                        //File URL to view
+                        url: URL.createObjectURL(item),
+                        // File Input Value
+                        _file: item
+                    };
+                    values.push(value);
+                });
+                scope.$apply(function () {
+                    if (isMultiple) {
+                        modelSetter(scope, values);
+                    } else {
+                        modelSetter(scope, values[0]);
+                    }
+                });
+            });
+        }
+    };
+}]);
+
+app.directive('multipleEmails', function () {
+    // Constants
+    var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
+
+    // DDO
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: multipleEmailsPostLink
+    };
+
+    // Function Definitions
+    function isValidEmail(email) {
+        return EMAIL_REGEXP.test(email.trim());
+    }
+
+    function multipleEmailsPostLink(scope, elem, attrs, modelCtrl) {
+        modelCtrl.$formatters.push(multipleEmailsValidator);
+        modelCtrl.$parsers.push(multipleEmailsValidator);
+
+        // Helpers
+        function multipleEmailsValidator(value) {
+            return validateAll(modelCtrl, 'multipleEmails', value);
+        }
+    }
+
+    function validateAll(ctrl, validatorName, value) {
+        var validity = ctrl.$isEmpty(value) || value.split(',').every(isValidEmail);
+
+        ctrl.$setValidity(validatorName, validity);
+
+        return validity ? value : undefined;
+    }
+});
+
+app.directive('ngPrint', function () {
+
+    var printSection = document.getElementById('printSection');
+
+    // if there is no printing section, create one
+    if (!printSection) {
+        printSection = document.createElement('div');
+        printSection.id = 'printSection';
+        document.body.appendChild(printSection);
+    }
+
+    function link(scope, element, attrs) {
+        element.on('click', function () {
+            var elemToPrint = document.getElementById(attrs.printElementId);
+            if (elemToPrint) {
+                printElement(elemToPrint);
+            }
+        });
+
+        if (window.matchMedia) {
+            var mediaQueryList = window.matchMedia('print');
+            mediaQueryList.addListener(function(mql) {
+                if (!mql.matches) {
+                    afterPrint();
+                } else {
+                    // before print (currently does nothing)
+                }
+            });
+        }
+
+        window.onafterprint = afterPrint;
+    }
+
+    function afterPrint() {
+        // clean the print section before adding new content
+        printSection.innerHTML = '';
+    }
+
+    function printElement(elem) {
+        // clones the element you want to print
+        var domClone = elem.cloneNode(true);
+        printSection.innerHTML = '';
+        printSection.appendChild(domClone);
+        window.print();
+    }
+
+    return {
+        link: link,
+        restrict: 'A'
+    };
+
 });
 
 

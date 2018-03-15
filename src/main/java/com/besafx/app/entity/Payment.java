@@ -3,6 +3,7 @@ package com.besafx.app.entity;
 import com.besafx.app.entity.enums.PaymentMethod;
 import com.besafx.app.util.ArabicLiteralNumberParser;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;

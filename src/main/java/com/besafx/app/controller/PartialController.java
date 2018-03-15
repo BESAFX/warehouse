@@ -1,29 +1,24 @@
 package com.besafx.app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
+import com.besafx.app.auditing.PersonAwareUserDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class PartialController {
 
-    @Autowired
-    private SessionRegistry sessionRegistry;
+    private final static Logger log = LoggerFactory.getLogger(PartialController.class);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView navToHome() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getPrincipal().equals("anonymousUser")) {
+        PersonAwareUserDetails userDetails = (PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("Trying to log in with user name: " + userDetails.getUsername());
+        if (userDetails.getUsername().equals("anonymousUser")) {
             return new ModelAndView("redirect:/login");
         } else {
             return new ModelAndView("index");
@@ -35,26 +30,8 @@ public class PartialController {
         return "login";
     }
 
-    @RequestMapping(value = "/getAllLoggedUsers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<String> getLoggedUsers() {
-        return sessionRegistry.getAllPrincipals().stream()
-                .filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty())
-                .map(Object::toString)
-                .collect(Collectors.toList());
-    }
 
-    @RequestMapping(value = {
-            "/home",
-            "/menu",
-            "/admin",
-            "/register",
-            "/calculate",
-            "/report",
-            "/help",
-            "/profile",
-            "/about"
-    })
+    @RequestMapping(value = {"/login", "/menu"})
     public ModelAndView navToView() {
         return new ModelAndView("forward:/");
     }

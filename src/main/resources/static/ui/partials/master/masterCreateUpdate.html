@@ -2,54 +2,65 @@
       focus-group-head="loop" focus-group-tail="loop">
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
-        <h3 class="modal-title text-center" id="modal-title">{{title}}</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
+            <span class="mdl-list__item-primary-content">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/masterCategory.{{iconSetType}}" width="24" height="24">
+                <strong>{{title}}</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body" id="modal-body">
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
                  ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    <label for="branch" class="control-label">[رقم الفرع] الفرع</label>
-                    <select id="branch"
-                            data-placeholder="ابحث عن الفروع"
-                            no-results-text="'لا توجد فروع توافق بحثك'"
-                            placeholder-text-single="'اختر الفروع'"
-                            class="form-control text-right"
-                            chosen=""
-                            focus-autofocus="1"
-                            ng-model="master.branch"
-                            required="required"
-                            disable-validation-message=""
-                            ng-options="(' [ ' + branch.code + ' ] ' + ' ' + branch.name) for branch in branches | orderBy:'code' track by branch.id">
-                    </select>
-                </div>
-
-                <div class="form-group text-right col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label for="masterCategory" class="control-label">[رقم التصنيف] التصنيف</label>
-                <select id="masterCategory"
-                        data-placeholder="ابحث عن التصنيفات"
-                        no-results-text="'لا توجد بيانات توافق بحثك'"
-                        placeholder-text-single="'اختر التصنيفات'"
-                        class="form-control text-right"
-                        chosen=""
-                        ng-model="master.masterCategory"
-                        required="required"
-                        disable-validation-message=""
-                        ng-options="(' [ ' + masterCategory.code + ' ] ' + ' ' + masterCategory.name) for masterCategory in masterCategories | orderBy:'code' track by masterCategory.id">
-                </select>
-            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="branch" class="control-label">الفرع</label>
+                <ui-select id="branch"
+                           focus-autofocus="1"
+                           ng-model="master.branch"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الفرع">
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices
+                            repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
+                        <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="masterCategory" class="control-label">التصنيف</label>
+                <ui-select id="masterCategory"
+                           focus-autofocus="1"
+                           ng-model="master.masterCategory"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الفرع">
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices
+                            repeat="masterCategory in masterCategories | filter: $select.search | orderBy:'code' track by masterCategory.id">
+                        <div ng-bind-html="masterCategory.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
                  ng-show="action==='update'">
                 <label for="code" class="control-label">رقم التخصص</label>
                 <input id="code"
@@ -61,7 +72,7 @@
                        ng-model="master.code">
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="name" class="control-label">اسم التخصص</label>
                 <input id="name"
                        type="text"
@@ -72,7 +83,7 @@
                        ng-model="master.name">
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="period" class="control-label">مدة التخصص</label>
                 <input id="period"
                        type="text"
@@ -95,28 +106,28 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">add</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
             </button>
             <button ng-if="action=='update'"
                     uib-tooltip="تعديل"
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">edit</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
                     ng-click="form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

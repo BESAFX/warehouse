@@ -3,8 +3,14 @@ app.controller('paymentFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $scope.modalTitle = title;
 
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.pagePayment.sorts.push(sortBy);
+        };
+
         $scope.submit = function () {
-            $uibModalInstance.close($scope.buffer);
+            $scope.pagePayment.page = $scope.pagePayment.currentPage - 1;
+            $uibModalInstance.close($scope.paramPaymentIn);
         };
 
         $scope.cancel = function () {

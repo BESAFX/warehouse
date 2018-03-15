@@ -56,6 +56,6 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
     }]);

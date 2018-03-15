@@ -3,21 +3,13 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <i class="material-icons mdl-list__item-icon mdl-color-text--white">note</i>
-                <strong>انشاء ملاحظة على الطالب رقم / </strong>
-                {{accountNote.account.code}}
-                -
-                {{accountNote.account.course.code}}
-                -
-                {{accountNote.account.course.master.code}}
-                -
-                {{accountNote.account.course.master.branch.code}}
-                -
-                {{accountNote.account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/account.{{iconSetType}}" width="24" height="24">
+                <strong>ملاحظة على الطالب رقم / </strong>
+                <span class="label label-info">{{accountNote.account.key}}</span>
             </span>
         </h3>
     </div>
@@ -32,25 +24,16 @@
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">البيانات المطلوبة</div>
-                    <div class="panel-body">
-
-                        <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="note" class="control-label">الملاحظات</label>
-                            <textarea id="note"
-                                      type="text"
-                                      msd-elastic="\n"
-                                      focus-autofocus="1"
-                                      class="form-control text-right"
-                                      placeholder="اذكر باختصار الملاحظات..."
-                                      ng-model="accountNote.note">
-                            </textarea>
-                        </div>
-
-                    </div>
-                </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="note" class="control-label">الملاحظات</label>
+                <textarea id="note"
+                          type="text"
+                          msd-elastic="\n"
+                          focus-autofocus="1"
+                          class="form-control text-right"
+                          placeholder="اذكر باختصار الملاحظات..."
+                          ng-model="accountNote.note">
+                </textarea>
             </div>
 
         </div>
@@ -64,21 +47,21 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">save</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
                     ng-click="form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

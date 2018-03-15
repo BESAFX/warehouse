@@ -3,7 +3,7 @@
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
         <a class="pull-left" href="" ng-click="cancel()">
-            <span class="fa fa-close fa-2x"></span>
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
@@ -17,13 +17,13 @@
 
         <div class="row">
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="form.$invalid && form.$submitted">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="bank" class="control-label">الحساب البنكي [اسم البنك/فرع البنك]</label>
                 <select id="bank"
                         data-placeholder="ابحث عن الحساب"
@@ -41,7 +41,7 @@
 
             <div class="row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="masterCreditAmount" class="control-label"> قيمة السحب </label>
                     <div dir="ltr" class="input-group" id="masterCreditAmount">
                         <span class="input-group-addon">ريال سعودي</span>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="code" class="control-label">رقم السحب </label>
                     <input id="code"
                            type="text"
@@ -70,7 +70,7 @@
 
             <div class="row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="fromName" class="control-label">اسم الساحب </label>
                     <input id="fromName"
                            type="text"
@@ -81,7 +81,7 @@
                            ng-model="withdraw.fromName">
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="date" class="control-label">
                         <span> تاريخ السحب</span>
                     </label>
@@ -107,7 +107,7 @@
 
             <div class="row">
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="checkDate" class="control-label">
                         <span> تاريخ إصدار الشيك</span>
                     </label>
@@ -127,7 +127,7 @@
                     </div>
                 </div>
 
-                <div class="form-group text-right col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <label for="checkNumber" class="control-label">رقم الشيك </label>
                     <input id="checkNumber"
                            type="text"
@@ -138,7 +138,7 @@
 
             </div>
 
-            <div class="form-group text-right col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="note" class="control-label">ملاحظات</label>
                 <textarea id="note"
                           type="text"
@@ -161,21 +161,21 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">add</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="reset"
                     ng-click="form.$setPristine()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">delete</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="خروج"
                     tooltip-append-to-body="true"
                     type="button"
                     ng-click="cancel()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">power_settings_new</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
             </button>
         </div>
 

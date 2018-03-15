@@ -1,5 +1,6 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.BranchAccess;
 import com.besafx.app.entity.Person;
@@ -20,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -31,9 +34,19 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/person/")
 public class PersonRest {
 
-    public static final String FILTER_TABLE = "**,team[**,-persons],branch[id,code,name],branches[id],branchAccesses[id,-person,branch[id,code,name]]";
-    public static final String FILTER_PERSON_COMBO = "id,contact[id,firstName,forthName]";
+    public static final String FILTER_TABLE = "" +
+            "**," +
+            "team[**,-persons]," +
+            "branch[id,code,name]," +
+            "branches[id]," +
+            "branchAccesses[id,-person,branch[id,code,name]]";
+    public static final String FILTER_PERSON_COMBO = "" +
+            "id," +
+            "email," +
+            "contact[id,shortName,mobile]";
+
     private final static Logger log = LoggerFactory.getLogger(PersonRest.class);
+
     @Autowired
     private PersonService personService;
 
@@ -162,6 +175,31 @@ public class PersonRest {
         }
         person.setOptions(JSONConverter.toString(options));
         personService.save(person);
+    }
+
+    @RequestMapping(value = "setStyle/{style}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    @Transactional
+    public void setStyle(@PathVariable(value = "style") String style) {
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
+        Options options = JSONConverter.toObject(caller.getOptions(), Options.class);
+        options.setStyle(style);
+        caller.setOptions(JSONConverter.toString(options));
+        personService.save(caller);
+    }
+
+    @RequestMapping(value = "setIconSet/{iconSet}/{iconSetType}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    @Transactional
+    public void setIconSet(@PathVariable(value = "iconSet") String iconSet, @PathVariable(value = "iconSetType") String iconSetType) {
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
+        Options options = JSONConverter.toObject(caller.getOptions(), Options.class);
+        options.setIconSet(iconSet);
+        options.setIconSetType(iconSetType);
+        caller.setOptions(JSONConverter.toString(options));
+        personService.save(caller);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)

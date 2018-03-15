@@ -3,12 +3,14 @@ app.controller('billBuyFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $scope.modalTitle = title;
 
-        $scope.buffer = {};
-
-        $scope.buffer.branch = $scope.branches[0];
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.pageBillBuy.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
-            $uibModalInstance.close($scope.buffer);
+            $scope.pageBillBuy.page = $scope.pageBillBuy.currentPage - 1;
+            $uibModalInstance.close($scope.paramBillBuy);
         };
 
         $scope.cancel = function () {
@@ -17,6 +19,6 @@ app.controller('billBuyFilterCtrl', ['PersonService', 'BranchService', '$scope',
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

@@ -3,12 +3,8 @@ app.controller('paymentOutFilterCtrl', ['PersonService', 'BranchService', '$scop
 
         $scope.modalTitle = title;
 
-        $scope.buffer = {};
-
-        $scope.buffer.branch = $scope.branches[0];
-
         $scope.submit = function () {
-            $uibModalInstance.close($scope.buffer);
+            $uibModalInstance.close($scope.paramPaymentOut);
         };
 
         $scope.cancel = function () {
@@ -17,6 +13,6 @@ app.controller('paymentOutFilterCtrl', ['PersonService', 'BranchService', '$scop
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);
