@@ -71,7 +71,7 @@ app.controller('accountAttachCreateCtrl', [
             }
 
             search.push('searchType=');
-            search.push('or');
+            search.push('and');
             search.push('&');
 
             return AccountService.filterWithAttaches(search.join("")).then(function (data) {

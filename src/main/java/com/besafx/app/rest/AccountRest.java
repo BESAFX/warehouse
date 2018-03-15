@@ -30,13 +30,13 @@ public class AccountRest {
 
     public static final String FILTER_TABLE = "" +
             "**," +
-            "lastPerson[id,contact[id,firstName,forthName]]," +
+            "lastPerson[id,contact[id,shortName]]," +
             "course[id,code,master[id,code,name,branch[id,code,name]]]," +
-            "student[id,contact[id,firstName,secondName,thirdName,forthName,mobile,identityNumber]]," +
-            "payments[**,lastPerson[id,contact[id,firstName,forthName]],-account]," +
-            "accountAttaches[**,attach[**,person[id,contact[id,firstName,forthName]]],-account]," +
-            "accountConditions[**,-account,person[id,contact[id,firstName,forthName]]]," +
-            "accountNotes[**,-account,person[id,contact[id,firstName,forthName]]]";
+            "student[id,contact[id,fullName,mobile,identityNumber]]," +
+            "payments[**,lastPerson[id,contact[id,shortName]],-account]," +
+            "accountAttaches[**,attach[**,person[id,contact[id,shortName]]],-account]," +
+            "accountConditions[**,-account,person[id,contact[id,shortName]]]," +
+            "accountNotes[**,-account,person[id,contact[id,shortName]]]";
 
     public static final String FILTER_ACCOUNT_COMBO = "" +
             "id," +

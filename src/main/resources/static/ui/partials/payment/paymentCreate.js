@@ -50,7 +50,7 @@ app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'Payment
             search.push('&');
 
             search.push('searchType=');
-            search.push('or');
+            search.push('and');
             search.push('&');
 
             return AccountService.filterWithInfo(search.join("")).then(function (data) {
