@@ -37,6 +37,8 @@
                         <label for="branch" class="control-label">الفرع</label>
                         <ui-select id="branch"
                                    focus-autofocus="1"
+                                   required="required"
+                                   disable-validation-message=""
                                    ng-model="paramPaymentIn.branch"
                                    theme="bootstrap">
                             <ui-select-match placeholder="اختر الفرع">
