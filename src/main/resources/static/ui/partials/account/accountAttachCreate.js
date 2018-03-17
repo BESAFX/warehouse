@@ -83,7 +83,7 @@ app.controller('accountAttachCreateCtrl', [
         $scope.refreshAttaches = function () {
             AccountAttachService.findByAccount($scope.buffer.account).then(function (data) {
                 $scope.buffer.account.accountAttaches = data;
-            })
+            });
         };
 
         $scope.setAccountAttachType = function (accountAttach) {

@@ -117,7 +117,7 @@
                 <button uib-tooltip="طباعة"
                         tooltip-append-to-body="true"
                         type="button"
-                        ng-show="toggleList===2"
+                        ng-show="toggleList===3"
                         ng-click="printToCart('printDiv2')"
                         class="mdl-button mdl-js-button mdl-js-ripple-effect">
                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
@@ -332,7 +332,11 @@
 
             <div class="form-group row" ng-show="toggleList===3" id="printDiv2">
 
-                <input class="no-print" id="uploader-account-attach" style="display: none" type="file" onchange="angular.element(this).scope().files=this.files;" multiple/>
+                <input class="no-print" id="uploader-account-attach"
+                       style="display: none"
+                       type="file"
+                       onchange="angular.element(this).scope().uploadAccountAttaches(this.files)"
+                       multiple/>
 
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="account in accounts">
 
@@ -351,34 +355,32 @@
                         <button uib-tooltip="تحديث"
                                 tooltip-append-to-body="true"
                                 type="button"
-                                ng-click="refreshAttaches()"
+                                ng-click="refreshAccountAttaches(account)"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
                         </button>
                         <button uib-tooltip="رفع ملفات"
                                 tooltip-append-to-body="true"
                                 type="button"
-                                ng-click="uploadFiles()"
+                                ng-click="browseAccountAttaches(account)"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/upload.{{iconSetType}}" width="24" height="24">
                         </button>
                     </div>
 
                     <div class="form-group row">
-                        <table st-table="collectionAccountAttaches"
-                               st-safe-src="account.accountAttaches"
-                               class="table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th st-sort="attach.name">اسم الملف</th>
-                                <th st-sort="attachType.name">نوع الملف</th>
-                                <th st-sort="attach.size">حجم الملف</th>
-                                <th st-sort="attach.date" st-sort-default="reverse">تاريخ الانشاء</th>
-                                <th st-sort="attach.person">مدخل الملف</th>
+                                <th>اسم الملف</th>
+                                <th>نوع الملف</th>
+                                <th>حجم الملف</th>
+                                <th>تاريخ الانشاء</th>
+                                <th>مدخل الملف</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="accountAttach in collectionAccountAttaches">
+                            <tr ng-repeat="accountAttach in account.accountAttaches">
                                 <td>{{accountAttach.attach.name}}</td>
                                 <td>
                                     <ui-select ng-model="accountAttach.attachType"
@@ -387,8 +389,7 @@
                                         <ui-select-match placeholder="اختر نوع الملف">
                                             <span>{{$select.selected.name}}</span>
                                         </ui-select-match>
-                                        <ui-select-choices
-                                                repeat="attachType in attachTypes | filter: $select.search | orderBy:'name' track by attachType.id">
+                                        <ui-select-choices repeat="attachType in attachTypes | filter: $select.search | orderBy:'name' track by attachType.id">
                                             <div ng-bind-html="attachType.name | highlight: $select.search"></div>
                                         </ui-select-choices>
                                     </ui-select>
@@ -402,7 +403,7 @@
                                     {{accountAttach.attach.person.contact.shortName}}
                                 </td>
                             </tr>
-                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!collectionAccountAttaches || collectionAccountAttaches.length ==0">
+                            <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;" ng-show="!account.accountAttaches || account.accountAttaches.length ==0">
                                 <td colspan="6">لا توجد مستندات حالياً</td>
                             </tr>
                             </tbody>

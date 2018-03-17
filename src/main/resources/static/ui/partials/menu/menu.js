@@ -7,6 +7,8 @@ app.controller("menuCtrl", [
     'CallService',
     'CourseService',
     'AccountService',
+    'AccountAttachService',
+    'AttachTypeService',
     'PaymentService',
     'PaymentOutService',
     'BillBuyTypeService',
@@ -28,6 +30,8 @@ app.controller("menuCtrl", [
               CallService,
               CourseService,
               AccountService,
+              AccountAttachService,
+              AttachTypeService,
               PaymentService,
               PaymentOutService,
               BillBuyTypeService,
@@ -1281,6 +1285,7 @@ app.controller("menuCtrl", [
          *                                                                                                            *
          **************************************************************************************************************/
         $scope.paramAccount = {};
+        $scope.accountToUploadAttaches = {};
         $scope.accounts = [];
         $scope.accounts.checkAll = false;
         $scope.itemsAccount = [];
@@ -1506,6 +1511,23 @@ app.controller("menuCtrl", [
                     });
                 }
             })
+        };
+        $scope.refreshAccountAttaches = function (account) {
+            AccountAttachService.findByAccount(account).then(function (data) {
+                return account.accountAttaches = data;
+            })
+        };
+        $scope.browseAccountAttaches = function (account) {
+            $scope.accountToUploadAttaches = account;
+            document.getElementById('uploader-account-attach').click();
+        };
+        $scope.uploadAccountAttaches = function (files) {
+            AccountAttachService.upload($scope.accountToUploadAttaches, files).then(function (data) {
+                return Array.prototype.push.apply($scope.accountToUploadAttaches.accountAttaches, data);
+            });
+        };
+        $scope.setAccountAttachType = function (accountAttach) {
+            AccountAttachService.setType(accountAttach, accountAttach.attachType);
         };
         $scope.rowMenuAccount = [
             {
@@ -2728,6 +2750,9 @@ app.controller("menuCtrl", [
             });
             PersonService.findAllCombo().then(function (data) {
                 $scope.personsCombo = data;
+            });
+            AttachTypeService.findAll().then(function (data) {
+                $scope.attachTypes = data;
             });
             window.componentHandler.upgradeAllRegistered();
         }, 800);
