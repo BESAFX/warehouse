@@ -1358,12 +1358,12 @@ app.controller("menuCtrl", [
             }
             if ($scope.paramAccount.dateFrom) {
                 search.push('dateFrom=');
-                search.push(moment($scope.paramAccount.dateFrom).valueOf());
+                search.push($scope.paramAccount.dateFrom.getTime());
                 search.push('&');
             }
             if ($scope.paramAccount.dateTo) {
                 search.push('dateTo=');
-                search.push(moment($scope.paramAccount.dateTo).valueOf());
+                search.push($scope.paramAccount.dateTo.getTime());
                 search.push('&');
             }
             if ($scope.paramAccount.studentIdentityNumber) {
@@ -1407,9 +1407,11 @@ app.controller("menuCtrl", [
                 search.push(courseIds);
                 search.push('&');
             }
+
             search.push('searchType=');
             search.push('and');
             search.push('&');
+
             AccountService.filterWithInfo(search.join("")).then(function (data) {
                 $scope.accounts = data.content;
 
@@ -1674,7 +1676,6 @@ app.controller("menuCtrl", [
                 scope: $scope,
                 backdrop: 'static',
                 keyboard: false,
-                size: 'lg',
                 resolve: {
                     title: function () {
                         return 'البحث فى سندات القبض';

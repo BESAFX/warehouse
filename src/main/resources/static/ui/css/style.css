@@ -772,7 +772,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
         font-size: 12px!important;
         font-weight: normal!important;
     }
-    #printThisElement{
+    #printDiv1, #printDiv2{
         position:fixed!important;
         left:0!important;
         right:0!important;

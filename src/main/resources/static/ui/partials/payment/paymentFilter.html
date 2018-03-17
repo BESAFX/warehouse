@@ -13,7 +13,7 @@
         </h3>
     </div>
 
-    <div class="modal-body modal-body-free" id="modal-body">
+    <div class="modal-body modal-body-free" id="modal-body" ng-init="buffer={};buffer.calendar1='H';buffer.calendar2='H'">
 
         <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
@@ -121,7 +121,7 @@
                         </ui-select>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="filterFirstName" class="control-label">الاسم الأول (يحتوى على) </label>
                         <input id="filterFirstName"
                                type="text"
@@ -130,7 +130,7 @@
                                ng-model="paramPaymentIn.firstName">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="filterSecondName" class="control-label">الاسم الثاني (يحتوى على) </label>
                         <input id="filterSecondName"
                                type="text"
@@ -139,7 +139,7 @@
                                ng-model="paramPaymentIn.secondName">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="filterThirdName" class="control-label">الاسم الثالث (يحتوى على) </label>
                         <input id="filterThirdName"
                                type="text"
@@ -148,7 +148,7 @@
                                ng-model="paramPaymentIn.thirdName">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="filterForthName" class="control-label">الاسم الرابع (يحتوى على) </label>
                         <input id="filterForthName"
                                type="text"
@@ -157,7 +157,20 @@
                                ng-model="paramPaymentIn.forthName">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <label for="calendar-1" class="control-label">نوع التقويم</label>
+                        <select id="calendar-1"
+                                style="height: 40px"
+                                class="form-control text-right"
+                                ng-model="buffer.calendar1"
+                                required="required"
+                                disable-validation-message="">
+                            <option value="H">تقويم هجري</option>
+                            <option value="G">تقويم ميلادي</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar1==='H'">
                         <label for="dateFrom" class="control-label">تاريخ التسجيل من</label>
                         <div dir="ltr" class="input-group">
                             <input dir="rtl"
@@ -174,7 +187,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar1==='H'">
                         <label for="dateTo" class="control-label">تاريخ التسجيل إلى</label>
                         <div dir="ltr" class="input-group">
                             <input dir="rtl"
@@ -191,7 +204,29 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar1==='G'">
+                        <label for="G-dateFrom" class="control-label">تاريخ التسجيل من</label>
+                        <input id="G-dateFrom"
+                               class="form-control"
+                               dir="ltr"
+                               type="text"
+                               name="input"
+                               ng-model="paramPaymentIn.dateFrom"
+                               datetime="yyyy-MM-dd"/>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar1==='G'">
+                        <label for="G-dateTo" class="control-label">تاريخ التسجيل إلى</label>
+                        <input id="G-dateTo"
+                               class="form-control"
+                               dir="ltr"
+                               type="text"
+                               name="input"
+                               ng-model="paramPaymentIn.dateTo"
+                               datetime="yyyy-MM-dd"/>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="filterIdentityNumber" class="control-label">رقم البطاقة / الإقامة </label>
                         <input id="filterIdentityNumber"
                                type="text"
@@ -200,7 +235,7 @@
                                ng-model="paramPaymentIn.studentIdentityNumber">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="filterMobile" class="control-label">رقم الجوال (يحتوى على)</label>
                         <input id="filterMobile"
                                type="text"
@@ -209,7 +244,7 @@
                                ng-model="paramPaymentIn.studentMobile">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="coursePriceFrom" class="control-label">المبلغ نقداً من </label>
                         <input id="coursePriceFrom"
                                type="number"
@@ -218,7 +253,7 @@
                                ng-model="paramPaymentIn.coursePriceFrom">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="coursePriceTo" class="control-label">المبلغ نقداً إلى </label>
                         <input id="coursePriceTo"
                                type="number"
@@ -235,7 +270,7 @@
 
                 <div class="row">
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="paymentCodeFrom" class="control-label">رقم السند من</label>
                         <input id="paymentCodeFrom"
                                type="number"
@@ -245,7 +280,7 @@
                                ng-model="paramPaymentIn.paymentCodeFrom">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="paymentCodeTo" class="control-label">رقم السند إلى</label>
                         <input id="paymentCodeTo"
                                type="number"
@@ -255,7 +290,20 @@
                                ng-model="paramPaymentIn.paymentCodeTo">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <label for="calendar-2" class="control-label">نوع التقويم</label>
+                        <select id="calendar-2"
+                                style="height: 40px"
+                                class="form-control text-right"
+                                ng-model="buffer.calendar2"
+                                required="required"
+                                disable-validation-message="">
+                            <option value="H">تقويم هجري</option>
+                            <option value="G">تقويم ميلادي</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar2==='H'">
                         <label for="paymentDateFrom" class="control-label">تاريخ السند من</label>
                         <div dir="ltr" class="input-group">
                             <input dir="rtl"
@@ -272,7 +320,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar2==='H'">
                         <label for="paymentDateTo" class="control-label">تاريخ السند إلى</label>
                         <div dir="ltr" class="input-group">
                             <input dir="rtl"
@@ -289,7 +337,29 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar2==='G'">
+                        <label for="G-paymentDateFrom" class="control-label">تاريخ السند من</label>
+                        <input id="G-paymentDateFrom"
+                               class="form-control"
+                               dir="ltr"
+                               type="text"
+                               name="input"
+                               ng-model="paramPaymentIn.paymentDateFrom"
+                               datetime="yyyy-MM-dd"/>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar2==='G'">
+                        <label for="G-paymentDateTo" class="control-label">تاريخ السند إلى</label>
+                        <input id="G-paymentDateTo"
+                               class="form-control"
+                               dir="ltr"
+                               type="text"
+                               name="input"
+                               ng-model="paramPaymentIn.paymentDateTo"
+                               datetime="yyyy-MM-dd"/>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="type" class="control-label">نوع السند</label>
                         <select id="type"
                                 style="height: 40px"
@@ -300,7 +370,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="amountFrom" class="control-label">قيمة السند من </label>
                         <input id="amountFrom"
                                type="number"
@@ -310,7 +380,7 @@
                                ng-model="paramPaymentIn.amountFrom">
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label for="amountTo" class="control-label">قيمة السند إلى </label>
                         <input id="amountTo"
                                type="number"
@@ -411,7 +481,7 @@
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
                     type="button"
-                    ng-click="clear();form.$setPristine();"
+                    ng-click="paramPaymentIn={};pagePayment.size=5;pagePayment.page=0;form.$setPristine();"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
             </button>
