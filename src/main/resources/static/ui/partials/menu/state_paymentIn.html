@@ -143,6 +143,16 @@
 
                 </div>
 
+                <div class="pull-left">
+
+                    <input type="text"
+                           class="form-control"
+                           placeholder="بحث سريع"
+                           ng-change="refreshGUI()"
+                           ng-model="paramPaymentIn.searchText">
+
+                </div>
+
             </div>
 
             <div class="form-group row" id="printThisElement">
@@ -206,7 +216,7 @@
                         </thead>
                         <tbody>
                         <tr
-                            ng-repeat="payment in payments"
+                            ng-repeat="payment in filteredPayments = (payments | filter:paramPaymentIn.searchText)"
                             ng-class="{'mdl-color--primary-dark' : payment.isSelected, 'mdl-color-text--white' : payment.isSelected}"
                             context-menu="rowMenuPayment">
                             <td class="fit no-print">
@@ -234,8 +244,23 @@
                                 {{payment.lastPerson.contact.shortName}}
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="6">
+                                <h3 class="text-center box-success">
+                                    <span>عدد السندات = </span>
+                                    <span>{{filteredPayments.length}}</span>
+                                </h3>
+                            </td>
+
+                            <td colspan="6">
+                                <h3 class="text-center box-info">
+                                    <span>إجمالي الإيرادات = </span>
+                                    <span>{{filteredPayments | sumByKey:'amountNumber' | currency:' SAR ':2}}</span>
+                                </h3>
+                            </td>
+                        </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
-                            ng-show="!payments || payments.length ==0">
+                            ng-show="!filteredPayments || filteredPayments.length ==0">
                             <td colspan="12">لا توجد بيانات</td>
                         </tr>
                         </tbody>
@@ -245,23 +270,7 @@
             </div>
 
         </div>
-        <div class="panel-footer">
 
-            <div class="row">
-
-                <h3 class="text-center col-xs-12 col-sm-12 col-md-3 col-lg-3 box-success">
-                    <span>عدد السندات = </span>
-                    <span>{{payments.length}}</span>
-                </h3>
-
-                <h3 class="text-center col-xs-12 col-sm-12 col-md-3 col-lg-3 box-info">
-                    <span>إجمالي الإيرادات = </span>
-                    <span>{{payments | sumByKey:'amountNumber' | currency:' SAR ':2}}</span>
-                </h3>
-
-            </div>
-
-        </div>
     </div>
 
 </div>

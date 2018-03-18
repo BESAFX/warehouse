@@ -44,6 +44,12 @@ app.run([
             $window.location.href = '/logout';
         };
 
+        $rootScope.refreshGUI = function () {
+            $timeout(function () {
+                window.componentHandler.upgradeAllRegistered();
+            }, 300);
+        };
+
         $rootScope.style = 'mdl-style';
         $rootScope.setStyle = function (style) {
             $rootScope.style = style ? style : 'mdl-style';

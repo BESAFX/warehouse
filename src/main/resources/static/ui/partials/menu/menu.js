@@ -1361,6 +1361,11 @@ app.controller("menuCtrl", [
                 search.push($scope.paramAccount.forthName);
                 search.push('&');
             }
+            if ($scope.paramAccount.fullName) {
+                search.push('fullName=');
+                search.push($scope.paramAccount.fullName);
+                search.push('&');
+            }
             if ($scope.paramAccount.dateFrom) {
                 search.push('dateFrom=');
                 search.push($scope.paramAccount.dateFrom.getTime());
