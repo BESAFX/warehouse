@@ -18,6 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +50,7 @@ public class ReportCallController {
             @RequestParam(value = "exportType") ExportType exportType,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            Sort sort,
             HttpServletResponse response)
             throws Exception {
         Person person = personService.findOne(id);
@@ -55,53 +61,31 @@ public class ReportCallController {
          * Insert Parameters
          */
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        StringBuilder param2 = new StringBuilder();
-        param2.append("تقرير عن الاتصالات بالعروض للموظف/ ");
-        param2.append(person.getContact().getFirstName().concat(" ").concat(person.getContact().getForthName()));
-        map.put("param2", param2.toString());
-        map.put("param3", "تاريخ الطباعة (" + DateConverter.getHijriStringFromDateLTR(new Date().getTime()) + ")");
-        /**
-         * Insert Data
-         */
-        List<Call> calls;
-        if (startDate == null && endDate == null) {
-            calls = callService.findByPerson(person);
-        } else {
-            calls = callService.findByPersonAndDateBetween(person, new DateTime(startDate).withTimeAtStartOfDay().toDate(), new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate());
-            map.put("param2", map.get("param2").toString()
-                    .concat(" ")
-                    .concat("التاريخ من: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(startDate.longValue()))
-                    .concat(" ")
-                    .concat("التاريخ إلى: ")
-                    .concat(DateConverter.getHijriStringFromDateLTR(endDate.longValue())));
+        StringBuilder builder = new StringBuilder();
+        builder.append("تقرير عن الاتصالات بالعروض للموظف/ ");
+        builder.append(person.getContact().getShortName());
+        map.put("title", builder.toString());
+
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(id).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("person").get("id"), value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        if (!predicates.isEmpty()) {
+            Specification result = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                result = Specifications.where(result).and(predicates.get(i));
+            }
+            map.put("calls", callService.findAll(result, sort));
+        }else{
+            map.put("calls", new ArrayList<>());
         }
-        List<WrapperUtil> list = initDateList(calls);
-        map.put("ItemDataSource", new JRBeanCollectionDataSource(list));
+        //End Search
+
         ClassPathResource jrxmlFile = new ClassPathResource("/report/call/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);
-    }
-
-    private List<WrapperUtil> initDateList(List<Call> calls) {
-        List<WrapperUtil> list = new ArrayList<>();
-        ListIterator<Call> listIterator = calls.listIterator();
-        while (listIterator.hasNext()) {
-            Call call = listIterator.next();
-            WrapperUtil wrapperUtil = new WrapperUtil();
-            wrapperUtil.setObj1(call);
-            list.add(wrapperUtil);
-        }
-        list.sort(Comparator.comparing(wrapperUtil -> ((Call) wrapperUtil.getObj1()).getOffer().getCustomerName()));
-        return list;
     }
 
 }

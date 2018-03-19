@@ -40,7 +40,6 @@ app.controller('paymentCreateCtrl', ['BranchService', 'AccountService', 'Payment
                     search.push($select.search);
                     search.push('&');
                     break;
-
             }
 
             search.push('branchIds=');

@@ -2,14 +2,17 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
     function (PersonService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
+
         $scope.buffer.personsList = [];
+
         $scope.persons = [];
 
-        $timeout(function () {
-            PersonService.findAllCombo().then(function (data) {
-                $scope.persons = data;
-            })
-        }, 1500);
+        $scope.buffer.sorts = [];
+
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.buffer.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
             var param = [];
@@ -29,9 +32,11 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
             angular.forEach($scope.buffer.personsList, function (person) {
                 personIds.push(person.id);
             });
-            param.push('personIds=');
-            param.push(personIds);
-            param.push('&');
+            if (personIds.length > 0) {
+                param.push('personIds=');
+                param.push(personIds);
+                param.push('&');
+            }
             //
             param.push('exportType=');
             param.push($scope.buffer.exportType);
@@ -46,6 +51,12 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
             param.push('&');
             //
 
+            angular.forEach($scope.buffer.sorts, function (sortBy) {
+                param.push('sort=');
+                param.push(sortBy.name + ',' + sortBy.direction);
+                param.push('&');
+            });
+
             window.open('/report/OfferByPersons?' + param.join(""));
         };
 
@@ -54,6 +65,9 @@ app.controller('offerByPersonCtrl', ['PersonService', '$scope', '$rootScope', '$
         };
 
         $timeout(function () {
+            PersonService.findAllCombo().then(function (data) {
+                $scope.persons = data;
+            });
             window.componentHandler.upgradeAllRegistered();
         }, 600);
 

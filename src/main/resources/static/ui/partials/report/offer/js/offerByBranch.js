@@ -2,14 +2,17 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
     function (BranchService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
+
         $scope.buffer.branchesList = [];
+
         $scope.branches = [];
 
-        $timeout(function () {
-            BranchService.fetchBranchCombo().then(function (data) {
-                $scope.branches = data;
-            });
-        }, 1500);
+        $scope.buffer.sorts = [];
+
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.buffer.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
             var param = [];
@@ -29,9 +32,11 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
             angular.forEach($scope.buffer.branchesList, function (branch) {
                 branchIds.push(branch.id);
             });
-            param.push('branchIds=');
-            param.push(branchIds);
-            param.push('&');
+            if(branchIds.length > 0){
+                param.push('branchIds=');
+                param.push(branchIds);
+                param.push('&');
+            }
             //
             param.push('exportType=');
             param.push($scope.buffer.exportType);
@@ -46,6 +51,12 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
             param.push('&');
             //
 
+            angular.forEach($scope.buffer.sorts, function (sortBy) {
+                param.push('sort=');
+                param.push(sortBy.name + ',' + sortBy.direction);
+                param.push('&');
+            });
+
             window.open('/report/OfferByBranches?' + param.join(""));
         };
 
@@ -53,8 +64,10 @@ app.controller('offerByBranchCtrl', ['BranchService', '$scope', '$rootScope', '$
             $uibModalInstance.dismiss('cancel');
         };
 
-
         $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            });
             window.componentHandler.upgradeAllRegistered();
         }, 600);
 

@@ -2,14 +2,17 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
     function (MasterService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
+
         $scope.buffer.mastersList = [];
+
         $scope.masters = [];
 
-        $timeout(function () {
-            MasterService.fetchMasterBranchCombo().then(function (data) {
-                $scope.masters = data;
-            })
-        }, 1500);
+        $scope.buffer.sorts = [];
+
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.buffer.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
             var param = [];
@@ -29,9 +32,11 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
             angular.forEach($scope.buffer.mastersList, function (master) {
                 masterIds.push(master.id);
             });
-            param.push('masterIds=');
-            param.push(masterIds);
-            param.push('&');
+            if(masterIds.length > 0){
+                param.push('masterIds=');
+                param.push(masterIds);
+                param.push('&');
+            }
             //
             param.push('exportType=');
             param.push($scope.buffer.exportType);
@@ -46,6 +51,12 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
             param.push('&');
             //
 
+            angular.forEach($scope.buffer.sorts, function (sortBy) {
+                param.push('sort=');
+                param.push(sortBy.name + ',' + sortBy.direction);
+                param.push('&');
+            });
+
             window.open('/report/OfferByMasters?' + param.join(""));
         };
 
@@ -54,6 +65,9 @@ app.controller('offerByMasterCtrl', ['MasterService', '$scope', '$rootScope', '$
         };
 
         $timeout(function () {
+            MasterService.fetchMasterBranchCombo().then(function (data) {
+                $scope.masters = data;
+            });
             window.componentHandler.upgradeAllRegistered();
         }, 600);
 

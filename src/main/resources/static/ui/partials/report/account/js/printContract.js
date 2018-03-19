@@ -1,126 +1,75 @@
-app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseService', 'AccountService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
-    function (BranchService, MasterService, CourseService, AccountService, $scope, $rootScope, $timeout, $uibModalInstance) {
+app.controller('printContractCtrl', ['BranchService' ,'AccountService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
+    function (BranchService, AccountService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
         $scope.buffer.reportFileName = "";
         $scope.buffer.contractType = "";
         $scope.buffer.reportType = "";
-        $scope.radio = {};
-        $scope.radio.registerOption = '1';
-        $scope.buffer.branchList = [];
-        $scope.buffer.masterList = [];
-        $scope.buffer.courseList = [];
 
-        $timeout(function () {
-            BranchService.fetchBranchCombo().then(function (data) {
-                $scope.branches = data;
-            });
-            MasterService.fetchMasterBranchCombo().then(function (data) {
-                $scope.masters = data;
-            });
-            CourseService.fetchCourseMasterBranchCombo().then(function (data) {
-                $scope.courses = data;
-            });
-        }, 1500);
+        $scope.accounts = [];
 
-        $scope.search = function () {
+        $scope.searchAccount = function ($select, $event) {
+
+            // no event means first load!
+            if (!$event) {
+                $scope.page = 0;
+                $scope.accounts = [];
+            } else {
+                $event.stopPropagation();
+                $event.preventDefault();
+                $scope.page++;
+            }
+
             var search = [];
-            switch ($scope.radio.registerOption){
-                case '1':
-                    //
-                    if (!$scope.buffer.branchList || $scope.buffer.branchList.length === 0) {
-                        $scope.buffer = {};
-                        $scope.accounts = [];
-                        return;
-                    }
-                    var branchIds = [];
-                    angular.forEach($scope.buffer.branchList, function (branch) {
-                        branchIds.push(branch.id);
-                    });
-                    search.push('branchIds=');
-                    search.push(branchIds);
+
+            search.push('size=');
+            search.push(10);
+            search.push('&');
+
+            search.push('page=');
+            search.push($scope.page);
+            search.push('&');
+
+            switch ($scope.buffer.searchBy){
+                case "fullName":{
+                    search.push('fullName=');
+                    search.push($select.search);
                     search.push('&');
-                    //
                     break;
-                case '2':
-                    //
-                    if (!$scope.buffer.masterList || $scope.buffer.masterList.length === 0) {
-                        $scope.buffer = {};
-                        $scope.accounts = [];
-                        return;
-                    }
-                    var masterIds = [];
-                    angular.forEach($scope.buffer.masterList, function (master) {
-                        masterIds.push(master.id);
-                    });
-                    search.push('masterIds=');
-                    search.push(masterIds);
+                }
+                case "studentIdentityNumber":
+                    search.push('studentIdentityNumber=');
+                    search.push($select.search);
                     search.push('&');
-                    //
                     break;
-                case '3':
-                    //
-                    if (!$scope.buffer.courseList || $scope.buffer.courseList.length === 0) {
-                        $scope.buffer = {};
-                        $scope.accounts = [];
-                        return;
-                    }
-                    var courseIds = [];
-                    angular.forEach($scope.buffer.courseList, function (course) {
-                        courseIds.push(course.id);
-                    });
-                    search.push('courseIds=');
-                    search.push(courseIds);
+                case "studentMobile":
+                    search.push('studentMobile=');
+                    search.push($select.search);
                     search.push('&');
-                    //
                     break;
             }
 
-            //
-            if ($scope.buffer.firstName) {
-                search.push('firstName=');
-                search.push($scope.buffer.firstName);
-                search.push('&');
-            }
-            if ($scope.buffer.secondName) {
-                search.push('secondName=');
-                search.push($scope.buffer.secondName);
-                search.push('&');
-            }
-            if ($scope.buffer.thirdName) {
-                search.push('thirdName=');
-                search.push($scope.buffer.thirdName);
-                search.push('&');
-            }
-            if ($scope.buffer.forthName) {
-                search.push('forthName=');
-                search.push($scope.buffer.forthName);
-                search.push('&');
-            }
-            if ($scope.buffer.studentIdentityNumber) {
-                search.push('studentIdentityNumber=');
-                search.push($scope.buffer.studentIdentityNumber);
-                search.push('&');
-            }
-            if ($scope.buffer.studentMobile) {
-                search.push('studentMobile=');
-                search.push($scope.buffer.studentMobile);
-                search.push('&');
-            }
+            search.push('branchIds=');
+            var branchIds = [];
+            branchIds.push($scope.buffer.branch.id);
+            search.push(branchIds);
+            search.push('&');
+
             search.push('searchType=');
             search.push('and');
             search.push('&');
-            AccountService.filterWithInfo(search.join("")).then(function (data) {
-                $scope.accounts = data;
+
+            return AccountService.filterWithInfo(search.join("")).then(function (data) {
+                $scope.buffer.last = data.last;
+                return $scope.accounts = $scope.accounts.concat(data.content);
             });
+
         };
 
         $scope.submit = function () {
             var selectedAccountsIds = [];
-            angular.forEach($scope.accounts, function (account) {
-                if (account.isSelected) {
-                    selectedAccountsIds.push(account.id);
-                }
+            angular.forEach($scope.buffer.accountsList, function (account) {
+                selectedAccountsIds.push(account.id);
             });
             switch ($scope.buffer.reportType){
                 case "ZIP":
@@ -137,6 +86,9 @@ app.controller('printContractCtrl', ['BranchService', 'MasterService', 'CourseSe
         };
 
         $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            });
             window.componentHandler.upgradeAllRegistered();
         }, 600);
 

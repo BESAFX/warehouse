@@ -604,6 +604,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .ui-select-bootstrap > .ui-select-match > .btn {
     text-align: right !important;
     padding: 10px !important;
+    height: auto!important;
 }
 
 .ui-select-bootstrap .ui-select-toggle > .caret {
@@ -789,6 +790,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
 
 .control-label{
     font-size: 14px!important;
+    font-weight: 500!important;
 }
 
 .mdl-button{
@@ -829,7 +831,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
 }
 
 .mdl-list__item--two-line{
-    height: 90px!important;
+    height: auto!important;
 }
 
 .mdl-list__item--two-line .mdl-list__item-primary-content{

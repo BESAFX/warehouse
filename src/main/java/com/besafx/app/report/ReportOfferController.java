@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -43,14 +45,6 @@ public class ReportOfferController {
             return;
         }
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", "عرض سعر");
         map.put("offer", offer);
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/ReportOfferById.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -67,16 +61,10 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            Pageable pageRequest,
             HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("branch").get("id").in(value)));
@@ -94,7 +82,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates));
+        map.put("offers", getList(predicates, pageRequest));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -112,17 +100,11 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            Pageable pageRequest,
             HttpServletResponse response)
             throws Exception {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("branch").get("id").in(value)));
@@ -141,7 +123,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates));
+        map.put("offers", getList(predicates, pageRequest));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -158,17 +140,11 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            Pageable pageRequest,
             HttpServletResponse response)
             throws Exception {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(masterIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("master").get("id").in(value)));
@@ -186,7 +162,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates));
+        map.put("offers", getList(predicates, pageRequest));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -203,17 +179,11 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            Pageable pageRequest,
             HttpServletResponse response)
             throws Exception {
         Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المملكة العربية السعودية");
-        param1.append("\n");
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        map.put("param1", param1.toString());
-        map.put("param2", title);
+        map.put("title", title);
         //Start Search
         List<Specification> predicates = new ArrayList<>();
         Optional.ofNullable(personIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("lastPerson").get("id").in(value)));
@@ -231,7 +201,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates));
+        map.put("offers", getList(predicates, pageRequest));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -239,44 +209,16 @@ public class ReportOfferController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    @Async("threadMultiplePool")
-    public Future<byte[]> reportOffersToday() {
-        Map<String, Object> map = new HashMap<>();
-        StringBuilder param1 = new StringBuilder();
-        param1.append("المعهد الأهلي العالي للتدريب");
-        param1.append("\n");
-        param1.append("تحت إشراف المؤسسة العامة للتدريب المهني والتقني");
-        param1.append("\n");
-        param1.append("تقرير عن العروض المدخلة اليوم من كافة الفروع");
-        map.put("title", param1.toString());
-        DateTime today = new DateTime().withTimeAtStartOfDay();
-        DateTime tomorrow = new DateTime().plusDays(1).withTimeAtStartOfDay();
-        List<Offer> offers = offerService.findByLastUpdateBetween(today.toDate(), tomorrow.toDate());
-        map.put("list", offers);
-        if (offers.isEmpty()) {
-            return null;
-        }
-        try {
-            ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/OffersToday.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
-            return new AsyncResult<>(JasperExportManager.exportReportToPdf(jasperPrint));
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            return null;
-        }
-    }
-
-    private List<Offer> getList(List<Specification> predicates) {
-        List<Offer> list = new ArrayList<>();
+    private List<Offer> getList(List<Specification> predicates, Pageable pageRequest) {
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            list.addAll(offerService.findAll(result));
+            return offerService.findAll(result, pageRequest).getContent();
+        }else{
+            return new ArrayList<>();
         }
-        return list;
     }
 
 }

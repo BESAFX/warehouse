@@ -99,17 +99,7 @@
                                 <tbody>
                                 <tr>
                                     <td>رقم الطالب</td>
-                                    <td>
-                                        {{account.code}}
-                                        -
-                                        {{account.course.code}}
-                                        -
-                                        {{account.course.master.code}}
-                                        -
-                                        {{account.course.master.branch.code}}
-                                        -
-                                        {{account.registerDate | kdate: 'yy' : 'ar' : 'ummalqura'}}
-                                    </td>
+                                    <td>{{account.key}}</td>
                                 </tr>
                                 <tr>
                                     <td>الفرع</td>
@@ -126,17 +116,16 @@
                                 <tr>
                                     <td>تاريخ التسجيل</td>
                                     <td>
-                                        {{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                        <span class="label label-success">{{account.registerDate | date:'h:m a'}}</span>
+                                        <span ng-show="dateType==='H'">{{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{account.registerDate | date: 'yyyy-MM-dd'}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>مدخل التسجيل</td>
                                     <td>
-                                            <span class="label label-success">
-                                                {{account.lastPerson.contact.firstName}}
-                                                {{account.lastPerson.contact.forthName}}
-                                            </span>
+                                        <span class="label label-success">
+                                            {{account.lastPerson.contact.shortName}}
+                                        </span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -155,10 +144,7 @@
                                 <tr>
                                     <td>اسم الطالب</td>
                                     <td>
-                                        {{account.student.contact.firstName}}
-                                        {{account.student.contact.secondName}}
-                                        {{account.student.contact.thirdName}}
-                                        {{account.student.contact.forthName}}
+                                        {{account.name}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -172,8 +158,8 @@
                                 <tr>
                                     <td>تاريخ الاصدار</td>
                                     <td>
-                                        {{account.student.contact.identityStartDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                        <span class="label label-success">{{account.student.contact.identityStartDate | date:'h:m a'}}</span>
+                                        <span ng-show="dateType==='H'">{{account.student.contact.identityStartDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{account.student.contact.identityStartDate | date: 'yyyy-MM-dd'}}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -187,8 +173,8 @@
                                 <tr>
                                     <td>تاريخ الميلاد</td>
                                     <td>
-                                        {{account.student.contact.birthDate | kdate: 'yyyy-mm-dd' : 'ar' :'ummalqura'}}
-                                        <span class="label label-success">{{account.student.contact.birthDate | date:'h:m a'}}</span>
+                                        <span ng-show="dateType==='H'">{{account.student.contact.birthDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{account.student.contact.birthDate | date: 'yyyy-MM-dd'}}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -243,12 +229,12 @@
                                 <tr>
                                     <td class="fit">المبلغ النهائي المطلوب</td>
                                     <td>
-                                            <span ng-if="account.coursePaymentType==='نقدي'">
-                                                {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:' SAR ':2}}
-                                            </span>
+                                        <span ng-if="account.coursePaymentType==='نقدي'">
+                                            {{account.coursePrice - (account.coursePrice * account.courseDiscountAmount / 100) | currency:' SAR ':2}}
+                                        </span>
                                         <span ng-if="account.coursePaymentType!=='نقدي'">
-                                                {{account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100) | currency:' SAR ':2}}
-                                            </span>
+                                            {{account.coursePrice + (account.coursePrice * account.courseProfitAmount / 100) | currency:' SAR ':2}}
+                                        </span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -294,7 +280,9 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="accountAttach in collectionAccountAttaches">
-                                <td>{{accountAttach.attach.name}}</td>
+                                <td>
+                                    <a ng-href="{{accountAttach.attach.link}}" target="_blank">{{accountAttach.attach.name}}</a>
+                                </td>
                                 <td>
                                     <ui-select ng-model="accountAttach.attachType"
                                                ng-change="setAccountAttachType(accountAttach)"

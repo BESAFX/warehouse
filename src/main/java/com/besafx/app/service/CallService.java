@@ -3,6 +3,8 @@ package com.besafx.app.service;
 import com.besafx.app.entity.Call;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -30,9 +32,13 @@ public interface CallService extends PagingAndSortingRepository<Call, Long>, Jpa
 
     List<Call> findByPerson(Person person);
 
+    List<Call> findByPerson(Person person, Sort sort);
+
     List<Call> findByPersonIn(List<Person> persons);
 
     List<Call> findByPersonAndDateBetween(Person person, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
+    List<Call> findByPersonAndDateBetween(Person person, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate, Sort sort);
 
     List<Call> findByPersonInAndDateBetween(List<Person> persons, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 }

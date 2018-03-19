@@ -65,7 +65,6 @@ public class AsyncScheduleOffers {
         Map<String, Object> map = new HashMap<>();
         map.put("title", title.toString());
         map.put("list", transactionalService.getOffersByDateAndBranch(branch, startDate.toDate(), endDate.toDate()));
-        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
 
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/OffersToday.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());

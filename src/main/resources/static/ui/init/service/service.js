@@ -1047,8 +1047,7 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             templateUrl: "/ui/partials/report/account/printContract.html",
             controller: "printContractCtrl",
             backdrop: 'static',
-            keyboard: false,
-            size: 'lg'
+            keyboard: false
         });
     };
     /**************************************************************
