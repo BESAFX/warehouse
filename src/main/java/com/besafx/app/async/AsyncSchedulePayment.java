@@ -65,7 +65,6 @@ public class AsyncSchedulePayment {
         Map<String, Object> map = new HashMap<>();
         map.put("title", title.toString());
         map.put("payments", transactionalService.getPaymentsByDateAndBranch(branch, startDate.toDate(), endDate.toDate()));
-        map.put("logo", new ClassPathResource("/report/img/logo.png").getInputStream());
 
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/ReportSummery.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());

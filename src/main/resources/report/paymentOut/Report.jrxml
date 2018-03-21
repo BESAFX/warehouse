@@ -68,16 +68,6 @@
 	<parameter name="param1" class="java.lang.Object" isForPrompting="false"/>
 	<parameter name="param2" class="java.lang.Object" isForPrompting="false"/>
 	<parameter name="param3" class="java.lang.Object" isForPrompting="false"/>
-	<background>
-		<band height="802">
-			<rectangle radius="10">
-				<reportElement mode="Transparent" x="0" y="0" width="555" height="802" backcolor="#754C29" uuid="e95f6d82-5ede-41de-a8a2-e4325b59c680"/>
-				<graphicElement>
-					<pen lineWidth="2.0" lineColor="#754C29"/>
-				</graphicElement>
-			</rectangle>
-		</band>
-	</background>
 	<pageHeader>
 		<band height="48">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>

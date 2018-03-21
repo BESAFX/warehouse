@@ -1,5 +1,6 @@
 package com.besafx.app.schedule;
 
+import com.besafx.app.async.AsyncScheduleBillBuy;
 import com.besafx.app.async.AsyncScheduleOffers;
 import com.besafx.app.async.AsyncSchedulePayment;
 import com.besafx.app.async.TransactionalService;
@@ -45,6 +46,9 @@ public class ScheduleSendingReports {
 
     @Autowired
     private AsyncSchedulePayment asyncSchedulePayment;
+
+    @Autowired
+    private AsyncScheduleBillBuy asyncScheduleBillBuy;
 
     @Autowired
     private TransactionalService transactionalService;
@@ -119,34 +123,52 @@ public class ScheduleSendingReports {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
 
+        List<Branch> branches = transactionalService.getBranches();
+
         log.info("Generate offers for each branch report");
         {
-            ListIterator<Branch> listIterator = transactionalService.getBranches().listIterator();
-            while (listIterator.hasNext()){
-                Branch branch = listIterator.next();
-                Future<byte[]> work = asyncScheduleOffers.getFile(timeType, branch);
-                byte[] fileBytes = work.get();
 
-                ZipEntry entry = new ZipEntry("العروض لفرع " + branch.getName() + ".pdf");
-                zipOutputStream.putNextEntry(entry);
-                zipOutputStream.write(fileBytes);
-                zipOutputStream.closeEntry();
-            }
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncScheduleOffers.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
+
+                    ZipEntry entry = new ZipEntry("العروض لفرع " + branch.getName() + ".pdf");
+                    zipOutputStream.putNextEntry(entry);
+                    zipOutputStream.write(fileBytes);
+                    zipOutputStream.closeEntry();
+                }catch (Exception ex){}
+            });
         }
 
         log.info("Generate payments for each branch report");
         {
-            ListIterator<Branch> listIterator = transactionalService.getBranches().listIterator();
-            while (listIterator.hasNext()){
-                Branch branch = listIterator.next();
-                Future<byte[]> work = asyncSchedulePayment.getFile(timeType, branch);
-                byte[] fileBytes = work.get();
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncSchedulePayment.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
 
-                ZipEntry entry = new ZipEntry("الايرادات لفرع " + branch.getName() + ".pdf");
-                zipOutputStream.putNextEntry(entry);
-                zipOutputStream.write(fileBytes);
-                zipOutputStream.closeEntry();
-            }
+                    ZipEntry entry = new ZipEntry("الايرادات لفرع " + branch.getName() + ".pdf");
+                    zipOutputStream.putNextEntry(entry);
+                    zipOutputStream.write(fileBytes);
+                    zipOutputStream.closeEntry();
+                }catch (Exception ex){}
+            });
+        }
+
+        log.info("Generate billBuys for each branch report");
+        {
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncScheduleBillBuy.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
+
+                    ZipEntry entry = new ZipEntry("المصروفات لفرع " + branch.getName() + ".pdf");
+                    zipOutputStream.putNextEntry(entry);
+                    zipOutputStream.write(fileBytes);
+                    zipOutputStream.closeEntry();
+                }catch (Exception ex){}
+            });
         }
 
         zipOutputStream.finish();
@@ -170,36 +192,54 @@ public class ScheduleSendingReports {
         parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
         parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_ULTRA);
 
+        List<Branch> branches = transactionalService.getBranches();
+
         log.info("Generate offers for each branch report");
         {
-            ListIterator<Branch> listIterator = transactionalService.getBranches().listIterator();
-            while (listIterator.hasNext()){
-                Branch branch = listIterator.next();
-                Future<byte[]> work = asyncScheduleOffers.getFile(timeType, branch);
-                byte[] fileBytes = work.get();
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncScheduleOffers.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
 
-                parameters.setFileNameInZip("العروض لفرع " + branch.getName() + ".pdf");
-                parameters.setSourceExternalStream(true);
-                zos.putNextEntry(null, parameters);
-                zos.write(fileBytes);
-                zos.closeEntry();
-            }
+                    parameters.setFileNameInZip("العروض لفرع " + branch.getName() + ".pdf");
+                    parameters.setSourceExternalStream(true);
+                    zos.putNextEntry(null, parameters);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }catch (Exception ex){}
+            });
         }
 
         log.info("Generate payments for each branch report");
         {
-            ListIterator<Branch> listIterator = transactionalService.getBranches().listIterator();
-            while (listIterator.hasNext()){
-                Branch branch = listIterator.next();
-                Future<byte[]> work = asyncSchedulePayment.getFile(timeType, branch);
-                byte[] fileBytes = work.get();
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncSchedulePayment.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
 
-                parameters.setFileNameInZip("الايرادات لفرع " + branch.getName() + ".pdf");
-                parameters.setSourceExternalStream(true);
-                zos.putNextEntry(null, parameters);
-                zos.write(fileBytes);
-                zos.closeEntry();
-            }
+                    parameters.setFileNameInZip("الايرادات لفرع " + branch.getName() + ".pdf");
+                    parameters.setSourceExternalStream(true);
+                    zos.putNextEntry(null, parameters);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }catch (Exception ex){}
+            });
+        }
+
+        log.info("Generate billBuys for each branch report");
+        {
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncScheduleBillBuy.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
+
+                    parameters.setFileNameInZip("المصروفات لفرع " + branch.getName() + ".pdf");
+                    parameters.setSourceExternalStream(true);
+                    zos.putNextEntry(null, parameters);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }catch (Exception ex){}
+            });
         }
 
         zos.finish();

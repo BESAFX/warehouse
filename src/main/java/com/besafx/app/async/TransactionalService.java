@@ -1,8 +1,10 @@
 package com.besafx.app.async;
 
+import com.besafx.app.entity.BillBuy;
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Payment;
+import com.besafx.app.service.BillBuyService;
 import com.besafx.app.service.BranchService;
 import com.besafx.app.service.OfferService;
 import com.besafx.app.service.PaymentService;
@@ -26,6 +28,9 @@ public class TransactionalService {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private BillBuyService billBuyService;
+
     @Transactional
     public List<Offer> getOffersByDateAndBranch(Branch branch, Date dateFrom, Date dateTo) {
         return offerService.findByMasterBranchAndLastUpdateBetween(branch, dateFrom, dateTo);
@@ -34,6 +39,11 @@ public class TransactionalService {
     @Transactional
     public List<Payment> getPaymentsByDateAndBranch(Branch branch, Date dateFrom, Date dateTo) {
         return paymentService.findByAccountCourseMasterBranchAndDateBetween(branch, dateFrom, dateTo);
+    }
+
+    @Transactional
+    public List<BillBuy> getBillBuysByDateAndBranch(Branch branch, Date dateFrom, Date dateTo) {
+        return billBuyService.findByBranchAndDateBetween(branch, dateFrom, dateTo);
     }
 
     @Transactional
