@@ -2,14 +2,13 @@ app.controller('paymentByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
     function (BranchService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
-        $scope.buffer.branchesList = [];
-        $scope.branches = [];
 
-        $timeout(function () {
-            BranchService.fetchBranchCombo().then(function (data) {
-                $scope.branches = data;
-            });
-        }, 1500);
+        $scope.buffer.sorts = [];
+
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.buffer.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
             var param = [];
@@ -22,6 +21,17 @@ app.controller('paymentByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
             if ($scope.buffer.endDate) {
                 param.push('endDate=');
                 param.push($scope.buffer.endDate.getTime());
+                param.push('&');
+            }
+            //
+            if ($scope.buffer.codeFrom) {
+                param.push('codeFrom=');
+                param.push($scope.buffer.codeFrom);
+                param.push('&');
+            }
+            if ($scope.buffer.codeTo) {
+                param.push('codeTo=');
+                param.push($scope.buffer.codeTo);
                 param.push('&');
             }
             //
@@ -46,10 +56,24 @@ app.controller('paymentByBranchCtrl', ['BranchService', '$scope', '$rootScope', 
             param.push('&');
             //
 
+            angular.forEach($scope.buffer.sorts, function (sortBy) {
+                param.push('sort=');
+                param.push(sortBy.name + ',' + sortBy.direction);
+                param.push('&');
+            });
+
             window.open('/report/PaymentByBranches?' + param.join(""));
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            });
+            window.componentHandler.upgradeAllRegistered();
+        }, 600);
+
     }]);

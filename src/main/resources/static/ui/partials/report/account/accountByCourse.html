@@ -2,7 +2,15 @@
       focus-group-tail="loop">
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
-        <h3 class="modal-title text-center">تقرير عن الطلاب المسجلين للدورات</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
+            <span class="mdl-list__item-primary-content">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/account.{{iconSetType}}" width="24" height="24">
+                <strong>تقرير عن الطلاب المسجلين للدورات</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body">
@@ -10,67 +18,60 @@
         <div class="row">
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="master" class="control-label">[رقم التخصص] اسم التخصص</label>
-                <select id="master"
-                        name="master"
-                        data-placeholder="ابحث عن التخصص"
-                        no-results-text="'لا توجد تخصصات توافق بحثك'"
-                        placeholder-text-single="'اختر التخصص'"
-                        class="form-control text-right"
-                        chosen=""
-                        focus-autofocus="1"
-                        ng-model="buffer.master"
-                        required="required"
-                        disable-validation-message=""
-                        ng-options="(' [ ' + master.code + ' ] ' + ' ' + master.name) group by master.branch.name for master in masters | orderBy:'code' track by master.id">
-                </select>
-            </div>
+                <label for="coursesList" class="control-label">الدورات</label>
+                <ui-select id="coursesList"
+                           focus-autofocus="1"
+                           ng-model="buffer.coursesList"
+                           multiple="multiple"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الدورات">
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="course" class="control-label">رقم الدورة</label>
-                <select id="course"
-                        data-placeholder="ابحث عن رقم الدورة المتاحة"
-                        no-results-text="'لا توجد دورات توافق بحثك'"
-                        placeholder-text-single="'اختر رقم الدورة'"
-                        class="form-control text-right"
-                        chosen=""
-                        ng-model="buffer.course"
-                        ng-options="(' [ ' + course.code + ' ] ' + course.instructor) for course in buffer.master.courses | orderBy:'code' track by course.id">
-                </select>
-            </div>
+                        <li class="mdl-list__item mdl-list__item--two-line"
+                            style="padding: unset;cursor: pointer;overflow: auto">
+                            <span class="mdl-list__item-primary-content">
+                            <span class="material-icons mdl-list__item-avatar"
+                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/course.{{iconSetType}}')"></span>
+                            <div ng-bind-html="code | highlight: $select.search"></div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="startDate" class="control-label">التاريخ من</label>
-                <div dir="ltr" class="input-group">
-                    <input dir="rtl"
-                           id="startDate"
-                           type="text"
-                           class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.startDate"
-                           calendarType="ummalqura"
-                           language="en"
-                           dateFormat="yyyy/mm/dd"
-                           showOnFocus="false"
-                           readonly="readonly"
-                           kdatepicker>
-                </div>
-            </div>
+                                <span class="mdl-list__item-sub-title" style="white-space: normal">
+                                    <span>التخصص / </span>
+                                    {{$item.master.name}}
+                                </span>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="endDate" class="control-label">التاريخ إلى</label>
-                <div dir="ltr" class="input-group">
-                    <input dir="rtl"
-                           id="endDate"
-                           type="text"
-                           class="form-control text-right is-calendarPicker"
-                           ng-model="buffer.endDate"
-                           calendarType="ummalqura"
-                           language="en"
-                           dateFormat="yyyy/mm/dd"
-                           showOnFocus="false"
-                           readonly="readonly"
-                           kdatepicker>
-                </div>
+                                <span class="mdl-list__item-sub-title" style="white-space: normal">
+                                    <span>الفرع / </span>
+                                    {{$item.master.branch.name}}
+                                </span>
+
+                            </span>
+                        </li>
+
+                    </ui-select-match>
+                    <ui-select-choices
+                            repeat="course in courses | filter: $select.search | orderBy:'code' track by course.id">
+
+                        <div class="mdl-menu__item--full-bleed-divider"></div>
+                        <li class="mdl-list__item mdl-list__item--two-line"
+                            style="padding: unset;cursor: pointer;">
+                            <span class="mdl-list__item-primary-content">
+                            <span class="material-icons mdl-list__item-avatar"
+                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/course.{{iconSetType}}')"></span>
+                            <div ng-bind-html="course.code | highlight: $select.search"></div>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>التخصص / </span>
+                                    {{course.master.name}}
+                                </span>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>الفرع / </span>
+                                    {{course.master.branch.name}}
+                                </span>
+                            </span>
+                        </li>
+
+                    </ui-select-choices>
+                </ui-select>
             </div>
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -114,6 +115,60 @@
                 </select>
             </div>
 
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="title" class="control-label">عنوان التقرير</label>
+                <input id="title"
+                       type="text"
+                       required="required"
+                       disable-validation-message=""
+                       class="form-control text-right"
+                       placeholder="ادخل عنوان مختصر..."
+                       ng-model="buffer.title">
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <th class="info" colspan="4">
+                        <span>ترتيب الطلاب حسب : </span>
+                        <a href="" ng-click="addSortBy()">اضافة...</a>
+                    </th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="sortBy in buffer.sorts">
+                        <td>
+                            <select class="form-control"
+                                    ng-model="sortBy.name">
+                                <option value="student.contact.firstName">الاسم الأول</option>
+                                <option value="student.contact.secondName">الاسم الثاني</option>
+                                <option value="student.contact.thirdName">الاسم الثالث</option>
+                                <option value="student.contact.forthName">الاسم الرابع</option>
+                                <option value="student.contact.identityNumber">رقم البطاقة</option>
+                                <option value="student.contact.mobile">رقم الجوال</option>
+                                <option value="course.master.branch.id">الفرع</option>
+                                <option value="course.master.id">التخصص</option>
+                                <option value="course.id">الدورة</option>
+                                <option value="lastPerson.id">مدخل التسجيل</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control"
+                                    ng-model="sortBy.direction">
+                                <option value="asc">تصاعدي</option>
+                                <option value="desc">تنازلي</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a href="" ng-click="buffer.sorts.splice($index, 1)">حذف</a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
 
     </div>
@@ -125,7 +180,7 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">print</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"

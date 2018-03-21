@@ -1,19 +1,14 @@
-app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService','$scope', '$rootScope', '$timeout', '$uibModalInstance',
+app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService', '$scope', '$rootScope', '$timeout', '$uibModalInstance',
     function (BranchService, BillBuyTypeService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
-        $scope.buffer.branchesList = [];
-        $scope.buffer.billBuyTypesList = [];
-        $scope.branches = [];
 
-        $timeout(function () {
-            BranchService.fetchBranchCombo().then(function (data) {
-                $scope.branches = data;
-            });
-            BillBuyTypeService.findAll().then(function (data) {
-                $scope.billBuyTypes = data;
-            });
-        }, 1500);
+        $scope.buffer.sorts = [];
+
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.buffer.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
             var param = [];
@@ -33,16 +28,18 @@ app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService','$s
             angular.forEach($scope.buffer.branchesList, function (branch) {
                 branchIds.push(branch.id);
             });
-            param.push('branchIds=');
-            param.push(branchIds);
-            param.push('&');
+            if (branchIds.length > 0) {
+                param.push('branchIds=');
+                param.push(branchIds);
+                param.push('&');
+            }
             //
             //
-            if($scope.buffer.billBuyTypesList.length > 0){
-                var billBuyTypeIds = [];
-                angular.forEach($scope.buffer.billBuyTypesList, function (billBuyType) {
-                    billBuyTypeIds.push(billBuyType.id);
-                });
+            var billBuyTypeIds = [];
+            angular.forEach($scope.buffer.billBuyTypesList, function (billBuyType) {
+                billBuyTypeIds.push(billBuyType.id);
+            });
+            if (billBuyTypeIds.length > 0) {
                 param.push('billBuyTypeIds=');
                 param.push(billBuyTypeIds);
                 param.push('&');
@@ -57,11 +54,31 @@ app.controller('billBuyByBranchCtrl', ['BranchService', 'BillBuyTypeService','$s
             param.push('&');
             //
 
+            param.push('sort=');
+            param.push('billBuyType.name,asc');
+            param.push('&');
+
+            angular.forEach($scope.buffer.sorts, function (sortBy) {
+                param.push('sort=');
+                param.push(sortBy.name + ',' + sortBy.direction);
+                param.push('&');
+            });
+
             window.open('/report/BillBuyByBranches?' + param.join(""));
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            });
+            BillBuyTypeService.findAll().then(function (data) {
+                $scope.billBuyTypes = data;
+            });
+            window.componentHandler.upgradeAllRegistered();
+        }, 600);
 
     }]);

@@ -2,19 +2,21 @@ app.controller('accountByMasterCategoryCtrl', ['BranchService' ,'MasterCategoryS
     function (BranchService ,MasterCategoryService, $scope, $rootScope, $timeout, $uibModalInstance) {
 
         $scope.buffer = {};
+
         $scope.buffer.branchesList = [];
+
         $scope.buffer.masterCategoriesList = [];
+
         $scope.branches = [];
+
         $scope.masterCategories = [];
 
-        $timeout(function () {
-            BranchService.fetchBranchCombo().then(function (data) {
-                $scope.branches = data;
-            });
-            MasterCategoryService.findAllCombo().then(function (data) {
-                $scope.masterCategories = data;
-            })
-        }, 1500);
+        $scope.buffer.sorts = [];
+
+        $scope.addSortBy = function () {
+            var sortBy = {};
+            $scope.buffer.sorts.push(sortBy);
+        };
 
         $scope.submit = function () {
             var param = [];
@@ -55,10 +57,27 @@ app.controller('accountByMasterCategoryCtrl', ['BranchService' ,'MasterCategoryS
             param.push('&');
             //
 
+            angular.forEach($scope.buffer.sorts, function (sortBy) {
+                param.push('sort=');
+                param.push(sortBy.name + ',' + sortBy.direction);
+                param.push('&');
+            });
+
             window.open('/report/AccountByMasterCategories?' + param.join(""));
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $timeout(function () {
+            BranchService.fetchBranchCombo().then(function (data) {
+                $scope.branches = data;
+            });
+            MasterCategoryService.findAllCombo().then(function (data) {
+                $scope.masterCategories = data;
+            })
+            window.componentHandler.upgradeAllRegistered();
+        }, 600);
+
     }]);

@@ -2,7 +2,15 @@
       focus-group-tail="loop">
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
-        <h3 class="modal-title text-center">تقرير عن السندات للفروع</h3>
+        <a class="pull-left" href="" ng-click="cancel()">
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
+            <span class="mdl-list__item-primary-content">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/account.{{iconSetType}}" width="24" height="24">
+                <strong>تقرير عن الايرادات للفروع</strong>
+            </span>
+        </h3>
     </div>
 
     <div class="modal-body">
@@ -10,23 +18,85 @@
         <div class="row">
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="branch" class="control-label">[رقم الفرع] اسم الفرع</label>
-                <select id="branch"
-                        data-placeholder="ابحث عن الفرع"
-                        no-results-text="'لا توجد فروع توافق بحثك'"
-                        placeholder-text-multiple="'اختر الفروع'"
+                <label for="branch" class="control-label">الفروع</label>
+                <ui-select id="branch"
+                           focus-autofocus="1"
+                           ng-model="buffer.branchesList"
+                           multiple="multiple"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الفروع">
+
+                        <li class="mdl-list__item mdl-list__item--two-line"
+                            style="padding: unset;cursor: pointer; overflow:auto;">
+                            <span class="mdl-list__item-primary-content">
+                            <span class="material-icons mdl-list__item-avatar"
+                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
+                            <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                                <span class="mdl-list__item-sub-title" style="white-space: normal">
+                                    <span>اسم الفرع / </span>
+                                    {{$item.name}}
+                                </span>
+                            </span>
+                        </li>
+
+                    </ui-select-match>
+                    <ui-select-choices
+                            repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
+
+                        <div class="mdl-menu__item--full-bleed-divider"></div>
+                        <li class="mdl-list__item mdl-list__item--two-line"
+                            style="padding: unset;cursor: pointer">
+                            <span class="mdl-list__item-primary-content">
+                            <span class="material-icons mdl-list__item-avatar"
+                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
+                            <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                            <span class="mdl-list__item-sub-title">
+                                <span>رقم الفرع / </span>
+                                {{branch.code}}
+                            </span>
+                            </span>
+                        </li>
+
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label for="codeFrom" class="control-label">رقم السند من</label>
+                <input id="codeFrom"
+                       type="number"
+                       min="1"
+                       class="form-control text-right"
+                       placeholder="ادخل الرقم من"
+                       ng-model="buffer.codeFrom">
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label for="codeTo" class="control-label">رقم السند إلى</label>
+                <input id="codeTo"
+                       type="number"
+                       min="1"
+                       class="form-control text-right"
+                       placeholder="ادخل الرقم إلى"
+                       ng-model="buffer.codeTo">
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-init="buffer.calendar='H'">
+                <label for="calendar" class="control-label">نوع التقويم</label>
+                <select id="calendar"
+                        style="height: 40px"
                         class="form-control text-right"
-                        chosen=""
-                        focus-autofocus="1"
-                        multiple="multiple"
-                        ng-model="buffer.branchesList"
+                        ng-model="buffer.calendar"
                         required="required"
-                        disable-validation-message=""
-                        ng-options="(' [ ' + branch.code + ' ] ' + ' ' +  branch.name) for branch in branches | orderBy:'code' track by branch.id">
+                        disable-validation-message="">
+                    <option value="H">تقويم هجري</option>
+                    <option value="G">تقويم ميلادي</option>
                 </select>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar==='H'">
                 <label for="startDate" class="control-label">التاريخ من</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
@@ -43,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar==='H'">
                 <label for="endDate" class="control-label">التاريخ إلى</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
@@ -58,6 +128,28 @@
                            readonly="readonly"
                            kdatepicker>
                 </div>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar==='G'">
+                <label for="G-startDate" class="control-label">التاريخ من</label>
+                <input id="G-startDate"
+                       class="form-control"
+                       dir="ltr"
+                       type="text"
+                       name="input"
+                       ng-model="buffer.startDate"
+                       datetime="yyyy-MM-dd"/>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-if="buffer.calendar==='G'">
+                <label for="G-endDate" class="control-label">التاريخ إلى</label>
+                <input id="G-endDate"
+                       class="form-control"
+                       dir="ltr"
+                       type="text"
+                       name="input"
+                       ng-model="buffer.endDate"
+                       datetime="yyyy-MM-dd"/>
             </div>
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -112,15 +204,67 @@
                        ng-model="buffer.title">
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-init="buffer.isSummery=false;">
-                <label class="help-block">
-                    <input style="height: 10px !important;"
-                           type="checkbox"
-                           ng-model="buffer.isSummery"/>
-                    <span>مختصر</span>
-                </label>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="isSummery" class="control-label">نوع التقرير</label>
+                <select id="isSummery"
+                        style="height: 40px"
+                        required="required"
+                        disable-validation-message=""
+                        class="form-control text-right"
+                        ng-model="buffer.isSummery">
+                    <option value="true">
+                        <span>مختصر</span>
+                    </option>
+                    <option value="false">
+                        <span>مفصل</span>
+                    </option>
+                </select>
             </div>
 
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <th class="info" colspan="4">
+                        <span>ترتيب السندات حسب : </span>
+                        <a href="" ng-click="addSortBy()">اضافة...</a>
+                    </th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="sortBy in buffer.sorts">
+                        <td>
+                            <select class="form-control"
+                                    ng-model="sortBy.name">
+                                <option value="account.student.contact.firstName">الاسم الأول</option>
+                                <option value="account.student.contact.secondName">الاسم الثاني</option>
+                                <option value="account.student.contact.thirdName">الاسم الثالث</option>
+                                <option value="account.student.contact.forthName">الاسم الرابع</option>
+                                <option value="account.student.contact.identityNumber">رقم البطاقة</option>
+                                <option value="account.student.contact.mobile">رقم الجوال</option>
+                                <option value="account.course.master.branch.id">الفرع</option>
+                                <option value="account.course.master.id">التخصص</option>
+                                <option value="account.course.id">الدورة</option>
+                                <option value="code">رقم السند</option>
+                                <option value="date">تاريخ السند</option>
+                                <option value="lastPerson.id">مدخل السند</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control"
+                                    ng-model="sortBy.direction">
+                                <option value="asc">تصاعدي</option>
+                                <option value="desc">تنازلي</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a href="" ng-click="buffer.sorts.splice($index, 1)">حذف</a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
@@ -133,7 +277,7 @@
                     tooltip-append-to-body="true"
                     type="submit"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
-                <i class="material-icons">print</i>
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
             </button>
             <button uib-tooltip="مسح الحقول"
                     tooltip-append-to-body="true"
