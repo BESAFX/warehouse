@@ -58,6 +58,8 @@ public class ReportPaymentController {
             @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "codeFrom", required = false) Long codeFrom,
+            @RequestParam(value = "codeTo", required = false) Long codeTo,
             @RequestParam(value = "title") String title,
             Sort sort,
             HttpServletResponse response
@@ -69,6 +71,8 @@ public class ReportPaymentController {
         Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("branch").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
         map.put("payments", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
@@ -118,6 +122,8 @@ public class ReportPaymentController {
             @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "codeFrom", required = false) Long codeFrom,
+            @RequestParam(value = "codeTo", required = false) Long codeTo,
             @RequestParam(value = "title") String title,
             Sort sort,
             HttpServletResponse response
@@ -129,6 +135,8 @@ public class ReportPaymentController {
         Optional.ofNullable(masterIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("master").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
         map.put("payments", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
@@ -145,6 +153,8 @@ public class ReportPaymentController {
             @RequestParam(value = "isSummery") Boolean isSummery,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "codeFrom", required = false) Long codeFrom,
+            @RequestParam(value = "codeTo", required = false) Long codeTo,
             @RequestParam(value = "title") String title,
             Sort sort,
             HttpServletResponse response
@@ -156,6 +166,8 @@ public class ReportPaymentController {
         Optional.ofNullable(courseIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("account").get("course").get("id").in(value)));
         Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
         map.put("payments", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/"+(isSummery ? "ReportSummery" : "Report")+".jrxml");
