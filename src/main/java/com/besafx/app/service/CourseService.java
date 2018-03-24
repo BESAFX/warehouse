@@ -26,10 +26,8 @@ public interface CourseService extends PagingAndSortingRepository<Course, Long>,
 
     Course findByCodeAndMasterCodeAndMasterBranchCode(Integer courseCode, Integer masterCode, Integer branchCode);
 
-    Long countByMaster(Master master);
-
-    Long countByMasterBranch(Branch branch);
-
     List<Course> findByMaster(Master master);
+
+    List<Course> findByMasterBranchIdIn(List<Long> branchIds);
 
 }

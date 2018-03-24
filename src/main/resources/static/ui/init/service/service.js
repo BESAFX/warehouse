@@ -938,9 +938,10 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 }]);
 
 app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
+
     /**************************************************************
      *                                                            *
-     * Report.OfferByBranch                                       *
+     * Offer                                                      *
      *                                                            *
      *************************************************************/
     this.openReportOfferByBranchModel = function () {
@@ -954,11 +955,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.OfferByMaster                                       *
-     *                                                            *
-     *************************************************************/
     this.openReportOfferByMasterModel = function () {
         return $uibModal.open({
             animation: true,
@@ -970,11 +966,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.OfferByMasterCategory                               *
-     *                                                            *
-     *************************************************************/
     this.openReportOfferByMasterCategoryModel = function () {
         return $uibModal.open({
             animation: true,
@@ -986,11 +977,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.OfferByPerson                                       *
-     *                                                            *
-     *************************************************************/
     this.openReportOfferByPersonModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1002,9 +988,21 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+    this.openReportOfferByIdModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/offer/offerById.html",
+            controller: "offerByIdCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
     /**************************************************************
      *                                                            *
-     * Report.CallByPerson                                        *
+     * Call                                                       *
      *                                                            *
      *************************************************************/
     this.openReportCallByPersonModel = function () {
@@ -1018,25 +1016,10 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+
     /**************************************************************
      *                                                            *
-     * Report.OfferById                                           *
-     *                                                            *
-     *************************************************************/
-    this.openReportOfferByIdModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "/ui/partials/report/offer/offerById.html",
-            controller: "offerByIdCtrl",
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Report.PrintContract                                       *
+     * Account                                                    *
      *                                                            *
      *************************************************************/
     this.openReportPrintContractModel = function () {
@@ -1050,11 +1033,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.AccountByBranch                                     *
-     *                                                            *
-     *************************************************************/
     this.openReportAccountByBranchModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1066,11 +1044,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.AccountByMaster                                     *
-     *                                                            *
-     *************************************************************/
     this.openReportAccountByMasterModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1082,11 +1055,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * ReportAccountByMasterCategory                              *
-     *                                                            *
-     *************************************************************/
     this.openReportAccountByMasterCategoryModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1098,11 +1066,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.AccountByCourse                                     *
-     *                                                            *
-     *************************************************************/
     this.openReportAccountByCourseModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1114,9 +1077,10 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+
     /**************************************************************
      *                                                            *
-     * Report.PaymentByBranch                                     *
+     * Payment                                                    *
      *                                                            *
      *************************************************************/
     this.openReportPaymentByBranchModel = function () {
@@ -1130,11 +1094,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.PaymentByMaster                                     *
-     *                                                            *
-     *************************************************************/
     this.openReportPaymentByMasterModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1146,11 +1105,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.PaymentByMasterCategory                             *
-     *                                                            *
-     *************************************************************/
     this.openReportPaymentByMasterCategoryModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1162,11 +1116,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.PaymentByCourse                                     *
-     *                                                            *
-     *************************************************************/
     this.openReportPaymentByCourseModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1178,11 +1127,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.PaymentByAccountIn                                  *
-     *                                                            *
-     *************************************************************/
     this.openReportPaymentByAccountInModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1194,9 +1138,21 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+    this.openReportIncomeAnalysisByBranchModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/payment/incomeAnalysisByBranch.html",
+            controller: "incomeAnalysisByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
     /**************************************************************
      *                                                            *
-     * Report.PaymentOutByBranch                                  *
+     * Payment Out                                                *
      *                                                            *
      *************************************************************/
     this.openReportPaymentOutByBranchModel = function () {
@@ -1210,11 +1166,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.PaymentOutByPerson                                  *
-     *                                                            *
-     *************************************************************/
     this.openReportPaymentOutByPersonModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1226,9 +1177,10 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+
     /**************************************************************
      *                                                            *
-     * Report.BillBuyByBranch                                     *
+     * BillBuy                                                    *
      *                                                            *
      *************************************************************/
     this.openReportBillBuyByBranchModel = function () {
@@ -1242,9 +1194,10 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+
     /**************************************************************
      *                                                            *
-     * Report.DepositByBranch                                     *
+     * Bank                                                       *
      *                                                            *
      *************************************************************/
     this.openReportDepositByBranchModel = function () {
@@ -1258,11 +1211,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.DepositByBank                                       *
-     *                                                            *
-     *************************************************************/
     this.openReportDepositByBankModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1274,11 +1222,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.WithdrawByBranch                                    *
-     *                                                            *
-     *************************************************************/
     this.openReportWithdrawByBranchModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1290,11 +1233,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.WithdrawByBank                                      *
-     *                                                            *
-     *************************************************************/
     this.openReportWithdrawByBankModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1306,9 +1244,10 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
+
     /**************************************************************
      *                                                            *
-     * Report.ChartOffersCountAverageByBranch                     *
+     * Chart                                                      *
      *                                                            *
      *************************************************************/
     this.openReportChartOffersCountAverageByBranchModel = function () {
@@ -1322,11 +1261,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.ChartOffersCountAverageByMaster                     *
-     *                                                            *
-     *************************************************************/
     this.openReportChartOffersCountAverageByMasterModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1338,11 +1272,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.ChartOffersPriceAverageByBranch                     *
-     *                                                            *
-     *************************************************************/
     this.openReportChartOffersPriceAverageByBranchModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1354,11 +1283,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             keyboard: false
         });
     };
-    /**************************************************************
-     *                                                            *
-     * Report.ChartOffersPriceAverageByMaster                     *
-     *                                                            *
-     *************************************************************/
     this.openReportChartOffersPriceAverageByMasterModel = function () {
         return $uibModal.open({
             animation: true,
@@ -1366,86 +1290,6 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
             ariaDescribedBy: 'modal-body',
             templateUrl: "/ui/partials/report/chart/offersPriceAverageByMaster.html",
             controller: "offersPriceAverageByMasterCtrl",
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Report.BranchDetails                                       *
-     *                                                            *
-     *************************************************************/
-    this.openReportBranchDetailsModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "/ui/partials/report/info/branchDetails.html",
-            controller: "branchDetailsCtrl",
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Report.MasterDetails                                       *
-     *                                                            *
-     *************************************************************/
-    this.openReportMasterDetailsModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "/ui/partials/report/info/masterDetails.html",
-            controller: "masterDetailsCtrl",
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Report.CourseDetails                                       *
-     *                                                            *
-     *************************************************************/
-    this.openReportCourseDetailsModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "/ui/partials/report/info/courseDetails.html",
-            controller: "courseDetailsCtrl",
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Report.UnRegisteredStudentDetailsByBranch                  *
-     *                                                            *
-     *************************************************************/
-    this.openReportUnRegisteredStudentDetailsByBranchModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "/ui/partials/report/info/unRegisteredStudentDetailsByBranch.html",
-            controller: "unRegisteredStudentDetailsByBranchCtrl",
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-    /**************************************************************
-     *                                                            *
-     * Report.UnRegisteredStudentDetailsByMaster                  *
-     *                                                            *
-     *************************************************************/
-    this.openReportUnRegisteredStudentDetailsByMasterModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "/ui/partials/report/info/unRegisteredStudentDetailsByMaster.html",
-            controller: "unRegisteredStudentDetailsByMasterCtrl",
             backdrop: 'static',
             keyboard: false
         });

@@ -3,6 +3,7 @@ package com.besafx.app.report;
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.enums.ExportType;
+import com.besafx.app.service.CourseService;
 import com.besafx.app.service.PaymentService;
 import net.sf.jasperreports.engine.*;
 import org.joda.time.DateTime;
@@ -29,6 +30,9 @@ public class ReportPaymentController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private CourseService courseService;
 
     @Autowired
     private ReportExporter reportExporter;
@@ -76,6 +80,25 @@ public class ReportPaymentController {
         map.put("payments", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/" + (isSummery ? "ReportSummery" : "Report") + ".jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
+    @RequestMapping(value = "/report/IncomeAnalysisByBranches", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    public void printIncomeAnalysisByBranches(
+            @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "title") String title,
+            HttpServletResponse response
+    ) throws JRException, IOException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        map.put("courses", courseService.findByMasterBranchIdIn(branchIds));
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/IncomeAnalysis.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
         reportExporter.export(exportType, response, jasperPrint);

@@ -236,10 +236,10 @@
                                 {{offer.customerMobile}}
                             </td>
                             <td class="fit">{{offer.masterPaymentType}}</td>
-                            <td class="fit">{{offer.masterPrice}} SAR</td>
+                            <td class="fit">{{offer.masterPrice| currency:' SAR ':2}}</td>
                             <td class="fit">{{offer.masterDiscountAmount}} %</td>
                             <td class="fit">{{offer.masterProfitAmount}} %</td>
-                            <td class="fit">{{offer.net}} SAR</td>
+                            <td class="fit">{{offer.net| currency:' SAR ':2}}</td>
                             <td>
                                 [ {{offer.master.code}} ] {{offer.master.name}}
                             </td>

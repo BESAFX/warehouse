@@ -134,11 +134,11 @@
                         <td st-select-row-multi="bank">{{bank.code}}</td>
                         <td st-select-row-multi="bank">{{bank.name}}</td>
                         <td st-select-row-multi="bank">{{bank.branchName}}</td>
-                        <td st-select-row-multi="bank">{{bank.startAmount}} SAR</td>
+                        <td st-select-row-multi="bank">{{bank.startAmount| currency:' SAR ':2}}</td>
                         <td st-select-row-multi="bank">
                             {{bank.startAmountDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}
                         </td>
-                        <td st-select-row-multi="bank">{{bank.stock}} SAR</td>
+                        <td st-select-row-multi="bank">{{bank.stock| currency:' SAR ':2}}</td>
                         <td st-select-row-multi="bank">
                             [ {{bank.branch.code}} ] {{bank.branch.name}}
                         </td>

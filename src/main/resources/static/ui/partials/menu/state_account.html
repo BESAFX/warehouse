@@ -185,9 +185,9 @@
                                 </label>
                             </th>
 
-                                <th>
-                                    <span>#</span>
-                                </th>
+                            <th>
+                                <span>#</span>
+                            </th>
 
                             <th>
                                 <span> رقم الطالب</span>
@@ -241,9 +241,9 @@
                             <td>{{account.name}}</td>
                             <td class="fit">{{account.student.contact.identityNumber}}</td>
                             <td class="fit">{{account.student.contact.mobile}}</td>
-                            <td class="fit">{{account.requiredPrice}} SAR</td>
-                            <td class="fit">{{account.paidPrice}} SAR</td>
-                            <td class="fit">{{account.remainPrice}} SAR</td>
+                            <td class="fit">{{account.requiredPrice | currency:' SAR ':2}}</td>
+                            <td class="fit">{{account.paidPrice | currency:' SAR ':2}}</td>
+                            <td class="fit">{{account.remainPrice | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-show="!accounts || accounts.length ==0">

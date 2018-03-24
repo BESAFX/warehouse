@@ -203,6 +203,7 @@ gulp.task('scripts', function () {
         './partials/report/payment/js/paymentByMaster.js',
         './partials/report/payment/js/paymentByMasterCategory.js',
         './partials/report/payment/js/paymentByAccountIn.js',
+        './partials/report/payment/js/incomeAnalysisByBranch.js',
 
         './partials/report/paymentOut/js/paymentOutByBranch.js',
         './partials/report/paymentOut/js/paymentOutByPerson.js',
