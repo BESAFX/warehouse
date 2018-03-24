@@ -90,6 +90,12 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             selected: false,
             category: 'التسجيل'
         });
+        $scope.roles.push({
+            name: 'ارسال العروض',
+            value: 'ROLE_OFFER_SEND',
+            selected: false,
+            category: 'التسجيل'
+        });
         //////////////////////////Course////////////////////////////////////////
         $scope.roles.push({
             name: 'إنشاء الدورات',

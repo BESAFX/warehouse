@@ -2,6 +2,7 @@ package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.EmailSender;
+import com.besafx.app.config.SendSMS;
 import com.besafx.app.entity.Branch;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.entity.Person;
@@ -72,6 +73,9 @@ public class OfferRest {
     @Autowired
     private EmailSender emailSender;
 
+    @Autowired
+    private SendSMS sendSMS;
+
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_OFFER_CREATE')")
@@ -105,7 +109,11 @@ public class OfferRest {
             buffer.append("سعر ");
             buffer.append(offer.getNet().toString().concat("SAR"));
 
-            if (offer.getCustomerEmail() != null) {
+            if(offer.getSendSMS()){
+                sendSMS.sendMessage(Lists.newArrayList(offer.getCustomerMobile()), buffer.toString());
+            }
+
+            if (offer.getSendEmail()) {
                 ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
                 String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
                 message = message.replaceAll("BRANCH_LOGO", branch.getLogo());

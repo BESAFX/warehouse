@@ -41,7 +41,7 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
                                  ng-show="action==='update'">
                                 <label for="code" class="control-label">رقم العرض</label>
                                 <input id="code"
@@ -54,54 +54,88 @@
                                        ng-model="offer.code">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="master" class="control-label">التخصص</label>
-                                <ui-select id="master"
-                                           focus-autofocus="2"
-                                           ng-model="offer.master"
-                                           theme="bootstrap">
-                                    <ui-select-match placeholder="اختر التخصص">
-                                        [{{$select.selected.code}}] {{$select.selected.name}}
-                                    </ui-select-match>
-                                    <ui-select-choices
-                                            group-by="groupByBranch"
-                                            repeat="master in masters | filter: $select.search | orderBy:'code' track by master.id">
-                                        <div ng-bind-html="master.name | highlight: $select.search"></div>
-                                        <span>رقم التخصص : </span>
-                                        <span ng-bind-html="''+master.code | highlight: $select.search"></span>
-                                    </ui-select-choices>
-                                </ui-select>
+                            <div class="form-group row">
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label for="master" class="control-label">التخصص</label>
+                                    <ui-select id="master"
+                                               focus-autofocus="2"
+                                               ng-model="offer.master"
+                                               theme="bootstrap">
+                                        <ui-select-match placeholder="اختر التخصص">
+                                            [{{$select.selected.code}}] {{$select.selected.name}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                group-by="groupByBranch"
+                                                repeat="master in masters | filter: $select.search | orderBy:'code' track by master.id">
+                                            <div ng-bind-html="master.name | highlight: $select.search"></div>
+                                            <span>رقم التخصص : </span>
+                                            <span ng-bind-html="''+master.code | highlight: $select.search"></span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label for="customerName" class="control-label">اسم العميل </label>
+                                    <input id="customerName"
+                                           type="text"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control text-right"
+                                           placeholder="اسم العميل..."
+                                           ng-model="offer.customerName">
+                                </div>
+
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="customerName" class="control-label">اسم العميل </label>
-                                <input id="customerName"
-                                       type="text"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control text-right"
-                                       placeholder="اسم العميل..."
-                                       ng-model="offer.customerName">
+                            <div class="form-group row">
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة</label>
+                                    <input id="identityNumber"
+                                           type="text"
+                                           class="form-control text-right "
+                                           placeholder="رقم البطاقة..."
+                                           ng-model="offer.customerIdentityNumber">
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label for="mobile" class="control-label">رقم الجوال</label>
+                                    <input id="mobile"
+                                           type="text"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control text-right "
+                                           placeholder="رقم الجوال..."
+                                           ng-model="offer.customerMobile">
+                                </div>
+
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="identityNumber" class="control-label">رقم البطاقة / الإقامة</label>
-                                <input id="identityNumber"
-                                       type="text"
-                                       class="form-control text-right "
-                                       placeholder="رقم البطاقة..."
-                                       ng-model="offer.customerIdentityNumber">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label for="customerEmail" class="control-label">البريد الإلكتروني</label>
+                                <input id="customerEmail"
+                                       type="email"
+                                       class="form-control"
+                                       ng-model="offer.customerEmail">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="mobile" class="control-label">رقم الجوال</label>
-                                <input id="mobile"
-                                       type="text"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control text-right "
-                                       placeholder="رقم الجوال..."
-                                       ng-model="offer.customerMobile">
+                            <div class="form-group row" ng-if="contains(me.team.authorities, ['ROLE_OFFER_SEND'])">
+
+                                <div class="form-group col-ms-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-email">
+                                        <input type="checkbox" id="checkbox-email" class="mdl-checkbox__input" ng-model="offer.sendEmail">
+                                        <span class="mdl-checkbox__label">رسالة عبر البريد الإلكتروني</span>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-ms-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-sms">
+                                        <input type="checkbox" id="checkbox-sms" class="mdl-checkbox__input" ng-model="offer.sendSMS">
+                                        <span class="mdl-checkbox__label">رسالة نصية</span>
+                                    </label>
+                                </div>
+
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">

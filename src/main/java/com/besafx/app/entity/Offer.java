@@ -69,6 +69,10 @@ public class Offer implements Serializable {
 
     private String masterPaymentType;
 
+    @Column(columnDefinition = "boolean default true", nullable = false)
+    private Boolean sendEmail;
+
+    @Column(columnDefinition = "boolean default true", nullable = false)
     private Boolean sendSMS;
 
     private String messageSid;
