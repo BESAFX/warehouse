@@ -107,7 +107,7 @@ public class ScheduleSendingReports {
                 String body = "اضغط على الزر اداناه لتحميل التقارير";
                 String buttonText = "تحميل التقارير";
                 List<String> emails = Lists.newArrayList(companyService.findFirstBy().getEmail(), "islamhaker@gmail.com");
-//                quickEmail.send(subject, emails, title, subTitle, body, uploadFileLinkTask.get(), buttonText);
+                quickEmail.send(subject, emails, title, subTitle, body, uploadFileLinkTask.get(), buttonText);
 
                 log.info("ENDING SENDING MESSAGE");
             }
