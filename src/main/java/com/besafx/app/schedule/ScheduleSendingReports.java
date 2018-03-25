@@ -1,9 +1,6 @@
 package com.besafx.app.schedule;
 
-import com.besafx.app.async.AsyncScheduleBillBuy;
-import com.besafx.app.async.AsyncScheduleOffers;
-import com.besafx.app.async.AsyncSchedulePayment;
-import com.besafx.app.async.TransactionalService;
+import com.besafx.app.async.*;
 import com.besafx.app.component.QuickEmail;
 import com.besafx.app.config.DropboxManager;
 import com.besafx.app.entity.Branch;
@@ -49,6 +46,9 @@ public class ScheduleSendingReports {
 
     @Autowired
     private AsyncScheduleBillBuy asyncScheduleBillBuy;
+
+    @Autowired
+    private AsyncScheduleIncomeAnalysis asyncScheduleIncomeAnalysis;
 
     @Autowired
     private TransactionalService transactionalService;
@@ -107,7 +107,7 @@ public class ScheduleSendingReports {
                 String body = "اضغط على الزر اداناه لتحميل التقارير";
                 String buttonText = "تحميل التقارير";
                 List<String> emails = Lists.newArrayList(companyService.findFirstBy().getEmail(), "islamhaker@gmail.com");
-                quickEmail.send(subject, emails, title, subTitle, body, uploadFileLinkTask.get(), buttonText);
+//                quickEmail.send(subject, emails, title, subTitle, body, uploadFileLinkTask.get(), buttonText);
 
                 log.info("ENDING SENDING MESSAGE");
             }
@@ -168,6 +168,23 @@ public class ScheduleSendingReports {
                     zipOutputStream.write(fileBytes);
                     zipOutputStream.closeEntry();
                 }catch (Exception ex){}
+            });
+        }
+
+        log.info("Generate income analysis for each branch report");
+        {
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncScheduleIncomeAnalysis.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
+
+                    ZipEntry entry = new ZipEntry("تحليل الايرادات لفرع " + branch.getName() + ".pdf");
+                    zipOutputStream.putNextEntry(entry);
+                    zipOutputStream.write(fileBytes);
+                    zipOutputStream.closeEntry();
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             });
         }
 
@@ -239,6 +256,24 @@ public class ScheduleSendingReports {
                     zos.write(fileBytes);
                     zos.closeEntry();
                 }catch (Exception ex){}
+            });
+        }
+
+        log.info("Generate income analysis for each branch report");
+        {
+            branches.stream().forEach(branch -> {
+                try{
+                    Future<byte[]> work = asyncScheduleIncomeAnalysis.getFile(timeType, branch);
+                    byte[] fileBytes = work.get();
+
+                    parameters.setFileNameInZip("تحليل الايرادات لفرع " + branch.getName() + ".pdf");
+                    parameters.setSourceExternalStream(true);
+                    zos.putNextEntry(null, parameters);
+                    zos.write(fileBytes);
+                    zos.closeEntry();
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             });
         }
 

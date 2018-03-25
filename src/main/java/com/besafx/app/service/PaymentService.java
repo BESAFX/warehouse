@@ -47,6 +47,8 @@ public interface PaymentService extends PagingAndSortingRepository<Payment, Long
 
     List<Payment> findByAccountCourseMasterAndDateBetween(Master master, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 
+    List<Payment> findByAccountCourseMasterInAndDateBetween(List<Master> masters, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
     List<Payment> findByAccountCourseAndDateBetween(Course course, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);
 
     List<Payment> findByAccountInAndDateBetween(List<Account> accounts, @Temporal(TemporalType.TIMESTAMP) Date startDate, @Temporal(TemporalType.TIMESTAMP) Date endDate);

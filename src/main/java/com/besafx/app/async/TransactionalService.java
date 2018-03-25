@@ -1,14 +1,9 @@
 package com.besafx.app.async;
 
-import com.besafx.app.entity.BillBuy;
-import com.besafx.app.entity.Branch;
-import com.besafx.app.entity.Offer;
-import com.besafx.app.entity.Payment;
-import com.besafx.app.service.BillBuyService;
-import com.besafx.app.service.BranchService;
-import com.besafx.app.service.OfferService;
-import com.besafx.app.service.PaymentService;
+import com.besafx.app.entity.*;
+import com.besafx.app.service.*;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +19,12 @@ public class TransactionalService {
 
     @Autowired
     private BranchService branchService;
+
+    @Autowired
+    private MasterService masterService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private PaymentService paymentService;
@@ -49,5 +50,94 @@ public class TransactionalService {
     @Transactional
     public List<Branch> getBranches(){
         return Lists.newArrayList(branchService.findAll());
+    }
+
+    @Transactional
+    public List<Master> getMastersByBranch(Branch branch){
+        return masterService.findByBranch(branch);
+    }
+
+    @Transactional
+    public Integer countOffersByMasterAndDateBetween(Master master, Long startDate, Long endDate) {
+        try {
+            return offerService.findByMasterAndLastUpdateBetween(
+                    master,
+                    new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                    new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+            ).size();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Transactional
+    public Integer countOffersByMastersInAndDateBetween(List<Master> masters, Long startDate, Long endDate) {
+        try {
+            return offerService.findByMasterInAndLastUpdateBetween(
+                    masters,
+                    new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                    new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+            ).size();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Transactional
+    public Integer countAccountsByMasterAndDateBetween(Master master, Long startDate, Long endDate) {
+        try {
+            return accountService.findByCourseMasterAndRegisterDateBetween(
+                    master,
+                    new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                    new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+            ).size();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Transactional
+    public Integer countAccountsByMastersInAndDateBetween(List<Master> masters, Long startDate, Long endDate) {
+        try {
+            return accountService.findByCourseMasterInAndRegisterDateBetween(
+                    masters,
+                    new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                    new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+            ).size();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Transactional
+    public Double countPaymentsByMasterAndDateBetween(Master master, Long startDate, Long endDate) {
+        try {
+            return paymentService.findByAccountCourseMasterAndDateBetween(
+                    master,
+                    new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                    new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+            ).stream().mapToDouble(Payment::getAmountNumber).sum();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1.0;
+        }
+    }
+
+    @Transactional
+    public Double countPaymentsByMastersInAndDateBetween(List<Master> masters, Long startDate, Long endDate) {
+        try {
+            return paymentService.findByAccountCourseMasterInAndDateBetween(
+                    masters,
+                    new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                    new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+            ).stream().mapToDouble(Payment::getAmountNumber).sum();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1.0;
+        }
     }
 }

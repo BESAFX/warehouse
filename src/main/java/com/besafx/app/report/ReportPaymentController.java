@@ -1,9 +1,11 @@
 package com.besafx.app.report;
 
+import com.besafx.app.async.TransactionalService;
 import com.besafx.app.component.ReportExporter;
 import com.besafx.app.entity.Payment;
 import com.besafx.app.enums.ExportType;
 import com.besafx.app.service.CourseService;
+import com.besafx.app.service.MasterService;
 import com.besafx.app.service.PaymentService;
 import net.sf.jasperreports.engine.*;
 import org.joda.time.DateTime;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +35,10 @@ public class ReportPaymentController {
     private PaymentService paymentService;
 
     @Autowired
-    private CourseService courseService;
+    private MasterService masterService;
+
+    @Autowired
+    private TransactionalService transactionalService;
 
     @Autowired
     private ReportExporter reportExporter;
@@ -97,7 +103,10 @@ public class ReportPaymentController {
     ) throws JRException, IOException {
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
-        map.put("courses", courseService.findByMasterBranchIdIn(branchIds));
+        map.put("ts", transactionalService);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("masters", masterService.findByBranchIdIn(branchIds));
         ClassPathResource jrxmlFile = new ClassPathResource("/report/payment/IncomeAnalysis.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
