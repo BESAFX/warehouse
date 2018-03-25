@@ -965,9 +965,11 @@ app.controller("menuCtrl", [
         $scope.newOffer = function () {
             ModalProvider.openOfferCreateModel().result.then(function (data) {
                 $scope.offers.splice(0, 0, data);
-                ModalProvider.openConfirmModel("العروض", "هل تود طباعة العرض ؟", "notification", "fa-info", function () {
-                    $scope.printOffer(data);
-                });
+                ModalProvider.openConfirmModel("العروض", "print", "هل تود طباعة العرض ؟").result.then(function (value) {
+                    if(value){
+                        $scope.printOffer(data);
+                    }
+                })
             });
         };
         $scope.copyOffer = function (offer) {
