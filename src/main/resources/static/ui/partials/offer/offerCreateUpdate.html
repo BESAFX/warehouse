@@ -175,7 +175,7 @@
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="masterPrice"> المبلغ نقدا </label>
+                                <label for="masterPrice" class="control-label"> المبلغ نقدا </label>
                                 <div dir="ltr" class="input-group" id="masterPrice">
                                     <span class="input-group-addon">ريال سعودي</span>
                                     <input required="required"
@@ -189,7 +189,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-show="offer.masterPaymentType==='نقدي'">
-                                <label for="masterDiscountAmount"> نسبة الخصم </label>
+                                <label for="masterDiscountAmount" class="control-label"> نسبة الخصم </label>
                                 <div dir="ltr" class="input-group" id="masterDiscountAmount">
                                     <span class="input-group-addon">%</span>
                                     <input
@@ -205,7 +205,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-show="offer.masterPaymentType!='نقدي'">
-                                <label for="masterProfitAmount"> نسبة الفائدة </label>
+                                <label for="masterProfitAmount" class="control-label"> نسبة الفائدة </label>
                                 <div dir="ltr" class="input-group" id="masterProfitAmount">
                                     <span class="input-group-addon">%</span>
                                     <input
@@ -221,7 +221,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-show="offer.masterPaymentType!='نقدي'">
-                                <label for="masterCreditAmount"> قيمة القسط </label>
+                                <label for="masterCreditAmount" class="control-label"> قيمة القسط </label>
                                 <div dir="ltr" class="input-group" id="masterCreditAmount">
                                     <span class="input-group-addon">ريال سعودي</span>
                                     <input type="number"
@@ -236,7 +236,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-show="offer.masterPaymentType==='نقدي'">
-                                <label for="priceAfterDiscount"> المبلغ بعد الخصم </label>
+                                <label for="priceAfterDiscount" class="control-label"> المبلغ بعد الخصم </label>
                                 <div dir="ltr" class="input-group"
                                      id="priceAfterDiscount">
                                     <span class="input-group-addon">ريال سعودي</span>
@@ -249,7 +249,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-show="offer.masterPaymentType!='نقدي'">
-                                <label for="priceAfterProfit"> المبلغ بعد الفائدة </label>
+                                <label for="priceAfterProfit" class="control-label"> المبلغ بعد الفائدة </label>
                                 <div dir="ltr" class="input-group" id="priceAfterProfit">
                                     <span class="input-group-addon">ريال سعودي</span>
                                     <input readonly="readonly"
