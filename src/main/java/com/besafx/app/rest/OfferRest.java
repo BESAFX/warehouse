@@ -26,10 +26,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -109,11 +111,11 @@ public class OfferRest {
             buffer.append("سعر ");
             buffer.append(offer.getNet().toString().concat("SAR"));
 
-            if(offer.getSendSMS()){
+            if(offer.getSendSMS() != null && offer.getSendSMS()){
                 sendSMS.sendMessage(Lists.newArrayList(offer.getCustomerMobile()), buffer.toString());
             }
 
-            if (offer.getSendEmail()) {
+            if(offer.getSendEmail() != null && offer.getSendEmail()){
                 ClassPathResource classPathResource = new ClassPathResource("/mailTemplate/NewOffer.html");
                 String message = org.apache.commons.io.IOUtils.toString(classPathResource.getInputStream(), Charset.defaultCharset());
                 message = message.replaceAll("BRANCH_LOGO", branch.getLogo());
@@ -121,6 +123,7 @@ public class OfferRest {
                 log.info("إرسال رسالة الي العميل");
                 emailSender.send("عروض المعهد الأهلي - " + offer.getMaster().getBranch().getName(), message, offer.getCustomerEmail());
             }
+
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), offer);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);

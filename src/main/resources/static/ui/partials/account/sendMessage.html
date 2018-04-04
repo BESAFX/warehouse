@@ -1,0 +1,157 @@
+<form dir="rtl" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack="" focus-group-head="loop"
+      focus-group-tail="loop">
+
+    <div class="modal-header mdl-color--primary mdl-navigation__link-active">
+        <a class="pull-left" href="" ng-click="cancel()">
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
+            <span class="mdl-list__item-primary-content">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/account.{{iconSetType}}" width="24" height="24">
+                <strong>إرسال الرسائل</strong>
+            </span>
+        </h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">الفرع</label>
+                <ui-select id="branch"
+                           focus-autofocus="1"
+                           ng-model="buffer.branch"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="اختر الفرع">
+                        {{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="branch in branches | filter: $select.search | orderBy:'name' track by branch.id">
+                        <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
+                            <span class="mdl-list__item-primary-content">
+                                <span class="material-icons mdl-list__item-avatar"
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
+                                <div ng-bind-html="branch.name | highlight: $select.search"></div>
+                                <span class="mdl-list__item-sub-title">
+                                    <span>رقم الفرع / </span>
+                                    {{branch.code}}
+                                </span>
+                            </span>
+                        </li>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="searchBy" class="control-label">بحث بواسطة</label>
+                <select id="searchBy"
+                        style="height: 40px"
+                        required="required"
+                        disable-validation-message=""
+                        class="form-control text-right"
+                        ng-model="buffer.searchBy">
+                    <option value="fullName">اسم الطالب</option>
+                    <option value="studentIdentityNumber">رقم البطاقة</option>
+                    <option value="studentMobile">رقم الجوال</option>
+                </select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">الطالب</label>
+                <ui-select ng-model="buffer.accountsList"
+                           multiple="multiple"
+                           required="required"
+                           disable-validation-message=""
+                           theme="bootstrap">
+                    <ui-select-match placeholder="ابحث عن الطالب">
+                        {{$item.key}}
+                    </ui-select-match>
+                    <ui-select-choices
+                            refresh="searchAccount($select)"
+                            refresh-delay="300"
+                            repeat="account in accounts | filter: $select.search | orderBy:'name' track by account.id">
+
+                        <div class="mdl-menu__item--full-bleed-divider"></div>
+                        <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
+                            <span class="mdl-list__item-primary-content">
+                                <div class="col-md-2">
+                                    <span class="material-icons mdl-list__item-avatar" style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/account.{{iconSetType}}')"></span>
+                                </div>
+                                <div class="col-md-10">
+                                    <div ng-bind-html="account.key | highlight: $select.search"></div>
+                                    <span class="mdl-list__item-sub-title">
+                                        <span>اسم الطالب / </span>
+                                        <span ng-bind-html="account.name | highlight: $select.search"></span>
+                                    </span>
+                                    <span class="mdl-list__item-sub-title">
+                                        <span>رقم الجوال / </span>
+                                        {{account.studentMobile}}
+                                    </span>
+                                    <span class="mdl-list__item-sub-title">
+                                        <span>رقم البطاقة / </span>
+                                        {{account.studentIdentityNumber}}
+                                    </span>
+                                    <span class="mdl-list__item-sub-title">
+                                        <span>التخصص / </span>
+                                        {{account.course.master.name}}
+                                    </span>
+                                </div>
+                            </span>
+                        </li>
+
+                        <div ng-if="$index == $select.items.length-1">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                    ng-disabled="buffer.last"
+                                    style="width: 100%; margin-top: 5px;"
+                                    ng-click="searchAccount($select, $event);">تحميل المزيد</button>
+                        </div>
+
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="content" class="control-label">الرسالة</label>
+                <textarea id="content"
+                          type="text"
+                          msd-elastic="\n"
+                          class="form-control text-right"
+                          placeholder="اذكر باختصار الرسالة"
+                          ng-model="buffer.message">
+                </textarea>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="row">
+            <button uib-tooltip="ارسال"
+                    tooltip-append-to-body="true"
+                    type="submit"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+            </button>
+            <button uib-tooltip="مسح الحقول"
+                    tooltip-append-to-body="true"
+                    type="reset"
+                    ng-click="form.$setPristine()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+            </button>
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="cancel()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+            </button>
+        </div>
+
+    </div>
+
+</form>

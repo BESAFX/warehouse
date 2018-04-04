@@ -31,6 +31,11 @@ app.factory("AccountService", ['$http', '$log',
                     return response.data;
                 });
             },
+            sendMessage: function (message, mobiles) {
+                return $http.get("/api/account/sendMessage/" + message + "/" + mobiles).then(function (response) {
+                    return response.data;
+                });
+            },
             findByMobile: function (mobile) {
                 return $http.get("/api/account/findByMobile/" + mobile).then(function (response) {
                     return response.data;

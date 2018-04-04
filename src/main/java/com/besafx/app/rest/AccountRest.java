@@ -1,5 +1,6 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.config.SendSMS;
 import com.besafx.app.entity.*;
 import com.besafx.app.search.AccountSearch;
 import com.besafx.app.service.*;
@@ -113,6 +114,9 @@ public class AccountRest {
     private AccountSearch accountSearch;
 
     @Autowired
+    private SendSMS sendSMS;
+
+    @Autowired
     private NotificationService notificationService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -189,6 +193,13 @@ public class AccountRest {
             accountService.delete(accounts);
             notificationService.notifyAll(Notification.builder().message("تم حذف الطلاب وكل ما يتعلق بهم من سندات وحسابات بنجاح").type("success").build());
         }
+    }
+
+    @RequestMapping(value = "sendMessage/{content}/{mobiles}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_SEND_SMS')")
+    public void sendMessage(@PathVariable String content, @PathVariable List<String> mobiles) {
+        sendSMS.sendMessage(mobiles, content);
     }
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

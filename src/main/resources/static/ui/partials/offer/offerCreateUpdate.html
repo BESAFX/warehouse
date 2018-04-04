@@ -120,7 +120,7 @@
                                        ng-model="offer.customerEmail">
                             </div>
 
-                            <div class="form-group row" ng-init="offer.sendEmail=false;offer.sendSMS=false" ng-if="contains(me.team.authorities, ['ROLE_OFFER_SEND'])">
+                            <div class="form-group row" ng-init="offer.sendEmail=false;offer.sendSMS=false" ng-if="contains(me.team.authorities, ['ROLE_SEND_SMS'])">
 
                                 <div class="form-group col-ms-12 col-sm-12 col-md-6 col-lg-6">
                                     <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-email">

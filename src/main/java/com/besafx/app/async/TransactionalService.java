@@ -58,6 +58,11 @@ public class TransactionalService {
     }
 
     @Transactional
+    public List<Account> getAccountsByMobile(String mobile){
+        return accountService.findByStudentContactMobileContaining(mobile);
+    }
+
+    @Transactional
     public Integer countOffersByMasterAndDateBetween(Master master, Long startDate, Long endDate) {
         try {
             return offerService.findByMasterAndLastUpdateBetween(

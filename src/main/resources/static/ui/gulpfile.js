@@ -166,6 +166,7 @@ gulp.task('scripts', function () {
         './partials/account/accountConditionCreate.js',
         './partials/account/accountNoteCreate.js',
         './partials/account/accountAttachCreate.js',
+        './partials/account/sendMessage.js',
         './partials/payment/paymentCreate.js',
         './partials/payment/paymentUpdate.js',
         './partials/payment/paymentFilter.js',

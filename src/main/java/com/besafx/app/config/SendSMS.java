@@ -1,6 +1,5 @@
 package com.besafx.app.config;
 
-import org.apache.catalina.LifecycleState;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
-import java.sql.Array;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +46,7 @@ public class SendSMS {
         log.info(jsonObj.toString());
     }
 
-    public String sendMessage(List<String> mobileList, String message){
+    public String sendMessage(List<String> mobileList, String message) {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());

@@ -92,7 +92,7 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
         });
         $scope.roles.push({
             name: 'ارسال العروض',
-            value: 'ROLE_OFFER_SEND',
+            value: 'ROLE_SEND_SMS',
             selected: false,
             category: 'التسجيل'
         });

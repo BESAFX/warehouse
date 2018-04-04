@@ -1,6 +1,5 @@
 package com.besafx.app.entity;
 
-import com.besafx.app.component.BeanUtil;
 import com.besafx.app.service.AccountService;
 import com.besafx.app.service.OfferService;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -14,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,12 +29,6 @@ public class Offer implements Serializable {
     private final static Logger log = LoggerFactory.getLogger(Offer.class);
 
     private static final long serialVersionUID = 1L;
-
-    @Transient
-    private static AccountService accountService;
-
-    @Transient
-    private static OfferService offerService;
 
     @GenericGenerator(
             name = "offerSequenceGenerator",
@@ -69,10 +61,10 @@ public class Offer implements Serializable {
 
     private String masterPaymentType;
 
-    @Column(columnDefinition = "boolean default true", nullable = false)
+    @Column(columnDefinition = "boolean default true")
     private Boolean sendEmail;
 
-    @Column(columnDefinition = "boolean default true", nullable = false)
+    @Column(columnDefinition = "boolean default true")
     private Boolean sendSMS;
 
     private String messageSid;
@@ -114,48 +106,6 @@ public class Offer implements Serializable {
         ObjectMapper mapper = new ObjectMapper();
         Offer offer = mapper.readValue(jsonString, Offer.class);
         return offer;
-    }
-
-    @PostConstruct
-    public void init() {
-        try {
-            accountService = BeanUtil.getBean(AccountService.class);
-            offerService = BeanUtil.getBean(OfferService.class);
-        } catch (Exception ex) {
-
-        }
-    }
-
-    public List<Account> getAccountsByMobile() {
-        try {
-            if (this.customerMobile != null) {
-                return accountService.findByStudentContactMobileContaining(this.customerMobile);
-            } else {
-                return new ArrayList<>();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public Boolean getRegistered() {
-        try {
-            if (!this.getAccountsByMobile().isEmpty()) {
-                if (!this.registered) {
-                    this.registered = true;
-                    offerService.save(this);
-                }
-            } else {
-                if (this.registered) {
-                    this.registered = false;
-                    offerService.save(this);
-                }
-            }
-            return this.registered;
-        } catch (Exception ex) {
-            return null;
-        }
     }
 
     public Double getNet() {
