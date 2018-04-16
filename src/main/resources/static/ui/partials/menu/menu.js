@@ -132,62 +132,81 @@ app.controller("menuCtrl", [
         $scope.toggleState = 'menu';
         $scope.openStateMenu = function () {
             $scope.toggleState = 'menu';
+            $rootScope.refreshGUI();
         };
         $scope.openStateCompany = function () {
             $scope.toggleState = 'company';
+            $rootScope.refreshGUI();
         };
         $scope.openStateBranch = function () {
             $scope.toggleState = 'branch';
+            $rootScope.refreshGUI();
             $scope.fetchBranchTableData();
         };
         $scope.openStateMasterCategory = function () {
             $scope.toggleState = 'masterCategory';
+            $rootScope.refreshGUI();
             $scope.readMasterCategories();
         };
         $scope.openStateMaster = function () {
             $scope.toggleState = 'master';
+            $rootScope.refreshGUI();
         };
         $scope.openStateOffer = function () {
             $scope.toggleState = 'offer';
+            $rootScope.refreshGUI();
         };
         $scope.openStateCourse = function () {
             $scope.toggleState = 'course';
+            $rootScope.refreshGUI();
         };
         $scope.openStateAccount = function () {
             $scope.toggleState = 'account';
+            $rootScope.refreshGUI();
         };
         $scope.openStatePaymentIn = function () {
             $scope.toggleState = 'paymentIn';
+            $rootScope.refreshGUI();
         };
         $scope.openStatePaymentOut = function () {
             $scope.toggleState = 'paymentOut';
+            $rootScope.refreshGUI();
         };
         $scope.openStateBillBuyType = function () {
             $scope.toggleState = 'billBuyType';
+            $rootScope.refreshGUI();
         };
         $scope.openStateBillBuy = function () {
             $scope.toggleState = 'billBuy';
+            $rootScope.refreshGUI();
         };
         $scope.openStateBank = function () {
             $scope.toggleState = 'bank';
+            $rootScope.refreshGUI();
         };
         $scope.openStateTeam = function () {
             $scope.toggleState = 'team';
+            $rootScope.refreshGUI();
         };
         $scope.openStatePerson = function () {
             $scope.toggleState = 'person';
+            $rootScope.refreshGUI();
         };
         $scope.openStateProfile = function () {
             $scope.toggleState = 'profile';
+            $rootScope.refreshGUI();
         };
         $scope.openStateHelp = function () {
             $scope.toggleState = 'help';
+            $rootScope.refreshGUI();
         };
         $scope.openStateAbout = function () {
             $scope.toggleState = 'about';
+            $rootScope.refreshGUI();
         };
         $scope.openStateReport = function () {
             $scope.toggleState = 'report';
+            $rootScope.refreshGUI();
         };
         $scope.menuOptionsBody = [
             {
@@ -199,7 +218,7 @@ app.controller("menuCtrl", [
                     return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.newAccount();
+
                 },
                 children: [
                     {
@@ -297,7 +316,7 @@ app.controller("menuCtrl", [
                     return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.newAccount();
+
                 },
                 children: [
                     {
@@ -407,7 +426,7 @@ app.controller("menuCtrl", [
                     return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_ACCOUNT_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.newAccount();
+
                 },
                 children: [
                     {

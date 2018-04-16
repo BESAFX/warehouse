@@ -76,6 +76,12 @@ public class PersonRest {
         person.setTokenExpired(false);
         person.setActive(false);
         person.setEnabled(true);
+        person.setOptions(JSONConverter.toString(Options.builder()
+                .lang("AR")
+                .dateType("H")
+                .iconSet("icon-set-2")
+                .iconSetType("png")
+                .style("mdl-style-1")));
         person = personService.save(person);
         ListIterator<BranchAccess> listIterator = person.getBranchAccesses().listIterator();
         while (listIterator.hasNext()) {

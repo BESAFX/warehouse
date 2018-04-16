@@ -295,22 +295,30 @@
                                 <tbody>
                                     <tr ng-repeat="sortBy in pageOffer.sorts">
                                         <td>
-                                            <select class="form-control"
-                                                    ng-model="sortBy.name">
-                                                <option value="code">رقم العرض</option>
-                                                <option value="customerName">اسم العميل</option>
-                                                <option value="customerIdentityNumber">رقم البطاقة</option>
-                                                <option value="customerMobile">رقم الجوال</option>
-                                                <option value="master.name">التخصص</option>
-                                                <option value="lastPerson.id">مدخل العرض</option>
-                                            </select>
+                                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <label for="sortBy" class="control-label">بواسطة</label>
+                                                <select id="sortBy"
+                                                        class="form-control"
+                                                        ng-model="sortBy.name">
+                                                    <option value="code">رقم العرض</option>
+                                                    <option value="customerName">اسم العميل</option>
+                                                    <option value="customerIdentityNumber">رقم البطاقة</option>
+                                                    <option value="customerMobile">رقم الجوال</option>
+                                                    <option value="master.name">التخصص</option>
+                                                    <option value="lastPerson.id">مدخل العرض</option>
+                                                </select>
+                                            </div>
                                         </td>
                                         <td>
-                                            <select class="form-control"
-                                                    ng-model="sortBy.direction">
-                                                <option value="asc">تصاعدي</option>
-                                                <option value="desc">تنازلي</option>
-                                            </select>
+                                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <label for="direction" class="control-label">اتجاة الترتيب</label>
+                                                <select id="direction"
+                                                        class="form-control"
+                                                        ng-model="sortBy.direction">
+                                                    <option value="asc">تصاعدي</option>
+                                                    <option value="desc">تنازلي</option>
+                                                </select>
+                                            </div>
                                         </td>
                                         <td>
                                             <a href="" ng-click="pageOffer.sorts.splice($index, 1)">حذف</a>

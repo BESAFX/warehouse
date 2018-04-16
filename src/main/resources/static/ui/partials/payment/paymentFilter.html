@@ -428,28 +428,34 @@
                             <tbody>
                             <tr ng-repeat="sortBy in pagePayment.sorts">
                                 <td>
-                                    <select class="form-control"
-                                            ng-model="sortBy.name">
-                                        <option value="account.student.contact.firstName">الاسم الأول</option>
-                                        <option value="account.student.contact.secondName">الاسم الثاني</option>
-                                        <option value="account.student.contact.thirdName">الاسم الثالث</option>
-                                        <option value="account.student.contact.forthName">الاسم الرابع</option>
-                                        <option value="account.student.contact.identityNumber">رقم البطاقة</option>
-                                        <option value="account.student.contact.mobile">رقم الجوال</option>
-                                        <option value="account.course.master.branch.id">الفرع</option>
-                                        <option value="account.course.master.id">التخصص</option>
-                                        <option value="account.course.id">الدورة</option>
-                                        <option value="code">رقم السند</option>
-                                        <option value="date">تاريخ السند</option>
-                                        <option value="lastPerson.id">مدخل السند</option>
-                                    </select>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label for="sortBy" class="control-label">بواسطة</label>
+                                        <select id="sortBy" class="form-control" ng-model="sortBy.name">
+                                            <option value="account.student.contact.firstName">الاسم الأول</option>
+                                            <option value="account.student.contact.secondName">الاسم الثاني</option>
+                                            <option value="account.student.contact.thirdName">الاسم الثالث</option>
+                                            <option value="account.student.contact.forthName">الاسم الرابع</option>
+                                            <option value="account.student.contact.identityNumber">رقم البطاقة</option>
+                                            <option value="account.student.contact.mobile">رقم الجوال</option>
+                                            <option value="account.course.master.branch.id">الفرع</option>
+                                            <option value="account.course.master.id">التخصص</option>
+                                            <option value="account.course.id">الدورة</option>
+                                            <option value="code">رقم السند</option>
+                                            <option value="date">تاريخ السند</option>
+                                            <option value="lastPerson.id">مدخل السند</option>
+                                        </select>
+                                    </div>
                                 </td>
                                 <td>
-                                    <select class="form-control"
-                                            ng-model="sortBy.direction">
-                                        <option value="asc">تصاعدي</option>
-                                        <option value="desc">تنازلي</option>
-                                    </select>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <label for="direction" class="control-label">اتجاة الترتيب</label>
+                                        <select id="direction"
+                                                class="form-control"
+                                                ng-model="sortBy.direction">
+                                            <option value="asc">تصاعدي</option>
+                                            <option value="desc">تنازلي</option>
+                                        </select>
+                                    </div>
                                 </td>
                                 <td>
                                     <a href="" ng-click="pagePayment.sorts.splice($index, 1)">حذف</a>

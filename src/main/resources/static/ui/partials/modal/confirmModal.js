@@ -1,11 +1,13 @@
 app.controller('confirmModalCtrl', [
     '$uibModalInstance',
     '$scope',
+    '$timeout',
     'title',
     'icon',
     'message',
     function ($uibModalInstance,
               $scope,
+              $timeout,
               title,
               icon,
               message) {
@@ -22,8 +24,8 @@ app.controller('confirmModalCtrl', [
             $uibModalInstance.dismiss('cancel');
         };
 
-       setTimeout(function () {
+        $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 1500);
+        }, 600);
 
     }]);

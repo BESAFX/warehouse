@@ -47,7 +47,7 @@ app.run([
         $rootScope.refreshGUI = function () {
             $timeout(function () {
                 window.componentHandler.upgradeAllRegistered();
-            }, 300);
+            }, 500);
         };
 
         $rootScope.style = 'mdl-style';
