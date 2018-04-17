@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" class="body-full-height" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!-- META SECTION -->
-    <title>Smart Offer | العروض وتسجيل الطلاب</title>
+    <title>Smart Offer | برنامج المعهد</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -32,10 +32,13 @@
 
     <style>
 
-        @import url('https://fonts.googleapis.com/css?family=Jomhuria');
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
+        @import url('https://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css');
 
         html * {
-            font-size: 24px;
+            font-size: 15px;
+            font-family: 'Droid Arabic Naskh', 'Roboto Condensed', sans-serif;
+            font-weight: 900;
         }
 
         .login-page {
@@ -53,7 +56,6 @@
             box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
         }
         .form input {
-            font-family: "Jomhuria", cursive;
             outline: 0;
             background: #f2f2f2;
             width: 100%;
@@ -61,10 +63,9 @@
             margin: 0 0 15px;
             padding: 15px;
             box-sizing: border-box;
-            font-size: 24px;
+            font-size: 15px;
         }
         .form button {
-            font-family: "Jomhuria", cursive;
             text-transform: uppercase;
             outline: 0;
             background: #424242;
@@ -72,7 +73,7 @@
             border: 0;
             padding: 15px;
             color: #FFFFFF;
-            font-size: 24px;
+            font-size: 15px;
             -webkit-transition: all 0.3 ease;
             transition: all 0.3 ease;
             cursor: pointer;
@@ -131,7 +132,6 @@
             background: -moz-linear-gradient(right, #212121, #424242);
             background: -o-linear-gradient(right, #212121, #424242);
             background: linear-gradient(to left, #212121, #424242);
-            font-family: "Jomhuria", cursive;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -142,7 +142,7 @@
 
 <div dir="rtl" class="login-page col-xs-12 col-sm-12 col-md-4 col-md-4 col-md-push-4 col-lg-push-4">
     <div class="form">
-        <h1>المعهد الأهلي العالي للتدريب | العروض وتسجيل الطلاب</h1>
+        <h1>برنامج المعهد | Smart Offer</h1>
         <div th:if="${param.error}">
             <div class="alert alert-danger" role="alert">
                 <strong>هناك خطأ فى الدخول: </strong>

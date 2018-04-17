@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -147,6 +148,56 @@ public class ReportAccountController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
+    @RequestMapping(value = "/report/AccountDebtByBranches", method = RequestMethod.GET, produces = "application/pdf")
+    @ResponseBody
+    public void printAccountDebtByBranches(
+            @RequestParam(value = "branchIds") List<Long> branchIds,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "title") String title,
+            Sort sort,
+            HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(branchIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("course").get("master").get("branch").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        //End Search
+        map.put("accounts", getDebtList(predicates, sort));
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/AccountDebt.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
+    @RequestMapping(value = "/report/AccountDebtByMasters", method = RequestMethod.GET, produces = "application/pdf")
+    @ResponseBody
+    public void printAccountDebtByMasters(
+            @RequestParam(value = "masterIds") List<Long> masterIds,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "title") String title,
+            Sort sort,
+            HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(masterIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("course").get("master").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        //End Search
+        map.put("accounts", getDebtList(predicates, sort));
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/AccountDebt.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
     @RequestMapping(value = "/report/account/contract/zip", method = RequestMethod.GET, produces = "application/zip")
     @ResponseBody
     public byte[] printContractAsZip(
@@ -243,13 +294,26 @@ public class ReportAccountController {
         reportExporter.exportMultiple(builder.toString().replaceAll(" ", "_"), response, jasperPrints);
     }
 
-    private List<Offer> getList(List<Specification> predicates, Sort sort) {
+    private List<Account> getList(List<Specification> predicates, Sort sort) {
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
             return accountService.findAll(result, sort);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    private List<Account> getDebtList(List<Specification> predicates, Sort sort) {
+        if (!predicates.isEmpty()) {
+            Specification result = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                result = Specifications.where(result).and(predicates.get(i));
+            }
+            List<Account> list = accountService.findAll(result, sort);
+            return list.stream().filter(account -> account.getRemainPrice() > 0).collect(Collectors.toList());
         } else {
             return new ArrayList<>();
         }

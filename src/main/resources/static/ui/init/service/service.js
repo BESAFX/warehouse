@@ -1090,6 +1090,30 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
         });
     };
 
+    this.openReportAccountDebtByBranchModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/account/accountDebtByBranch.html",
+            controller: "accountDebtByBranchCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
+    this.openReportAccountDebtByMasterModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/account/accountDebtByMaster.html",
+            controller: "accountDebtByMasterCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * Payment                                                    *
