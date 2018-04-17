@@ -201,6 +201,7 @@ gulp.task('scripts', function () {
 
         './partials/report/account/js/accountDebtByBranch.js',
         './partials/report/account/js/accountDebtByMaster.js',
+        './partials/report/account/js/accountDebtByCourse.js',
 
         './partials/report/payment/js/paymentByBranch.js',
         './partials/report/payment/js/paymentByCourse.js',

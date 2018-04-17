@@ -198,6 +198,31 @@ public class ReportAccountController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
+    @RequestMapping(value = "/report/AccountDebtByCourses", method = RequestMethod.GET, produces = "application/pdf")
+    @ResponseBody
+    public void printAccountDebtByCourses(
+            @RequestParam(value = "courseIds") List<Long> courseIds,
+            @RequestParam(value = "exportType") ExportType exportType,
+            @RequestParam(value = "startDate", required = false) Long startDate,
+            @RequestParam(value = "endDate", required = false) Long endDate,
+            @RequestParam(value = "title") String title,
+            Sort sort,
+            HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        //Start Search
+        List<Specification> predicates = new ArrayList<>();
+        Optional.ofNullable(courseIds).ifPresent(value -> predicates.add((root, cq, cb) -> root.get("course").get("id").in(value)));
+        Optional.ofNullable(startDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(endDate).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        //End Search
+        map.put("accounts", getDebtList(predicates, sort));
+        ClassPathResource jrxmlFile = new ClassPathResource("/report/account/AccountDebt.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map);
+        reportExporter.export(exportType, response, jasperPrint);
+    }
+
     @RequestMapping(value = "/report/account/contract/zip", method = RequestMethod.GET, produces = "application/zip")
     @ResponseBody
     public byte[] printContractAsZip(

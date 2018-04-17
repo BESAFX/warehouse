@@ -1114,6 +1114,18 @@ app.service('ReportModelProvider', ['$uibModal', function ($uibModal) {
         });
     };
 
+    this.openReportAccountDebtByCourseModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: "/ui/partials/report/account/accountDebtByCourse.html",
+            controller: "accountDebtByCourseCtrl",
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * Payment                                                    *
