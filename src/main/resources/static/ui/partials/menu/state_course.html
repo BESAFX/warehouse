@@ -2,8 +2,10 @@
     <div class="panel panel-body">
         <div class="row">
             <ul dir="rtl" class="breadcrumb">
+                <li>
+                    <a href="" ng-click="openStateMenu()">الرئيسية</a>
+                </li>
                 <li ng-repeat="item in itemsCourse | orderBy:'id' track by item.id">
-                    <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
                     <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
                 </li>
             </ul>

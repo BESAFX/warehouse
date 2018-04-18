@@ -136,7 +136,9 @@
                         <tbody>
                         <tr ng-repeat="accountAttach in collectionAccountAttaches">
                             <td class="fit">{{$index+1}}</td>
-                            <td>{{accountAttach.attach.name}}</td>
+                            <td>
+                                <a ng-href="{{accountAttach.attach.link}}" target="_blank">{{accountAttach.attach.name}}</a>
+                            </td>
                             <td>
                                 <ui-select ng-model="accountAttach.attachType"
                                            ng-change="setAccountAttachType(accountAttach)"

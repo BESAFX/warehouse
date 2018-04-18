@@ -3,8 +3,10 @@
 
         <div class="row">
             <ul dir="rtl" class="breadcrumb">
+                <li>
+                    <a href="" ng-click="openStateMenu()">الرئيسية</a>
+                </li>
                 <li ng-repeat="item in itemsMaster | orderBy:'id' track by item.id">
-                    <a ng-if="item.type==='link'" href="">{{item.name}}</a>
                     <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
                 </li>
             </ul>

@@ -693,7 +693,6 @@ app.controller("menuCtrl", [
          **************************************************************************************************************/
         $scope.paramMaster = {};
         $scope.itemsMaster = [];
-        $scope.itemsMaster.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsMaster.push({'id': 2, 'type': 'title', 'name': 'التخصصات'});
         $scope.newMaster = function () {
             ModalProvider.openMasterCreateModel().result.then(function (data) {
@@ -762,7 +761,6 @@ app.controller("menuCtrl", [
             MasterService.filter(search.join("")).then(function (data) {
                 $scope.masters = data;
                 $scope.itemsMaster = [];
-                $scope.itemsMaster.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsMaster.push({
                     'id': 2,
                     'type': 'title',
@@ -826,7 +824,6 @@ app.controller("menuCtrl", [
         $scope.offers = [];
         $scope.offers.checkAll = false;
         $scope.itemsOffer = [];
-        $scope.itemsOffer.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsOffer.push({'id': 2, 'type': 'title', 'name': 'العروض'});
 
         $scope.pageOffer = {};
@@ -952,7 +949,6 @@ app.controller("menuCtrl", [
                 $scope.pageOffer.currentPageString = ($scope.pageOffer.page + 1) + ' / ' + $scope.pageOffer.totalPages;
 
                 $scope.itemsOffer = [];
-                $scope.itemsOffer.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsOffer.push({'id': 2, 'type': 'title', 'name': 'العروض', 'style': 'font-weight:bold'});
                 $scope.itemsOffer.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
                 $scope.itemsOffer.push({
@@ -1139,7 +1135,6 @@ app.controller("menuCtrl", [
         $scope.paramCourse = {};
         $scope.courses = [];
         $scope.itemsCourse = [];
-        $scope.itemsCourse.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsCourse.push({'id': 2, 'type': 'title', 'name': 'الدورات'});
         $scope.newCourse = function () {
             ModalProvider.openCourseCreateModel().result.then(function (data) {
@@ -1227,7 +1222,6 @@ app.controller("menuCtrl", [
             CourseService.filter(search.join("")).then(function (data) {
                 $scope.courses = data;
                 $scope.itemsCourse = [];
-                $scope.itemsCourse.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsCourse.push({'id': 2, 'type': 'title', 'name': 'الدورات', 'style': 'font-weight:bold'});
                 $scope.itemsCourse.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
                 $scope.itemsCourse.push({
@@ -1310,7 +1304,6 @@ app.controller("menuCtrl", [
         $scope.accounts = [];
         $scope.accounts.checkAll = false;
         $scope.itemsAccount = [];
-        $scope.itemsAccount.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsAccount.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب'});
 
         $scope.pageAccount = {};
@@ -1457,7 +1450,6 @@ app.controller("menuCtrl", [
                 $scope.pageAccount.currentPageString = ($scope.pageAccount.page + 1) + ' / ' + $scope.pageAccount.totalPages;
 
                 $scope.itemsAccount = [];
-                $scope.itemsAccount.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsAccount.push({'id': 2, 'type': 'title', 'name': 'تسجيل الطلاب', 'style': 'font-weight:bold'});
                 $scope.itemsAccount.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
                 $scope.itemsAccount.push({'id': 4, 'type': 'title', 'name': ' [ ' + $scope.paramAccount.branch.code + ' ] ' + $scope.paramAccount.branch.name});
@@ -1701,7 +1693,6 @@ app.controller("menuCtrl", [
         $scope.payments = [];
         $scope.payments.checkAll = false;
         $scope.itemsPayment = [];
-        $scope.itemsPayment.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsPayment.push({'id': 2, 'type': 'title', 'name': 'سندات القبض'});
 
         $scope.pagePayment = {};
@@ -1868,7 +1859,6 @@ app.controller("menuCtrl", [
                 $scope.pagePayment.currentPageString = ($scope.pagePayment.page + 1) + ' / ' + $scope.pagePayment.totalPages;
 
                 $scope.itemsPayment = [];
-                $scope.itemsPayment.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsPayment.push({'id': 2, 'type': 'title', 'name': 'سندات القبض', 'style': 'font-weight:bold'});
                 $scope.itemsPayment.push({'id': 3, 'type': 'title', 'name': 'فرع', 'style': 'font-weight:bold'});
                 $scope.itemsPayment.push({'id': 4, 'type': 'title', 'name': ' [ ' + paramPaymentIn.branch.code + ' ] ' + paramPaymentIn.branch.name});
@@ -2011,7 +2001,6 @@ app.controller("menuCtrl", [
         $scope.paramPaymentOut = {};
         $scope.paymentOuts = [];
         $scope.itemsPaymentOut = [];
-        $scope.itemsPaymentOut.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsPaymentOut.push({'id': 2, 'type': 'title', 'name': 'سندات الصرف'});
         $scope.newPaymentOut = function () {
             ModalProvider.openPaymentOutCreateModel().result.then(function (data) {
@@ -2221,7 +2210,6 @@ app.controller("menuCtrl", [
         $scope.billBuys = [];
         $scope.billBuys.checkAll = false;
         $scope.itemsBillBuy = [];
-        $scope.itemsBillBuy.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsBillBuy.push({'id': 2, 'type': 'title', 'name': 'فواتير الشراء'});
 
         $scope.pageBillBuy = {};
@@ -2323,7 +2311,6 @@ app.controller("menuCtrl", [
                 $scope.pageBillBuy.currentPageString = ($scope.pageBillBuy.page + 1) + ' / ' + $scope.pageBillBuy.totalPages;
 
                 $scope.itemsBillBuy = [];
-                $scope.itemsBillBuy.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                 $scope.itemsBillBuy.push({
                     'id': 2,
                     'type': 'title',
@@ -2437,7 +2424,6 @@ app.controller("menuCtrl", [
          *                                                                                                            *
          **************************************************************************************************************/
         $scope.itemsBank = [];
-        $scope.itemsBank.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
         $scope.itemsBank.push({'id': 2, 'type': 'title', 'name': 'الحسابات البنكية'});
         $scope.banks = [];
         $scope.filterBank = function () {
@@ -2493,7 +2479,6 @@ app.controller("menuCtrl", [
                 BankService.filter(search.join("")).then(function (data) {
                     $scope.banks = data;
                     $scope.itemsBank = [];
-                    $scope.itemsBank.push({'id': 1, 'type': 'link', 'name': 'البرامج', 'link': 'menu'});
                     $scope.itemsBank.push({
                         'id': 2,
                         'type': 'title',

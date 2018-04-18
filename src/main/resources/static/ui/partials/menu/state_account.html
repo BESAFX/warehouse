@@ -2,6 +2,9 @@
     <div class="panel panel-body">
         <div class="row">
             <ul dir="rtl" class="breadcrumb">
+                <li>
+                    <a href="" ng-click="openStateMenu()">الرئيسية</a>
+                </li>
                 <li ng-repeat="item in itemsAccount | orderBy:'id' track by item.id">
                     <a ng-if="item.type==='link'" href="" ui-sref="{{item.link}}">{{item.name}}</a>
                     <span ng-if="item.type==='title'" style="{{item.style}}">{{item.name}}</span>
@@ -194,6 +197,14 @@
                             </th>
 
                             <th>
+                                <span>التخصص</span>
+                            </th>
+
+                            <th>
+                                <span>الفرع</span>
+                            </th>
+
+                            <th>
                                 <span>تاريخ التسجيل</span>
                             </th>
 
@@ -234,6 +245,8 @@
                             </td>
                             <td class="fit">{{$index+1}}</td>
                             <td class="fit"><a href="" ng-click="ModalProvider.openAccountDetailsModel(account);">{{account.key}}</a></td>
+                            <td>{{account.course.master.name}}</td>
+                            <td>{{account.course.master.branch.name}}</td>
                             <td class="fit">
                                 <span ng-class="{'no-print': dateType==='G'}" ng-show="dateType==='H'">{{account.registerDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                 <span ng-class="{'no-print': dateType==='H'}" ng-show="dateType==='G'">{{account.registerDate | date: 'yyyy-MM-dd'}}</span>
@@ -247,7 +260,7 @@
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-show="!accounts || accounts.length ==0">
-                            <td colspan="13">لا توجد بيانات</td>
+                            <td colspan="15">لا توجد بيانات</td>
                         </tr>
                         </tbody>
                     </table>
@@ -391,7 +404,9 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="accountAttach in account.accountAttaches">
-                                <td>{{accountAttach.attach.name}}</td>
+                                <td>
+                                    <a ng-href="{{accountAttach.attach.link}}" target="_blank">{{accountAttach.attach.name}}</a>
+                                </td>
                                 <td>
                                     <ui-select ng-model="accountAttach.attachType"
                                                ng-change="setAccountAttachType(accountAttach)"
