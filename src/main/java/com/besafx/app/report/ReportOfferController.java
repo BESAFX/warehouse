@@ -4,24 +4,23 @@ import com.besafx.app.component.ReportExporter;
 import com.besafx.app.entity.Offer;
 import com.besafx.app.enums.ExportType;
 import com.besafx.app.service.OfferService;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.concurrent.Future;
 
 @RestController
 public class ReportOfferController {
@@ -61,7 +60,7 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
-            Pageable pageRequest,
+            Sort sort,
             HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
@@ -82,7 +81,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates, pageRequest));
+        map.put("offers", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -100,7 +99,7 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
-            Pageable pageRequest,
+            Sort sort,
             HttpServletResponse response)
             throws Exception {
         Map<String, Object> map = new HashMap<>();
@@ -123,7 +122,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates, pageRequest));
+        map.put("offers", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -140,7 +139,7 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
-            Pageable pageRequest,
+            Sort sort,
             HttpServletResponse response)
             throws Exception {
         Map<String, Object> map = new HashMap<>();
@@ -162,7 +161,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates, pageRequest));
+        map.put("offers", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -179,7 +178,7 @@ public class ReportOfferController {
             @RequestParam(value = "registerOption") Integer registerOption,
             @RequestParam(value = "startDate", required = false) Long startDate,
             @RequestParam(value = "endDate", required = false) Long endDate,
-            Pageable pageRequest,
+            Sort sort,
             HttpServletResponse response)
             throws Exception {
         Map<String, Object> map = new HashMap<>();
@@ -201,7 +200,7 @@ public class ReportOfferController {
                     break;
             }
         });
-        map.put("offers", getList(predicates, pageRequest));
+        map.put("offers", getList(predicates, sort));
         //End Search
         ClassPathResource jrxmlFile = new ClassPathResource("/report/offer/Report.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile.getInputStream());
@@ -209,14 +208,14 @@ public class ReportOfferController {
         reportExporter.export(exportType, response, jasperPrint);
     }
 
-    private List<Offer> getList(List<Specification> predicates, Pageable pageRequest) {
+    private List<Offer> getList(List<Specification> predicates, Sort sort) {
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
                 result = Specifications.where(result).and(predicates.get(i));
             }
-            return offerService.findAll(result, pageRequest).getContent();
-        }else{
+            return offerService.findAll(result, sort);
+        } else {
             return new ArrayList<>();
         }
     }

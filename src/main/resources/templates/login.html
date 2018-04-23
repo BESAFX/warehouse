@@ -143,15 +143,13 @@
 <div dir="rtl" class="login-page col-xs-12 col-sm-12 col-md-4 col-md-4 col-md-push-4 col-lg-push-4">
     <div class="form">
         <h1>برنامج المعهد | Smart Offer</h1>
-        <div th:if="${param.error}">
-            <div class="alert alert-danger" role="alert">
-                <strong>هناك خطأ فى الدخول: </strong>
-                <ul>
-                    <li>تأكد من البريد الإلكتروني أو كلمة المرور</li>
-                    <li>يجب أن يكون المستخدم يشغل منصب داخل النظام</li>
-                    <li>مصرح للدعم الفني الدخول مباشرة</li>
-                </ul>
-            </div>
+        <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
+            <strong>هناك خطأ فى الدخول: </strong>
+            <ul>
+                <li>تأكد من البريد الإلكتروني أو كلمة المرور</li>
+                <li>يجب أن يكون المستخدم يشغل منصب داخل النظام</li>
+                <li>مصرح للدعم الفني الدخول مباشرة</li>
+            </ul>
         </div>
         <div th:if="${param.logout}">
             <div class="alert alert-success" role="alert">تم تسجيل بيانات الخروج بنجاح</div>
