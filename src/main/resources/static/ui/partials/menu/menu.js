@@ -1098,6 +1098,28 @@ app.controller("menuCtrl", [
                 click: function ($itemScope, $event, value) {
                     $scope.callOffer($itemScope.offer);
                 }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/send.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>ارسال رسالة...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SEND_SMS']);
+                },
+                click: function ($itemScope, $event, value) {
+                    var selectedOffers = [];
+                    angular.forEach($scope.offers, function (offer) {
+                        if(offer.isSelected){
+                            selectedOffers.push(offer);
+                        }
+                    });
+                    if(selectedOffers.length > 0){
+                        ModalProvider.openOfferSendMessageModel(selectedOffers);
+                    }else{
+                        $rootScope.showNotify('', 'فضلا قم باختيار عرض واحد على الأقل', 'error', '');
+                    }
+                }
             }
         ];
         $scope.checkAllOffers = function () {

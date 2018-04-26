@@ -152,6 +152,7 @@ gulp.task('scripts', function () {
         './partials/offer/offerHeavyWork.js',
         './partials/offer/offerDetails.js',
         './partials/offer/callCreate.js',
+        './partials/offer/offerSendMessage.js',
         './partials/course/courseCreateUpdate.js',
         './partials/course/courseHeavyWork.js',
         './partials/course/courseFilter.js',

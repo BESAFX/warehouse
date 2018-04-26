@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SendSMS {
@@ -61,7 +62,7 @@ public class SendSMS {
         json.put("Username", "966599233472");
         json.put("Password", "0504975344");
         json.put("Tagname", "ANNI");
-        json.put("RecepientNumber", String.join(",", mobileList));
+        json.put("RecepientNumber", String.join(",", mobileList.stream().distinct().collect(Collectors.toList())));
         json.put("VariableList", "");
         json.put("ReplacementList", "");
         json.put("Message", message);

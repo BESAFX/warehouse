@@ -287,6 +287,23 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openOfferSendMessageModel = function (offers) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/offer/offerSendMessage.html',
+            controller: "offerSendMessageCtrl",
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                offers: function () {
+                    return offers;
+                }
+            }
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * Course Model                                               *
