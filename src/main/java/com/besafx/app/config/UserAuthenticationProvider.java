@@ -43,7 +43,7 @@ public class UserAuthenticationProvider implements UserDetailsService {
             log.info("BUILD USER DETAILS.");
             Optional.ofNullable(person.getTeam().getAuthorities())
                     .ifPresent(value -> Arrays.asList(value.split(",")).stream()
-                            .forEach(s -> authorities.add(new SimpleGrantedAuthority(s))));
+                                              .forEach(s -> authorities.add(new SimpleGrantedAuthority(s))));
             personAwareUserDetails = new PersonAwareUserDetails(person, authorities);
 
             log.info("SAVE LOGIN INFO.");

@@ -72,7 +72,7 @@
                 return function linkFunc(scope, element, attr) {
                     var
                         collection,
-                        key = (safe === true ? attr.lrDragSrcSafe : attr.lrDragSrc ) || 'temp';
+                        key = (safe === true ? attr.lrDragSrcSafe : attr.lrDragSrc) || 'temp';
 
                     if (attr.lrDragData) {
                         scope.$watch(attr.lrDragData, function (newValue) {

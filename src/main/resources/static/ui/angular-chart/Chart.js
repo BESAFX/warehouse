@@ -32,8 +32,8 @@
             if (!n[o]) {
                 if (!t[o]) {
                     var a = typeof require == "function" && require;
-                    if (!u && a)return a(o, !0);
-                    if (i)return i(o, !0);
+                    if (!u && a) return a(o, !0);
+                    if (i) return i(o, !0);
                     var f = new Error("Cannot find module '" + o + "'");
                     throw f.code = "MODULE_NOT_FOUND", f
                 }
@@ -47,7 +47,7 @@
         }
 
         var i = typeof require == "function" && require;
-        for (var o = 0; o < r.length; o++)s(r[o]);
+        for (var o = 0; o < r.length; o++) s(r[o]);
         return s
     })({
         1: [function (require, module, exports) {
@@ -4703,19 +4703,19 @@
                         var me = this;
                         var type = me.datasetElementType;
                         return type && new type({
-                                _chart: me.chart.chart,
-                                _datasetIndex: me.index
-                            });
+                            _chart: me.chart.chart,
+                            _datasetIndex: me.index
+                        });
                     },
 
                     createMetaData: function (index) {
                         var me = this;
                         var type = me.dataElementType;
                         return type && new type({
-                                _chart: me.chart.chart,
-                                _datasetIndex: me.index,
-                                _index: index
-                            });
+                            _chart: me.chart.chart,
+                            _datasetIndex: me.index,
+                            _index: index
+                        });
                     },
 
                     addElements: function () {
@@ -5953,10 +5953,10 @@
                     var me = this;
                     var helpers = Chart.helpers;
                     me.config = config || {
-                            data: {
-                                datasets: []
-                            }
-                        };
+                        data: {
+                            datasets: []
+                        }
+                    };
 
                     // Support a jQuery'd canvas element
                     if (context.length && context[0].getContext) {
@@ -6586,7 +6586,7 @@
 
                                 helpers.each(me.legendItems, function (legendItem, i) {
                                     var boxWidth = labelOpts.usePointStyle ?
-                                    fontSize * Math.sqrt(2) :
+                                        fontSize * Math.sqrt(2) :
                                         labelOpts.boxWidth;
 
                                     var width = boxWidth + (fontSize / 2) + ctx.measureText(legendItem.text).width;
@@ -6767,8 +6767,8 @@
                             helpers.each(me.legendItems, function (legendItem, i) {
                                 var textWidth = ctx.measureText(legendItem.text).width,
                                     width = labelOpts.usePointStyle ?
-                                    fontSize + (fontSize / 2) + textWidth :
-                                    boxWidth + (fontSize / 2) + textWidth,
+                                        fontSize + (fontSize / 2) + textWidth :
+                                        boxWidth + (fontSize / 2) + textWidth,
                                     x = cursor.x,
                                     y = cursor.y;
 
@@ -9126,8 +9126,8 @@
                         var vm = this._view;
                         return vm ?
                             (vm.y < vm.base ?
-                            (mouseX >= vm.x - vm.width / 2 && mouseX <= vm.x + vm.width / 2) && (mouseY >= vm.y && mouseY <= vm.base) :
-                            (mouseX >= vm.x - vm.width / 2 && mouseX <= vm.x + vm.width / 2) && (mouseY >= vm.base && mouseY <= vm.y)) :
+                                (mouseX >= vm.x - vm.width / 2 && mouseX <= vm.x + vm.width / 2) && (mouseY >= vm.y && mouseY <= vm.base) :
+                                (mouseX >= vm.x - vm.width / 2 && mouseX <= vm.x + vm.width / 2) && (mouseY >= vm.base && mouseY <= vm.y)) :
                             false;
                     },
                     inLabelRange: function (mouseX) {

@@ -2,7 +2,6 @@ package com.besafx.app;
 
 import com.besafx.app.config.DropboxManager;
 import com.besafx.app.config.EmailSender;
-import com.besafx.app.schedule.ScheduleSendingReports;
 import com.besafx.app.util.JSONConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;

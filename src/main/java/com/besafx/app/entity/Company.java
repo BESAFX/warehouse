@@ -53,8 +53,8 @@ public class Company implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     private String logo;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    private List<Branch> branches = new ArrayList<>();
+    @OneToMany(mappedBy = "company")
+    private List<Person> persons = new ArrayList<>();
 
     @JsonCreator
     public static Company Create(String jsonString) throws IOException {

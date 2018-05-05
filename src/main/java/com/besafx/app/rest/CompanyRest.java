@@ -14,15 +14,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping(value = "/api/company/")
 public class CompanyRest {
 
-    private final static Logger log = LoggerFactory.getLogger(CompanyRest.class);
+    private final static Logger LOG = LoggerFactory.getLogger(CompanyRest.class);
 
-    private final String FILTER_TABLE = "**,branches[id]";
+    private final String FILTER_TABLE = "" +
+            "**," +
+            "persons[id]";
 
     @Autowired
     private CompanyService companyService;
@@ -30,20 +30,24 @@ public class CompanyRest {
     @Autowired
     private NotificationService notificationService;
 
-    @RequestMapping(value = "get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "get", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String get() {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), companyService.findFirstBy());
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COMPANY_UPDATE')")
-    public String update(@RequestBody Company company, Principal principal) {
+    public String update(@RequestBody Company company) {
         Company object = companyService.findOne(company.getId());
         if (object != null) {
             company = companyService.save(company);
-            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الشركة بنجاح").type("warning").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم تعديل بيانات الشركة بنجاح")
+                                                  .type("warning")
+                                                  .build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), company);
         } else {
             return null;

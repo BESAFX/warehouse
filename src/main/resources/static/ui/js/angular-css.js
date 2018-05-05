@@ -41,7 +41,7 @@
             }
 
             function t(a) {
-                if (!a)return void(d && m.error("No stylesheets provided"));
+                if (!a) return void(d && m.error("No stylesheets provided"));
                 var b = "?cache=";
                 -1 === a.href.indexOf(b) && (a.href = a.href + (a.bustCache ? b + (new Date).getTime() : ""))
             }
@@ -55,7 +55,7 @@
             function v(a) {
                 return a ? (A[a.href] = h.matchMedia(a.media), B[a.href] = function (b) {
                     i(function () {
-                        if (b.matches)e.stylesheets.push(a); else {
+                        if (b.matches) e.stylesheets.push(a); else {
                             var c = e.stylesheets.indexOf(l("filter")(e.stylesheets, {href: a.href})[0]);
                             -1 !== c && e.stylesheets.splice(c, 1)
                         }
@@ -71,26 +71,28 @@
                 return a ? !(!a.media || -1 !== C.indexOf(a.media) || !h.matchMedia) : void(d && m.error("No stylesheet provided"))
             }
 
-            var y = {}, z = '<link ng-repeat="stylesheet in stylesheets | orderBy: \'weight\' track by $index " rel="{{ stylesheet.rel }}" type="{{ stylesheet.type }}" ng-href="{{ stylesheet.href }}" ng-attr-media="{{ stylesheet.media }}">';
+            var y = {},
+                z = '<link ng-repeat="stylesheet in stylesheets | orderBy: \'weight\' track by $index " rel="{{ stylesheet.rel }}" type="{{ stylesheet.type }}" ng-href="{{ stylesheet.href }}" ng-attr-media="{{ stylesheet.media }}">';
             z = z.replace(/{{/g, n.startSymbol()).replace(/}}/g, n.endSymbol());
-            var A = {}, B = {}, C = ["print"], D = a.extend({}, b), E = a.element(document.querySelector ? document.querySelector(D.container) : document.getElementsByTagName(D.container)[0]), F = [];
+            var A = {}, B = {}, C = ["print"], D = a.extend({}, b),
+                E = a.element(document.querySelector ? document.querySelector(D.container) : document.getElementsByTagName(D.container)[0]), F = [];
             return a.forEach(c, function (a, b) {
                 a.hasOwnProperty("css") && (c[b] = s(a.css))
             }), e.stylesheets = [], E[D.method](j(z)(e)), e.$on("$directiveAdd", o), e.$on("$routeChangeSuccess", p), e.$on("$stateChangeSuccess", q), y.getFromRoute = function (b) {
-                if (!b)return void(d && m.error("Get From Route: No route provided"));
+                if (!b) return void(d && m.error("Get From Route: No route provided"));
                 var c = null, e = [];
                 return b.$$route && b.$$route.css ? c = b.$$route.css : b.css && (c = b.css), c && (a.isArray(c) ? a.forEach(c, function (b) {
                     a.isFunction(b) && F.push(s(b)), e.push(s(b))
                 }) : (a.isFunction(c) && F.push(s(c)), e.push(s(c)))), e
             }, y.getFromRoutes = function (b) {
-                if (!b)return void(d && m.error("Get From Routes: No routes provided"));
+                if (!b) return void(d && m.error("Get From Routes: No routes provided"));
                 var c = [];
                 return a.forEach(b, function (a) {
                     var b = y.getFromRoute(a);
                     b.length && c.push(b[0])
                 }), c
             }, y.getFromState = function (b) {
-                if (!b)return void(d && m.error("Get From State: No state provided"));
+                if (!b) return void(d && m.error("Get From State: No state provided"));
                 var c = [];
                 if (a.isDefined(b.views) && a.forEach(b.views, function (b) {
                         b.css && (a.isFunction(b.css) && F.push(s(b.css)), c.push(s(b.css)))
@@ -106,7 +108,7 @@
                 }
                 return c
             }, y.getFromStates = function (b) {
-                if (!b)return void(d && m.error("Get From States: No states provided"));
+                if (!b) return void(d && m.error("Get From States: No states provided"));
                 var c = [];
                 return a.forEach(b, function (b) {
                     var d = y.getFromState(b);
@@ -125,7 +127,7 @@
                     e(b)
                 })
             }, y.bind = function (b, c) {
-                if (!b || !c)return void(d && m.error("No scope or stylesheets provided"));
+                if (!b || !c) return void(d && m.error("No scope or stylesheets provided"));
                 var e = [];
                 a.isArray(b) ? a.forEach(b, function (a) {
                     e.push(s(a))
@@ -150,7 +152,7 @@
         }]
     }]), b.filter("$cssLinks", function () {
         return function (b) {
-            if (!b || !a.isArray(b))return b;
+            if (!b || !a.isArray(b)) return b;
             var c = "";
             return a.forEach(b, function (a) {
                 c += '<link rel="' + a.rel + '" type="' + a.type + '" href="' + a.href + '"', c += a.media ? ' media="' + a.media + '"' : "", c += ">\n\n"

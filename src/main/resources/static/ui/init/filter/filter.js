@@ -70,8 +70,8 @@ app.filter('propsFilter', function () {
     };
 });
 
-app.filter('sumByKey', function() {
-    return function(input) {
+app.filter('sumByKey', function () {
+    return function (input) {
         var i = input instanceof Array ? input.length : 0;
         var a = arguments.length;
         if (a === 1 || i === 0)

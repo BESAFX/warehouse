@@ -57,7 +57,7 @@
          @throws Error if an invalid date. */
         newDate: function (year, month, day, calendar, language) {
             calendar = (year != null && year.year ? year.calendar() : (typeof calendar === 'string' ?
-                    this.instance(calendar, language) : calendar)) || this.instance();
+                this.instance(calendar, language) : calendar)) || this.instance();
             return calendar.newDate(year, month, day);
         }
     });
@@ -255,7 +255,7 @@
             }
             var c = (this._year !== date._year ? this._year - date._year :
                 this._month !== date._month ? this.monthOfYear() - date.monthOfYear() :
-                this._day - date._day);
+                    this._day - date._day);
             return (c === 0 ? 0 : (c < 0 ? -1 : +1));
         },
 
@@ -428,7 +428,7 @@
             var date = this._validate(year, month, day,
                 $.calendars.local.invalidDate || $.calendars.regionalOptions[''].invalidDate);
             return date.toJD() - this.newDate(date.year(),
-                    this.fromMonthOfYear(date.year(), this.minMonth), this.minDay).toJD() + 1;
+                this.fromMonthOfYear(date.year(), this.minMonth), this.minDay).toJD() + 1;
         },
 
         /** Retrieve the number of days in a week.

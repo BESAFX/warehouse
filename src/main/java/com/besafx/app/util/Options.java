@@ -11,8 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class Options {
     private String lang;
+
     private String dateType;
+
     private String style;
+
     private String iconSet;
+
     private String iconSetType;
 }

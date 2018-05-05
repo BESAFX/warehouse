@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var cssMin = require('gulp-css');
-var gutil = require('gulp-util')
+var gutil = require('gulp-util');
 
 
 gulp.task('css', function () {
@@ -105,33 +105,11 @@ gulp.task('scripts', function () {
         './js/datetime.js',
 
         './init/config/config.js',
-        './init/factory/accountAttachFactory.js',
-        './init/factory/accountConditionFactory.js',
-        './init/factory/accountFactory.js',
-        './init/factory/accountNoteFactory.js',
         './init/factory/attachTypeFactory.js',
-        './init/factory/bankFactory.js',
-        './init/factory/billBuyFactory.js',
-        './init/factory/billBuyTypeFactory.js',
-        './init/factory/branchFactory.js',
         './init/factory/companyFactory.js',
-        './init/factory/courseFactory.js',
-        './init/factory/depositFactory.js',
         './init/factory/errorHandleFactory.js',
-        './init/factory/fileFactory.js',
-        './init/factory/masterCategoryFactory.js',
-        './init/factory/masterFactory.js',
-        './init/factory/offerFactory.js',
-        './init/factory/callFactory.js',
-        './init/factory/paymentFactory.js',
-        './init/factory/paymentOutFactory.js',
-        './init/factory/permissionFactory.js',
         './init/factory/personFactory.js',
-        './init/factory/roleFactory.js',
-        './init/factory/screenFactory.js',
-        './init/factory/studentFactory.js',
         './init/factory/teamFactory.js',
-        './init/factory/withdrawFactory.js',
 
         './init/service/service.js',
         './init/directive/directive.js',
@@ -140,112 +118,19 @@ gulp.task('scripts', function () {
 
         './partials/home/home.js',
         './partials/menu/menu.js',
-        './partials/admin/admin.js',
-        './partials/register/register.js',
-        './partials/calculate/calculate.js',
-        './partials/branch/branchCreateUpdate.js',
-        './partials/master/masterCreateUpdate.js',
-        './partials/masterCategory/masterCategoryCreateUpdate.js',
-        './partials/master/masterFilter.js',
-        './partials/offer/offerFilter.js',
-        './partials/offer/offerCreateUpdate.js',
-        './partials/offer/offerHeavyWork.js',
-        './partials/offer/offerDetails.js',
-        './partials/offer/callCreate.js',
-        './partials/offer/offerSendMessage.js',
-        './partials/course/courseCreateUpdate.js',
-        './partials/course/courseHeavyWork.js',
-        './partials/course/courseFilter.js',
-        './partials/account/accountFilter.js',
-        './partials/account/accountCreate.js',
-        './partials/account/accountUpdate.js',
-        './partials/account/accountUpdatePrice.js',
-        './partials/account/accountContract.js',
-        './partials/account/accountHeavyWork.js',
-        './partials/account/accountDetails.js',
-        './partials/account/accountPayment.js',
-        './partials/account/accountConditionCreate.js',
-        './partials/account/accountNoteCreate.js',
-        './partials/account/accountAttachCreate.js',
-        './partials/account/sendMessage.js',
-        './partials/payment/paymentCreate.js',
-        './partials/payment/paymentUpdate.js',
-        './partials/payment/paymentFilter.js',
-        './partials/payment/paymentHeavyWork.js',
-        './partials/payment/paymentMoveToBook.js',
-        './partials/paymentOut/paymentOut.js',
-        './partials/paymentOut/paymentOutCreate.js',
-        './partials/paymentOut/paymentOutFilter.js',
-        './partials/bank/bankCreateUpdate.js',
-        './partials/bank/bankFilter.js',
-        './partials/bank/depositCreate.js',
-        './partials/bank/depositFilter.js',
-        './partials/bank/withdrawCreate.js',
-        './partials/bank/withdrawFilter.js',
-        './partials/billBuyType/billBuyTypeCreateUpdate.js',
-        './partials/billBuy/billBuyFilter.js',
-        './partials/billBuy/billBuyCreateUpdate.js',
-
-        './partials/report/report.js',
-        './partials/report/offer/js/offerByBranch.js',
-        './partials/report/offer/js/offerByMaster.js',
-        './partials/report/offer/js/offerByMasterCategory.js',
-        './partials/report/offer/js/offerById.js',
-        './partials/report/offer/js/offerByPerson.js',
-        './partials/report/call/js/callByPerson.js',
-
-        './partials/report/account/js/accountByBranch.js',
-        './partials/report/account/js/accountByCourse.js',
-        './partials/report/account/js/accountByMaster.js',
-        './partials/report/account/js/accountByMasterCategory.js',
-        './partials/report/account/js/printContract.js',
-
-        './partials/report/account/js/accountDebtByBranch.js',
-        './partials/report/account/js/accountDebtByMaster.js',
-        './partials/report/account/js/accountDebtByCourse.js',
-
-        './partials/report/payment/js/paymentByBranch.js',
-        './partials/report/payment/js/paymentByCourse.js',
-        './partials/report/payment/js/paymentByMaster.js',
-        './partials/report/payment/js/paymentByMasterCategory.js',
-        './partials/report/payment/js/paymentByAccountIn.js',
-        './partials/report/payment/js/incomeAnalysisByBranch.js',
-
-        './partials/report/paymentOut/js/paymentOutByBranch.js',
-        './partials/report/paymentOut/js/paymentOutByPerson.js',
-
-        './partials/report/billBuy/js/billBuyByBranch.js',
-
-        './partials/report/deposit/js/depositByBank.js',
-        './partials/report/deposit/js/depositByBranch.js',
-        './partials/report/withdraw/js/withdrawByBank.js',
-        './partials/report/withdraw/js/withdrawByBranch.js',
-
-        './partials/report/chart/js/offersCountAverageByBranch.js',
-        './partials/report/chart/js/offersCountAverageByMaster.js',
-        './partials/report/chart/js/offersPriceAverageByBranch.js',
-        './partials/report/chart/js/offersPriceAverageByMaster.js',
-
-        './partials/report/info/js/branchDetails.js',
-        './partials/report/info/js/masterDetails.js',
-        './partials/report/info/js/courseDetails.js',
-        './partials/report/info/js/unRegisteredStudentDetailsByBranch.js',
-        './partials/report/info/js/unRegisteredStudentDetailsByMaster.js',
-
         './partials/team/team.js',
         './partials/team/teamCreateUpdate.js',
-
         './partials/person/person.js',
         './partials/person/personCreateUpdate.js',
-
         './partials/profile/profile.js',
-
         './partials/modal/confirmModal.js'
 
     ])
         .pipe(concat('app.js'))
         .pipe(uglify())
-        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+        .on('error', function (err) {
+            gutil.log(gutil.colors.red('[Error]'), err.toString());
+        })
         .pipe(gulp.dest('./'))
 
 });

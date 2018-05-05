@@ -3,37 +3,39 @@
     "object" == typeof module && module.exports ? module.exports = b() : "function" == typeof define && define.amd ? define(b) : a.Spinner = b()
 }(this, function () {
     "use strict";
+
     function a(a, b) {
         var c, d = document.createElement(a || "div");
-        for (c in b)d[c] = b[c];
+        for (c in b) d[c] = b[c];
         return d
     }
 
     function b(a) {
-        for (var b = 1, c = arguments.length; c > b; b++)a.appendChild(arguments[b]);
+        for (var b = 1, c = arguments.length; c > b; b++) a.appendChild(arguments[b]);
         return a
     }
 
     function c(a, b, c, d) {
-        var e = ["opacity", b, ~~(100 * a), c, d].join("-"), f = .01 + c / d * 100, g = Math.max(1 - (1 - a) / b * (100 - f), a), h = j.substring(0, j.indexOf("Animation")).toLowerCase(), i = h && "-" + h + "-" || "";
+        var e = ["opacity", b, ~~(100 * a), c, d].join("-"), f = .01 + c / d * 100, g = Math.max(1 - (1 - a) / b * (100 - f), a),
+            h = j.substring(0, j.indexOf("Animation")).toLowerCase(), i = h && "-" + h + "-" || "";
         return m[e] || (k.insertRule("@" + i + "keyframes " + e + "{0%{opacity:" + g + "}" + f + "%{opacity:" + a + "}" + (f + .01) + "%{opacity:1}" + (f + b) % 100 + "%{opacity:" + a + "}100%{opacity:" + g + "}}", k.cssRules.length), m[e] = 1), e
     }
 
     function d(a, b) {
         var c, d, e = a.style;
-        if (b = b.charAt(0).toUpperCase() + b.slice(1), void 0 !== e[b])return b;
-        for (d = 0; d < l.length; d++)if (c = l[d] + b, void 0 !== e[c])return c
+        if (b = b.charAt(0).toUpperCase() + b.slice(1), void 0 !== e[b]) return b;
+        for (d = 0; d < l.length; d++) if (c = l[d] + b, void 0 !== e[c]) return c
     }
 
     function e(a, b) {
-        for (var c in b)a.style[d(a, c) || c] = b[c];
+        for (var c in b) a.style[d(a, c) || c] = b[c];
         return a
     }
 
     function f(a) {
         for (var b = 1; b < arguments.length; b++) {
             var c = arguments[b];
-            for (var d in c)void 0 === a[d] && (a[d] = c[d])
+            for (var d in c) void 0 === a[d] && (a[d] = c[d])
         }
         return a
     }
@@ -74,8 +76,8 @@
                 top: l,
                 left: l
             });
-            if (d.shadow)for (i = 1; i <= d.lines; i++)h(i, -2, "progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)");
-            for (i = 1; i <= d.lines; i++)h(i);
+            if (d.shadow) for (i = 1; i <= d.lines; i++) h(i, -2, "progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)");
+            for (i = 1; i <= d.lines; i++) h(i);
             return b(a, m)
         }, h.prototype.opacity = function (a, b, c, d) {
             var e = a.firstChild;
@@ -116,10 +118,11 @@
                         left: d.left,
                         top: d.top
                     }), b && b.insertBefore(f, b.firstChild || null), f.setAttribute("role", "progressbar"), c.lines(f, c.opts), !j) {
-                    var g, h = 0, i = (d.lines - 1) * (1 - d.direction) / 2, k = d.fps, l = k / d.speed, m = (1 - d.opacity) / (l * d.trail / 100), n = l / d.lines;
+                    var g, h = 0, i = (d.lines - 1) * (1 - d.direction) / 2, k = d.fps, l = k / d.speed, m = (1 - d.opacity) / (l * d.trail / 100),
+                        n = l / d.lines;
                     !function o() {
                         h++;
-                        for (var a = 0; a < d.lines; a++)g = Math.max(1 - (h + (d.lines - a) * n) % l * m, d.opacity), c.opacity(f, a * d.direction + i, g, d);
+                        for (var a = 0; a < d.lines; a++) g = Math.max(1 - (h + (d.lines - a) * n) % l * m, d.opacity), c.opacity(f, a * d.direction + i, g, d);
                         c.timeout = c.el && setTimeout(o, ~~(1e3 / k))
                     }()
                 }
@@ -141,7 +144,7 @@
                     })
                 }
 
-                for (var i, k = 0, l = (f.lines - 1) * (1 - f.direction) / 2; k < f.lines; k++)i = e(a(), {
+                for (var i, k = 0, l = (f.lines - 1) * (1 - f.direction) / 2; k < f.lines; k++) i = e(a(), {
                     position: "absolute",
                     top: 1 + ~(f.scale * f.width / 2) + "px",
                     transform: f.hwaccel ? "translate3d(0,0,0)" : "",

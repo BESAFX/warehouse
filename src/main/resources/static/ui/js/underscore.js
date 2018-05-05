@@ -1141,7 +1141,7 @@
             // from different frames are.
             var aCtor = a.constructor, bCtor = b.constructor;
             if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
-                _.isFunction(bCtor) && bCtor instanceof bCtor)
+                    _.isFunction(bCtor) && bCtor instanceof bCtor)
                 && ('constructor' in a && 'constructor' in b)) {
                 return false;
             }
@@ -1212,8 +1212,8 @@
     // Is a given value an array?
     // Delegates to ECMA5's native Array.isArray
     _.isArray = nativeIsArray || function (obj) {
-            return toString.call(obj) === '[object Array]';
-        };
+        return toString.call(obj) === '[object Array]';
+    };
 
     // Is a given variable an object?
     _.isObject = function (obj) {
@@ -1338,8 +1338,8 @@
 
     // A (possibly faster) way to get the current timestamp as an integer.
     _.now = Date.now || function () {
-            return new Date().getTime();
-        };
+        return new Date().getTime();
+    };
 
     // List of HTML entities for escaping.
     var escapeMap = {
@@ -1427,10 +1427,10 @@
 
         // Combine delimiters into one regular expression via alternation.
         var matcher = RegExp([
-                (settings.escape || noMatch).source,
-                (settings.interpolate || noMatch).source,
-                (settings.evaluate || noMatch).source
-            ].join('|') + '|$', 'g');
+            (settings.escape || noMatch).source,
+            (settings.interpolate || noMatch).source,
+            (settings.evaluate || noMatch).source
+        ].join('|') + '|$', 'g');
 
         // Compile the template source, escaping string literals appropriately.
         var index = 0;

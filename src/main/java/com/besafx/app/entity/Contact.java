@@ -1,6 +1,5 @@
 package com.besafx.app.entity;
 
-import com.besafx.app.rest.AccountRest;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,16 +37,16 @@ public class Contact implements Serializable {
     @GeneratedValue(generator = "contactSequenceGenerator")
     private Long id;
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name="second_name")
+    @Column(name = "second_name")
     private String secondName;
 
-    @Column(name="third_name")
+    @Column(name = "third_name")
     private String thirdName;
 
-    @Column(name="forth_name")
+    @Column(name = "forth_name")
     private String forthName;
 
     @Formula(value = "concat_ws(' ',first_name, second_name, third_name, forth_name)")
@@ -87,13 +86,5 @@ public class Contact implements Serializable {
         ObjectMapper mapper = new ObjectMapper();
         Contact contact = mapper.readValue(jsonString, Contact.class);
         return contact;
-    }
-
-    public String getFullName() {
-        return this.fullName;
-    }
-
-    public String getShortName() {
-        return this.shortName;
     }
 }

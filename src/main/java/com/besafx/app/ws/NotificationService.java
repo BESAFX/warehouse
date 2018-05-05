@@ -38,12 +38,12 @@ public class NotificationService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional.ofNullable(auth).ifPresent(value -> notification.setSender(value.getName()));
         Lists.newArrayList(personService.findAll())
-                .stream()
-                .forEach(person -> {
-                    notification.setReceiver(person.getEmail());
-                    messagingTemplate.convertAndSendToUser(person.getEmail(), "/queue/notify", notification);
-                    logger.info("Send notification to " + notification.getReceiver() + ": " + notification);
-                });
+             .stream()
+             .forEach(person -> {
+                 notification.setReceiver(person.getEmail());
+                 messagingTemplate.convertAndSendToUser(person.getEmail(), "/queue/notify", notification);
+                 logger.info("Send notification to " + notification.getReceiver() + ": " + notification);
+             });
     }
 
     //Send to multiple destination except me
@@ -52,12 +52,12 @@ public class NotificationService {
         Person me = personService.findByEmail(auth == null ? "" : auth.getName());
         Optional.ofNullable(auth).ifPresent(value -> notification.setSender(value.getName()));
         Lists.newArrayList(personService.findAll())
-                .stream()
-                .filter(person -> !person.equals(me))
-                .forEach(person -> {
-                    notification.setReceiver(person.getEmail());
-                    messagingTemplate.convertAndSendToUser(person.getEmail(), "/queue/notify", notification);
-                    logger.info("Send notification to " + notification.getReceiver() + ": " + notification);
-                });
+             .stream()
+             .filter(person -> !person.equals(me))
+             .forEach(person -> {
+                 notification.setReceiver(person.getEmail());
+                 messagingTemplate.convertAndSendToUser(person.getEmail(), "/queue/notify", notification);
+                 logger.info("Send notification to " + notification.getReceiver() + ": " + notification);
+             });
     }
 }

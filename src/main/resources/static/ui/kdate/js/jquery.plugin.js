@@ -155,7 +155,7 @@
          @return {boolean} True if this method is a getter, false otherwise. */
         _isNotChained: function (name, otherArgs) {
             if (name === 'option' && (otherArgs.length === 0 ||
-                (otherArgs.length === 1 && typeof otherArgs[0] === 'string'))) {
+                    (otherArgs.length === 1 && typeof otherArgs[0] === 'string'))) {
                 return true;
             }
             return $.inArray(name, this._getters) > -1;

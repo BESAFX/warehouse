@@ -18,7 +18,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ApiError> handleAll(Exception ex, WebRequest request) {
-        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, Optional.ofNullable(ex.getMessage()).isPresent() ? ex.getMessage() : "هناك خطأ ما، فضلاً قم بإعادة تحميل الصفحة او الاتصال بالدعم بالفني", "error occurred");
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, Optional.ofNullable(ex.getMessage()).isPresent() ? ex.getMessage() :
+                "هناك خطأ ما، فضلاً قم بإعادة تحميل الصفحة او الاتصال بالدعم بالفني", "error occurred");
         return new ResponseEntity<ApiError>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

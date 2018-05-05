@@ -52,26 +52,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
         http.authorizeRequests()
-                .antMatchers("/ui/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated();
+            .antMatchers("/ui/**").permitAll()
+            .antMatchers("/api/**").permitAll()
+            .anyRequest().authenticated();
         http.httpBasic();
         http.formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/menu")
-                .permitAll();
+            .loginPage("/login")
+            .usernameParameter("email")
+            .passwordParameter("password")
+            .defaultSuccessUrl("/menu")
+            .permitAll();
         http.logout()
-                .logoutUrl("/logout")
-                .invalidateHttpSession(true)
-                .logoutSuccessUrl("/")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+            .logoutUrl("/logout")
+            .invalidateHttpSession(true)
+            .logoutSuccessUrl("/")
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
         http.rememberMe();
         http.csrf().disable();
         http.sessionManagement()
-                .maximumSessions(1)
-                .sessionRegistry(sessionRegistry());
+            .maximumSessions(1)
+            .sessionRegistry(sessionRegistry());
     }
 
     @Bean

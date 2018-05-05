@@ -1,4 +1,4 @@
-(function($, angular) {
+(function ($, angular) {
 
     // eslint-disable-next-line angular/file-name, angular/no-service-method
     angular.module('ui.bootstrap.contextMenu', [])
@@ -68,7 +68,7 @@
 
                         $a.css($anchorStyle);
                         $a.addClass('dropdown-item');
-                        $a.attr({ tabindex: '-1', href: '#' });
+                        $a.attr({tabindex: '-1', href: '#'});
 
                         var textParam = item.text || item[0];
                         var text = DEFAULT_ITEM_TEXT;
@@ -150,7 +150,7 @@
                  * Registers the appropriate mouse events for options if the item is enabled.
                  * Otherwise, it ensures that clicks to the item do not propagate.
                  */
-                function registerCurrentItemEvents (params) {
+                function registerCurrentItemEvents(params) {
                     // Destructuring:
                     var item = params.item;
                     var $ul = params.$ul;
@@ -187,17 +187,17 @@
                              * At this point, nestedMenu can only either be an Array or a promise.
                              * Regardless, passing them to `when` makes the implementation singular.
                              */
-                            $q.when(nestedMenu).then(function(promisedNestedMenu) {
+                            $q.when(nestedMenu).then(function (promisedNestedMenu) {
                                 if (angular.isFunction(promisedNestedMenu)) {
                                     //  support for dynamic subitems
                                     promisedNestedMenu = promisedNestedMenu.call($scope, $scope, event, modelValue, text, $li);
                                 }
                                 var nestedParam = {
-                                    $scope : $scope,
-                                    event : ev,
-                                    options : promisedNestedMenu,
-                                    modelValue : modelValue,
-                                    level : level + 1,
+                                    $scope: $scope,
+                                    event: ev,
+                                    options: promisedNestedMenu,
+                                    modelValue: modelValue,
+                                    level: level + 1,
                                     orientation: orientation,
                                     customClass: customClass
                                 };
@@ -206,7 +206,7 @@
                         };
 
                         $li.on('click', function ($event) {
-                            if($event.which == 1) {
+                            if ($event.which == 1) {
                                 $event.preventDefault();
                                 $scope.$apply(function () {
 
@@ -222,7 +222,7 @@
 
                                     if (clickFunction) {
                                         var res = clickFunction.call($scope, $scope, event, modelValue, text, $li);
-                                        if(res === undefined || res) {
+                                        if (res === undefined || res) {
                                             cleanupFunction();
                                         }
                                     } else {
@@ -290,7 +290,7 @@
                  * - level = the current context menu level (defauts to 0)
                  * - customClass = the custom class to be used for the context menu
                  */
-                function renderContextMenu (params) {
+                function renderContextMenu(params) {
                     /// <summary>Render context menu recursively.</summary>
 
                     // Destructuring:
@@ -369,7 +369,7 @@
                  * calculation need to be done after element has been added (and all texts are set; thus the promises)
                  * to the DOM the get the actual height
                  */
-                function doAfterAllPromises (params) {
+                function doAfterAllPromises(params) {
 
                     // Desctructuring:
                     var $ul = params.$ul;
@@ -379,24 +379,24 @@
                     var leftOriented = String(params.orientation).toLowerCase() === 'left';
 
                     $q.all($promises).then(function () {
-                        var topCoordinate  = event.pageY;
+                        var topCoordinate = event.pageY;
                         var menuHeight = angular.element($ul[0]).prop('offsetHeight');
                         var winHeight = $window.scrollY + event.view.innerHeight;
                         /// the 20 pixels in second condition are considering the browser status bar that sometimes overrides the element
                         if (topCoordinate > menuHeight && winHeight - topCoordinate < menuHeight + 20) {
                             topCoordinate = event.pageY - menuHeight;
                             /// If the element is a nested menu, adds the height of the parent li to the topCoordinate to align with the parent
-                            if(level && level > 0) {
+                            if (level && level > 0) {
                                 topCoordinate += event.event.currentTarget.offsetHeight;
                             }
-                        } else if(winHeight <= menuHeight) {
+                        } else if (winHeight <= menuHeight) {
                             // If it really can't fit, reset the height of the menu to one that will fit
-                            angular.element($ul[0]).css({ 'height': winHeight - 5, 'overflow-y': 'scroll' });
+                            angular.element($ul[0]).css({'height': winHeight - 5, 'overflow-y': 'scroll'});
                             // ...then set the topCoordinate height to 0 so the menu starts from the top
                             topCoordinate = 0;
-                        } else if(winHeight - topCoordinate < menuHeight) {
+                        } else if (winHeight - topCoordinate < menuHeight) {
                             var reduceThresholdY = 5;
-                            if(topCoordinate < reduceThresholdY) {
+                            if (topCoordinate < reduceThresholdY) {
                                 reduceThresholdY = topCoordinate;
                             }
                             topCoordinate = winHeight - menuHeight - reduceThresholdY;
@@ -422,9 +422,9 @@
                         } else {
                             if (leftCoordinate > menuWidth && winWidth - leftCoordinate - padding < menuWidth) {
                                 leftCoordinate = winWidth - menuWidth - padding;
-                            } else if(winWidth - leftCoordinate < menuWidth) {
+                            } else if (winWidth - leftCoordinate < menuWidth) {
                                 var reduceThresholdX = 5;
-                                if(leftCoordinate < reduceThresholdX + padding) {
+                                if (leftCoordinate < reduceThresholdX + padding) {
                                     reduceThresholdX = leftCoordinate + padding;
                                 }
                                 leftCoordinate = winWidth - menuWidth - reduceThresholdX - padding;
@@ -453,7 +453,7 @@
 
                     var $ul = $('<ul>');
                     $ul.addClass('dropdown-menu');
-                    $ul.attr({ 'role': 'menu' });
+                    $ul.attr({'role': 'menu'});
                     $ul.css({
                         display: 'block',
                         position: 'absolute',
@@ -462,13 +462,15 @@
                         'z-index': 10000
                     });
 
-                    if(customClass) { $ul.addClass(customClass); }
+                    if (customClass) {
+                        $ul.addClass(customClass);
+                    }
 
                     return $ul;
                 }
 
                 function isTouchDevice() {
-                    return 'ontouchstart' in window  || navigator.maxTouchPoints; // works on most browsers | works on IE10/11 and Surface
+                    return 'ontouchstart' in window || navigator.maxTouchPoints; // works on most browsers | works on IE10/11 and Surface
                 }
 
                 /**
@@ -476,14 +478,14 @@
                  * to the value passed. If undefined, null or 0, all context menus
                  * are removed.
                  */
-                function removeContextMenus (level) {
+                function removeContextMenus(level) {
                     while (_contextMenus.length && (!level || _contextMenus.length > level)) {
                         var cm = _contextMenus.pop();
-                        $rootScope.$broadcast(ContextMenuEvents.ContextMenuClosed, { context: _clickedElement, contextMenu: cm });
+                        $rootScope.$broadcast(ContextMenuEvents.ContextMenuClosed, {context: _clickedElement, contextMenu: cm});
                         cm.remove();
                     }
-                    if(!level) {
-                        $rootScope.$broadcast(ContextMenuEvents.ContextMenuAllClosed, { context: _clickedElement });
+                    if (!level) {
+                        $rootScope.$broadcast(ContextMenuEvents.ContextMenuAllClosed, {context: _clickedElement});
                     }
                 }
 
@@ -496,7 +498,7 @@
                     var $curr = $(e.target);
                     var shouldRemove = true;
 
-                    while($curr.length) {
+                    while ($curr.length) {
                         if ($curr.hasClass('dropdown-menu')) {
                             shouldRemove = false;
                             break;
@@ -562,19 +564,19 @@
                     var openMenuEvents = ['contextmenu'];
                     _emptyText = $scope.$eval(attrs.contextMenuEmptyText) || 'empty';
 
-                    if(attrs.contextMenuOn && typeof(attrs.contextMenuOn) === 'string'){
+                    if (attrs.contextMenuOn && typeof(attrs.contextMenuOn) === 'string') {
                         openMenuEvents = attrs.contextMenuOn.split(',');
                     }
 
                     angular.forEach(openMenuEvents, function (openMenuEvent) {
                         element.on(openMenuEvent.trim(), function (event) {
-                            if(!attrs.allowEventPropagation) {
+                            if (!attrs.allowEventPropagation) {
                                 event.stopPropagation();
                                 event.preventDefault();
                             }
 
                             // Don't show context menu if on touch device and element is draggable
-                            if(isTouchDevice() && element.attr('draggable') === 'true') {
+                            if (isTouchDevice() && element.attr('draggable') === 'true') {
                                 return false;
                             }
 
@@ -592,21 +594,21 @@
                                 var modelValue = $scope.$eval(attrs.model);
                                 var orientation = attrs.contextMenuOrientation;
 
-                                $q.when(options).then(function(promisedMenu) {
+                                $q.when(options).then(function (promisedMenu) {
                                     if (angular.isFunction(promisedMenu)) {
                                         //  support for dynamic items
                                         promisedMenu = promisedMenu.call($scope, $scope, event, modelValue);
                                     }
                                     var params = {
-                                        '$scope' : $scope,
-                                        'event' : event,
-                                        'options' : promisedMenu,
-                                        'modelValue' : modelValue,
-                                        'level' : 0,
-                                        'customClass' : customClass,
+                                        '$scope': $scope,
+                                        'event': event,
+                                        'options': promisedMenu,
+                                        'modelValue': modelValue,
+                                        'level': 0,
+                                        'customClass': customClass,
                                         'orientation': orientation
                                     };
-                                    $rootScope.$broadcast(ContextMenuEvents.ContextMenuOpening, { context: _clickedElement });
+                                    $rootScope.$broadcast(ContextMenuEvents.ContextMenuOpening, {context: _clickedElement});
                                     renderContextMenu(params);
                                 });
                             });

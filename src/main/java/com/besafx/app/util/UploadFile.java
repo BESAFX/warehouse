@@ -38,9 +38,9 @@ public class UploadFile {
     private static void uploadFile(DbxClientV2 dbxClient, File localFile, String dropboxPath) {
         try (InputStream in = new FileInputStream(localFile)) {
             FileMetadata metadata = dbxClient.files().uploadBuilder(dropboxPath)
-                    .withMode(WriteMode.ADD)
-                    .withClientModified(new Date(localFile.lastModified()))
-                    .uploadAndFinish(in);
+                                             .withMode(WriteMode.ADD)
+                                             .withClientModified(new Date(localFile.lastModified()))
+                                             .uploadAndFinish(in);
             System.out.println(metadata.toStringMultiline());
         } catch (UploadErrorException ex) {
             System.err.println("Error uploading to Dropbox: " + ex.getMessage());
@@ -93,8 +93,8 @@ public class UploadFile {
                 // (1) Start
                 if (sessionId == null) {
                     sessionId = dbxClient.files().uploadSessionStart()
-                            .uploadAndFinish(in, CHUNKED_UPLOAD_CHUNK_SIZE)
-                            .getSessionId();
+                                         .uploadAndFinish(in, CHUNKED_UPLOAD_CHUNK_SIZE)
+                                         .getSessionId();
                     uploaded += CHUNKED_UPLOAD_CHUNK_SIZE;
                     printProgress(uploaded, size);
                 }
@@ -102,7 +102,7 @@ public class UploadFile {
                 // (2) Append
                 while ((size - uploaded) > CHUNKED_UPLOAD_CHUNK_SIZE) {
                     dbxClient.files().uploadSessionAppendV2(cursor)
-                            .uploadAndFinish(in, CHUNKED_UPLOAD_CHUNK_SIZE);
+                             .uploadAndFinish(in, CHUNKED_UPLOAD_CHUNK_SIZE);
                     uploaded += CHUNKED_UPLOAD_CHUNK_SIZE;
                     printProgress(uploaded, size);
                     cursor = new UploadSessionCursor(sessionId, uploaded);
@@ -110,11 +110,11 @@ public class UploadFile {
                 // (3) Finish
                 long remaining = size - uploaded;
                 CommitInfo commitInfo = CommitInfo.newBuilder(dropboxPath)
-                        .withMode(WriteMode.ADD)
-                        .withClientModified(new Date(localFile.lastModified()))
-                        .build();
+                                                  .withMode(WriteMode.ADD)
+                                                  .withClientModified(new Date(localFile.lastModified()))
+                                                  .build();
                 FileMetadata metadata = dbxClient.files().uploadSessionFinish(cursor, commitInfo)
-                        .uploadAndFinish(in, remaining);
+                                                 .uploadAndFinish(in, remaining);
                 System.out.println(metadata.toStringMultiline());
                 return;
             } catch (RetryException ex) {

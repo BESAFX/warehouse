@@ -226,7 +226,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 // issue #2676 #2889
     function silenceUncaughtInPromise(promise) {
         return promise.then(undefined, function () {
-            }) && promise;
+        }) && promise;
     }
 
     /**
@@ -323,6 +323,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * Manages resolution of (acyclic) graphs of promises.
      */
     $Resolve.$inject = ['$q', '$injector'];
+
     function $Resolve($q, $injector) {
 
         var VISIT_IN_PROGRESS = 1,
@@ -486,6 +487,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                         }
                     });
                     if (!waitParams) proceed();
+
                     function proceed() {
                         if (isDefined(result.$$failure)) return;
                         try {
@@ -1912,6 +1914,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * in your module config.
      */
     $UrlRouterProvider.$inject = ['$locationProvider', '$urlMatcherFactoryProvider'];
+
     function $UrlRouterProvider($locationProvider, $urlMatcherFactory) {
         var rules = [], otherwise = null, interceptDeferred = false, listener;
 
@@ -2168,6 +2171,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          */
         this.$get = $get;
         $get.$inject = ['$location', '$rootScope', '$injector', '$browser', '$sniffer'];
+
         function $get($location, $rootScope, $injector, $browser, $sniffer) {
 
             var baseHref = $browser.baseHref(), location = $location.url(), lastPushedUrl;
@@ -2356,6 +2360,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * The `$stateProvider` provides interfaces to declare these states for your app.
      */
     $StateProvider.$inject = ['$urlRouterProvider', '$urlMatcherFactoryProvider'];
+
     function $StateProvider($urlRouterProvider, $urlMatcherFactory) {
 
         var root, states = {}, $state, queue = {}, abstractKey = 'abstract';
@@ -2517,8 +2522,8 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
             // Get parent name
             var parentName = (name.indexOf('.') !== -1) ? name.substring(0, name.lastIndexOf('.'))
                 : (isString(state.parent)) ? state.parent
-                : (isObject(state.parent) && isString(state.parent.name)) ? state.parent.name
-                : '';
+                    : (isObject(state.parent) && isString(state.parent.name)) ? state.parent.name
+                        : '';
 
             // If parent is not registered yet, add state to queue and register later
             if (parentName && !states[parentName]) {
@@ -2683,6 +2688,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          * @return {object} $stateProvider - $stateProvider instance
          */
         this.decorator = decorator;
+
         function decorator(name, func) {
             /*jshint validthis: true */
             if (isString(name) && !isDefined(func)) {
@@ -3018,6 +3024,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          *
          */
         this.state = state;
+
         function state(name, definition) {
             /*jshint validthis: true */
             if (isObject(name)) definition = name;
@@ -3052,6 +3059,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          */
         this.$get = $get;
         $get.$inject = ['$rootScope', '$q', '$view', '$injector', '$resolve', '$stateParams', '$urlRouter', '$location', '$urlMatcherFactory'];
+
         function $get($rootScope, $q, $view, $injector, $resolve, $stateParams, $urlRouter, $location, $urlMatcherFactory) {
 
             var TransitionSupersededError = new Error('transition superseded');
@@ -3611,9 +3619,9 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                 }
 
                 return !params || objectKeys(params).reduce(function (acc, key) {
-                        var paramDef = state.params[key];
-                        return acc && !paramDef || paramDef.type.equals($stateParams[key], params[key]);
-                    }, true);
+                    var paramDef = state.params[key];
+                    return acc && !paramDef || paramDef.type.equals($stateParams[key], params[key]);
+                }, true);
             };
 
             /**
@@ -3799,11 +3807,11 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                         var injectables = (view.resolve && view.resolve !== state.resolve ? view.resolve : {});
                         injectables.$template = [function () {
                             return $view.load(name, {
-                                    view: view,
-                                    locals: dst.globals,
-                                    params: $stateParams,
-                                    notify: options.notify
-                                }) || '';
+                                view: view,
+                                locals: dst.globals,
+                                params: $stateParams,
+                                notify: options.notify
+                            }) || '';
                         }];
 
                         viewsPromises.push($resolve.resolve(injectables, dst.globals, dst.resolve, state).then(function (result) {
@@ -3879,6 +3887,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
 
 
     $ViewProvider.$inject = [];
+
     function $ViewProvider() {
 
         this.$get = $get;
@@ -3893,6 +3902,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
          *
          */
         $get.$inject = ['$rootScope', '$templateFactory'];
+
         function $get($rootScope, $templateFactory) {
             return {
                 // $view.load('full.viewName', { template: ..., controller: ..., resolve: ..., async: false, params: ... })
@@ -4115,6 +4125,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * </pre>
      */
     $ViewDirective.$inject = ['$state', '$injector', '$uiViewScroll', '$interpolate', '$q'];
+
     function $ViewDirective($state, $injector, $uiViewScroll, $interpolate, $q) {
 
         function getService() {
@@ -4297,6 +4308,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
     }
 
     $ViewDirectiveFill.$inject = ['$compile', '$controller', '$state', '$interpolate'];
+
     function $ViewDirectiveFill($compile, $controller, $state, $interpolate) {
         return {
             restrict: 'ECA',
@@ -4477,6 +4489,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * @param {Object} ui-sref-opts options to pass to {@link ui.router.state.$state#methods_go $state.go()}
      */
     $StateRefDirective.$inject = ['$state', '$timeout'];
+
     function $StateRefDirective($state, $timeout) {
         return {
             restrict: 'A',
@@ -4537,6 +4550,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * @param {Object} ui-state-opts options to pass to {@link ui.router.state.$state#methods_go $state.go()}
      */
     $StateRefDynamicDirective.$inject = ['$state', '$timeout'];
+
     function $StateRefDynamicDirective($state, $timeout) {
         return {
             restrict: 'A',
@@ -4546,8 +4560,8 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
                 var active = uiSrefActive[1] || uiSrefActive[0];
                 var group = [attrs.uiState, attrs.uiStateParams || null, attrs.uiStateOpts || null];
                 var watch = '[' + group.map(function (val) {
-                        return val || 'null';
-                    }).join(', ') + ']';
+                    return val || 'null';
+                }).join(', ') + ']';
                 var def = {state: null, params: null, options: null, href: null};
                 var unlinkInfoFn = null;
                 var hookFn;
@@ -4672,6 +4686,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      *
      */
     $StateRefActiveDirective.$inject = ['$state', '$stateParams', '$interpolate'];
+
     function $StateRefActiveDirective($state, $stateParams, $interpolate) {
         return {
             restrict: "A",
@@ -4807,6 +4822,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * Translates to {@link ui.router.state.$state#methods_is $state.is("stateName")}.
      */
     $IsStateFilter.$inject = ['$state'];
+
     function $IsStateFilter($state) {
         var isFilter = function (state, params) {
             return $state.is(state, params);
@@ -4825,6 +4841,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
      * Translates to {@link ui.router.state.$state#methods_includes $state.includes('fullOrPartialStateName')}.
      */
     $IncludedByStateFilter.$inject = ['$state'];
+
     function $IncludedByStateFilter($state) {
         var includesFilter = function (state, params, options) {
             return $state.includes(state, params, options);

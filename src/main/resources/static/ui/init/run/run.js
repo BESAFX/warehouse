@@ -9,7 +9,6 @@ app.run([
     'defaultErrorMessageResolver',
     'ModalProvider',
     'Fullscreen',
-    'ReportModelProvider',
     '$state',
     '$stateParams',
     '$timeout',
@@ -23,7 +22,6 @@ app.run([
               defaultErrorMessageResolver,
               ModalProvider,
               Fullscreen,
-              ReportModelProvider,
               $state,
               $stateParams,
               $timeout) {
@@ -55,7 +53,7 @@ app.run([
             $rootScope.style = style ? style : 'mdl-style';
             $css.removeAll();
             $css.add([
-                '/ui/css/'+ $rootScope.style +'.css',
+                '/ui/css/' + $rootScope.style + '.css',
                 '/ui/css/theme-black.css',
                 '/ui/css/style.css'
             ], $rootScope);
@@ -69,8 +67,6 @@ app.run([
             $rootScope.iconSetType = iconSetType ? iconSetType : 'png';
             PersonService.setIconSet($rootScope.iconSet, $rootScope.iconSetType);
         };
-
-        $rootScope.ReportModelProvider = ReportModelProvider;
 
         $rootScope.ModalProvider = ModalProvider;
 
@@ -95,7 +91,7 @@ app.run([
             $rootScope.iconSetType = $rootScope.options.iconSetType ? $rootScope.options.iconSetType : 'png';
             $css.removeAll();
             $css.add([
-                '/ui/css/'+ $rootScope.style +'.css',
+                '/ui/css/' + $rootScope.style + '.css',
                 '/ui/css/theme-black.css',
                 '/ui/css/style.css'
             ], $rootScope);

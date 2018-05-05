@@ -1,5 +1,6 @@
 !function (a) {
     "use strict";
+
     function b(a, b) {
         a.module("angularSpinner", []).factory("usSpinnerService", ["$rootScope", function (a) {
             var b = {};

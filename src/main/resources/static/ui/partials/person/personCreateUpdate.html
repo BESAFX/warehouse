@@ -165,37 +165,6 @@
                         <div class="form-group row">
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="branch" class="control-label">الفرع</label>
-                                <ui-select id="branch"
-                                           ng-model="person.branch"
-                                           required="required"
-                                           disable-validation-message=""
-                                           theme="bootstrap">
-                                    <ui-select-match placeholder="اختر الفرع">
-                                        {{$select.selected.name}}
-                                    </ui-select-match>
-                                    <ui-select-choices
-                                            repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
-
-                                        <div class="mdl-menu__item--full-bleed-divider"></div>
-                                        <li class="mdl-list__item mdl-list__item--two-line"
-                                            style="padding: unset;cursor: pointer">
-                                        <span class="mdl-list__item-primary-content">
-                                        <span class="material-icons mdl-list__item-avatar"
-                                              style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
-                                        <div ng-bind-html="branch.name | highlight: $select.search"></div>
-                                        <span class="mdl-list__item-sub-title">
-                                            <span>رقم الفرع / </span>
-                                            {{branch.code}}
-                                        </span>
-                                        </span>
-                                        </li>
-
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="team" class="control-label">مجموعة الصلاحيات</label>
                                 <ui-select id="team"
                                            ng-model="person.team"
@@ -227,48 +196,6 @@
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="branchList" class="control-label">الفروع الاخرى</label>
-                                <ui-select id="branchList"
-                                           ng-model="buffer.branchList"
-                                           multiple="multiple"
-                                           sortable="true"
-                                           close-on-select="false"
-                                           required="required"
-                                           disable-validation-message=""
-                                           theme="bootstrap">
-                                    <ui-select-match placeholder="اختر الفروع">
-                                        <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
-                                            <span class="mdl-list__item-primary-content">
-                                            <span class="material-icons mdl-list__item-avatar" style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
-                                            <div>{{$item.name}}</div>
-                                            <span class="mdl-list__item-sub-title">
-                                                <span>رقم الفرع / </span>
-                                                {{$item.code}}
-                                            </span>
-                                            </span>
-                                        </li>
-                                    </ui-select-match>
-                                    <ui-select-choices
-                                            repeat="branch in branches | filter: $select.search | orderBy:'code' track by branch.id">
-
-                                        <div class="mdl-menu__item--full-bleed-divider"></div>
-                                        <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
-                                            <span class="mdl-list__item-primary-content">
-                                            <span class="material-icons mdl-list__item-avatar"
-                                                  style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/branch.{{iconSetType}}')"></span>
-                                            <div ng-bind-html="branch.name | highlight: $select.search"></div>
-                                            <span class="mdl-list__item-sub-title">
-                                                <span>رقم الفرع / </span>
-                                                {{branch.code}}
-                                            </span>
-                                            </span>
-                                        </li>
-
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="email" class="control-label">البريد الإلكتروني</label>
                                 <input id="email"
                                        dir="ltr"
@@ -279,7 +206,7 @@
                                        ng-model="person.email">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="password" class="control-label">الرقم السري</label>
                                 <input id="password"
                                        dir="ltr"

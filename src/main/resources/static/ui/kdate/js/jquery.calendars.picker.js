@@ -576,7 +576,7 @@
         _postAttach: function (elem, inst) {
             if (inst.inline) {
                 inst.drawDate = plugin._checkMinMax((inst.selectedDates[0] ||
-                inst.get('defaultDate') || inst.options.calendar.today()).newDate(), inst);
+                    inst.get('defaultDate') || inst.options.calendar.today()).newDate(), inst);
                 inst.prevDate = inst.drawDate.newDate();
                 this._update(elem[0]);
                 if ($.fn.mousewheel) {
@@ -675,9 +675,9 @@
                         return maxI;
                     };
                     date.month(findMax(calendar.local[dateFormat.match(/MM/) ? // Longest month
-                            'monthNames' : 'monthNamesShort']) + 1);
+                        'monthNames' : 'monthNamesShort']) + 1);
                     date.day(findMax(calendar.local[dateFormat.match(/DD/) ? // Longest day
-                            'dayNames' : 'dayNamesShort']) + 20 - date.dayOfWeek());
+                        'dayNames' : 'dayNamesShort']) + 20 - date.dayOfWeek());
                 }
                 inst.elem.attr('size', date.formatDate(dateFormat).length);
             }
@@ -804,7 +804,7 @@
                 inst.selectedDates = plugin._extractDates(inst, elem.val());
                 inst.pickingRange = false;
                 inst.drawDate = plugin._checkMinMax((inst.selectedDates[0] ||
-                inst.get('defaultDate') || inst.options.calendar.today()).newDate(), inst);
+                    inst.get('defaultDate') || inst.options.calendar.today()).newDate(), inst);
                 inst.prevDate = inst.drawDate.newDate();
                 plugin.curInst = inst;
                 // Generate content
@@ -884,8 +884,8 @@
             if (!$.isEmptyObject(inst)) {
                 if (inst.inline || plugin.curInst === inst) {
                     if ($.isFunction(inst.options.onChangeMonthYear) && (!inst.prevDate ||
-                        inst.prevDate.year() !== inst.drawDate.year() ||
-                        inst.prevDate.month() !== inst.drawDate.month())) {
+                            inst.prevDate.year() !== inst.drawDate.year() ||
+                            inst.prevDate.month() !== inst.drawDate.month())) {
                         inst.options.onChangeMonthYear.apply(elem[0],
                             [inst.drawDate.year(), inst.drawDate.month()]);
                     }
@@ -929,7 +929,7 @@
                 var altFormat = inst.options.altFormat || dateFormat;
                 for (var i = 0; i < inst.selectedDates.length; i++) {
                     value += (keyUp ? '' : (i > 0 ? sep : '') +
-                    calendar.formatDate(dateFormat, inst.selectedDates[i]));
+                        calendar.formatDate(dateFormat, inst.selectedDates[i]));
                     altValue += (i > 0 ? sep : '') +
                         calendar.formatDate(altFormat, inst.selectedDates[i]);
                 }
@@ -1326,7 +1326,7 @@
                 }
                 inst.prevDate = (inst.drawDate ? inst.drawDate.newDate() : null);
                 inst.drawDate = this._checkMinMax((inst.selectedDates[0] ||
-                inst.get('defaultDate') || inst.options.calendar.today()).newDate(), inst);
+                    inst.get('defaultDate') || inst.options.calendar.today()).newDate(), inst);
                 if (!setOpt) {
                     this._update(elem);
                     this._updateInput(elem, keyUp);
@@ -1393,7 +1393,7 @@
         showMonth: function (elem, year, month, day) {
             var inst = this._getInst(elem);
             if (!$.isEmptyObject(inst) && (day != null ||
-                (inst.drawDate.year() !== year || inst.drawDate.month() !== month))) {
+                    (inst.drawDate.year() !== year || inst.drawDate.month() !== month))) {
                 inst.prevDate = inst.drawDate.newDate();
                 var calendar = inst.options.calendar;
                 var show = this._checkMinMax((year != null ?
@@ -1658,21 +1658,21 @@
             var today = calendar.today();
             var drawDate = calendar.newDate(year, month, calendar.minDay);
             drawDate.add(-leadDays - (fixedWeeks &&
-                (drawDate.dayOfWeek() === firstDay || drawDate.daysInMonth() < calendar.daysInWeek()) ?
-                    calendar.daysInWeek() : 0), 'd');
+            (drawDate.dayOfWeek() === firstDay || drawDate.daysInMonth() < calendar.daysInWeek()) ?
+                calendar.daysInWeek() : 0), 'd');
             var jd = drawDate.toJD();
             // Generate weeks
             var weeks = '';
             for (var week = 0; week < numWeeks; week++) {
                 var weekOfYear = (!showWeeks ? '' : '<span class="jd' + jd + '">' +
-                ($.isFunction(inst.options.calculateWeek) ?
-                    inst.options.calculateWeek(drawDate) : drawDate.weekOfYear()) + '</span>');
+                    ($.isFunction(inst.options.calculateWeek) ?
+                        inst.options.calculateWeek(drawDate) : drawDate.weekOfYear()) + '</span>');
                 var days = '';
                 for (var day = 0; day < calendar.daysInWeek(); day++) {
                     var selected = false;
                     if (inst.options.rangeSelect && inst.selectedDates.length > 0) {
                         selected = (drawDate.compareTo(inst.selectedDates[0]) !== -1 &&
-                        drawDate.compareTo(inst.selectedDates[1]) !== +1)
+                            drawDate.compareTo(inst.selectedDates[1]) !== +1)
                     }
                     else {
                         for (var i = 0; i < inst.selectedDates.length; i++) {
@@ -1690,18 +1690,18 @@
                         (selectable ? '<a href="javascript:void(0)"' : '<span') +
                         ' class="jd' + jd + ' ' + (dateInfo.dateClass || '') +
                         (selected && (selectOtherMonths || drawDate.month() === month) ?
-                        ' ' + renderer.selectedClass : '') +
+                            ' ' + renderer.selectedClass : '') +
                         (selectable ? ' ' + renderer.defaultClass : '') +
                         (drawDate.weekDay() ? '' : ' ' + renderer.weekendClass) +
                         (drawDate.month() === month ? '' : ' ' + renderer.otherMonthClass) +
                         (drawDate.compareTo(today) === 0 && drawDate.month() === month ?
-                        ' ' + renderer.todayClass : '') +
+                            ' ' + renderer.todayClass : '') +
                         (drawDate.compareTo(inst.drawDate) === 0 && drawDate.month() === month ?
-                        ' ' + renderer.highlightedClass : '') + '"' +
+                            ' ' + renderer.highlightedClass : '') + '"' +
                         (dateInfo.title || (inst.options.dayStatus && selectable) ? ' title="' +
-                        (dateInfo.title || drawDate.formatDate(inst.options.dayStatus)) + '"' : '') + '>' +
+                            (dateInfo.title || drawDate.formatDate(inst.options.dayStatus)) + '"' : '') + '>' +
                         (inst.options.showOtherMonths || drawDate.month() === month ?
-                        dateInfo.content || drawDate.day() : '&#160;') +
+                            dateInfo.content || drawDate.day() : '&#160;') +
                         (selectable ? '</a>' : '</span>'));
                     drawDate.add(1, 'd');
                     jd++;

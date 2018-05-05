@@ -4,18 +4,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.besafx.app</groupId>
-    <artifactId>smart-offer</artifactId>
-    <version>0.3</version>
+    <artifactId>madar</artifactId>
+    <version>0.1</version>
     <packaging>jar</packaging>
 
-    <name>smart-offer</name>
-    <description>Smart Offer</description>
+    <name>madar</name>
+    <description>Web Application For Managing Aqsat</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.9.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>

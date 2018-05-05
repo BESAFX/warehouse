@@ -107,8 +107,8 @@
         classes = isArray(classes)
             ? classes
             : classes && isString(classes) && classes.length
-            ? classes.split(/\s+/)
-            : [];
+                ? classes.split(/\s+/)
+                : [];
         forEach(classes, function (klass, i) {
             if (klass && klass.length > 0) {
                 className += (i > 0) ? ' ' : '';
@@ -1006,8 +1006,8 @@
 
                     var itemIndex = stagger
                         ? options.staggerIndex >= 0
-                        ? options.staggerIndex
-                        : gcsLookup.count(cacheKey)
+                            ? options.staggerIndex
+                            : gcsLookup.count(cacheKey)
                         : 0;
 
                     var isFirst = itemIndex === 0;
@@ -1244,7 +1244,7 @@
                         // rely that the delay value is an intential stagger delay style.
                         var maxStagger = itemIndex > 0
                             && ((timings.transitionDuration && stagger.transitionDuration === 0) ||
-                            (timings.animationDuration && stagger.animationDuration === 0))
+                                (timings.animationDuration && stagger.animationDuration === 0))
                             && Math.max(stagger.animationDelay, stagger.transitionDelay);
                         if (maxStagger) {
                             $timeout(triggerAnimationStart,
@@ -1445,9 +1445,9 @@
                 return function initDriverFn(animationDetails) {
                     return animationDetails.from && animationDetails.to
                         ? prepareFromToAnchorAnimation(animationDetails.from,
-                        animationDetails.to,
-                        animationDetails.classes,
-                        animationDetails.anchors)
+                            animationDetails.to,
+                            animationDetails.classes,
+                            animationDetails.anchors)
                         : prepareRegularAnimation(animationDetails);
                 };
 
@@ -2130,11 +2130,11 @@
                 var classNameFilter = $animateProvider.classNameFilter();
                 var isAnimatableClassName = !classNameFilter
                     ? function () {
-                    return true;
-                }
+                        return true;
+                    }
                     : function (className) {
-                    return classNameFilter.test(className);
-                };
+                        return classNameFilter.test(className);
+                    };
 
                 var applyAnimationClasses = applyAnimationClassesFactory($$jqLite);
 
@@ -2420,8 +2420,8 @@
                         // is no point in performing an animation. The parent node must also be set.
                         var isValidAnimation = parentElement.length > 0
                             && (animationDetails.event === 'animate'
-                            || animationDetails.structural
-                            || hasAnimationClasses(animationDetails.options));
+                                || animationDetails.structural
+                                || hasAnimationClasses(animationDetails.options));
 
                         // this means that the previous animation was cancelled
                         // even if the follow-up animation is the same event
@@ -2653,6 +2653,7 @@
                 var index = 0;
 
                 next();
+
                 function next() {
                     if (index === chain.length) {
                         callback(true);

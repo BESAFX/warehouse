@@ -13,6 +13,7 @@ public class PersonAwareUserDetails implements UserDetails {
 
     @Getter
     private final Person person;
+
     private final Collection<? extends GrantedAuthority> grantedAuthorities;
 
     public PersonAwareUserDetails(Person person) {

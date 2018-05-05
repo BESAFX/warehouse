@@ -305,7 +305,7 @@
             // property access. You'll therefore see the `foo.bar || foo['bar']`
             // pattern repeated across this method.
             var widgetMissing = (typeof config.widget === 'undefined' &&
-            typeof config['widget'] === 'undefined');
+                typeof config['widget'] === 'undefined');
             var widget = true;
 
             if (!widgetMissing) {
@@ -2720,6 +2720,7 @@
             this.initTabs_();
         }
     };
+
     /**
      * Constructor for an individual tab.
      *
@@ -3571,6 +3572,7 @@
             this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
         }
     };
+
     /**
      * Constructor for an individual tab.
      *

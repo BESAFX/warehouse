@@ -14,6 +14,7 @@
     }
 })(window, function factory(window) {
     'use strict';
+
     function getOffset(element, property) {
         var offset = element[property];
         var parent = element;

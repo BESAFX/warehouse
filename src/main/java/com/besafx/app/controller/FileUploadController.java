@@ -33,22 +33,9 @@ public class FileUploadController {
     @ResponseBody
     public String uploadCompanyLogo(@RequestParam("file") MultipartFile file) throws Exception {
         String fileName = new BigInteger(130, random).toString(32) + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-        Future<Boolean> task = dropboxManager.uploadFile(file, "/Smart Offer/Companies/" + fileName);
+        Future<Boolean> task = dropboxManager.uploadFile(file, "/Madar/Companies/" + fileName);
         if (task.get()) {
-            Future<String> task11 = dropboxManager.shareFile("/Smart Offer/Companies/" + fileName);
-            return task11.get();
-        } else {
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/uploadBranchLogo", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String uploadBranchLogo(@RequestParam("file") MultipartFile file) throws Exception {
-        String fileName = new BigInteger(130, random).toString(32) + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-        Future<Boolean> task = dropboxManager.uploadFile(file, "/Smart Offer/Branches/" + fileName);
-        if (task.get()) {
-            Future<String> task11 = dropboxManager.shareFile("/Smart Offer/Branches/" + fileName);
+            Future<String> task11 = dropboxManager.shareFile("/Madar/Companies/" + fileName);
             return task11.get();
         } else {
             return null;
@@ -59,9 +46,9 @@ public class FileUploadController {
     @ResponseBody
     public String uploadContactPhoto(@RequestParam("file") MultipartFile file) throws Exception {
         String fileName = new BigInteger(130, random).toString(32) + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-        Future<Boolean> task = dropboxManager.uploadFile(file, "/Smart Offer/Contacts/" + fileName);
+        Future<Boolean> task = dropboxManager.uploadFile(file, "/Madar/Contacts/" + fileName);
         if (task.get()) {
-            Future<String> task11 = dropboxManager.shareFile("/Smart Offer/Contacts/" + fileName);
+            Future<String> task11 = dropboxManager.shareFile("/Madar/Contacts/" + fileName);
             return task11.get();
         } else {
             return null;

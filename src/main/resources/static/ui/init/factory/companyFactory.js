@@ -14,7 +14,10 @@ app.factory("CompanyService",
             uploadCompanyLogo: function (file) {
                 var fd = new FormData();
                 fd.append('file', file);
-                return $http.post("/uploadCompanyLogo", fd, {transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(function (response) {
+                return $http.post("/uploadCompanyLogo", fd, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).then(function (response) {
                     return response.data;
                 });
             }

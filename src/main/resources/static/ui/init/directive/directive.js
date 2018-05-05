@@ -146,32 +146,32 @@ app.directive('stDefaultValue', function () {
     };
 });
 
-app.directive('arrowSelector',['$document',function($document){
-    return{
-        restrict:'A',
-        link:function(scope,elem,attrs,ctrl){
+app.directive('arrowSelector', ['$document', function ($document) {
+    return {
+        restrict: 'A',
+        link: function (scope, elem, attrs, ctrl) {
             var elemFocus = false;
-            elem.on('mouseenter',function(){
+            elem.on('mouseenter', function () {
                 elemFocus = true;
                 console.log(elemFocus);
             });
-            elem.on('mouseleave',function(){
+            elem.on('mouseleave', function () {
                 elemFocus = false;
                 console.log(elemFocus);
             });
-            $document.bind('keydown',function(e){
-                if(elemFocus){
-                    if(e.keyCode == 38){
+            $document.bind('keydown', function (e) {
+                if (elemFocus) {
+                    if (e.keyCode == 38) {
                         console.log(scope.selectedRow);
-                        if(scope.selectedRow == 0){
+                        if (scope.selectedRow == 0) {
                             return;
                         }
                         scope.selectedRow--;
                         scope.$apply();
                         e.preventDefault();
                     }
-                    if(e.keyCode == 40){
-                        if(scope.selectedRow == scope.foodItems.length - 1){
+                    if (e.keyCode == 40) {
+                        if (scope.selectedRow == scope.foodItems.length - 1) {
                             return;
                         }
                         scope.selectedRow++;
@@ -184,11 +184,11 @@ app.directive('arrowSelector',['$document',function($document){
     };
 }]);
 
-app.directive("formatDate", function(){
+app.directive("formatDate", function () {
     return {
         require: 'ngModel',
-        link: function(scope, elem, attr, modelCtrl) {
-            modelCtrl.$formatters.push(function(modelValue){
+        link: function (scope, elem, attr, modelCtrl) {
+            modelCtrl.$formatters.push(function (modelValue) {
                 return new Date(modelValue);
             })
         }
@@ -221,7 +221,7 @@ app.directive('csSelect', function () {
     };
 });
 
-app.directive('stSelectRowCustom',['$timeout',
+app.directive('stSelectRowCustom', ['$timeout',
     function ($timeout) {
         return {
             restrict: 'A',
@@ -468,7 +468,7 @@ app.directive('ngPrint', function () {
 
         if (window.matchMedia) {
             var mediaQueryList = window.matchMedia('print');
-            mediaQueryList.addListener(function(mql) {
+            mediaQueryList.addListener(function (mql) {
                 if (!mql.matches) {
                     afterPrint();
                 } else {

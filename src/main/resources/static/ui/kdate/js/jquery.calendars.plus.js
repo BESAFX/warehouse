@@ -205,7 +205,7 @@
                             break;
                         case 'y':
                             output += (doubled('y', 2) ? date.year() :
-                            (date.year() % 100 < 10 ? '0' : '') + date.year() % 100);
+                                (date.year() % 100 < 10 ? '0' : '') + date.year() % 100);
                             break;
                         case 'Y':
                             doubled('Y', 2);
@@ -266,7 +266,7 @@
             settings = settings || {};
             var shortYearCutoff = settings.shortYearCutoff || this.shortYearCutoff;
             shortYearCutoff = (typeof shortYearCutoff !== 'string' ? shortYearCutoff :
-            this.today().year() % 100 + parseInt(shortYearCutoff, 10));
+                this.today().year() % 100 + parseInt(shortYearCutoff, 10));
             var dayNamesShort = settings.dayNamesShort || this.local.dayNamesShort;
             var dayNames = settings.dayNames || this.local.dayNames;
             var monthNamesShort = settings.monthNamesShort || this.local.monthNamesShort;
@@ -315,7 +315,7 @@
             var checkLiteral = function () {
                 if (value.charAt(iValue) !== format.charAt(iFormat)) {
                     throw ($.calendars.local.unexpectedLiteralAt ||
-                    $.calendars.regionalOptions[''].unexpectedLiteralAt).replace(/\{0\}/, iValue);
+                        $.calendars.regionalOptions[''].unexpectedLiteralAt).replace(/\{0\}/, iValue);
                 }
                 iValue++;
             };
@@ -395,7 +395,7 @@
             }
             else if (year < 100 && shortYear) {
                 year += (shortYearCutoff === -1 ? 1900 : this.today().year() -
-                this.today().year() % 100 - (year <= shortYearCutoff ? 0 : 100));
+                    this.today().year() % 100 - (year <= shortYearCutoff ? 0 : 100));
             }
             if (doy > -1) {
                 month = 1;
@@ -444,7 +444,7 @@
                 }
                 offset = offset.toLowerCase();
                 var date = (offset.match(/^c/) && currentDate ?
-                        currentDate.newDate() : null) || calendar.today();
+                    currentDate.newDate() : null) || calendar.today();
                 var pattern = /([+-]?[0-9]+)\s*(d|w|m|y)?/g;
                 var matches = pattern.exec(offset);
                 while (matches) {

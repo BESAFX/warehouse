@@ -276,18 +276,19 @@ app.factory("progressBarService", function () {
     }
 
     function n(a) {
-        var b = A(a), c = b.year || 0, d = b.quarter || 0, e = b.month || 0, f = b.week || 0, g = b.day || 0, h = b.hour || 0, i = b.minute || 0, j = b.second || 0, k = b.millisecond || 0;
+        var b = A(a), c = b.year || 0, d = b.quarter || 0, e = b.month || 0, f = b.week || 0, g = b.day || 0, h = b.hour || 0, i = b.minute || 0,
+            j = b.second || 0, k = b.millisecond || 0;
         this._milliseconds = +k + 1e3 * j + 6e4 * i + 36e5 * h, this._days = +g + 7 * f, this._months = +e + 3 * d + 12 * c, this._data = {}, this._locale = vb.localeData(), this._bubble()
     }
 
     function o(a, b) {
-        for (var d in b)c(b, d) && (a[d] = b[d]);
+        for (var d in b) c(b, d) && (a[d] = b[d]);
         return c(b, "toString") && (a.toString = b.toString), c(b, "valueOf") && (a.valueOf = b.valueOf), a
     }
 
     function p(a, b) {
         var c, d, e;
-        if ("undefined" != typeof b._isAMomentObject && (a._isAMomentObject = b._isAMomentObject), "undefined" != typeof b._i && (a._i = b._i), "undefined" != typeof b._f && (a._f = b._f), "undefined" != typeof b._l && (a._l = b._l), "undefined" != typeof b._strict && (a._strict = b._strict), "undefined" != typeof b._tzm && (a._tzm = b._tzm), "undefined" != typeof b._isUTC && (a._isUTC = b._isUTC), "undefined" != typeof b._offset && (a._offset = b._offset), "undefined" != typeof b._pf && (a._pf = b._pf), "undefined" != typeof b._locale && (a._locale = b._locale), Kb.length > 0)for (c in Kb)d = Kb[c], e = b[d], "undefined" != typeof e && (a[d] = e);
+        if ("undefined" != typeof b._isAMomentObject && (a._isAMomentObject = b._isAMomentObject), "undefined" != typeof b._i && (a._i = b._i), "undefined" != typeof b._f && (a._f = b._f), "undefined" != typeof b._l && (a._l = b._l), "undefined" != typeof b._strict && (a._strict = b._strict), "undefined" != typeof b._tzm && (a._tzm = b._tzm), "undefined" != typeof b._isUTC && (a._isUTC = b._isUTC), "undefined" != typeof b._offset && (a._offset = b._offset), "undefined" != typeof b._pf && (a._pf = b._pf), "undefined" != typeof b._locale && (a._locale = b._locale), Kb.length > 0) for (c in Kb) d = Kb[c], e = b[d], "undefined" != typeof e && (a[d] = e);
         return a
     }
 
@@ -296,7 +297,7 @@ app.factory("progressBarService", function () {
     }
 
     function r(a, b, c) {
-        for (var d = "" + Math.abs(a), e = a >= 0; d.length < b;)d = "0" + d;
+        for (var d = "" + Math.abs(a), e = a >= 0; d.length < b;) d = "0" + d;
         return (e ? c ? "+" : "" : "-") + d
     }
 
@@ -332,7 +333,7 @@ app.factory("progressBarService", function () {
 
     function y(a, b, c) {
         var d, e = Math.min(a.length, b.length), f = Math.abs(a.length - b.length), g = 0;
-        for (d = 0; e > d; d++)(c && a[d] !== b[d] || !c && C(a[d]) !== C(b[d])) && g++;
+        for (d = 0; e > d; d++) (c && a[d] !== b[d] || !c && C(a[d]) !== C(b[d])) && g++;
         return g + f
     }
 
@@ -346,14 +347,14 @@ app.factory("progressBarService", function () {
 
     function A(a) {
         var b, d, e = {};
-        for (d in a)c(a, d) && (b = z(d), b && (e[b] = a[d]));
+        for (d in a) c(a, d) && (b = z(d), b && (e[b] = a[d]));
         return e
     }
 
     function B(b) {
         var c, d;
-        if (0 === b.indexOf("week"))c = 7, d = "day"; else {
-            if (0 !== b.indexOf("month"))return;
+        if (0 === b.indexOf("week")) c = 7, d = "day"; else {
+            if (0 !== b.indexOf("month")) return;
             c = 12, d = "month"
         }
         vb[b] = function (e, f) {
@@ -361,8 +362,8 @@ app.factory("progressBarService", function () {
             if ("number" == typeof e && (f = e, e = a), h = function (a) {
                     var b = vb().utc().set(d, a);
                     return i.call(vb._locale, b, e || "")
-                }, null != f)return h(f);
-            for (g = 0; c > g; g++)j.push(h(g));
+                }, null != f) return h(f);
+            for (g = 0; c > g; g++) j.push(h(g));
             return j
         }
     }
@@ -404,8 +405,8 @@ app.factory("progressBarService", function () {
     function K(a) {
         for (var b, c, d, e, f = 0; f < a.length;) {
             for (e = J(a[f]).split("-"), b = e.length, c = J(a[f + 1]), c = c ? c.split("-") : null; b > 0;) {
-                if (d = L(e.slice(0, b).join("-")))return d;
-                if (c && c.length >= b && y(e, c, !0) >= b - 1)break;
+                if (d = L(e.slice(0, b).join("-"))) return d;
+                if (c && c.length >= b && y(e, c, !0) >= b - 1) break;
                 b--
             }
             f++
@@ -415,7 +416,7 @@ app.factory("progressBarService", function () {
 
     function L(a) {
         var b = null;
-        if (!Jb[a] && Lb)try {
+        if (!Jb[a] && Lb) try {
             b = vb.locale(), require("./locale/" + a), vb.locale(b)
         } catch (c) {
         }
@@ -433,10 +434,10 @@ app.factory("progressBarService", function () {
 
     function O(a) {
         var b, c, d = a.match(Pb);
-        for (b = 0, c = d.length; c > b; b++)d[b] = rc[d[b]] ? rc[d[b]] : N(d[b]);
+        for (b = 0, c = d.length; c > b; b++) d[b] = rc[d[b]] ? rc[d[b]] : N(d[b]);
         return function (e) {
             var f = "";
-            for (b = 0; c > b; b++)f += d[b] instanceof Function ? d[b].call(e, a) : d[b];
+            for (b = 0; c > b; b++) f += d[b] instanceof Function ? d[b].call(e, a) : d[b];
             return f
         }
     }
@@ -451,7 +452,7 @@ app.factory("progressBarService", function () {
         }
 
         var d = 5;
-        for (Qb.lastIndex = 0; d >= 0 && Qb.test(a);)a = a.replace(Qb, c), Qb.lastIndex = 0, d -= 1;
+        for (Qb.lastIndex = 0; d >= 0 && Qb.test(a);) a = a.replace(Qb, c), Qb.lastIndex = 0, d -= 1;
         return a
     }
 
@@ -476,11 +477,11 @@ app.factory("progressBarService", function () {
             case"ggggg":
                 return d ? dc : Ub;
             case"S":
-                if (d)return _b;
+                if (d) return _b;
             case"SS":
-                if (d)return ac;
+                if (d) return ac;
             case"SSS":
-                if (d)return bc;
+                if (d) return bc;
             case"DDD":
                 return Sb;
             case"MMM":
@@ -640,8 +641,8 @@ app.factory("progressBarService", function () {
     function V(a) {
         var c, d, e, f, g = [];
         if (!a._d) {
-            for (e = X(a), a._w && null == a._a[Eb] && null == a._a[Db] && U(a), a._dayOfYear && (f = b(a._a[Cb], e[Cb]), a._dayOfYear > F(f) && (a._pf._overflowDayOfYear = !0), d = fb(f, 0, a._dayOfYear), a._a[Db] = d.getUTCMonth(), a._a[Eb] = d.getUTCDate()), c = 0; 3 > c && null == a._a[c]; ++c)a._a[c] = g[c] = e[c];
-            for (; 7 > c; c++)a._a[c] = g[c] = null == a._a[c] ? 2 === c ? 1 : 0 : a._a[c];
+            for (e = X(a), a._w && null == a._a[Eb] && null == a._a[Db] && U(a), a._dayOfYear && (f = b(a._a[Cb], e[Cb]), a._dayOfYear > F(f) && (a._pf._overflowDayOfYear = !0), d = fb(f, 0, a._dayOfYear), a._a[Db] = d.getUTCMonth(), a._a[Eb] = d.getUTCDate()), c = 0; 3 > c && null == a._a[c]; ++c) a._a[c] = g[c] = e[c];
+            for (; 7 > c; c++) a._a[c] = g[c] = null == a._a[c] ? 2 === c ? 1 : 0 : a._a[c];
             24 === a._a[Fb] && 0 === a._a[Gb] && 0 === a._a[Hb] && 0 === a._a[Ib] && (a._nextDay = !0, a._a[Fb] = 0), a._d = (a._useUTC ? fb : eb).apply(null, g), null != a._tzm && a._d.setUTCMinutes(a._d.getUTCMinutes() - a._tzm), a._nextDay && (a._a[Fb] = 24)
         }
     }
@@ -657,10 +658,10 @@ app.factory("progressBarService", function () {
     }
 
     function Y(b) {
-        if (b._f === vb.ISO_8601)return void ab(b);
+        if (b._f === vb.ISO_8601) return void ab(b);
         b._a = [], b._pf.empty = !0;
         var c, d, e, f, g, h = "" + b._i, i = h.length, j = 0;
-        for (e = Q(b._f, b._locale).match(Pb) || [], c = 0; c < e.length; c++)f = e[c], d = (h.match(R(f, b)) || [])[0], d && (g = h.substr(0, h.indexOf(d)), g.length > 0 && b._pf.unusedInput.push(g), h = h.slice(h.indexOf(d) + d.length), j += d.length), rc[f] ? (d ? b._pf.empty = !1 : b._pf.unusedTokens.push(f), T(f, d, b)) : b._strict && !d && b._pf.unusedTokens.push(f);
+        for (e = Q(b._f, b._locale).match(Pb) || [], c = 0; c < e.length; c++) f = e[c], d = (h.match(R(f, b)) || [])[0], d && (g = h.substr(0, h.indexOf(d)), g.length > 0 && b._pf.unusedInput.push(g), h = h.slice(h.indexOf(d) + d.length), j += d.length), rc[f] ? (d ? b._pf.empty = !1 : b._pf.unusedTokens.push(f), T(f, d, b)) : b._strict && !d && b._pf.unusedTokens.push(f);
         b._pf.charsLeftOver = i - j, h.length > 0 && b._pf.unusedInput.push(h), b._pf.bigHour === !0 && b._a[Fb] <= 12 && (b._pf.bigHour = a), b._a[Fb] = k(b._locale, b._a[Fb], b._meridiem), V(b), H(b)
     }
 
@@ -676,19 +677,19 @@ app.factory("progressBarService", function () {
 
     function _(a) {
         var b, c, e, f, g;
-        if (0 === a._f.length)return a._pf.invalidFormat = !0, void(a._d = new Date(0 / 0));
-        for (f = 0; f < a._f.length; f++)g = 0, b = p({}, a), null != a._useUTC && (b._useUTC = a._useUTC), b._pf = d(), b._f = a._f[f], Y(b), I(b) && (g += b._pf.charsLeftOver, g += 10 * b._pf.unusedTokens.length, b._pf.score = g, (null == e || e > g) && (e = g, c = b));
+        if (0 === a._f.length) return a._pf.invalidFormat = !0, void(a._d = new Date(0 / 0));
+        for (f = 0; f < a._f.length; f++) g = 0, b = p({}, a), null != a._useUTC && (b._useUTC = a._useUTC), b._pf = d(), b._f = a._f[f], Y(b), I(b) && (g += b._pf.charsLeftOver, g += 10 * b._pf.unusedTokens.length, b._pf.score = g, (null == e || e > g) && (e = g, c = b));
         o(a, c || b)
     }
 
     function ab(a) {
         var b, c, d = a._i, e = fc.exec(d);
         if (e) {
-            for (a._pf.iso = !0, b = 0, c = hc.length; c > b; b++)if (hc[b][1].exec(d)) {
+            for (a._pf.iso = !0, b = 0, c = hc.length; c > b; b++) if (hc[b][1].exec(d)) {
                 a._f = hc[b][0] + (e[6] || " ");
                 break
             }
-            for (b = 0, c = ic.length; c > b; b++)if (ic[b][1].exec(d)) {
+            for (b = 0, c = ic.length; c > b; b++) if (ic[b][1].exec(d)) {
                 a._f += ic[b][0];
                 break
             }
@@ -702,7 +703,7 @@ app.factory("progressBarService", function () {
 
     function cb(a, b) {
         var c, d = [];
-        for (c = 0; c < a.length; ++c)d.push(b(a[c], c));
+        for (c = 0; c < a.length; ++c) d.push(b(a[c], c));
         return d
     }
 
@@ -724,8 +725,8 @@ app.factory("progressBarService", function () {
     }
 
     function gb(a, b) {
-        if ("string" == typeof a)if (isNaN(a)) {
-            if (a = b.weekdaysParse(a), "number" != typeof a)return null
+        if ("string" == typeof a) if (isNaN(a)) {
+            if (a = b.weekdaysParse(a), "number" != typeof a) return null
         } else a = parseInt(a, 10);
         return a
     }
@@ -735,7 +736,9 @@ app.factory("progressBarService", function () {
     }
 
     function ib(a, b, c) {
-        var d = vb.duration(a).abs(), e = Ab(d.as("s")), f = Ab(d.as("m")), g = Ab(d.as("h")), h = Ab(d.as("d")), i = Ab(d.as("M")), j = Ab(d.as("y")), k = e < oc.s && ["s", e] || 1 === f && ["m"] || f < oc.m && ["mm", f] || 1 === g && ["h"] || g < oc.h && ["hh", g] || 1 === h && ["d"] || h < oc.d && ["dd", h] || 1 === i && ["M"] || i < oc.M && ["MM", i] || 1 === j && ["y"] || ["yy", j];
+        var d = vb.duration(a).abs(), e = Ab(d.as("s")), f = Ab(d.as("m")), g = Ab(d.as("h")), h = Ab(d.as("d")), i = Ab(d.as("M")),
+            j = Ab(d.as("y")),
+            k = e < oc.s && ["s", e] || 1 === f && ["m"] || f < oc.m && ["mm", f] || 1 === g && ["h"] || g < oc.h && ["hh", g] || 1 === h && ["d"] || h < oc.d && ["dd", h] || 1 === i && ["M"] || i < oc.M && ["MM", i] || 1 === j && ["y"] || ["yy", j];
         return k[2] = b, k[3] = +a > 0, k[4] = c, hb.apply({}, k)
     }
 
@@ -762,8 +765,8 @@ app.factory("progressBarService", function () {
 
     function mb(a, b) {
         var c, d;
-        if (1 === b.length && w(b[0]) && (b = b[0]), !b.length)return vb();
-        for (c = b[0], d = 1; d < b.length; ++d)b[d][a](c) && (c = b[d]);
+        if (1 === b.length && w(b[0]) && (b = b[0]), !b.length) return vb();
+        for (c = b[0], d = 1; d < b.length; ++d) b[d][a](c) && (c = b[d]);
         return c
     }
 
@@ -926,12 +929,12 @@ app.factory("progressBarService", function () {
         }, Q: function () {
             return this.quarter()
         }
-    }, sc = {}, tc = ["months", "monthsShort", "weekdays", "weekdaysShort", "weekdaysMin"], uc = !1; pc.length;)xb = pc.pop(), rc[xb + "o"] = i(rc[xb], xb);
-    for (; qc.length;)xb = qc.pop(), rc[xb + xb] = h(rc[xb], 2);
+    }, sc = {}, tc = ["months", "monthsShort", "weekdays", "weekdaysShort", "weekdaysMin"], uc = !1; pc.length;) xb = pc.pop(), rc[xb + "o"] = i(rc[xb], xb);
+    for (; qc.length;) xb = qc.pop(), rc[xb + xb] = h(rc[xb], 2);
     rc.DDDD = h(rc.DDD, 3), o(l.prototype, {
         set: function (a) {
             var b, c;
-            for (c in a)b = a[c], "function" == typeof b ? this[c] = b : this["_" + c] = b;
+            for (c in a) b = a[c], "function" == typeof b ? this[c] = b : this["_" + c] = b;
             this._ordinalParseLenient = new RegExp(this._ordinalParse.source + "|" + /\d{1,2}/.source)
         },
         _months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"),
@@ -945,9 +948,9 @@ app.factory("progressBarService", function () {
         monthsParse: function (a, b, c) {
             var d, e, f;
             for (this._monthsParse || (this._monthsParse = [], this._longMonthsParse = [], this._shortMonthsParse = []), d = 0; 12 > d; d++) {
-                if (e = vb.utc([2e3, d]), c && !this._longMonthsParse[d] && (this._longMonthsParse[d] = new RegExp("^" + this.months(e, "").replace(".", "") + "$", "i"), this._shortMonthsParse[d] = new RegExp("^" + this.monthsShort(e, "").replace(".", "") + "$", "i")), c || this._monthsParse[d] || (f = "^" + this.months(e, "") + "|^" + this.monthsShort(e, ""), this._monthsParse[d] = new RegExp(f.replace(".", ""), "i")), c && "MMMM" === b && this._longMonthsParse[d].test(a))return d;
-                if (c && "MMM" === b && this._shortMonthsParse[d].test(a))return d;
-                if (!c && this._monthsParse[d].test(a))return d
+                if (e = vb.utc([2e3, d]), c && !this._longMonthsParse[d] && (this._longMonthsParse[d] = new RegExp("^" + this.months(e, "").replace(".", "") + "$", "i"), this._shortMonthsParse[d] = new RegExp("^" + this.monthsShort(e, "").replace(".", "") + "$", "i")), c || this._monthsParse[d] || (f = "^" + this.months(e, "") + "|^" + this.monthsShort(e, ""), this._monthsParse[d] = new RegExp(f.replace(".", ""), "i")), c && "MMMM" === b && this._longMonthsParse[d].test(a)) return d;
+                if (c && "MMM" === b && this._shortMonthsParse[d].test(a)) return d;
+                if (!c && this._monthsParse[d].test(a)) return d
             }
         },
         _weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
@@ -964,7 +967,7 @@ app.factory("progressBarService", function () {
         },
         weekdaysParse: function (a) {
             var b, c, d;
-            for (this._weekdaysParse || (this._weekdaysParse = []), b = 0; 7 > b; b++)if (this._weekdaysParse[b] || (c = vb([2e3, 1]).day(b), d = "^" + this.weekdays(c, "") + "|^" + this.weekdaysShort(c, "") + "|^" + this.weekdaysMin(c, ""), this._weekdaysParse[b] = new RegExp(d.replace(".", ""), "i")), this._weekdaysParse[b].test(a))return b
+            for (this._weekdaysParse || (this._weekdaysParse = []), b = 0; 7 > b; b++) if (this._weekdaysParse[b] || (c = vb([2e3, 1]).day(b), d = "^" + this.weekdays(c, "") + "|^" + this.weekdaysShort(c, "") + "|^" + this.weekdaysMin(c, ""), this._weekdaysParse[b] = new RegExp(d.replace(".", ""), "i")), this._weekdaysParse[b].test(a)) return b
         },
         _longDateFormat: {
             LTS: "h:mm:ss A",
@@ -1103,9 +1106,9 @@ app.factory("progressBarService", function () {
         return vb.localeData(a)
     }), vb.localeData = function (a) {
         var b;
-        if (a && a._locale && a._locale._abbr && (a = a._locale._abbr), !a)return vb._locale;
+        if (a && a._locale && a._locale._abbr && (a = a._locale._abbr), !a) return vb._locale;
         if (!w(a)) {
-            if (b = L(a))return b;
+            if (b = L(a)) return b;
             a = [a]
         }
         return K(a)
@@ -1114,7 +1117,7 @@ app.factory("progressBarService", function () {
     }, vb.isDuration = function (a) {
         return a instanceof n
     };
-    for (xb = tc.length - 1; xb >= 0; --xb)B(tc[xb]);
+    for (xb = tc.length - 1; xb >= 0; --xb) B(tc[xb]);
     vb.normalizeUnits = function (a) {
         return z(a)
     }, vb.invalid = function (a) {
@@ -1183,7 +1186,8 @@ app.factory("progressBarService", function () {
             return this.from(vb(), a)
         },
         calendar: function (a) {
-            var b = a || vb(), c = M(b, this).startOf("day"), d = this.diff(c, "days", !0), e = -6 > d ? "sameElse" : -1 > d ? "lastWeek" : 0 > d ? "lastDay" : 1 > d ? "sameDay" : 2 > d ? "nextDay" : 7 > d ? "nextWeek" : "sameElse";
+            var b = a || vb(), c = M(b, this).startOf("day"), d = this.diff(c, "days", !0),
+                e = -6 > d ? "sameElse" : -1 > d ? "lastWeek" : 0 > d ? "lastDay" : 1 > d ? "sameDay" : 2 > d ? "nextDay" : 7 > d ? "nextWeek" : "sameElse";
             return this.format(this.localeData().calendar(e, this, vb(b)))
         },
         isLeapYear: function () {
@@ -1314,7 +1318,7 @@ app.factory("progressBarService", function () {
         },
         set: function (a, b) {
             var c;
-            if ("object" == typeof a)for (c in a)this.set(c, a[c]); else a = z(a), "function" == typeof this[a] && this[a](b);
+            if ("object" == typeof a) for (c in a) this.set(c, a[c]); else a = z(a), "function" == typeof this[a] && this[a](b);
             return this
         },
         locale: function (b) {
@@ -1361,7 +1365,7 @@ app.factory("progressBarService", function () {
         },
         as: function (a) {
             var b, c;
-            if (a = z(a), "month" === a || "year" === a)return b = this._days + this._milliseconds / 864e5, c = this._months + 12 * rb(b), "month" === a ? c : c / 12;
+            if (a = z(a), "month" === a || "year" === a) return b = this._days + this._milliseconds / 864e5, c = this._months + 12 * rb(b), "month" === a ? c : c / 12;
             switch (b = this._days + Math.round(sb(this._months / 12)), a) {
                 case"week":
                     return b / 7 + this._milliseconds / 6048e5;
@@ -1385,7 +1389,8 @@ app.factory("progressBarService", function () {
             return this.toISOString()
         }),
         toISOString: function () {
-            var a = Math.abs(this.years()), b = Math.abs(this.months()), c = Math.abs(this.days()), d = Math.abs(this.hours()), e = Math.abs(this.minutes()), f = Math.abs(this.seconds() + this.milliseconds() / 1e3);
+            var a = Math.abs(this.years()), b = Math.abs(this.months()), c = Math.abs(this.days()), d = Math.abs(this.hours()),
+                e = Math.abs(this.minutes()), f = Math.abs(this.seconds() + this.milliseconds() / 1e3);
             return this.asSeconds() ? (this.asSeconds() < 0 ? "-" : "") + "P" + (a ? a + "Y" : "") + (b ? b + "M" : "") + (c ? c + "D" : "") + (d || e || f ? "T" : "") + (d ? d + "H" : "") + (e ? e + "M" : "") + (f ? f + "S" : "") : "P0D"
         },
         localeData: function () {
@@ -1395,7 +1400,7 @@ app.factory("progressBarService", function () {
             return this.toISOString()
         }
     }), vb.duration.fn.toString = vb.duration.fn.toISOString;
-    for (xb in kc)c(kc, xb) && tb(xb.toLowerCase());
+    for (xb in kc) c(kc, xb) && tb(xb.toLowerCase());
     vb.duration.fn.asMilliseconds = function () {
         return this.as("ms")
     }, vb.duration.fn.asSeconds = function () {
@@ -1629,31 +1634,32 @@ app.factory("progressBarService", function () {
         a(vb)
     }(function (a) {
         var b = {1: "١", 2: "٢", 3: "٣", 4: "٤", 5: "٥", 6: "٦", 7: "٧", 8: "٨", 9: "٩", 0: "٠"}, c = {
-            "١": "1",
-            "٢": "2",
-            "٣": "3",
-            "٤": "4",
-            "٥": "5",
-            "٦": "6",
-            "٧": "7",
-            "٨": "8",
-            "٩": "9",
-            "٠": "0"
-        }, d = function (a) {
-            return 0 === a ? 0 : 1 === a ? 1 : 2 === a ? 2 : a % 100 >= 3 && 10 >= a % 100 ? 3 : a % 100 >= 11 ? 4 : 5
-        }, e = {
-            s: ["أقل من ثانية", "ثانية واحدة", ["ثانيتان", "ثانيتين"], "%d ثوان", "%d ثانية", "%d ثانية"],
-            m: ["أقل من دقيقة", "دقيقة واحدة", ["دقيقتان", "دقيقتين"], "%d دقائق", "%d دقيقة", "%d دقيقة"],
-            h: ["أقل من ساعة", "ساعة واحدة", ["ساعتان", "ساعتين"], "%d ساعات", "%d ساعة", "%d ساعة"],
-            d: ["أقل من يوم", "يوم واحد", ["يومان", "يومين"], "%d أيام", "%d يومًا", "%d يوم"],
-            M: ["أقل من شهر", "شهر واحد", ["شهران", "شهرين"], "%d أشهر", "%d شهرا", "%d شهر"],
-            y: ["أقل من عام", "عام واحد", ["عامان", "عامين"], "%d أعوام", "%d عامًا", "%d عام"]
-        }, f = function (a) {
-            return function (b, c) {
-                var f = d(b), g = e[a][d(b)];
-                return 2 === f && (g = g[c ? 0 : 1]), g.replace(/%d/i, b)
-            }
-        }, g = ["كانون الثاني يناير", "شباط فبراير", "آذار مارس", "نيسان أبريل", "أيار مايو", "حزيران يونيو", "تموز يوليو", "آب أغسطس", "أيلول سبتمبر", "تشرين الأول أكتوبر", "تشرين الثاني نوفمبر", "كانون الأول ديسمبر"];
+                "١": "1",
+                "٢": "2",
+                "٣": "3",
+                "٤": "4",
+                "٥": "5",
+                "٦": "6",
+                "٧": "7",
+                "٨": "8",
+                "٩": "9",
+                "٠": "0"
+            }, d = function (a) {
+                return 0 === a ? 0 : 1 === a ? 1 : 2 === a ? 2 : a % 100 >= 3 && 10 >= a % 100 ? 3 : a % 100 >= 11 ? 4 : 5
+            }, e = {
+                s: ["أقل من ثانية", "ثانية واحدة", ["ثانيتان", "ثانيتين"], "%d ثوان", "%d ثانية", "%d ثانية"],
+                m: ["أقل من دقيقة", "دقيقة واحدة", ["دقيقتان", "دقيقتين"], "%d دقائق", "%d دقيقة", "%d دقيقة"],
+                h: ["أقل من ساعة", "ساعة واحدة", ["ساعتان", "ساعتين"], "%d ساعات", "%d ساعة", "%d ساعة"],
+                d: ["أقل من يوم", "يوم واحد", ["يومان", "يومين"], "%d أيام", "%d يومًا", "%d يوم"],
+                M: ["أقل من شهر", "شهر واحد", ["شهران", "شهرين"], "%d أشهر", "%d شهرا", "%d شهر"],
+                y: ["أقل من عام", "عام واحد", ["عامان", "عامين"], "%d أعوام", "%d عامًا", "%d عام"]
+            }, f = function (a) {
+                return function (b, c) {
+                    var f = d(b), g = e[a][d(b)];
+                    return 2 === f && (g = g[c ? 0 : 1]), g.replace(/%d/i, b)
+                }
+            },
+            g = ["كانون الثاني يناير", "شباط فبراير", "آذار مارس", "نيسان أبريل", "أيار مايو", "حزيران يونيو", "تموز يوليو", "آب أغسطس", "أيلول سبتمبر", "تشرين الأول أكتوبر", "تشرين الثاني نوفمبر", "كانون الأول ديسمبر"];
         return a.defineLocale("ar", {
             months: g,
             monthsShort: g,
@@ -1779,7 +1785,7 @@ app.factory("progressBarService", function () {
             },
             ordinalParse: /\d{1,2}-(ıncı|inci|nci|üncü|ncı|uncu)/,
             ordinal: function (a) {
-                if (0 === a)return a + "-ıncı";
+                if (0 === a) return a + "-ıncı";
                 var c = a % 10, d = a % 100 - c, e = a >= 100 ? 100 : null;
                 return a + (b[c] || b[d] || b[e])
             },
@@ -2351,13 +2357,14 @@ app.factory("progressBarService", function () {
             }
         }
 
-        var d = "leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec".split("_"), e = "led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro".split("_");
+        var d = "leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec".split("_"),
+            e = "led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro".split("_");
         return a.defineLocale("cs", {
             months: d,
             monthsShort: e,
             monthsParse: function (a, b) {
                 var c, d = [];
-                for (c = 0; 12 > c; c++)d[c] = new RegExp("^" + a[c] + "$|^" + b[c] + "$", "i");
+                for (c = 0; 12 > c; c++) d[c] = new RegExp("^" + a[c] + "$|^" + b[c] + "$", "i");
                 return d
             }(d, e),
             weekdays: "neděle_pondělí_úterý_středa_čtvrtek_pátek_sobota".split("_"),
@@ -2513,7 +2520,8 @@ app.factory("progressBarService", function () {
             },
             ordinalParse: /\d{1,2}(fed|ain|af|il|ydd|ed|eg)/,
             ordinal: function (a) {
-                var b = a, c = "", d = ["", "af", "il", "ydd", "ydd", "ed", "ed", "ed", "fed", "fed", "fed", "eg", "fed", "eg", "eg", "fed", "eg", "eg", "fed", "eg", "fed"];
+                var b = a, c = "",
+                    d = ["", "af", "il", "ydd", "ydd", "ed", "ed", "ed", "fed", "fed", "fed", "eg", "fed", "eg", "eg", "fed", "eg", "eg", "fed", "eg", "fed"];
                 return b > 20 ? c = 40 === b || 50 === b || 60 === b || 80 === b || 100 === b ? "fed" : "ain" : b > 0 && (c = d[b]), a + c
             },
             week: {dow: 1, doy: 4}
@@ -2938,7 +2946,8 @@ app.factory("progressBarService", function () {
     }), function (a) {
         a(vb)
     }(function (a) {
-        var b = "ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"), c = "ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_");
+        var b = "ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),
+            c = "ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_");
         return a.defineLocale("es", {
             months: "enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),
             monthsShort: function (a, d) {
@@ -3208,7 +3217,8 @@ app.factory("progressBarService", function () {
             return 10 > a ? b ? e[a] : d[a] : a
         }
 
-        var d = "nolla yksi kaksi kolme neljä viisi kuusi seitsemän kahdeksan yhdeksän".split(" "), e = ["nolla", "yhden", "kahden", "kolmen", "neljän", "viiden", "kuuden", d[7], d[8], d[9]];
+        var d = "nolla yksi kaksi kolme neljä viisi kuusi seitsemän kahdeksan yhdeksän".split(" "),
+            e = ["nolla", "yhden", "kahden", "kolmen", "neljän", "viiden", "kuuden", d[7], d[8], d[9]];
         return a.defineLocale("fi", {
             months: "tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu".split("_"),
             monthsShort: "tammi_helmi_maalis_huhti_touko_kesä_heinä_elo_syys_loka_marras_joulu".split("_"),
@@ -3392,7 +3402,8 @@ app.factory("progressBarService", function () {
     }), function (a) {
         a(vb)
     }(function (a) {
-        var b = "jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.".split("_"), c = "jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_");
+        var b = "jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.".split("_"),
+            c = "jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_");
         return a.defineLocale("fy", {
             months: "jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber".split("_"),
             monthsShort: function (a, d) {
@@ -4269,15 +4280,15 @@ app.factory("progressBarService", function () {
         }
 
         function e(a) {
-            if (a = parseInt(a, 10), isNaN(a))return !1;
-            if (0 > a)return !0;
-            if (10 > a)return a >= 4 && 7 >= a ? !0 : !1;
+            if (a = parseInt(a, 10), isNaN(a)) return !1;
+            if (0 > a) return !0;
+            if (10 > a) return a >= 4 && 7 >= a ? !0 : !1;
             if (100 > a) {
                 var b = a % 10, c = a / 10;
                 return e(0 === b ? c : b)
             }
             if (1e4 > a) {
-                for (; a >= 10;)a /= 10;
+                for (; a >= 10;) a /= 10;
                 return e(a)
             }
             return a /= 1e3, e(a)
@@ -4889,7 +4900,8 @@ app.factory("progressBarService", function () {
     }), function (a) {
         a(vb)
     }(function (a) {
-        var b = "jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"), c = "jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_");
+        var b = "jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),
+            c = "jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_");
         return a.defineLocale("nl", {
             months: "januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),
             monthsShort: function (a, d) {
@@ -5004,7 +5016,8 @@ app.factory("progressBarService", function () {
             }
         }
 
-        var d = "styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień".split("_"), e = "stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia".split("_");
+        var d = "styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień".split("_"),
+            e = "stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia".split("_");
         return a.defineLocale("pl", {
             months: function (a, b) {
                 return /D MMMM/.test(b) ? e[a.month()] : d[a.month()]
@@ -5263,7 +5276,7 @@ app.factory("progressBarService", function () {
                     return 2 === this.day() ? "[Во] dddd [в] LT" : "[В] dddd [в] LT"
                 },
                 lastWeek: function (a) {
-                    if (a.week() === this.week())return 2 === this.day() ? "[Во] dddd [в] LT" : "[В] dddd [в] LT";
+                    if (a.week() === this.week()) return 2 === this.day() ? "[Во] dddd [в] LT" : "[В] dddd [в] LT";
                     switch (this.day()) {
                         case 0:
                             return "[В прошлое] dddd [в] LT";
@@ -5358,13 +5371,14 @@ app.factory("progressBarService", function () {
             }
         }
 
-        var d = "január_február_marec_apríl_máj_jún_júl_august_september_október_november_december".split("_"), e = "jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec".split("_");
+        var d = "január_február_marec_apríl_máj_jún_júl_august_september_október_november_december".split("_"),
+            e = "jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec".split("_");
         return a.defineLocale("sk", {
             months: d,
             monthsShort: e,
             monthsParse: function (a, b) {
                 var c, d = [];
-                for (c = 0; 12 > c; c++)d[c] = new RegExp("^" + a[c] + "$|^" + b[c] + "$", "i");
+                for (c = 0; 12 > c; c++) d[c] = new RegExp("^" + a[c] + "$|^" + b[c] + "$", "i");
                 return d
             }(d, e),
             weekdays: "nedeľa_pondelok_utorok_streda_štvrtok_piatok_sobota".split("_"),
@@ -5967,7 +5981,7 @@ app.factory("progressBarService", function () {
             },
             ordinalParse: /\d{1,2}'(inci|nci|üncü|ncı|uncu|ıncı)/,
             ordinal: function (a) {
-                if (0 === a)return a + "'ıncı";
+                if (0 === a) return a + "'ıncı";
                 var c = a % 10, d = a % 100 - c, e = a >= 100 ? 100 : null;
                 return a + (b[c] || b[d] || b[e])
             },
@@ -6479,7 +6493,7 @@ app.factory("progressBarService", function () {
                 return "segon" + ((c !== 1) ? "s" : "");
             },
             millisecond: function (c) {
-                return "milisegon" + ((c !== 1) ? "s" : "" );
+                return "milisegon" + ((c !== 1) ? "s" : "");
             }
         },
         da: {
@@ -6581,7 +6595,7 @@ app.factory("progressBarService", function () {
                 return "segundo" + ((c !== 1) ? "s" : "");
             },
             millisecond: function (c) {
-                return "milisegundo" + ((c !== 1) ? "s" : "" );
+                return "milisegundo" + ((c !== 1) ? "s" : "");
             }
         },
         fr: {
@@ -6641,7 +6655,7 @@ app.factory("progressBarService", function () {
                 return "second" + ((c !== 1) ? "i" : "o");
             },
             millisecond: function (c) {
-                return "millisecond" + ((c !== 1) ? "i" : "o" );
+                return "millisecond" + ((c !== 1) ? "i" : "o");
             }
         },
         ja: {

@@ -204,13 +204,13 @@ input[type=checkbox] {
 }
 
 .mdl-layout__title, .mdl-layout-title {
-    font-family: 'Droid Arabic Naskh', 'Roboto Condensed', sans-serif!important;
-    color: white!important;
+    font-family: 'Droid Arabic Naskh', 'Roboto Condensed', sans-serif !important;
+    color: white !important;
 }
 
 .mdl-menu {
     width: 310px !important;
-    overflow: auto!important;
+    overflow: auto !important;
 }
 
 .mdl-list__item--two-line .mdl-list__item-primary-content {
@@ -362,14 +362,14 @@ select {
 }
 
 .drop-menu {
-    direction: rtl!important;
+    direction: rtl !important;
     padding: 0 16px !important;
     margin: 0;
     text-align: right !important;
     cursor: pointer !important;
-    line-height: 48px!important;
+    line-height: 48px !important;
     height: 48px;
-    font-size: 14px!important;
+    font-size: 14px !important;
 }
 
 .drop-menu img {
@@ -532,17 +532,17 @@ WebKit inertia scrolling is being added here for any present/future devices that
     font-weight: 800 !important;
 }
 
-.mdl-tabs__tab{
+.mdl-tabs__tab {
     text-decoration: none !important;
     font-weight: bold !important;
     font-size: 12px !important;
 }
 
 .mdl-tabs__tab.is-active {
-    background-color: #eeeeee!important;
-    color: #0275d8!important;
+    background-color: #eeeeee !important;
+    color: #0275d8 !important;
     font-size: 14px !important;
-    font-weight: 900!important;
+    font-weight: 900 !important;
 }
 
 .mdl-tabs__tab-bar {
@@ -597,12 +597,13 @@ WebKit inertia scrolling is being added here for any present/future devices that
     right: 0 !important;
     left: auto !important;
 }
+
 /** CheckBox **/
 
 .mdl-tabs__panel {
     padding: 10px !important;
     height: 400px !important;
-    overflow: auto!important;
+    overflow: auto !important;
 }
 
 /**********************************
@@ -613,7 +614,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .ui-select-bootstrap > .ui-select-match > .btn {
     text-align: right !important;
     padding: 10px !important;
-    height: auto!important;
+    height: auto !important;
 }
 
 .ui-select-bootstrap .ui-select-toggle > .caret {
@@ -707,14 +708,14 @@ WebKit inertia scrolling is being added here for any present/future devices that
     font-size: 13px !important;
 }
 
-.ui-select-multiple.ui-select-bootstrap .ui-select-match-item{
-    width: 45%!important;
+.ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+    width: 45% !important;
 }
 
 .ui-select-multiple.ui-select-bootstrap .ui-select-match-item,
-.ui-select-bootstrap .ui-select-choices-row>span{
+.ui-select-bootstrap .ui-select-choices-row > span {
     font-size: 16px !important;
-    height: unset!important;
+    height: unset !important;
 }
 
 .bold-text {
@@ -737,22 +738,22 @@ WebKit inertia scrolling is being added here for any present/future devices that
     width: auto !important;
 }
 
-.question-font{
+.question-font {
     font-family: "AdvertisingExtraBold" !important;
-    font-weight: unset!important;
+    font-weight: unset !important;
 }
 
-.answer-font{
+.answer-font {
     font-family: "Arial Black" !important;
-    font-weight: unset!important;
+    font-weight: unset !important;
 }
 
-.force-dir-ltr{
+.force-dir-ltr {
     direction: ltr !important;
     text-align: left !important;
 }
 
-.force-dir-rtl{
+.force-dir-rtl {
     direction: rtl !important;
     text-align: right !important;
 }
@@ -762,92 +763,96 @@ WebKit inertia scrolling is being added here for any present/future devices that
         display: none;
     }
 }
+
 @media print {
     html * {
         direction: rtl;
-        font-family: 'Arial'!important;
-        font-size: 12px!important;
-        font-weight: normal!important;
+        font-family: 'Arial' !important;
+        font-size: 12px !important;
+        font-weight: normal !important;
     }
+
     .table > thead > tr > th, .table > tbody > tr > th,
     .table > tfoot > tr > th, .table > thead > tr > td,
     .table > tbody > tr > td, .table > tfoot > tr > td {
-        text-align: right!important;
-        font-family: 'Arial'!important;
-        font-size: 12px!important;
-        font-weight: normal!important;
+        text-align: right !important;
+        font-family: 'Arial' !important;
+        font-size: 12px !important;
+        font-weight: normal !important;
     }
-    #printDiv1, #printDiv2{
-        position:fixed!important;
-        left:0!important;
-        right:0!important;
-        top:0!important;
-        margin:auto!important;
-        max-width:100%!important;
-        max-height:100%!important;
-        overflow:auto!important;
+
+    #printDiv1, #printDiv2 {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: 0 !important;
+        margin: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        overflow: auto !important;
     }
+
     .no-print, .no-print * {
-        visibility:hidden!important;
+        visibility: hidden !important;
     }
 }
 
-.control-label{
-    font-size: 14px!important;
-    font-weight: 500!important;
+.control-label {
+    font-size: 14px !important;
+    font-weight: 500 !important;
 }
 
-.mdl-button{
-    text-transform: unset!important;
+.mdl-button {
+    text-transform: unset !important;
 }
 
-.alert-danger{
-    background-color: #e74c3c!important;
-    font-size: 16px!important;
-    border-radius: 5px!important;
+.alert-danger {
+    background-color: #e74c3c !important;
+    font-size: 16px !important;
+    border-radius: 5px !important;
 }
 
-.modal-body{
-    max-height: 400px!important;
-    overflow: auto!important;
+.modal-body {
+    max-height: 400px !important;
+    overflow: auto !important;
 }
 
-.modal-body-free{
-    max-height: unset!important;
-    overflow: unset!important;
+.modal-body-free {
+    max-height: unset !important;
+    overflow: unset !important;
 }
 
-.mdl-list__item-secondary-action{
-    float: left!important;
+.mdl-list__item-secondary-action {
+    float: left !important;
 }
 
-.error-msg{
-    display: none!important;
+.error-msg {
+    display: none !important;
 }
 
-.mdl-layout__drawer{
-    width: 300px!important;
-    transform: translateX(-300px)!important;
+.mdl-layout__drawer {
+    width: 300px !important;
+    transform: translateX(-300px) !important;
 }
 
-.mdl-layout__drawer.is-visible{
-    transform: translateX(0)!important;
+.mdl-layout__drawer.is-visible {
+    transform: translateX(0) !important;
 }
 
-.mdl-list__item--two-line{
-    height: auto!important;
+.mdl-list__item--two-line {
+    height: auto !important;
 }
 
-.mdl-list__item--two-line .mdl-list__item-primary-content{
-    height: 90px!important;
-    margin-top: 20px!important;
+.mdl-list__item--two-line .mdl-list__item-primary-content {
+    height: 90px !important;
+    margin-top: 20px !important;
 }
 
-.ui-select-bootstrap .ui-select-choices-row.active>span{
-    background-color: #ccc!important;
+.ui-select-bootstrap .ui-select-choices-row.active > span {
+    background-color: #ccc !important;
 }
 
-.mdl-list__item-avatar, .mdl-list__item-avatar.material-icons{
-    height: 60px!important;
-    width: 60px!important;
+.mdl-list__item-avatar, .mdl-list__item-avatar.material-icons {
+    height: 60px !important;
+    width: 60px !important;
 }

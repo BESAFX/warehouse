@@ -11,10 +11,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -40,10 +37,16 @@ public class Person implements Serializable {
 
     private String password;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean technicalSupport;
+
+    @Column(columnDefinition = "boolean default true")
     private Boolean enabled;
 
+    @Column(columnDefinition = "boolean default false")
     private Boolean tokenExpired;
 
+    @Column(columnDefinition = "boolean default false")
     private Boolean active;
 
     @JsonIgnore
@@ -66,35 +69,14 @@ public class Person implements Serializable {
     private Contact contact;
 
     @ManyToOne
-    @JoinColumn(name = "branch")
-    private Branch branch;
+    @JoinColumn(name = "company")
+    private Company company;
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
-    private List<BranchAccess> branchAccesses = new ArrayList<>();
 
     @JsonCreator
     public static Person Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Person person = mapper.readValue(jsonString, Person.class);
         return person;
-    }
-
-    public List<Branch> getBranches() {
-        try {
-            List<Branch> list = new ArrayList<>();
-            list.add(this.branch);
-            list.addAll(this.branchAccesses.stream().map(BranchAccess::getBranch).collect(Collectors.toList()));
-            return list.stream().distinct().collect(Collectors.toList());
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public String getName() {
-        try {
-            return this.contact.getFirstName().concat(" ").concat(this.contact.getForthName());
-        } catch (Exception ex) {
-            return "";
-        }
     }
 }

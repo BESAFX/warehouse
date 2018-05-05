@@ -17,9 +17,10 @@ window.FontAwesomeCdnConfig = {
 };
 !function () {
     function a(a) {
-        var b, c = [], d = document, e = d.documentElement.doScroll, f = "DOMContentLoaded", g = (e ? /^loaded|^c/ : /^loaded|^i|^c/).test(d.readyState);
+        var b, c = [], d = document, e = d.documentElement.doScroll, f = "DOMContentLoaded",
+            g = (e ? /^loaded|^c/ : /^loaded|^i|^c/).test(d.readyState);
         g || d.addEventListener(f, b = function () {
-            for (d.removeEventListener(f, b), g = 1; b = c.shift();)b()
+            for (d.removeEventListener(f, b), g = 1; b = c.shift();) b()
         }), g ? setTimeout(a, 0) : c.push(a)
     }
 
@@ -47,12 +48,13 @@ window.FontAwesomeCdnConfig = {
 
     !function () {
         "use strict";
+
         function a(a) {
             l.push(a), 1 == l.length && k()
         }
 
         function b() {
-            for (; l.length;)l[0](), l.shift()
+            for (; l.length;) l[0](), l.shift()
         }
 
         function c(a) {
@@ -83,11 +85,11 @@ window.FontAwesomeCdnConfig = {
 
         function f(a, b) {
             if (a.a == m) {
-                if (b == a)throw new TypeError;
+                if (b == a) throw new TypeError;
                 var c = !1;
                 try {
                     var d = b && b.then;
-                    if (null != b && "object" == typeof b && "function" == typeof d)return void d.call(b, function (b) {
+                    if (null != b && "object" == typeof b && "function" == typeof d) return void d.call(b, function (b) {
                         c || f(a, b), c = !0
                     }, function (b) {
                         c || g(a, b), c = !0
@@ -101,14 +103,14 @@ window.FontAwesomeCdnConfig = {
 
         function g(a, b) {
             if (a.a == m) {
-                if (b == a)throw new TypeError;
+                if (b == a) throw new TypeError;
                 a.a = 1, a.b = b, h(a)
             }
         }
 
         function h(b) {
             a(function () {
-                if (b.a != m)for (; b.f.length;) {
+                if (b.a != m) for (; b.f.length;) {
                     var a = b.f.shift(), c = a[0], d = a[1], e = a[2], a = a[3];
                     try {
                         0 == b.a ? e("function" == typeof c ? c.call(void 0, b.b) : b.b) : 1 == b.a && ("function" == typeof d ? e(d.call(void 0, b.b)) : a(b.b))
@@ -129,13 +131,13 @@ window.FontAwesomeCdnConfig = {
 
                 var f = 0, g = [];
                 0 == a.length && b(g);
-                for (var h = 0; h < a.length; h += 1)e(a[h]).c(d(h), c)
+                for (var h = 0; h < a.length; h += 1) e(a[h]).c(d(h), c)
             })
         }
 
         function j(a) {
             return new c(function (b, c) {
-                for (var d = 0; d < a.length; d += 1)e(a[d]).c(b, c)
+                for (var d = 0; d < a.length; d += 1) e(a[d]).c(b, c)
             })
         }
 
@@ -155,7 +157,7 @@ window.FontAwesomeCdnConfig = {
     }(), function () {
         function a(a) {
             this.el = a;
-            for (var b = a.className.replace(/^\s+|\s+$/g, "").split(/\s+/), c = 0; c < b.length; c++)d.call(this, b[c])
+            for (var b = a.className.replace(/^\s+|\s+$/g, "").split(/\s+/), c = 0; c < b.length; c++) d.call(this, b[c])
         }
 
         function b(a, b, c) {
@@ -173,7 +175,7 @@ window.FontAwesomeCdnConfig = {
                     return this[a] || null
                 }, remove: function (a) {
                     if (this.contains(a)) {
-                        for (var b = 0; b < this.length && this[b] != a; b++);
+                        for (var b = 0; b < this.length && this[b] != a; b++) ;
                         e.call(this, b, 1), this.el.className = this.toString()
                     }
                 }, toString: function () {
@@ -198,7 +200,7 @@ window.FontAwesomeCdnConfig = {
         }
 
         var f, g = window.document, h = g.createElement("link");
-        if (b)f = b; else {
+        if (b) f = b; else {
             var i = (g.body || g.getElementsByTagName("head")[0]).childNodes;
             f = i[i.length - 1]
         }
@@ -207,7 +209,7 @@ window.FontAwesomeCdnConfig = {
             f.parentNode.insertBefore(h, b ? f : f.nextSibling)
         });
         var k = function (a) {
-            for (var b = h.href, c = j.length; c--;)if (j[c].href === b)return a();
+            for (var b = h.href, c = j.length; c--;) if (j[c].href === b) return a();
             setTimeout(function () {
                 k(a)
             })
@@ -301,13 +303,14 @@ window.FontAwesomeCdnConfig = {
                     }
 
                     function m() {
-                        if ((new Date).getTime() - l >= i)w.parentNode && w.parentNode.removeChild(w), e(f); else {
+                        if ((new Date).getTime() - l >= i) w.parentNode && w.parentNode.removeChild(w), e(f); else {
                             var a = document.hidden;
                             !0 !== a && void 0 !== a || (q = n.a.offsetWidth, r = o.a.offsetWidth, s = p.a.offsetWidth, b()), x = setTimeout(m, 50)
                         }
                     }
 
-                    var n = new c(h), o = new c(h), p = new c(h), q = -1, r = -1, s = -1, t = -1, u = -1, v = -1, w = document.createElement("div"), x = 0;
+                    var n = new c(h), o = new c(h), p = new c(h), q = -1, r = -1, s = -1, t = -1, u = -1, v = -1, w = document.createElement("div"),
+                        x = 0;
                     w.dir = "ltr", d(n, j(f, "sans-serif")), d(o, j(f, "serif")), d(p, j(f, "monospace")), w.appendChild(n.a), w.appendChild(o.a), w.appendChild(p.a), document.body.appendChild(w), t = n.a.offsetWidth, u = o.a.offsetWidth, v = p.a.offsetWidth, m(), g(n, function (a) {
                         q = a, b()
                     }), d(n, j(f, '"' + f.family + '",sans-serif')), g(o, function (a) {
@@ -322,17 +325,18 @@ window.FontAwesomeCdnConfig = {
     var g = {
         observe: function (a, b) {
             for (var c = b.prefix, d = function (a) {
-                var b = a.weight ? "-" + a.weight : "", d = a.style ? "-" + a.style : "", e = a.className ? "-" + a.className : "", g = a.className ? "-" + a.className + b + d : "", h = document.getElementsByTagName("html")[0].classList, i = function (a) {
-                    h.add(c + e + "-" + a), h.add(c + g + "-" + a)
-                }, j = function (a) {
-                    h.remove(c + e + "-" + a), h.remove(c + g + "-" + a)
-                };
+                var b = a.weight ? "-" + a.weight : "", d = a.style ? "-" + a.style : "", e = a.className ? "-" + a.className : "",
+                    g = a.className ? "-" + a.className + b + d : "", h = document.getElementsByTagName("html")[0].classList, i = function (a) {
+                        h.add(c + e + "-" + a), h.add(c + g + "-" + a)
+                    }, j = function (a) {
+                        h.remove(c + e + "-" + a), h.remove(c + g + "-" + a)
+                    };
                 i("loading"), new f(a.familyName).load(a.testString).then(function () {
                     i("ready"), j("loading")
                 }, function () {
                     i("failed"), j("loading")
                 })
-            }, e = 0; e < a.length; e++)d(a[e])
+            }, e = 0; e < a.length; e++) d(a[e])
         }
     }, h = {
         load: function (a) {
@@ -349,8 +353,9 @@ window.FontAwesomeCdnConfig = {
     };
     try {
         if (window.FontAwesomeCdnConfig) {
-            var j = window.FontAwesomeCdnConfig, k = j.useUrl, l = j.faCdnUrl, m = j.code, n = "FontAwesome", o = "fa", p = "ï‰€", q = d.bind(d, "fa"), r = function () {
-            };
+            var j = window.FontAwesomeCdnConfig, k = j.useUrl, l = j.faCdnUrl, m = j.code, n = "FontAwesome", o = "fa", p = "ï‰€",
+                q = d.bind(d, "fa"), r = function () {
+                };
             j.autoA11y.enabled && (a(q), c(q)), j.reporting.enabled && b(j.reporting.domains, location.host) && i.load(l + "/js/stats.js"), cssUrl = "https://" + k + "/" + m + ".css", new f(n).load(p).then(function () {
                 var a = (window.FontAwesomeHooks || {}).loaded || r;
                 a()

@@ -16,15 +16,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping(value = "/api/team/")
 public class TeamRest {
 
-    private final static Logger log = LoggerFactory.getLogger(BranchRest.class);
+    private final static Logger LOG = LoggerFactory.getLogger(TeamRest.class);
 
-    private final String FILTER_TABLE = "**,persons[id]";
+    private final String FILTER_TABLE = "" +
+            "**," +
+            "persons[id]";
 
     @Autowired
     private TeamService teamService;
@@ -32,10 +32,10 @@ public class TeamRest {
     @Autowired
     private NotificationService notificationService;
 
-    @RequestMapping(value = "create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_CREATE')")
-    public String create(@RequestBody Team team, Principal principal) {
+    public String create(@RequestBody Team team) {
         Team topTeam = teamService.findTopByOrderByCodeDesc();
         if (topTeam == null) {
             team.setCode(1);
@@ -47,10 +47,10 @@ public class TeamRest {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_UPDATE')")
-    public String update(@RequestBody Team team, Principal principal) {
+    public String update(@RequestBody Team team) {
         if (teamService.findByCodeAndIdIsNot(team.getCode(), team.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
@@ -64,10 +64,10 @@ public class TeamRest {
         }
     }
 
-    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_DELETE')")
-    public void delete(@PathVariable Long id, Principal principal) {
+    public void delete(@PathVariable Long id) {
         Team team = teamService.findOne(id);
         if (team != null) {
             if (!team.getPersons().isEmpty()) {
@@ -78,13 +78,13 @@ public class TeamRest {
         }
     }
 
-    @RequestMapping(value = "findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findAll() {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(teamService.findAll()));
     }
 
-    @RequestMapping(value = "findOne/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), teamService.findOne(id));

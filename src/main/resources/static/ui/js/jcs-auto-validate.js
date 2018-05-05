@@ -651,8 +651,8 @@
     }
 
     angular.autoValidate = angular.autoValidate || {
-            errorMessages: {}
-        };
+        errorMessages: {}
+    };
 
     angular.autoValidate.errorMessages['default'] = {
         defaultMsg: 'Please add error message for {0}',
@@ -1105,9 +1105,9 @@
 
                 if (frmOptions.disabled === false) {
                     if ((frmOptions.forceValidation ||
-                        (shouldValidateElement(el, frmOptions, frmOptions.getFormController().$submitted) &&
-                        modelCtrl &&
-                        needsValidation))) {
+                            (shouldValidateElement(el, frmOptions, frmOptions.getFormController().$submitted) &&
+                                modelCtrl &&
+                                needsValidation))) {
                         isValid = !modelCtrl.$invalid;
 
                         if (frmOptions.removeExternalValidationErrorsOnSubmit && modelCtrl.removeAllExternalValidation) {
@@ -1506,7 +1506,7 @@
 
                                 if (attrs.formnovalidate === undefined &&
                                     (frmCtrl !== undefined && frmCtrl !== null && frmCtrl.autoValidateFormOptions &&
-                                    frmCtrl.autoValidateFormOptions.disabled === false)) {
+                                        frmCtrl.autoValidateFormOptions.disabled === false)) {
                                     // if the version of angular supports ng-model-options let angular handle the element.on bit
                                     // fixes issue with async validators
                                     if (supportsNgModelOptions ||

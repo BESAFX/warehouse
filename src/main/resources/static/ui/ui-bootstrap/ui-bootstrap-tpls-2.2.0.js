@@ -1885,6 +1885,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
 
         this.step = {months: 1};
         this.element = $element;
+
         function getDaysInMonth(year, month) {
             return month === 1 && year % 4 === 0 &&
             (year % 100 !== 0 || year % 400 === 0) ? 29 : DAYS_IN_MONTH[month];
@@ -1915,7 +1916,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
 
             var difference = this.startingDay - firstDayOfMonth.getDay(),
                 numDisplayedFromPreviousMonth = difference > 0 ?
-                7 - difference : -difference,
+                    7 - difference : -difference,
                 firstDate = new Date(firstDayOfMonth);
 
             if (numDisplayedFromPreviousMonth > 0) {
@@ -2837,9 +2838,9 @@ angular.module('ui.bootstrap.datepickerPopup', ['ui.bootstrap.datepicker', 'ui.b
                 ngModel = _ngModel_;
                 ngModelOptions = angular.isObject(_ngModel_.$options) ?
                     _ngModel_.$options :
-                {
-                    timezone: null
-                };
+                    {
+                        timezone: null
+                    };
                 closeOnDateSelection = angular.isDefined($attrs.closeOnDateSelection) ?
                     $scope.$parent.$eval($attrs.closeOnDateSelection) :
                     datepickerPopupConfig.closeOnDateSelection;
@@ -3451,7 +3452,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
                     } else {
                         self.selectedOption = self.selectedOption === elems.length - 1 ?
                             self.selectedOption :
-                        self.selectedOption + 1;
+                            self.selectedOption + 1;
                     }
                     break;
                 }
@@ -3971,8 +3972,8 @@ angular.module('ui.bootstrap.modal', ['ui.bootstrap.stackedMap', 'ui.bootstrap.p
 
             function isVisible(element) {
                 return !!(element.offsetWidth ||
-                element.offsetHeight ||
-                element.getClientRects().length);
+                    element.offsetHeight ||
+                    element.getClientRects().length);
             }
 
             function backdropIndex() {
@@ -5000,7 +5001,7 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position', 'ui.bootstrap.s
                     'uib-title="' + startSym + 'title' + endSym + '" ' +
                     (options.useContentExp ?
                         'content-exp="contentExp()" ' :
-                    'content="' + startSym + 'content' + endSym + '" ') +
+                        'content="' + startSym + 'content' + endSym + '" ') +
                     'origin-scope="origScope" ' +
                     'class="uib-position-measure ' + prefix + '" ' +
                     'tooltip-animation-class="fade"' +
@@ -5941,7 +5942,7 @@ angular.module('ui.bootstrap.tabs', [])
 
             if (ctrl.tabs[index].index === ctrl.active) {
                 var newActiveTabIndex = index === ctrl.tabs.length - 1 ?
-                index - 1 : index + 1 % ctrl.tabs.length;
+                    index - 1 : index + 1 % ctrl.tabs.length;
                 ctrl.select(newActiveTabIndex);
             }
 
@@ -6022,8 +6023,8 @@ angular.module('ui.bootstrap.tabs', [])
                 if (angular.isUndefined(attrs.index)) {
                     if (tabsetCtrl.tabs && tabsetCtrl.tabs.length) {
                         scope.index = Math.max.apply(null, tabsetCtrl.tabs.map(function (t) {
-                                return t.index;
-                            })) + 1;
+                            return t.index;
+                        })) + 1;
                     } else {
                         scope.index = 0;
                     }
@@ -6098,14 +6099,14 @@ angular.module('ui.bootstrap.tabs', [])
 
         function isTabHeading(node) {
             return node.tagName && (
-                    node.hasAttribute('uib-tab-heading') ||
-                    node.hasAttribute('data-uib-tab-heading') ||
-                    node.hasAttribute('x-uib-tab-heading') ||
-                    node.tagName.toLowerCase() === 'uib-tab-heading' ||
-                    node.tagName.toLowerCase() === 'data-uib-tab-heading' ||
-                    node.tagName.toLowerCase() === 'x-uib-tab-heading' ||
-                    node.tagName.toLowerCase() === 'uib:tab-heading'
-                );
+                node.hasAttribute('uib-tab-heading') ||
+                node.hasAttribute('data-uib-tab-heading') ||
+                node.hasAttribute('x-uib-tab-heading') ||
+                node.tagName.toLowerCase() === 'uib-tab-heading' ||
+                node.tagName.toLowerCase() === 'data-uib-tab-heading' ||
+                node.tagName.toLowerCase() === 'x-uib-tab-heading' ||
+                node.tagName.toLowerCase() === 'uib:tab-heading'
+            );
         }
     });
 
@@ -6281,7 +6282,7 @@ angular.module('ui.bootstrap.timepicker', [])
         function getHoursFromTemplate() {
             var hours = +$scope.hours;
             var valid = $scope.showMeridian ? hours > 0 && hours < 13 :
-            hours >= 0 && hours < 24;
+                hours >= 0 && hours < 24;
             if (!valid || $scope.hours === '') {
                 return undefined;
             }
@@ -6317,7 +6318,7 @@ angular.module('ui.bootstrap.timepicker', [])
             }
 
             return angular.isDefined(value) && value.toString().length < 2 && !noPad ?
-            '0' + value : value.toString();
+                '0' + value : value.toString();
         }
 
         // Respond on mousewheel spin

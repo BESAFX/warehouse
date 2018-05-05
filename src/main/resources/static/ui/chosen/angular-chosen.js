@@ -6,9 +6,9 @@
  */
 (function () {
     var e = [].indexOf || function (e) {
-            for (var t = 0, n = this.length; n > t; t++)if (t in this && this[t] === e)return t;
-            return -1
-        };
+        for (var t = 0, n = this.length; n > t; t++) if (t in this && this[t] === e) return t;
+        return -1
+    };
     angular.module("localytics.directives", []), angular.module("localytics.directives").directive("chosen", ["$timeout", function (t) {
         var n, r, i, s;
         return r = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/, n = ["persistentCreateOption", "createOptionText", "createOption", "skipNoResults", "noResultsText", "allowSingleDeselect", "disableSearchThreshold", "disableSearch", "enableSplitWordSearch", "inheritSelectClasses", "maxSelectedOptions", "placeholderTextMultiple", "placeholderTextSingle", "searchContains", "singleBackstrokeDelete", "displayDisabledOptions", "displaySelectedOptions", "width", "includeGroupLabelInSelected", "maxShownResults"], s = function (e) {
@@ -17,8 +17,8 @@
             })
         }, i = function (e) {
             var t;
-            if (angular.isArray(e))return 0 === e.length;
-            if (angular.isObject(e))for (t in e)if (e.hasOwnProperty(t))return !1;
+            if (angular.isArray(e)) return 0 === e.length;
+            if (angular.isObject(e)) for (t in e) if (e.hasOwnProperty(t)) return !1;
             return !0
         }, {
             restrict: "A", require: "?ngModel", priority: 1, link: function (a, l, o, d) {

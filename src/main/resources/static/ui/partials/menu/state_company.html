@@ -16,33 +16,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="panel panel-info">
-                                <div class="panel-heading">
-                                    <ul class="panel-controls pull-left" style="margin-top: 2px;">
-                                        <li>
-                                            <a href=""
-                                               ng-click="browseCompanyLogo()"
-                                               tooltip-append-to-body="true"
-                                               uib-tooltip="تحميل">
-                                                <span class="fa fa-paperclip"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="panel-title-box pull-right">
-                                        <h3>الشعار الرسمي</h3>
-                                        <span>المعهد الأهلي العالي للتدريب</span>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <input id="uploader-company" style="display: none" type="file" accept="image/*"
-                                           onchange="angular.element(this).scope().uploadCompanyLogo(this.files)"/>
-                                    <img ng-src="{{selectedCompany.logo}}" style="width: 100%; height: 100%"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-8 col-lg-8">
                             <div class="panel panel-info">
                                 <div class="panel-heading">البيانات الاساسية</div>
                                 <div class="panel-body">
@@ -153,6 +127,32 @@
 
                                     </div>
 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <ul class="panel-controls pull-left" style="margin-top: 2px;">
+                                        <li>
+                                            <a href=""
+                                               ng-click="browseCompanyLogo()"
+                                               tooltip-append-to-body="true"
+                                               uib-tooltip="تحميل">
+                                                <span class="fa fa-paperclip"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="panel-title-box pull-right">
+                                        <h3>الشعار الرسمي</h3>
+                                        <span>المعهد الأهلي العالي للتدريب</span>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <input id="uploader-company" style="display: none" type="file" accept="image/*"
+                                           onchange="angular.element(this).scope().uploadCompanyLogo(this.files)"/>
+                                    <img ng-src="{{selectedCompany.logo}}" style="width: 100%; height: 100%"/>
                                 </div>
                             </div>
                         </div>

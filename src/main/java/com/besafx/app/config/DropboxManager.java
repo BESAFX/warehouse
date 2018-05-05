@@ -20,7 +20,9 @@ import java.util.concurrent.Future;
 public class DropboxManager {
 
     private static final String ACCESS_TOKEN = "lwXbn73MQTAAAAAAAAAACtvJCtgSD7Rp5hwd7V8jM2V4O9I8c9javetzqM49b1-Y";
+
     private final Logger log = LoggerFactory.getLogger(DropboxManager.class);
+
     private DbxRequestConfig config;
 
     private DbxClientV2 client;
@@ -124,7 +126,8 @@ public class DropboxManager {
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             try {
-                link = client.sharing().listSharedLinksBuilder().withPath(path).withDirectOnly(true).start().getLinks().get(0).getUrl().replaceAll("dl=0", "raw=1");
+                link = client.sharing().listSharedLinksBuilder().withPath(path).withDirectOnly(true).start().getLinks().get(0).getUrl().replaceAll
+                        ("dl=0", "raw=1");
             } catch (Exception ex_) {
                 log.error(ex_.getMessage(), ex_);
             }

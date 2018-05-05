@@ -4,6 +4,7 @@ public enum PaymentMethod {
     Cash("نقدي"),
     Check("شيك"),
     Visa("فيزا");
+
     private String name;
 
     PaymentMethod(String name) {

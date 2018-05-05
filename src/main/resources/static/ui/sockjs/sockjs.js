@@ -36,18 +36,18 @@ JSON || (JSON = {}), function () {
             case"null":
                 return String(i);
             case"object":
-                if (!i)return "null";
+                if (!i) return "null";
                 gap += indent, h = [];
                 if (Object.prototype.toString.apply(i) === "[object Array]") {
                     f = i.length;
-                    for (c = 0; c < f; c += 1)h[c] = str(c, i) || "null";
+                    for (c = 0; c < f; c += 1) h[c] = str(c, i) || "null";
                     e = h.length === 0 ? "[]" : gap ? "[\n" + gap + h.join(",\n" + gap) + "\n" + g + "]" : "[" + h.join(",") + "]", gap = g;
                     return e
                 }
                 if (rep && typeof rep == "object") {
                     f = rep.length;
-                    for (c = 0; c < f; c += 1)typeof rep[c] == "string" && (d = rep[c], e = str(d, i), e && h.push(quote(d) + (gap ? ": " : ":") + e))
-                } else for (d in i)Object.prototype.hasOwnProperty.call(i, d) && (e = str(d, i), e && h.push(quote(d) + (gap ? ": " : ":") + e));
+                    for (c = 0; c < f; c += 1) typeof rep[c] == "string" && (d = rep[c], e = str(d, i), e && h.push(quote(d) + (gap ? ": " : ":") + e))
+                } else for (d in i) Object.prototype.hasOwnProperty.call(i, d) && (e = str(d, i), e && h.push(quote(d) + (gap ? ": " : ":") + e));
                 e = h.length === 0 ? "{}" : gap ? "{\n" + gap + h.join(",\n" + gap) + "\n" + g + "}" : "{" + h.join(",") + "}", gap = g;
                 return e
         }
@@ -70,26 +70,28 @@ JSON || (JSON = {}), function () {
     }, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function (a) {
         return this.valueOf()
     });
-    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, gap, indent, meta = {
-        "\b": "\\b",
-        "\t": "\\t",
-        "\n": "\\n",
-        "\f": "\\f",
-        "\r": "\\r",
-        '"': '\\"',
-        "\\": "\\\\"
-    }, rep;
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, gap,
+        indent, meta = {
+            "\b": "\\b",
+            "\t": "\\t",
+            "\n": "\\n",
+            "\f": "\\f",
+            "\r": "\\r",
+            '"': '\\"',
+            "\\": "\\\\"
+        }, rep;
     typeof JSON.stringify != "function" && (JSON.stringify = function (a, b, c) {
         var d;
         gap = "", indent = "";
-        if (typeof c == "number")for (d = 0; d < c; d += 1)indent += " "; else typeof c == "string" && (indent = c);
+        if (typeof c == "number") for (d = 0; d < c; d += 1) indent += " "; else typeof c == "string" && (indent = c);
         rep = b;
-        if (!b || typeof b == "function" || typeof b == "object" && typeof b.length == "number")return str("", {"": a});
+        if (!b || typeof b == "function" || typeof b == "object" && typeof b.length == "number") return str("", {"": a});
         throw new Error("JSON.stringify")
     }), typeof JSON.parse != "function" && (JSON.parse = function (text, reviver) {
         function walk(a, b) {
             var c, d, e = a[b];
-            if (e && typeof e == "object")for (c in e)Object.prototype.hasOwnProperty.call(e, c) && (d = walk(e, c), d !== undefined ? e[c] = d : delete e[c]);
+            if (e && typeof e == "object") for (c in e) Object.prototype.hasOwnProperty.call(e, c) && (d = walk(e, c), d !== undefined ? e[c] = d : delete e[c]);
             return reviver.call(a, b, e)
         }
 
@@ -306,8 +308,8 @@ SockJS = (function () {
         if (!url_b) url_b = _window.location.href;
 
         return (url_a.split('/').slice(0, 3).join('/')
-        ===
-        url_b.split('/').slice(0, 3).join('/'));
+            ===
+            url_b.split('/').slice(0, 3).join('/'));
     };
 
     utils.getParentDomain = function (url) {
@@ -423,8 +425,8 @@ SockJS = (function () {
 
 // Via: https://gist.github.com/1133122/2121c601c5549155483f50be3da5305e83b8c5df
     utils.isArray = Array.isArray || function (value) {
-            return {}.toString.call(value).indexOf('Array') >= 0
-        };
+        return {}.toString.call(value).indexOf('Array') >= 0
+    };
 
     utils.delay = function (t, fun) {
         if (typeof t === 'function') {
@@ -478,14 +480,14 @@ SockJS = (function () {
 
 // JSON Quote string. Use native implementation when possible.
     var JSONQuote = (JSON && JSON.stringify) || function (string) {
-            json_escapable.lastIndex = 0;
-            if (json_escapable.test(string)) {
-                string = string.replace(json_escapable, function (a) {
-                    return json_lookup[a];
-                });
-            }
-            return '"' + string + '"';
-        };
+        json_escapable.lastIndex = 0;
+        if (json_escapable.test(string)) {
+            string = string.replace(json_escapable, function (a) {
+                return json_lookup[a];
+            });
+        }
+        return '"' + string + '"';
+    };
 
 // This may be quite slow, so let's delay until user actually uses bad
 // characters.
@@ -1232,8 +1234,8 @@ SockJS = (function () {
             if (SockJS[protocol] &&
                 SockJS[protocol].need_body === true &&
                 (!_document.body ||
-                (typeof _document.readyState !== 'undefined'
-                && _document.readyState !== 'complete'))) {
+                    (typeof _document.readyState !== 'undefined'
+                        && _document.readyState !== 'complete'))) {
                 that._protocols.unshift(protocol);
                 that.protocol = 'waiting-for-load';
                 utils.attachEvent('load', function () {
@@ -1786,8 +1788,8 @@ SockJS = (function () {
         // Support for CORS Ajax aka Ajax2? Opera 12 claims CORS but
         // doesn't do streaming.
         return (_window.XMLHttpRequest &&
-        'withCredentials' in new XMLHttpRequest() &&
-        (!/opera/i.test(navigator.userAgent)));
+            'withCredentials' in new XMLHttpRequest() &&
+            (!/opera/i.test(navigator.userAgent)));
     };
     XhrStreamingTransport.roundTrips = 2; // preflight, ajax
 
@@ -1931,7 +1933,7 @@ SockJS = (function () {
         // huge delay, or not at all.
         var konqueror = navigator && navigator.userAgent && navigator.userAgent.indexOf('Konqueror') !== -1;
         return ((typeof _window.postMessage === 'function' ||
-        typeof _window.postMessage === 'object') && (!konqueror));
+            typeof _window.postMessage === 'object') && (!konqueror));
     };
 //         [*] End of lib/trans-iframe.js
 

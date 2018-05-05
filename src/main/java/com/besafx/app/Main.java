@@ -26,7 +26,6 @@ public class Main {
         log.info("Start Initializing From Main...");
         context.getBean(EmailSender.class).init();
         context.getBean(DropboxManager.class).init();
-        context.getBean(JSONConverter.class).init();
     }
 
     @Bean

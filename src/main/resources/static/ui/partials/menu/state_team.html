@@ -11,14 +11,14 @@
                     ng-click="fetchTeamTableData()">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
-                        <span>عرض مجموعات الصلاحيات</span>
+                        <span>عرض البيانات</span>
                     </span>
                 </li>
                 <li class="mdl-menu__item mdl-list__item" ng-click="newTeam();"
                     ng-if="contains(me.team.authorities, ['ROLE_TEAM_CREATE'])">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
-                        <span>مجموعة صلاحيات جديدة</span>
+                        <span>جديد...</span>
                     </span>
                 </li>
             </ul>
@@ -177,7 +177,8 @@
                                 ng-if="contains(me.team.authorities, ['ROLE_TEAM_DELETE'])"
                                 ng-click="deleteTeam(team)"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24"
+                                 height="24">
                         </button>
                     </div>
                 </div>
