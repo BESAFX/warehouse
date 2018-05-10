@@ -67,7 +67,7 @@
 </div>
 
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
-    <div class="panel panel-body alert alert-info">
+    <div class="panel panel-body box-info">
         <p>
             <span>مرحباً بك عزيزي العميل ، يمكنك إنشاء عقد جديد من خلال هذا الرابط </span>
             <a href="" ng-click="newContract()">اضغط هنا</a>
@@ -279,7 +279,7 @@
                                 <hr>
                                 <p>
                                     <strong>المستثمر</strong>
-                                    {{contract.seller.contact.identityNumber}}
+                                    {{contract.seller.contact.shortName}}
                                 </p>
                             </div>
                         </div>

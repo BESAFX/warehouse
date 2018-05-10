@@ -2,16 +2,10 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.BankTransaction;
-import com.besafx.app.entity.ContractProduct;
-import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Contract;
+import com.besafx.app.entity.*;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.ContractSearch;
-import com.besafx.app.service.BankTransactionService;
-import com.besafx.app.service.ContactService;
-import com.besafx.app.service.ContractProductService;
-import com.besafx.app.service.ContractService;
+import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +45,9 @@ public class ContractRest {
     private ContractProductService contractProductService;
 
     @Autowired
+    private ContractPremiumService contractPremiumService;
+
+    @Autowired
     private ContractSearch contractSearch;
 
     @Autowired
@@ -70,15 +67,28 @@ public class ContractRest {
         contract.setPerson(caller);
         contract.setDate(new DateTime().toDate());
         contract = contractService.save(contract);
+        LOG.info("ربط الأصناف المطلوبة مع العقد");
         ListIterator<ContractProduct> contractProductListIterator = contract.getContractProducts().listIterator();
         while (contractProductListIterator.hasNext()){
             ContractProduct contractProduct = contractProductListIterator.next();
             contractProduct.setContract(contract);
             contractProductListIterator.set(contractProductService.save(contractProduct));
         }
+        LOG.info("ربط الأقساط مع العقد");
+        ListIterator<ContractPremium> contractPremiumListIterator = contract.getContractPremiums().listIterator();
+        while (contractPremiumListIterator.hasNext()){
+            ContractPremium contractPremium = contractPremiumListIterator.next();
+            contractPremium.setContract(contract);
+            contractPremiumListIterator.set(contractPremiumService.save(contractPremium));
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("تم إنشاء العقد بنجاح بمجموع أسعار = ");
+        builder.append(contract.getTotalPrice());
+        builder.append("، وأصناف عدد " + contract.getContractProducts().size() + " صنف");
+        builder.append("، تسدد على " + contract.getContractPremiums().size() +  " قسط");
         notificationService.notifyAll(Notification
                                               .builder()
-                                              .message("تم انشاء عقد جديد بنجاح")
+                                              .message(builder.toString())
                                               .type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contract);
     }

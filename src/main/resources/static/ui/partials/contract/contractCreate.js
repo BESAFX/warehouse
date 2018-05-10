@@ -156,6 +156,7 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
         };
 
         $scope.submit = function () {
+            //ربط الأصناف بالعقد
             $scope.contract.contractProducts = [];
             angular.forEach($scope.productPurchases, function (productPurchase) {
                 var contractProduct = {};
@@ -163,6 +164,11 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
                 contractProduct.unitSellPrice = productPurchase.unitSellPrice;
                 contractProduct.productPurchase = productPurchase;
                 $scope.contract.contractProducts.push(contractProduct);
+            });
+            //ربط الأقساط بالعقد
+            $scope.contract.contractPremiums = [];
+            angular.forEach($scope.contractPremiums, function (contractPremium) {
+                $scope.contract.contractPremiums.push(contractPremium);
             });
             ContractService.create($scope.contract).then(function (data) {
                 ContractService.findOne(data.id).then(function (value) {

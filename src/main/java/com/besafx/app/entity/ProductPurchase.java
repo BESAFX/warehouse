@@ -9,7 +9,9 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -55,10 +57,24 @@ public class ProductPurchase implements Serializable {
     @JoinColumn(name = "person")
     private Person person;
 
+    @OneToMany(mappedBy = "productPurchase")
+    private List<ContractProduct> contractProducts = new ArrayList<>();
+
     @JsonCreator
     public static ProductPurchase Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ProductPurchase productPurchase = mapper.readValue(jsonString, ProductPurchase.class);
         return productPurchase;
+    }
+
+    public Double getRemain(){
+        try{
+            return this.quantity - this.contractProducts
+                    .stream()
+                    .mapToDouble(ContractProduct::getQuantity)
+                    .sum();
+        }catch (Exception ex){
+            return 0.0;
+        }
     }
 }

@@ -898,3 +898,8 @@ input.success{
 input.danger{
     background-color:  #d9534f !important;;
 }
+
+p{
+    margin: unset!important;
+    padding: 10px!important;
+}

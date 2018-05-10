@@ -441,19 +441,6 @@
                         <div class="form-group row">
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="openCash" class="control-label">الدفعة المقدمة</label>
-                                <div dir="ltr" class="input-group" id="openCash">
-                                    <span class="input-group-addon">ريال سعودي</span>
-                                    <input dir="rtl"
-                                           type="number"
-                                           min="1"
-                                           class="form-control"
-                                           placeholder="اختياري"
-                                           ng-model="contract.openCash">
-                                </div>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <label for="paperFees" class="control-label">الرسوم الإدارية</label>
                                 <div dir="ltr" class="input-group" id="paperFees">
                                     <span class="input-group-addon">ريال سعودي</span>
@@ -498,134 +485,142 @@
 
                     <div class="mdl-tabs__panel" id="panel-4-contract">
 
-                        <div class="form-group row" ng-if="contract.seller.id">
-
-                            <button uib-tooltip="إضافة قسط"
-                                    tooltip-append-to-body="true"
-                                    type="button"
-                                    ng-click="addContractPremium()"
-                                    class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
-                                     height="24">
-                            </button>
-
+                        <div ng-if="!totalPrice" class="box-danger">
+                            <p>يجب أن يكون مجموع العقد أكبر من صفر حتى يكون هناك أقساط</p>
                         </div>
 
-                        <div class="form-group row">
+                        <div ng-if="totalPrice">
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
+                            <div class="form-group row">
 
-                                        <th>
-                                            <span>#</span>
-                                        </th>
+                                <button uib-tooltip="إضافة قسط"
+                                        tooltip-append-to-body="true"
+                                        type="button"
+                                        ng-click="addContractPremium()"
+                                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
+                                         height="24">
+                                </button>
 
-                                        <th>
-                                            <span>تاريخ الاستحقاق</span>
-                                            <select style="height: 40px"
-                                                    class="form-control"
-                                                    ng-model="contractPremiums.calendar"
-                                                    required="required"
-                                                    disable-validation-message="">
-                                                <option value="H">تقويم هجري</option>
-                                                <option value="G">تقويم ميلادي</option>
-                                            </select>
-                                        </th>
+                            </div>
 
-                                        <th>
-                                            <span>المبلغ</span>
-                                        </th>
+                            <div class="form-group row">
 
-                                        <th>
-                                            <span>العمليات</span>
-                                        </th>
+                                <div class="table-responsive" ng-init="contractPremiums.calendar='G'">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
 
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="contractPremium in contractPremiums">
-                                        <td>{{$index+1}}</td>
-                                        <td>
-                                            <div dir="ltr" class="input-group">
+                                            <th>
+                                                <span>#</span>
+                                            </th>
+
+                                            <th>
+                                                <span>تاريخ الاستحقاق</span>
+                                                <select style="height: 40px"
+                                                        class="form-control"
+                                                        ng-model="contractPremiums.calendar"
+                                                        required="required"
+                                                        disable-validation-message="">
+                                                    <option value="H">تقويم هجري</option>
+                                                    <option value="G">تقويم ميلادي</option>
+                                                </select>
+                                            </th>
+
+                                            <th>
+                                                <span>المبلغ</span>
+                                            </th>
+
+                                            <th>
+                                                <span>العمليات</span>
+                                            </th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="contractPremium in contractPremiums">
+                                            <td>{{$index+1}}</td>
+                                            <td>
+                                                <div dir="ltr" class="input-group">
+                                                    <input dir="rtl"
+                                                           type="text"
+                                                           ng-if="contractPremiums.calendar==='H'"
+                                                           class="form-control is-calendarPicker"
+                                                           ng-model="contractPremium.dueDate"
+                                                           calendarType="ummalqura"
+                                                           language="en"
+                                                           dateFormat="yyyy/mm/dd"
+                                                           showOnFocus="false"
+                                                           readonly="readonly"
+                                                           kdatepicker>
+                                                </div>
+                                                <input ng-if="contractPremiums.calendar==='G'"
+                                                       class="form-control"
+                                                       dir="ltr"
+                                                       type="text"
+                                                       name="input"
+                                                       ng-model="contractPremium.dueDate"
+                                                       datetime="yyyy-MM-dd"/>
+                                            </td>
+                                            <td>
+                                                <input dir="rtl"
+                                                       type="number"
+                                                       min="0"
+                                                       ng-maxlength="6"
+                                                       required="required"
+                                                       disable-validation-message=""
+                                                       class="form-control"
+                                                       ng-model="contractPremium.amount">
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <button uib-tooltip="حذف"
+                                                            tooltip-append-to-body="true"
+                                                            type="button"
+                                                            ng-click="removeContractPremium($index)"
+                                                            class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                            ng-show="!contractPremiums || contractPremiums.length ==0">
+                                            <td colspan="4">
+                                                <strong>
+                                                    <a href="" ng-click="addContractPremium()">اضافة قسط</a>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                            <td colspan="2" class="text-left info">
+                                                <span>المجموع</span>
+                                            </td>
+                                            <td colspan="2">
                                                 <input dir="rtl"
                                                        type="text"
-                                                       ng-if="contractPremiums.calendar==='H'"
-                                                       class="form-control is-calendarPicker"
-                                                       ng-model="contractPremium.dueDate"
-                                                       calendarType="ummalqura"
-                                                       language="en"
-                                                       dateFormat="yyyy/mm/dd"
-                                                       showOnFocus="false"
-                                                       readonly="readonly"
-                                                       kdatepicker>
-                                            </div>
-                                            <input ng-if="contractPremiums.calendar==='G'"
-                                                   class="form-control"
-                                                   dir="ltr"
-                                                   type="text"
-                                                   name="input"
-                                                   ng-model="contractPremium.dueDate"
-                                                   datetime="yyyy-MM-dd"/>
-                                        </td>
-                                        <td>
-                                            <input dir="rtl"
-                                                   type="number"
-                                                   min="0"
-                                                   ng-maxlength="6"
-                                                   required="required"
-                                                   disable-validation-message=""
-                                                   class="form-control"
-                                                   ng-model="contractPremium.amount">
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <button uib-tooltip="حذف"
-                                                        tooltip-append-to-body="true"
-                                                        type="button"
-                                                        ng-click="removeContractPremium($index)"
-                                                        class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                        ng-show="!contractPremiums || contractPremiums.length ==0">
-                                        <td colspan="4">
-                                            <strong>
-                                                <a href="" ng-click="addContractPremium()">اضافة قسط</a>
-                                            </strong>
-                                        </td>
-                                    </tr>
-                                    <tr ng-if="contract.seller.id && productPurchases.length > 0">
-                                        <td colspan="2" class="text-left info">
-                                            <span>المجموع</span>
-                                        </td>
-                                        <td colspan="2">
-                                            <input dir="rtl"
-                                                   type="text"
-                                                   disabled
-                                                   class="form-control"
-                                                   value="{{(contractPremiums | sumByKey:'amount') | currency:'':2}}">
-                                        </td>
-                                    </tr>
-                                    <tr ng-if="contract.seller.id && productPurchases.length > 0">
-                                        <td colspan="2" class="text-left success">
-                                            <span>المتبقي فى العقد</span>
-                                        </td>
-                                        <td colspan="2">
-                                            <input dir="rtl"
-                                                   type="text"
-                                                   disabled
-                                                   class="form-control"
-                                                   ng-class="{'success': remainPrice >=0 , 'danger': remainPrice < 0}"
-                                                   value="{{ remainPrice = (totalPrice - (contractPremiums | sumByKey:'amount')) | currency:'':2}}">
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                                       disabled
+                                                       class="form-control"
+                                                       value="{{(contractPremiums | sumByKey:'amount') | currency:'':2}}">
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                            <td colspan="2" class="text-left success">
+                                                <span>المتبقي فى العقد</span>
+                                            </td>
+                                            <td colspan="2">
+                                                <input dir="rtl"
+                                                       type="text"
+                                                       disabled
+                                                       class="form-control"
+                                                       ng-class="{'success': remainPrice >=0 , 'danger': remainPrice < 0}"
+                                                       value="{{ remainPrice = (totalPrice - (contractPremiums | sumByKey:'amount')) | currency:'':2}}">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                             </div>
 
                         </div>

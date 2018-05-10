@@ -37,6 +37,7 @@ public class ProductPurchaseRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
+            "-contractProducts," +
             "product[id,name]," +
             "seller[id,contact[id,shortName]]," +
             "person[id,contact[id,shortName]]";
