@@ -58,6 +58,9 @@ public class Contract implements Serializable {
     private Customer sponsor2;
 
     @Temporal(TemporalType.TIMESTAMP)
+    private Date writtenDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     @ManyToOne
@@ -66,6 +69,9 @@ public class Contract implements Serializable {
 
     @OneToMany(mappedBy = "contract")
     private List<ContractProduct> contractProducts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "contract")
+    private List<ContractPremium> contractPremiums = new ArrayList<>();
 
     @JsonCreator
     public static Contract Create(String jsonString) throws IOException {

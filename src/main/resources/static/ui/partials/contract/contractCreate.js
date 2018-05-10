@@ -11,6 +11,8 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
 
         $scope.productPurchases = [];
 
+        $scope.contractPremiums = [];
+
         $scope.capitalCash = 0;
 
         $scope.profitPercentage = 0;
@@ -138,6 +140,19 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
             $scope.findCapitalCash();
             $scope.findTotalPrice();
             $scope.profitPercentage = (($scope.totalPrice - $scope.capitalCash) / $scope.capitalCash) * 100;
+        };
+
+        //اضافة قسط
+        $scope.addContractPremium = function () {
+            var contractPremium = {};
+            contractPremium.amount = 0;
+            contractPremium.dueDate = new Date();
+            $scope.contractPremiums.push(contractPremium);
+        };
+
+        //إزالة قسط
+        $scope.removeContractPremium = function (index) {
+            $scope.contractPremiums.splice(index, 1);
         };
 
         $scope.submit = function () {

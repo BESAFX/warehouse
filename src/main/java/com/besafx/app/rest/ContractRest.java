@@ -41,6 +41,7 @@ public class ContractRest {
             "customer[id,contact[id,mobile,shortName]]," +
             "seller[id,contact[id,mobile,shortName]]," +
             "-contractProducts," +
+            "-contractPremiums," +
             "person[id,contact[id,shortName]]";
 
     @Autowired
