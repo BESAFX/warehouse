@@ -68,12 +68,13 @@ public class PersonRest {
         person.setTokenExpired(false);
         person.setActive(false);
         person.setEnabled(true);
-        person.setOptions(JSONConverter.toString(Options.builder()
-                                                        .lang("AR")
-                                                        .dateType("H")
-                                                        .iconSet("icon-set-2")
-                                                        .iconSetType("png")
-                                                        .style("mdl-style-1")));
+        person.setOptions(JSONConverter
+                                  .toString(Options.builder()
+                                                   .lang("AR")
+                                                   .dateType("H")
+                                                   .iconSet("icon-set-2")
+                                                   .iconSetType("png")
+                                                   .style("mdl-style-1")));
         person = personService.save(person);
         notificationService.notifyAll(Notification.builder().message("تم إنشاء حساب شخصي بنجاح").type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
@@ -92,7 +93,11 @@ public class PersonRest {
                 person.setContact(contactService.save(person.getContact()));
             }
             person = personService.save(person);
-            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الحساب الشخصي بنجاح").type("success").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم تعديل بيانات الحساب الشخصي بنجاح")
+                                                  .type("success")
+                                                  .build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
@@ -111,7 +116,11 @@ public class PersonRest {
             if (person.getContact() != null) {
                 person.setContact(contactService.save(person.getContact()));
             }
-            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات الحساب الشخصي بنجاح").type("success").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم تعديل بيانات الحساب الشخصي بنجاح")
+                                                  .type("success")
+                                                  .build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
@@ -126,7 +135,11 @@ public class PersonRest {
         if (object != null) {
             person.setEnabled(true);
             person = personService.save(person);
-            notificationService.notifyAll(Notification.builder().message("تم تفعيل المستخدم بنجاح").type("success").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم تفعيل المستخدم بنجاح")
+                                                  .type("success")
+                                                  .build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
@@ -141,7 +154,11 @@ public class PersonRest {
         if (object != null) {
             person.setEnabled(false);
             person = personService.save(person);
-            notificationService.notifyAll(Notification.builder().message("تم تعطيل المستخدم بنجاح").type("error").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم تعطيل المستخدم بنجاح")
+                                                  .type("error")
+                                                  .build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), person);
         } else {
             return null;
@@ -195,33 +212,39 @@ public class PersonRest {
     @GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findAll() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(personService.findByEnabledIsTrue()));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       Lists.newArrayList(personService.findByEnabledIsTrue()));
     }
 
     @GetMapping(value = "findAllCombo", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findAllCombo() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_PERSON_COMBO), Lists.newArrayList(personService.findByEnabledIsTrue
-                ()));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_PERSON_COMBO),
+                                       Lists.newArrayList(personService.findByEnabledIsTrue()));
     }
 
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findOne(id));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       personService.findOne(id));
     }
 
     @GetMapping("findAuthorities")
     @ResponseBody
     public String findAuthorities(Authentication authentication) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), authentication.getAuthorities().stream().map(item -> item
-                .getAuthority()).collect(Collectors.toList()));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       authentication.getAuthorities()
+                                                     .stream()
+                                                     .map(item -> item.getAuthority())
+                                                     .collect(Collectors.toList()));
     }
 
     @GetMapping("findActivePerson")
     @ResponseBody
     public String findActivePerson(Principal principal) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), personService.findByEmail(principal.getName()));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       personService.findByEmail(principal.getName()));
     }
 
 }

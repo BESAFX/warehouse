@@ -2,6 +2,304 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
+     * Customer Model                                             *
+     *                                                            *
+     *************************************************************/
+    this.openCustomerCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/customer/customerCreateUpdate.html',
+            controller: 'customerCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'عميل جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                customer: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openCustomerUpdateModel = function (customer) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/customer/customerCreateUpdate.html',
+            controller: 'customerCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات عميل';
+                },
+                action: function () {
+                    return 'update';
+                },
+                customer: function () {
+                    return customer;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Seller Model                                               *
+     *                                                            *
+     *************************************************************/
+    this.openSellerCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/seller/sellerCreateUpdate.html',
+            controller: 'sellerCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'مستثمر جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                seller: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openSellerUpdateModel = function (seller) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/seller/sellerCreateUpdate.html',
+            controller: 'sellerCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات مستثمر';
+                },
+                action: function () {
+                    return 'update';
+                },
+                seller: function () {
+                    return seller;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Product Model                                              *
+     *                                                            *
+     *************************************************************/
+    this.openParentCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/product/parentCreateUpdate.html',
+            controller: 'parentCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تصنيف رئيسي جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                product: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openParentUpdateModel = function (product) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/product/parentCreateUpdate.html',
+            controller: 'parentCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات التصنيف الرئيسي';
+                },
+                action: function () {
+                    return 'update';
+                },
+                product: function () {
+                    return product;
+                }
+            }
+        });
+    };
+
+    this.openProductCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/product/productCreateUpdate.html',
+            controller: 'productCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تصنيف فرعي جديد';
+                },
+                action: function () {
+                    return 'create';
+                },
+                product: function () {
+                    return {};
+                }
+            }
+        });
+    };
+
+    this.openProductUpdateModel = function (product) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/product/productCreateUpdate.html',
+            controller: 'productCreateUpdateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                title: function () {
+                    return 'تعديل بيانات التصنيف الفرعي';
+                },
+                action: function () {
+                    return 'update';
+                },
+                product: function () {
+                    return product;
+                }
+            }
+        });
+    };
+
+    this.openProductPurchaseCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/product/productPurchaseCreate.html',
+            controller: 'productPurchaseCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg'
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * Contract Model                                             *
+     *                                                            *
+     *************************************************************/
+    this.openContractCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contract/contractCreate.html',
+            controller: 'contractCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg'
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * DepositCreate Model                                        *
+     *                                                            *
+     *************************************************************/
+    this.openDepositCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bankTransaction/depositCreate.html',
+            controller: 'depositCreateCtrl',
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * WithdrawCreate Model                                       *
+     *                                                            *
+     *************************************************************/
+    this.openWithdrawCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bankTransaction/withdrawCreate.html',
+            controller: 'withdrawCreateCtrl',
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * TransferCreate Model                                       *
+     *                                                            *
+     *************************************************************/
+    this.openTransferCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bankTransaction/transferCreate.html',
+            controller: 'transferCreateCtrl',
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * WithdrawCashCreate Model                                   *
+     *                                                            *
+     *************************************************************/
+    this.openWithdrawCashCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/bankTransaction/withdrawCashCreate.html',
+            controller: 'withdrawCashCreateCtrl',
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
      * Team Model                                                 *
      *                                                            *
      *************************************************************/
@@ -14,7 +312,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'teamCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
             resolve: {
                 title: function () {
                     return 'مجموعة جديدة';
@@ -38,7 +335,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'teamCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
             resolve: {
                 title: function () {
                     return 'تعديل بيانات مجموعة';
@@ -67,7 +363,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'personCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
             resolve: {
                 title: function () {
                     return 'مستخدم جديد';
@@ -91,7 +386,6 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'personCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg',
             resolve: {
                 title: function () {
                     return 'تعديل بيانات مستخدم';

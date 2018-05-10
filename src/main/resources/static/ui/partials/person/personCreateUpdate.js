@@ -2,26 +2,14 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'PersonService', '$scop
     function (TeamService, PersonService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, person) {
 
         $scope.buffer = {};
-        $scope.buffer.branchList = [];
-        $scope.person = person;
 
-        if ($scope.person.id) {
-            angular.forEach($scope.person.branchAccesses, function (branchAccess) {
-                $scope.buffer.branchList.push(branchAccess.branch);
-            });
-        }
+        $scope.person = person;
 
         $scope.title = title;
 
         $scope.action = action;
 
         $scope.submit = function () {
-            $scope.person.branchAccesses = [];
-            angular.forEach($scope.buffer.branchList, function (branch) {
-                var branchAccess = {};
-                branchAccess.branch = branch;
-                $scope.person.branchAccesses.push(branchAccess);
-            });
             switch ($scope.action) {
                 case 'create' :
                     PersonService.create($scope.person).then(function (data) {
@@ -45,6 +33,6 @@ app.controller('personCreateUpdateCtrl', ['TeamService', 'PersonService', '$scop
                 $scope.teams = data;
             });
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
     }]);

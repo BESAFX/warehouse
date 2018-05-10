@@ -22,6 +22,7 @@ public class CompanyRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
+            "seller[id,contact[id,shortName]]," +
             "persons[id]";
 
     @Autowired

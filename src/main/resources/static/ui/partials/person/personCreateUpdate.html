@@ -1,4 +1,4 @@
-<form dir="rtl" name="from" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
+<form dir="rtl" name="form" ng-submit="submit()" novalidate="novalidate" focus-group="" focus-stack=""
       focus-group-head="loop" focus-group-tail="loop">
 
     <div class="modal-header mdl-color--primary mdl-navigation__link-active">
@@ -17,8 +17,7 @@
 
         <div class="row">
 
-            <div class="form-group row"
-                 ng-show="form.$invalid && form.$submitted">
+            <div class="form-group row" ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
@@ -41,52 +40,36 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="firstName" class="control-label">الاسم الأول </label>
-                                <input id="firstName"
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label for="nickname" class="control-label">اللقب</label>
+                                <input id="nickname"
                                        type="text"
                                        focus-autofocus="1"
                                        required="required"
                                        disable-validation-message=""
-                                       class="form-control text-right"
-                                       ng-model="person.contact.firstName">
+                                       class="form-control"
+                                       ng-model="person.contact.nickname">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="secondName" class="control-label">اسم الاب </label>
-                                <input id="secondName"
-                                       type="text"
-                                       class="form-control text-right"
-                                       ng-model="person.contact.secondName">
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="thirdName" class="control-label">اسم الجد </label>
-                                <input id="thirdName"
-                                       type="text"
-                                       class="form-control text-right"
-                                       ng-model="person.contact.thirdName">
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="forthName" class="control-label">اسم العائلة </label>
-                                <input id="forthName"
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label for="name" class="control-label">الاسم</label>
+                                <input id="name"
                                        type="text"
                                        required="required"
                                        disable-validation-message=""
-                                       class="form-control text-right"
-                                       ng-model="person.contact.forthName">
+                                       class="form-control"
+                                       ng-model="person.contact.name">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="birthLocation" class="control-label">مكان الميلاد </label>
                                 <input id="birthLocation"
                                        type="text"
-                                       class="form-control text-right"
+                                       class="form-control"
                                        ng-model="person.contact.birthLocation">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="endDate" class="control-label">تاريخ الميلاد</label>
                                 <div dir="ltr" class="input-group">
                                     <input dir="rtl"
@@ -103,56 +86,56 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="nationality" class="control-label">الجنسية </label>
                                 <input id="nationality"
                                        type="text"
-                                       class="form-control text-right"
+                                       class="form-control"
                                        placeholder="الجنسية"
                                        ng-model="person.contact.nationality">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="identityNumber" class="control-label">رقم البطاقة</label>
                                 <input id="identityNumber"
                                        type="text"
-                                       class="form-control text-right"
+                                       class="form-control"
                                        ng-model="person.contact.identityNumber">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="mobile" class="control-label">الجوال </label>
                                 <input id="mobile"
                                        type="text"
                                        required="required"
                                        disable-validation-message=""
-                                       class="form-control text-right"
+                                       class="form-control"
                                        ng-model="person.contact.mobile">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="phone" class="control-label">الهاتف </label>
                                 <input id="phone"
                                        type="text"
-                                       class="form-control text-right"
+                                       class="form-control"
                                        ng-model="person.contact.phone">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="qualification" class="control-label">المنصب الوظيفي </label>
                                 <input id="qualification"
                                        type="text"
                                        required="required"
                                        disable-validation-message=""
-                                       class="form-control text-right"
+                                       class="form-control"
                                        ng-model="person.contact.qualification">
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="address" class="control-label">العنوان الحالي </label>
                                 <input id="address"
                                        type="text"
-                                       class="form-control text-right"
+                                       class="form-control"
                                        ng-model="person.contact.address">
                             </div>
 

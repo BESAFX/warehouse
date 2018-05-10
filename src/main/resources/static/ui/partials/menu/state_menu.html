@@ -10,7 +10,88 @@
             </div>
             <div class="mdl-card__actions">
                 <a class="card-image__filename">
-                    <span>الشركة</span>
+                    <span>المؤسسة</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
+             ng-show="contains(me.team.authorities, [
+            'ROLE_CUSTOMER_CREATE',
+            'ROLE_CUSTOMER_UPDATE',
+            'ROLE_CUSTOMER_DELETE',
+            'ROLE_CUSTOMER_NOTE_CREATE'
+            ])"
+             ng-click="openStateCustomer()">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/customer.{{iconSetType}}')">
+                <div class="mdl-card__title mdl-card--expand"></div>
+            </div>
+            <div class="mdl-card__actions">
+                <a class="card-image__filename">
+                    <span>العملاء/الكفلاء</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
+             ng-show="contains(me.team.authorities, [
+            'ROLE_SELLER_CREATE',
+            'ROLE_SELLER_UPDATE',
+            'ROLE_SELLER_DELETE',
+            ])"
+             ng-click="openStateSeller()">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')">
+                <div class="mdl-card__title mdl-card--expand"></div>
+            </div>
+            <div class="mdl-card__actions">
+                <a class="card-image__filename">
+                    <span>المستثمرين</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
+             ng-show="contains(me.team.authorities, [
+            'ROLE_PRODUCT_CREATE',
+            'ROLE_PRODUCT_UPDATE',
+            'ROLE_PRODUCT_DELETE',
+            ])"
+             ng-click="openStateProductPurchase()">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/productPurchase.{{iconSetType}}')">
+                <div class="mdl-card__title mdl-card--expand"></div>
+            </div>
+            <div class="mdl-card__actions">
+                <a class="card-image__filename">
+                    <span>المخزون</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
+             ng-show="contains(me.team.authorities, [
+            'ROLE_CONTRACT_CREATE',
+            'ROLE_CONTRACT_DELETE',
+            ])"
+             ng-click="openStateContract()">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/contract.{{iconSetType}}')">
+                <div class="mdl-card__title mdl-card--expand"></div>
+            </div>
+            <div class="mdl-card__actions">
+                <a class="card-image__filename">
+                    <span>العقود</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
+             ng-click="openStateBankTransaction()"
+             ng-if="contains(me.team.authorities, ['ROLE_COMPANY_UPDATE'])">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/bankTransaction.{{iconSetType}}')">
+                <div class="mdl-card__title mdl-card--expand"></div>
+            </div>
+            <div class="mdl-card__actions">
+                <a class="card-image__filename">
+                    <span>المعاملات المالية</span>
                 </a>
             </div>
         </div>

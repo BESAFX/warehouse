@@ -43,7 +43,10 @@ public class TeamRest {
             team.setCode(topTeam.getCode() + 1);
         }
         team = teamService.save(team);
-        notificationService.notifyAll(Notification.builder().message("تم مجموعة صلاحيات جديدة بنجاح").type("success").build());
+        notificationService.notifyAll(Notification
+                                              .builder()
+                                              .message("تم انشاء مجموعة صلاحيات جديدة بنجاح")
+                                              .type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
     }
 
@@ -57,7 +60,10 @@ public class TeamRest {
         Team object = teamService.findOne(team.getId());
         if (object != null) {
             team = teamService.save(team);
-            notificationService.notifyAll(Notification.builder().message("تم تعديل بيانات المجموعة بنجاح").type("success").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم تعديل بيانات المجموعة بنجاح")
+                                                  .type("success").build());
             return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), team);
         } else {
             return null;
@@ -74,19 +80,24 @@ public class TeamRest {
                 throw new CustomException("لا يمكن حذف هذة المجموعة لإعتماد بعض المستخدمين عليها.");
             }
             teamService.delete(id);
-            notificationService.notifyAll(Notification.builder().message("تم حذف مجموعة الصلاحيات بنجاح").type("error").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم حذف مجموعة الصلاحيات بنجاح")
+                                                  .type("error").build());
         }
     }
 
     @GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findAll() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), Lists.newArrayList(teamService.findAll()));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       Lists.newArrayList(teamService.findAll()));
     }
 
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), teamService.findOne(id));
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       teamService.findOne(id));
     }
 }

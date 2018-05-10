@@ -14,6 +14,125 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             selected: false,
             category: 'الإدارة'
         });
+        $scope.roles.push({
+            name: 'عملية إيداع',
+            value: 'ROLE_DEPOSIT_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'عملية سحب',
+            value: 'ROLE_WITHDRAW_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'عملية تحويل',
+            value: 'ROLE_TRANSFER_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'عملية تسجيل مصروفات',
+            value: 'ROLE_WITHDRAW_CASH_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Customer//////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء حسابات العملاء',
+            value: 'ROLE_CUSTOMER_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل حسابات العملاء',
+            value: 'ROLE_CUSTOMER_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف حسابات العملاء',
+            value: 'ROLE_CUSTOMER_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Customer Note//////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء ملاحظات العملاء',
+            value: 'ROLE_CUSTOMER_NOTE_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل ملاحظات العملاء',
+            value: 'ROLE_CUSTOMER_NOTE_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف ملاحظات العملاء',
+            value: 'ROLE_CUSTOMER_NOTE_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Seller//////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء حسابات المستثمرين',
+            value: 'ROLE_SELLER_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل حسابات المستثمرين',
+            value: 'ROLE_SELLER_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف حسابات المستثمرين',
+            value: 'ROLE_SELLER_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Product//////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء التصنيفات',
+            value: 'ROLE_PRODUCT_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'تعديل التصنيفات',
+            value: 'ROLE_PRODUCT_UPDATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف التصنيفات',
+            value: 'ROLE_PRODUCT_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'شراء سلعة جديدة',
+            value: 'ROLE_PRODUCT_PURCHASE_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        //////////////////////////Contract//////////////////////////////////////////
+        $scope.roles.push({
+            name: 'إنشاء العقود',
+            value: 'ROLE_CONTRACT_CREATE',
+            selected: false,
+            category: 'الإدارة'
+        });
+        $scope.roles.push({
+            name: 'حذف العقود',
+            value: 'ROLE_CONTRACT_DELETE',
+            selected: false,
+            category: 'الإدارة'
+        });
         //////////////////////////Person//////////////////////////////////////////
         $scope.roles.push({
             name: 'إنشاء حسابات المستخدمين',
@@ -100,6 +219,6 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
 
         $timeout(function () {
             window.componentHandler.upgradeAllRegistered();
-        }, 800);
+        }, 600);
 
     }]);

@@ -2,7 +2,6 @@ package com.besafx.app;
 
 import com.besafx.app.config.DropboxManager;
 import com.besafx.app.config.EmailSender;
-import com.besafx.app.util.JSONConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,11 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableScheduling
 public class Main {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
-        log.info("Start Initializing From Main...");
+        LOG.info("Start Initializing From Main...");
         context.getBean(EmailSender.class).init();
         context.getBean(DropboxManager.class).init();
     }

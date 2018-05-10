@@ -37,22 +37,11 @@ public class Contact implements Serializable {
     @GeneratedValue(generator = "contactSequenceGenerator")
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    private String name;
 
-    @Column(name = "second_name")
-    private String secondName;
+    private String nickname;
 
-    @Column(name = "third_name")
-    private String thirdName;
-
-    @Column(name = "forth_name")
-    private String forthName;
-
-    @Formula(value = "concat_ws(' ',first_name, second_name, third_name, forth_name)")
-    private String fullName;
-
-    @Formula(value = "concat_ws(' ',first_name, forth_name)")
+    @Formula(value = "concat_ws(' ',nickname, name)")
     private String shortName;
 
     private String address;

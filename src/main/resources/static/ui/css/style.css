@@ -78,11 +78,20 @@ input {
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: white !important;
+    background-color: white;
 }
 
 .form-control[disabled], .form-control[readonly] {
     color: black !important;
+}
+
+.panel {
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
+}
+
+.panel * {
+    /*font-size: 12px !important;*/
 }
 
 .panel-green {
@@ -159,6 +168,10 @@ input {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2) !important;
 }
 
+.panel-body {
+    padding: 5px !important;
+}
+
 .panel .panel-body.profile {
     border-radius: 0px !important;
 }
@@ -211,6 +224,7 @@ input[type=checkbox] {
 .mdl-menu {
     width: 310px !important;
     overflow: auto !important;
+    padding: 0px 0px !important;
 }
 
 .mdl-list__item--two-line .mdl-list__item-primary-content {
@@ -601,9 +615,13 @@ WebKit inertia scrolling is being added here for any present/future devices that
 /** CheckBox **/
 
 .mdl-tabs__panel {
-    padding: 10px !important;
+    padding-top: 20px !important;
     height: 400px !important;
     overflow: auto !important;
+}
+
+.mdl-tabs__panel_free {
+    height: unset !important;
 }
 
 /**********************************
@@ -855,4 +873,28 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .mdl-list__item-avatar, .mdl-list__item-avatar.material-icons {
     height: 60px !important;
     width: 60px !important;
+}
+
+.mdl-mini-footer {
+    padding: 16px 16px !important;
+}
+
+.row [class^='col-xs-'],
+.row [class^='col-sm-'],
+.row [class^='col-md-'],
+.row [class^='col-lg-'] {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.table-responsive{
+    overflow-x: unset!important;
+}
+
+input.success{
+    background-color:  #5cb85c !important;;
+}
+
+input.danger{
+    background-color:  #d9534f !important;;
 }

@@ -10,8 +10,8 @@
                 <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
                     ng-click="fetchPersonTableData()">
                     <span class="mdl-list__item-primary-content">
-                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
-                        <span>عرض البيانات</span>
+                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+                        <span>البحث المتقدم</span>
                     </span>
                 </li>
                 <li class="mdl-menu__item mdl-list__item" ng-click="newPerson()"
@@ -56,7 +56,7 @@
                        ng-click="fetchPersonTableData()"
                        tooltip-append-to-body="true"
                        uib-tooltip="تحديث البيانات">
-                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
+                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
                     </a>
                     <a href=""
                        ng-if="contains(me.team.authorities, ['ROLE_TEAM_CREATE'])"

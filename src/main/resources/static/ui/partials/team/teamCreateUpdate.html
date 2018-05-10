@@ -13,42 +13,69 @@
         </h3>
     </div>
 
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body modal-body-free" id="modal-body">
 
         <div class="row">
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            <div class="form-group row"
                  ng-show="form.$invalid && form.$submitted">
                 <div class="alert alert-danger" role="alert">
                     <strong>فضلاً اكمل الحقول المطلوبة</strong>
                 </div>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label>
-                    <span ng-if="lang==='AR'">اسم المجموعة</span>
-                    <span ng-if="lang==='EN'">Name</span>
-                </label>
-                <input type="text"
-                       focus-autofocus="1"
-                       required="required"
-                       disable-validation-message=""
-                       class="form-control"
-                       placeholder="{{lang==='AR' ? 'اذكر اسم المجموعة...' : 'Type Team Name...'}}"
-                       ng-model="team.name">
-            </div>
+            <div class="form-group row">
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="(key, value) in roles | groupBy:'category'">
+                <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
-                <div class="form-group row mdl-color--primary-dark">
-                    <h3 class="text-center mdl-color-text--white">{{key}}</h3>
-                </div>
+                    <div class="mdl-tabs__tab-bar">
+                        <a href="#panel-1-team" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6 is-active">
+                            <span>البيانات الأساسية</span>
+                        </a>
+                        <a href="#panel-2-team" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <span>الإدارة</span>
+                        </a>
+                    </div>
 
-                <div class="form-group col-ms-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="role in value">
-                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-{{role.value}}">
-                        <input type="checkbox" id="checkbox-{{role.value}}" class="mdl-checkbox__input" ng-model="role.selected">
-                        <span class="mdl-checkbox__label">{{role.name}}</span>
-                    </label>
+                    <div class="mdl-tabs__panel is-active" id="panel-1-team">
+
+                        <div class="form-group row">
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label>
+                                    <span>اسم المجموعة</span>
+                                </label>
+                                <input type="text"
+                                       focus-autofocus="1"
+                                       required="required"
+                                       disable-validation-message=""
+                                       class="form-control"
+                                       ng-model="team.name">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mdl-tabs__panel" id="panel-2-team">
+
+                        <div class="form-group row">
+
+                            <div ng-repeat="(key, value) in roles | groupBy:'category'">
+
+                                <div class="form-group col-ms-12 col-sm-12 col-md-12 col-lg-12" ng-repeat="role in value">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-{{role.value}}">
+                                        <input type="checkbox" id="checkbox-{{role.value}}" class="mdl-checkbox__input" ng-model="role.selected">
+                                        <span class="mdl-checkbox__label">{{role.name}}</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
