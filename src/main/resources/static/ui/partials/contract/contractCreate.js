@@ -19,6 +19,8 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
 
         $scope.totalPrice = 0;
 
+        $scope.reaminPrice = 0;
+
         $scope.searchSellers = function ($select, $event) {
 
             // no event means first load!
@@ -133,6 +135,7 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
             angular.forEach($scope.productPurchases, function (productPurchase) {
                 $scope.totalPrice = $scope.totalPrice + (productPurchase.requiredQuantity * productPurchase.unitSellPrice);
             });
+            return $scope.totalPrice;
         };
 
         //نسبة الربح
@@ -153,6 +156,20 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
         //إزالة قسط
         $scope.removeContractPremium = function (index) {
             $scope.contractPremiums.splice(index, 1);
+        };
+
+        //حساب إجمالي الاقساط
+        $scope.findContractPremiumsSum = function () {
+            $scope.contractPremiumsSum = 0;
+            angular.forEach($scope.contractPremiums, function (contractPremium) {
+                $scope.contractPremiumsSum = $scope.contractPremiumsSum + contractPremium.amount;
+            });
+            return $scope.contractPremiumsSum;
+        };
+
+        //حساب الباقي من اجمالي العقد عند اضافة الأقساط
+        $scope.findRemainPrice = function () {
+            $scope.remainPrice = $scope.findTotalPrice() - $scope.findContractPremiumsSum();
         };
 
         $scope.submit = function () {

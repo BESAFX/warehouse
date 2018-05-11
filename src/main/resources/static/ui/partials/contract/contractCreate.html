@@ -569,6 +569,7 @@
                                                        ng-maxlength="6"
                                                        required="required"
                                                        disable-validation-message=""
+                                                       ng-change="findRemainPrice()"
                                                        class="form-control"
                                                        ng-model="contractPremium.amount">
                                             </td>
@@ -601,7 +602,7 @@
                                                        type="text"
                                                        disabled
                                                        class="form-control"
-                                                       value="{{(contractPremiums | sumByKey:'amount') | currency:'':2}}">
+                                                       value="{{contractPremiumsSum | currency:'':2}}">
                                             </td>
                                         </tr>
                                         <tr ng-if="contract.seller.id && productPurchases.length > 0">
@@ -614,7 +615,7 @@
                                                        disabled
                                                        class="form-control"
                                                        ng-class="{'success': remainPrice >=0 , 'danger': remainPrice < 0}"
-                                                       value="{{ remainPrice = (totalPrice - (contractPremiums | sumByKey:'amount')) | currency:'':2}}">
+                                                       value="{{ remainPrice | currency:'':2}}">
                                             </td>
                                         </tr>
                                         </tbody>
