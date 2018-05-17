@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @RestController
@@ -44,6 +45,7 @@ public class CustomerRest {
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_CREATE')")
+    @Transactional
     public String create(@RequestBody Customer customer) {
         Customer topCustomer = customerService.findTopByOrderByCodeDesc();
         if (topCustomer == null) {
@@ -64,6 +66,7 @@ public class CustomerRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_UPDATE')")
+    @Transactional
     public String update(@RequestBody Customer customer) {
         if (customerService.findByCodeAndIdIsNot(customer.getCode(), customer.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
@@ -85,6 +88,7 @@ public class CustomerRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
         Customer customer = customerService.findOne(id);
         if (customer != null) {

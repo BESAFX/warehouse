@@ -104,7 +104,8 @@
         </div>
         <div class="panel-body">
 
-            <div class="form-group row" ng-if="pageBankTransaction.totalElements > 0 && (toggleList===1 || toggleList===2)">
+            <div class="form-group row"
+                 ng-if="pageBankTransaction.totalElements > 0">
 
                 <div class="pull-right btn-toolbar">
 
@@ -137,6 +138,14 @@
                             <i class="material-icons md-36">keyboard_arrow_left</i>
                         </button>
 
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printBankTransactionTable', 'سجل المعاملات المالية')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
                     </div>
 
                 </div>
@@ -153,7 +162,7 @@
 
             </div>
 
-            <div class="row">
+            <div class="form-group row" id="printBankTransactionTable">
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -189,17 +198,17 @@
                         <tbody>
                         <tr ng-repeat="bankTransaction in bankTransactions | filter:bankTransactions.searchText">
                             <td>{{$index+1}}</td>
-                            <td class="fit">
-                                <span ng-show="dateType==='H'">{{bankTransaction.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                <span ng-show="dateType==='G'">{{bankTransaction.date | date: 'yyyy-MM-dd'}}</span>
+                            <td>
+                                <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{bankTransaction.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{bankTransaction.date | date: 'yyyy-MM-dd'}}</span>
                             </td>
                             <td>{{bankTransaction.transactionType.name}}</td>
-                            <td class="fit">{{bankTransaction.amount | currency:' SAR ':2}}</td>
+                            <td>{{bankTransaction.amount | currency:' SAR ':2}}</td>
                             <td>{{bankTransaction.note}}</td>
                             <td>{{bankTransaction.person.contact.shortName}}</td>
                         </tr>
-                        <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                            ng-show="!bankTransactions || bankTransactions.length ==0">
+                        <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
+                            ng-if="!bankTransactions || bankTransactions.length ==0">
                             <td colspan="6">
                                 <p>
                                     <span>لا يوجد معاملات مالية حتى الآن </span>

@@ -2,9 +2,9 @@ app.controller('customerCreateUpdateCtrl', ['CustomerService', '$scope', '$rootS
     function (CustomerService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, customer) {
 
         $scope.buffer = {};
-        
+
         $scope.customer = customer;
-        
+
         $scope.title = title;
 
         $scope.action = action;

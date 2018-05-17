@@ -6,8 +6,23 @@ app.factory("ProductPurchaseService",
                     return response.data;
                 });
             },
+            findMyProductPurchases: function () {
+                return $http.get("/api/productPurchase/findMyProductPurchases").then(function (response) {
+                    return response.data;
+                });
+            },
             findBySeller: function (id) {
                 return $http.get("/api/productPurchase/findBySeller/" + id).then(function (response) {
+                    return response.data;
+                });
+            },
+            findBySellerAndRemainFull: function (id) {
+                return $http.get("/api/productPurchase/findBySellerAndRemainFull/" + id).then(function (response) {
+                    return response.data;
+                });
+            },
+            findBySellerAndRemainEmpty: function (id) {
+                return $http.get("/api/productPurchase/findBySellerAndRemainEmpty/" + id).then(function (response) {
                     return response.data;
                 });
             },

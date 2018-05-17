@@ -1,6 +1,7 @@
 package com.besafx.app.service;
 
 import com.besafx.app.entity.ProductPurchase;
+import com.besafx.app.entity.Seller;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public interface ProductPurchaseService extends PagingAndSortingRepository<Produ
     ProductPurchase findTopByOrderByCodeDesc();
 
     ProductPurchase findByCodeAndIdIsNot(Integer code, Long id);
+
+    List<ProductPurchase> findBySeller(Seller seller);
 
     List<ProductPurchase> findBySellerId(Long sellerId);
 }

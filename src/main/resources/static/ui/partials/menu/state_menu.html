@@ -84,6 +84,23 @@
         </div>
 
         <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
+             ng-show="contains(me.team.authorities, [
+            'ROLE_CONTRACT_PREMIUM_CREATE',
+            'ROLE_CONTRACT_PREMIUM_UPDATE',
+            'ROLE_CONTRACT_PREMIUM_DELETE',
+            ])"
+             ng-click="openStateContractPremium()">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/contractPremium.{{iconSetType}}')">
+                <div class="mdl-card__title mdl-card--expand"></div>
+            </div>
+            <div class="mdl-card__actions">
+                <a class="card-image__filename">
+                    <span>الأقساط والدفعات</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
              ng-click="openStateBankTransaction()"
              ng-if="contains(me.team.authorities, ['ROLE_COMPANY_UPDATE'])">
             <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/bankTransaction.{{iconSetType}}')">

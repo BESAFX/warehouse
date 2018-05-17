@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping(value = "/api/company/")
 public class CompanyRest {
@@ -40,6 +42,7 @@ public class CompanyRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_COMPANY_UPDATE')")
+    @Transactional
     public String update(@RequestBody Company company) {
         Company object = companyService.findOne(company.getId());
         if (object != null) {

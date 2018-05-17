@@ -230,6 +230,99 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openContractDetailsModel = function (contract) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contract/contractDetails.html',
+            controller: 'contractDetailsCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                contract: function () {
+                    return contract;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * ContractProduct Model                                      *
+     *                                                            *
+     *************************************************************/
+    this.openContractProductCreateModel = function (contract) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contractProduct/contractProductCreate.html',
+            controller: 'contractProductCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                contract: ['ProductPurchaseService', function (ProductPurchaseService) {
+                    return ProductPurchaseService.findBySellerAndRemainFull(contract.seller.id).then(function (data) {
+                        contract.seller.productPurchases = [];
+                        angular.forEach(data, function (productPurchase) {
+                            productPurchase.requiredQuantity = 0;
+                            productPurchase.unitSellPrice = 0;
+                            contract.seller.productPurchases.push(productPurchase);
+                        });
+                        return contract;
+                    });
+                }]
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * ContractPremium Model                                      *
+     *                                                            *
+     *************************************************************/
+    this.openContractPremiumCreateModel = function (contract) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contractPremium/contractPremiumCreate.html',
+            controller: 'contractPremiumCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                contract: function () {
+                    return contract;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * ContractPayment Model                                      *
+     *                                                            *
+     *************************************************************/
+    this.openContractPaymentCreateModel = function (contract) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contractPayment/contractPaymentCreate.html',
+            controller: 'contractPaymentCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                contract: function () {
+                    return contract;
+                }
+            }
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * DepositCreate Model                                        *

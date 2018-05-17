@@ -38,27 +38,35 @@ public class SellerSearch {
             final String qualification,
             final String filterCompareType,
             Pageable pageRequest
-                                ) {
+                              ) {
         List<Specification<Seller>> predicates = new ArrayList<>();
-        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"),  value)));
-        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"),  value)));
-        Optional.ofNullable(registerDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"),  new DateTime(value).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(registerDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"),  new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(registerDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"),
+                                                                                                                          new DateTime(value)
+                                                                                                                                  .withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(registerDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), new
+                DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
         Optional.ofNullable(name).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("name"), "%" + value + "%")));
-        Optional.ofNullable(mobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("mobile"), "%" + value + "%")));
+        Optional.ofNullable(mobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("mobile"), "%" + value +
+                "%")));
         Optional.ofNullable(phone).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("phone"), "%" + value + "%")));
-        Optional.ofNullable(nationality).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("nationality"), "%" + value + "%")));
-        Optional.ofNullable(identityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("identityNumber"), "%" + value + "%")));
-        Optional.ofNullable(qualification).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("qualification"), "%" + value + "%")));
+        Optional.ofNullable(nationality).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("nationality"), "%" +
+                value + "%")));
+        Optional.ofNullable(identityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("identityNumber"),
+                                                                                                        "%" + value + "%")));
+        Optional.ofNullable(qualification).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("contact").get("qualification"),
+                                                                                                       "%" + value + "%")));
 
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
-                if(filterCompareType == null){
-                    result =  Specifications.where(result).and(predicates.get(i));
+                if (filterCompareType == null) {
+                    result = Specifications.where(result).and(predicates.get(i));
                     continue;
                 }
-                result = filterCompareType.equalsIgnoreCase("and") ? Specifications.where(result).and(predicates.get(i)) : Specifications.where(result).or(predicates.get(i));
+                result = filterCompareType.equalsIgnoreCase("and") ? Specifications.where(result).and(predicates.get(i)) : Specifications.where
+                        (result).or(predicates.get(i));
             }
             return sellerService.findAll(result, pageRequest);
         } else {

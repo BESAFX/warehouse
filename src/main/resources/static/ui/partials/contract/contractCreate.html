@@ -299,11 +299,15 @@
                                     <tbody>
                                     <tr ng-repeat="productPurchase in productPurchases">
                                         <td>{{productPurchase.product.name}}</td>
-                                        <td class="fit"></td>
+                                        <td class="fit"
+                                            ng-class="{'success': productPurchase.remain > 0, 'danger': productPurchase.remain <=0}">
+                                            <span>{{productPurchase.remain}}</span>
+                                        </td>
                                         <td>
                                             <input dir="rtl"
                                                    type="number"
                                                    min="0"
+                                                   ng-max="productPurchase.remain"
                                                    required="required"
                                                    disable-validation-message=""
                                                    class="form-control"
@@ -491,17 +495,10 @@
 
                         <div ng-if="totalPrice">
 
-                            <div class="form-group row">
-
-                                <button uib-tooltip="إضافة قسط"
-                                        tooltip-append-to-body="true"
-                                        type="button"
-                                        ng-click="addContractPremium()"
-                                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
-                                         height="24">
-                                </button>
-
+                            <div class="form-group row" ng-show="remainPrice < 0">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>تأكد من أن المتبقي فى العقد يساوي صفر</strong>
+                                </div>
                             </div>
 
                             <div class="form-group row">
@@ -565,7 +562,7 @@
                                             <td>
                                                 <input dir="rtl"
                                                        type="number"
-                                                       min="0"
+                                                       min="1"
                                                        ng-maxlength="6"
                                                        required="required"
                                                        disable-validation-message=""
@@ -575,12 +572,22 @@
                                             </td>
                                             <td>
                                                 <div class="row">
+                                                    <button uib-tooltip="إضافة قسط"
+                                                            tooltip-append-to-body="true"
+                                                            type="button"
+                                                            ng-hide="remainPrice <= 0"
+                                                            ng-click="addContractPremium()"
+                                                            class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                                        <img class="material-icons mdl-list__item-icon"
+                                                             ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                                                    </button>
                                                     <button uib-tooltip="حذف"
                                                             tooltip-append-to-body="true"
                                                             type="button"
                                                             ng-click="removeContractPremium($index)"
                                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                                                        <img class="material-icons mdl-list__item-icon"
+                                                             ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
                                                     </button>
                                                 </div>
                                             </td>
@@ -603,6 +610,19 @@
                                                        disabled
                                                        class="form-control"
                                                        value="{{contractPremiumsSum | currency:'':2}}">
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                            <td colspan="2" class="text-left warning">
+                                                <span>إجمالي قيمة العقد</span>
+                                            </td>
+                                            <td colspan="2">
+                                                <input dir="rtl"
+                                                       type="text"
+                                                       disabled
+                                                       class="form-control"
+                                                       ng-class="{'success': remainPrice >=0 , 'danger': remainPrice < 0}"
+                                                       value="{{ totalPrice | currency:'':2}}">
                                             </td>
                                         </tr>
                                         <tr ng-if="contract.seller.id && productPurchases.length > 0">

@@ -15,7 +15,6 @@ import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
-import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @RestController
@@ -37,6 +37,13 @@ public class SellerRest {
     private final String FILTER_TABLE = "" +
             "**," +
             "-productPurchases," +
+            "-contracts," +
+            "seller[id]";
+
+    private final String FILTER_DETAILS = "" +
+            "**," +
+            "productPurchases[**,product[id,name],-seller,-contractProducts,person[id,contact[id,shortName]]]," +
+            "-contracts," +
             "seller[id]";
 
     @Autowired
@@ -57,6 +64,7 @@ public class SellerRest {
     @PostMapping(value = "create/{openCash}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_CREATE')")
+    @Transactional
     public String create(@PathVariable(value = "openCash") Double openCash, @RequestBody Seller seller) {
         Seller topSeller = sellerService.findTopByOrderByCodeDesc();
         if (topSeller == null) {
@@ -75,7 +83,7 @@ public class SellerRest {
                                               .message("تم انشاء حساب مستثمر جديد بنجاح")
                                               .type("success").build());
         LOG.info("إنشاء الرصيد الافتتاحي وعمل عملية إيداع بالمبلغ");
-        if(openCash > 0){
+        if (openCash > 0) {
             BankTransaction bankTransaction = new BankTransaction();
             bankTransaction.setAmount(openCash);
             bankTransaction.setBank(Initializer.bank);
@@ -103,6 +111,7 @@ public class SellerRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_UPDATE')")
+    @Transactional
     public String update(@RequestBody Seller seller) {
         if (sellerService.findByCodeAndIdIsNot(seller.getCode(), seller.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
@@ -124,6 +133,7 @@ public class SellerRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
         Seller seller = sellerService.findOne(id);
         if (seller != null) {
@@ -138,7 +148,7 @@ public class SellerRest {
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
                                        sellerService.findOne(id));
     }
 

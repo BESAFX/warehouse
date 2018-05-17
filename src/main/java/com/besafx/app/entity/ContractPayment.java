@@ -48,6 +48,10 @@ public class ContractPayment implements Serializable {
     private ContractPremium contractPremium;
 
     @ManyToOne
+    @JoinColumn(name = "bankTransaction")
+    private BankTransaction bankTransaction;
+
+    @ManyToOne
     @JoinColumn(name = "person")
     private Person person;
 

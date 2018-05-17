@@ -57,7 +57,8 @@
                             <div class="mdl-menu__item--full-bleed-divider"></div>
                             <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                             <span class="mdl-list__item-primary-content">
-                                <span class="material-icons mdl-list__item-avatar" style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
+                                <span class="material-icons mdl-list__item-avatar"
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
                                 <div ng-bind-html="seller.name | highlight: $select.search"></div>
                                 <span class="mdl-list__item-sub-title">
                                     <span>رقم المستثمر / </span>
@@ -78,7 +79,8 @@
                                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                                         ng-disabled="buffer.last"
                                         style="width: 100%; margin-top: 5px;"
-                                        ng-click="searchSellers($select, $event);">تحميل المزيد</button>
+                                        ng-click="searchSellers($select, $event);">تحميل المزيد
+                                </button>
                             </div>
 
                         </ui-select-choices>
@@ -174,7 +176,8 @@
                                     <ui-select-match placeholder="اختر السلعة">
                                         {{$select.selected.name}}
                                     </ui-select-match>
-                                    <ui-select-choices repeat="product in buffer.parent.childs | filter: $select.search | orderBy:'code' track by $index">
+                                    <ui-select-choices
+                                            repeat="product in buffer.parent.childs | filter: $select.search | orderBy:'code' track by $index">
 
                                         <div class="mdl-menu__item--full-bleed-divider"></div>
                                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
@@ -226,14 +229,16 @@
                                             type="button"
                                             ng-click="addProductPurchase()"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
+                                             height="24">
                                     </button>
                                     <button uib-tooltip="حذف"
                                             tooltip-append-to-body="true"
                                             type="button"
                                             ng-click="removeProductPurchase($index)"
                                             class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24"
+                                             height="24">
                                     </button>
                                 </div>
                             </td>

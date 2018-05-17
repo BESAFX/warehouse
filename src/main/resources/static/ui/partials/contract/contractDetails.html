@@ -1,0 +1,373 @@
+<div dir="rtl">
+
+    <div class="modal-header mdl-color--primary mdl-navigation__link-active">
+        <a class="pull-left" href="" ng-click="cancel()">
+            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+        </a>
+        <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
+            <span class="mdl-list__item-primary-content">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/contract.{{iconSetType}}" width="24" height="24">
+                <span>تفاصيل العقد رقم / </span>&nbsp;
+                <span class="label label-info">{{contract.code}}</span>
+            </span>
+        </h3>
+    </div>
+
+    <div class="modal-body modal-body-free" id="modal-body">
+
+        <div class="form-group row">
+
+            <button uib-tooltip="تحديث البيانات"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="refreshContract()"
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24" height="24">
+            </button>
+
+        </div>
+
+        <div class="form-group row">
+
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#panel-1-contract-details"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4 is-active">
+                        <span>البيانات الاساسية</span>
+                    </a>
+                    <a href="#panel-2-contract-details"
+                       ng-click="refreshContractProducts()"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>السلع</span>
+                    </a>
+                    <a href="#panel-3-contract-details"
+                       ng-click="refreshContractPremiums()"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>الأقساط</span>
+                    </a>
+                    <a href="#panel-4-contract-details"
+                       ng-click="refreshContractPayments()"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>عمليات الدفع</span>
+                    </a>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="panel-1-contract-details">
+
+                    <div class="form-group row">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>رقم العقد</td>
+                                    <td>{{contract.code}}</td>
+                                </tr>
+                                <tr>
+                                    <td>تاريخ كتابة العقد</td>
+                                    <td>
+                                        <span ng-show="dateType==='H'">{{contract.writtenDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{contract.writtenDate | date: 'yyyy-MM-dd'}}</span>
+                                        <span class="label label-info">{{contract.writtenDate | date: 'hh:mm a'}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>المستثمر</td>
+                                    <td>{{contract.seller.contact.shortName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>العميل</td>
+                                    <td>{{contract.customer.contact.shortName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>الكفيل الأول</td>
+                                    <td>{{contract.sponsor1 ? contract.sponsor1.contact.shortName : '---'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>الكفيل الثاني</td>
+                                    <td>{{contract.sponsor2 ? contract.sponsor2.contact.shortName : '---'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>الرسوم الإدارية</td>
+                                    <td>{{contract.paperFees | currency:' SAR ':2}}</td>
+                                </tr>
+                                <tr>
+                                    <td>عمولة العقد</td>
+                                    <td>{{contract.commissionFees | currency:' SAR ':2}}</td>
+                                </tr>
+                                <tr>
+                                    <td>رسوم المحاماة</td>
+                                    <td>{{contract.lawFees | currency:' SAR ':2}}</td>
+                                </tr>
+                                <tr>
+                                    <td>مدخل العقد</td>
+                                    <td>
+                                        <span class="label label-info">
+                                            {{contract.person.contact.shortName}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-2-contract-details">
+
+                    <div class="form-group row">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+
+                                    <th>
+                                        <span>السلعة</span>
+                                    </th>
+
+                                    <th>
+                                        <span>الكمية</span>
+                                    </th>
+
+                                    <th>
+                                        <span>سعر التكلفة الإجمالي</span>
+                                    </th>
+
+                                    <th>
+                                        <span>العمليات</span>
+                                    </th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="contractProduct in contract.contractProducts">
+                                    <td>{{contractProduct.productPurchase.product.name}}</td>
+                                    <td>{{contractProduct.quantity}}</td>
+                                    <td>{{(contractProduct.quantity * contractProduct.unitSellPrice) | currency:' SAR ':2}}</td>
+                                    <td>
+                                        <div class="row">
+                                            <button uib-tooltip="إضافة سلعة"
+                                                    tooltip-append-to-body="true"
+                                                    type="button"
+                                                    ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PRODUCT_CREATE'])"
+                                                    ng-click="newContractProduct()"
+                                                    class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}"
+                                                     width="24" height="24">
+                                            </button>
+                                            <button uib-tooltip="حذف"
+                                                    tooltip-append-to-body="true"
+                                                    type="button"
+                                                    ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PRODUCT_DELETE'])"
+                                                    ng-click="deleteContractProduct(contractProduct)"
+                                                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}"
+                                                     width="24" height="24">
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!contract.contractProducts || contract.contractProducts.length ==0">
+                                    <td colspan="4">
+                                        <span>لا توجد سلع حتى الآن لهذا العقد </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                                    <td colspan="2" class="text-left warning">
+                                        <span>إجمالي قيمة العقد</span>
+                                    </td>
+                                    <td colspan="2">{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-3-contract-details">
+
+                    <div class="form-group row">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+
+                                    <th>
+                                        <span>تاريخ الإستحقاق</span>
+                                    </th>
+
+                                    <th>
+                                        <span>المبلغ</span>
+                                    </th>
+
+                                    <th>
+                                        <span>المدفوع</span>
+                                    </th>
+
+                                    <th>
+                                        <span>الباقي</span>
+                                    </th>
+
+                                    <th>
+                                        <span>العمليات</span>
+                                    </th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="contractPremium in contract.contractPremiums">
+                                    <td>
+                                        <span ng-show="dateType==='H'">{{contractPremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{contractPremium.dueDate | date: 'yyyy-MM-dd'}}</span>
+                                    </td>
+                                    <td>{{contractPremium.amount | currency:' SAR ':2}}</td>
+                                    <td>{{contractPremium.paid | currency:' SAR ':2}}</td>
+                                    <td>{{contractPremium.remain | currency:' SAR ':2}}</td>
+                                    <td>
+                                        <div class="row">
+                                            <button uib-tooltip="إضافة قسط"
+                                                    tooltip-append-to-body="true"
+                                                    type="button"
+                                                    ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']) && contract.totalPremium < contract.totalPrice"
+                                                    ng-click="newContractPremium()"
+                                                    class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}"
+                                                     width="24" height="24">
+                                            </button>
+                                            <button uib-tooltip="حذف"
+                                                    tooltip-append-to-body="true"
+                                                    type="button"
+                                                    ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PREMIUM_DELETE'])"
+                                                    ng-click="deleteContractPremium(contractPremium)"
+                                                    class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}"
+                                                     width="24" height="24">
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!contract.contractPremiums || contract.contractPremiums.length ==0">
+                                    <td colspan="5">
+                                        <span>لا توجد أقساط حتى الآن لهذا العقد </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                                    <td colspan="2" class="text-left warning">
+                                        <span>إجمالي قيمة العقد</span>
+                                    </td>
+                                    <td colspan="3">{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                </tr>
+                                <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                                    <td colspan="2" class="text-left success">
+                                        <span>إجمالي المدفوع</span>
+                                    </td>
+                                    <td colspan="3">{{contract.contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                                </tr>
+                                <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                                    <td colspan="2" class="text-left danger">
+                                        <span>إجمالي الباقي</span>
+                                    </td>
+                                    <td colspan="3">{{contract.contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-4-contract-details">
+
+                    <div class="form-group row">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+
+                                    <th>
+                                        <span>رقم العملية</span>
+                                    </th>
+
+                                    <th>
+                                        <span>التاريخ</span>
+                                    </th>
+
+                                    <th>
+                                        <span>المبلغ</span>
+                                    </th>
+
+                                    <th>
+                                        <span>البيان</span>
+                                    </th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="contractPayment in contract.contractPayments">
+                                    <td>{{contractPayment.code}}</td>
+                                    <td>
+                                        <span ng-show="dateType==='H'">{{contractPayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-show="dateType==='G'">{{contractPayment.date | date: 'yyyy-MM-dd'}}</span>
+                                    </td>
+                                    <td>{{contractPayment.amount | currency:' SAR ':2}}</td>
+                                    <td>{{contractPayment.note}}</td>
+                                </tr>
+                                <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
+                                    ng-show="!contract.contractPayments || contract.contractPayments.length ==0">
+                                    <td colspan="4">
+                                        <span>لا توجد عمليات دفع حتى الآن لهذا العقد، يمكنك إضافة دفعة مالية بالضغط  </span>
+                                        <a href="" ng-click="newContractPayment()">هنــا</a>
+                                    </td>
+                                </tr>
+                                <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                                    <td colspan="2" class="text-left warning">
+                                        <span>إجمالي قيمة العقد</span>
+                                    </td>
+                                    <td colspan="2">{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                </tr>
+                                <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                                    <td colspan="2" class="text-left success">
+                                        <span>إجمالي الدفعات المالية</span>
+                                    </td>
+                                    <td colspan="2">{{contract.contractPayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <div class="row">
+            <button uib-tooltip="خروج"
+                    tooltip-append-to-body="true"
+                    type="button"
+                    ng-click="cancel()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect pull-left">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/close.{{iconSetType}}" width="24" height="24">
+            </button>
+        </div>
+
+    </div>
+
+</div>

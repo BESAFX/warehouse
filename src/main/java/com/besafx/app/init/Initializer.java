@@ -24,6 +24,8 @@ public class Initializer implements CommandLineRunner {
 
     public static TransactionType transactionTypeDepositTransfer;
 
+    public static TransactionType transactionTypeDepositPayment;
+
     public static TransactionType transactionTypeWithdraw;
 
     public static TransactionType transactionTypeWithdrawTransfer;
@@ -105,6 +107,13 @@ public class Initializer implements CommandLineRunner {
             transactionTypeDepositTransfer.setTransactionType(transactionTypeDeposit);
             transactionTypeService.save(transactionTypeDepositTransfer);
 
+            LOG.info("عملية الإيداع[سداد]");
+            TransactionType transactionTypeDepositPayment = new TransactionType();
+            transactionTypeDepositPayment.setCode("Deposit_Payment");
+            transactionTypeDepositPayment.setName("إيداع[سداد]");
+            transactionTypeDepositPayment.setTransactionType(transactionTypeDeposit);
+            transactionTypeService.save(transactionTypeDepositPayment);
+
             LOG.info("عملية السحب");
             TransactionType transactionTypeWithdraw = new TransactionType();
             transactionTypeWithdraw.setCode("Withdraw");
@@ -131,6 +140,7 @@ public class Initializer implements CommandLineRunner {
             transactionTypeWithdrawCash.setName("سحب[مصروفات]");
             transactionTypeWithdrawCash.setTransactionType(transactionTypeWithdraw);
             transactionTypeService.save(transactionTypeWithdrawCash);
+
         }
 
         if (Lists.newArrayList(personService.findAll()).isEmpty()) {
@@ -171,6 +181,12 @@ public class Initializer implements CommandLineRunner {
                                             "ROLE_PRODUCT_PURCHASE_CREATE",
                                             "ROLE_CONTRACT_CREATE",
                                             "ROLE_CONTRACT_DELETE",
+                                            "ROLE_CONTRACT_PRODUCT_CREATE",
+                                            "ROLE_CONTRACT_PRODUCT_DELETE",
+                                            "ROLE_CONTRACT_PREMIUM_CREATE",
+                                            "ROLE_CONTRACT_PREMIUM_DELETE",
+                                            "ROLE_CONTRACT_PAYMENT_CREATE",
+                                            "ROLE_CONTRACT_PAYMENT_DELETE",
                                             "ROLE_PERSON_CREATE",
                                             "ROLE_PERSON_UPDATE",
                                             "ROLE_PERSON_DELETE",
@@ -193,7 +209,7 @@ public class Initializer implements CommandLineRunner {
         }
     }
 
-    private void init(){
+    private void init() {
 
         LOG.info("تعريف بعض المتغيرات الهامة");
 
@@ -202,6 +218,8 @@ public class Initializer implements CommandLineRunner {
         transactionTypeDeposit = transactionTypeService.findByCode("Deposit");
 
         transactionTypeDepositTransfer = transactionTypeService.findByCode("Deposit_Transfer");
+
+        transactionTypeDepositPayment = transactionTypeService.findByCode("Deposit_Payment");
 
         transactionTypeWithdraw = transactionTypeService.findByCode("Withdraw");
 

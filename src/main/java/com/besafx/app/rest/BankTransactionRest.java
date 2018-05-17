@@ -5,12 +5,10 @@ import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.BankTransaction;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Seller;
-import com.besafx.app.entity.TransactionType;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.BankTransactionSearch;
 import com.besafx.app.service.BankTransactionService;
 import com.besafx.app.service.SellerService;
-import com.besafx.app.service.TransactionTypeService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +35,7 @@ public class BankTransactionRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "bank[**]," +
+            "bank[id,name]," +
             "seller[id,contact[id,shortName]]," +
             "transactionType[id,name]," +
             "person[id,contact[id,shortName]]";
@@ -219,6 +217,14 @@ public class BankTransactionRest {
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        bankTransactionService.findOne(id));
+    }
+
+    @GetMapping(value = "findMyBankTransactions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findMyBankTransactions() {
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       bankTransactionService.findBySeller(caller.getCompany().getSeller()));
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)

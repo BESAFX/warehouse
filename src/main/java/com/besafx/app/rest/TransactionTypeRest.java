@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping(value = "/api/transactionType/")
@@ -36,13 +37,14 @@ public class TransactionTypeRest {
     private NotificationService notificationService;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         this.transactionType = transactionTypeService.findByCode("Withdraw_Cash");
     }
 
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TRANSACTION_TYPE_CREATE')")
+    @Transactional
     public String create(@RequestBody TransactionType transactionType) {
         transactionType.setTransactionType(this.transactionType);
         transactionType = transactionTypeService.save(transactionType);
@@ -56,6 +58,7 @@ public class TransactionTypeRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TRANSACTION_TYPE_UPDATE')")
+    @Transactional
     public String update(@RequestBody TransactionType transactionType) {
         TransactionType object = transactionTypeService.findOne(transactionType.getId());
         if (object != null) {
@@ -74,6 +77,7 @@ public class TransactionTypeRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TRANSACTION_TYPE_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
         TransactionType transactionType = transactionTypeService.findOne(id);
         if (transactionType != null) {

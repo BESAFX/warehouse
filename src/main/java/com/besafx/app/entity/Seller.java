@@ -47,7 +47,10 @@ public class Seller implements Serializable {
     @JoinColumn(name = "seller")
     private Seller seller;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "seller")
+    private List<Contract> contracts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "seller")
     private List<ProductPurchase> productPurchases = new ArrayList<>();
 
     @JsonCreator
@@ -57,10 +60,10 @@ public class Seller implements Serializable {
         return seller;
     }
 
-    public String getShortName(){
+    public String getShortName() {
         try {
             return this.contact.getNickname().concat(" ").concat(this.contact.getName());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "";
         }
     }

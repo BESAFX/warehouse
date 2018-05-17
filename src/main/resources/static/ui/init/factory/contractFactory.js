@@ -6,6 +6,11 @@ app.factory("ContractService",
                     return response.data;
                 });
             },
+            findMyContracts: function () {
+                return $http.get("/api/contract/findMyContracts").then(function (response) {
+                    return response.data;
+                });
+            },
             create: function (contract) {
                 return $http.post("/api/contract/create", contract).then(function (response) {
                     return response.data;

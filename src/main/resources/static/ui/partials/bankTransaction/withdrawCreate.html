@@ -55,7 +55,8 @@
                         <div class="mdl-menu__item--full-bleed-divider"></div>
                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                             <span class="mdl-list__item-primary-content">
-                                <span class="material-icons mdl-list__item-avatar" style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
+                                <span class="material-icons mdl-list__item-avatar"
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
                                 <div ng-bind-html="seller.name | highlight: $select.search"></div>
                                 <span class="mdl-list__item-sub-title">
                                     <span>رقم المستثمر / </span>
@@ -76,7 +77,8 @@
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                                     ng-disabled="buffer.last"
                                     style="width: 100%; margin-top: 5px;"
-                                    ng-click="searchSellers($select, $event);">تحميل المزيد</button>
+                                    ng-click="searchSellers($select, $event);">تحميل المزيد
+                            </button>
                         </div>
 
                     </ui-select-choices>

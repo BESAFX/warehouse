@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping(value = "/api/team/")
 public class TeamRest {
@@ -35,6 +37,7 @@ public class TeamRest {
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_CREATE')")
+    @Transactional
     public String create(@RequestBody Team team) {
         Team topTeam = teamService.findTopByOrderByCodeDesc();
         if (topTeam == null) {
@@ -53,6 +56,7 @@ public class TeamRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_UPDATE')")
+    @Transactional
     public String update(@RequestBody Team team) {
         if (teamService.findByCodeAndIdIsNot(team.getCode(), team.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
@@ -73,6 +77,7 @@ public class TeamRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TEAM_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
         Team team = teamService.findOne(id);
         if (team != null) {

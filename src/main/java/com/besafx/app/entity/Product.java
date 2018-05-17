@@ -61,4 +61,36 @@ public class Product implements Serializable {
         Product product = mapper.readValue(jsonString, Product.class);
         return product;
     }
+
+    public Double getTotalQuantity() {
+        try {
+            return this.productPurchases
+                    .stream()
+                    .mapToDouble(ProductPurchase::getQuantity)
+                    .sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getSoledQuantity() {
+        try {
+            return this.productPurchases
+                    .stream()
+                    .flatMap(productPurchase -> productPurchase.getContractProducts().stream())
+                    .mapToDouble(ContractProduct::getQuantity)
+                    .sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getRemainQuantity() {
+        try {
+            return this.getTotalQuantity() - this.getSoledQuantity();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
 }

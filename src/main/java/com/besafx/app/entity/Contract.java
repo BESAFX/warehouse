@@ -73,6 +73,9 @@ public class Contract implements Serializable {
     @OneToMany(mappedBy = "contract")
     private List<ContractPremium> contractPremiums = new ArrayList<>();
 
+    @OneToMany(mappedBy = "contract")
+    private List<ContractPayment> contractPayments = new ArrayList<>();
+
     @JsonCreator
     public static Contract Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -80,29 +83,51 @@ public class Contract implements Serializable {
         return contract;
     }
 
-    public Double getTotalPrice(){
-        try{
+    public Double getTotalPrice() {
+        try {
             return this.contractProducts
                     .stream()
                     .mapToDouble(contractProduct -> contractProduct.getQuantity() * contractProduct.getUnitSellPrice())
                     .sum();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }
 
-    public Double getPaid(){
-        try{
-            return 0.0;
-        }catch (Exception ex){
+    public Double getTotalPremium() {
+        try {
+            return this.contractPremiums
+                    .stream()
+                    .mapToDouble(ContractPremium::getAmount)
+                    .sum();
+        } catch (Exception ex) {
             return 0.0;
         }
     }
 
-    public Double getRemain(){
-        try{
+    public Double getRemainPremium() {
+        try {
+            return this.getTotalPrice() - this.getTotalPremium();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getPaid() {
+        try {
+            return this.contractPayments
+                    .stream()
+                    .mapToDouble(ContractPayment::getAmount)
+                    .sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getRemain() {
+        try {
             return getTotalPrice() - getPaid();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }

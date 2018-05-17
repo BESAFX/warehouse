@@ -1,16 +1,13 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
-import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.BankTransaction;
 import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Product;
 import com.besafx.app.entity.ProductPurchase;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.ProductPurchaseSearch;
 import com.besafx.app.service.BankTransactionService;
 import com.besafx.app.service.ProductPurchaseService;
-import com.besafx.app.service.ProductService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/productPurchase/")
@@ -114,11 +112,43 @@ public class ProductPurchaseRest {
                                        productPurchaseService.findOne(id));
     }
 
+    @GetMapping(value = "findMyProductPurchases", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findMyProductPurchases() {
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       productPurchaseService.findBySeller(caller.getCompany().getSeller()));
+    }
+
     @GetMapping(value = "findBySeller/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findBySeller(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        productPurchaseService.findBySellerId(id));
+    }
+
+    @GetMapping(value = "findBySellerAndRemainFull/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findBySellerAndRemainFull(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       productPurchaseService
+                                               .findBySellerId(id)
+                                               .stream()
+                                               .filter(productPurchase -> productPurchase.getRemain() > 0)
+                                               .collect(Collectors.toList())
+                                      );
+    }
+
+    @GetMapping(value = "findBySellerAndRemainEmpty/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findBySellerAndRemainEmpty(@PathVariable Long id) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+                                       productPurchaseService
+                                               .findBySellerId(id)
+                                               .stream()
+                                               .filter(productPurchase -> productPurchase.getRemain() <= 0)
+                                               .collect(Collectors.toList())
+                                      );
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)

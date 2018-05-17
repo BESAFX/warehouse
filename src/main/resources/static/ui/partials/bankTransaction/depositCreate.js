@@ -31,8 +31,8 @@ app.controller('depositCreateCtrl', ['SellerService', 'BankTransactionService', 
             search.push($scope.page);
             search.push('&');
 
-            switch ($scope.buffer.searchBy){
-                case "name":{
+            switch ($scope.buffer.searchBy) {
+                case "name": {
                     search.push('name=');
                     search.push($select.search);
                     search.push('&');

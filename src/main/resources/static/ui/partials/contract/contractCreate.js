@@ -108,7 +108,7 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
         };
 
         $scope.findProductPurchasesBySeller = function (seller) {
-            ProductPurchaseService.findBySeller(seller.id).then(function (value) {
+            ProductPurchaseService.findBySellerAndRemainFull(seller.id).then(function (value) {
                 $scope.productPurchases = [];
                 $scope.capitalCash = 0;
                 $scope.profitPercentage = 0;
@@ -176,16 +176,20 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
             //ربط الأصناف بالعقد
             $scope.contract.contractProducts = [];
             angular.forEach($scope.productPurchases, function (productPurchase) {
-                var contractProduct = {};
-                contractProduct.quantity = productPurchase.requiredQuantity;
-                contractProduct.unitSellPrice = productPurchase.unitSellPrice;
-                contractProduct.productPurchase = productPurchase;
-                $scope.contract.contractProducts.push(contractProduct);
+                if (productPurchase.requiredQuantity > 0) {
+                    var contractProduct = {};
+                    contractProduct.quantity = productPurchase.requiredQuantity;
+                    contractProduct.unitSellPrice = productPurchase.unitSellPrice;
+                    contractProduct.productPurchase = productPurchase;
+                    $scope.contract.contractProducts.push(contractProduct);
+                }
             });
             //ربط الأقساط بالعقد
             $scope.contract.contractPremiums = [];
             angular.forEach($scope.contractPremiums, function (contractPremium) {
-                $scope.contract.contractPremiums.push(contractPremium);
+                if (contractPremium.amount > 0) {
+                    $scope.contract.contractPremiums.push(contractPremium);
+                }
             });
             ContractService.create($scope.contract).then(function (data) {
                 ContractService.findOne(data.id).then(function (value) {

@@ -94,7 +94,7 @@
         </div>
         <div class="panel-body">
 
-            <div class="form-group row" ng-if="pageBankTransaction.totalElements > 0 && (toggleList===1 || toggleList===2)">
+            <div class="form-group row" ng-if="pageProductPurchase.totalElements > 0">
 
                 <div class="pull-right btn-toolbar">
 
@@ -102,7 +102,7 @@
 
                         <button uib-tooltip="السابق"
                                 tooltip-append-to-body="true"
-                                ng-disabled="pageBankTransaction.first"
+                                ng-disabled="pageProductPurchase.first"
                                 type="button"
                                 ng-click="selectPrevProductPurchasePage()"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
@@ -115,16 +115,24 @@
                                    readonly
                                    class="form-control"
                                    style="text-align: center!important;"
-                                   ng-model="pageBankTransaction.currentPageString">
+                                   ng-model="pageProductPurchase.currentPageString">
                         </div>
 
                         <button uib-tooltip="التالي"
                                 tooltip-append-to-body="true"
-                                ng-disabled="pageBankTransaction.last"
+                                ng-disabled="pageProductPurchase.last"
                                 type="button"
                                 ng-click="selectNextProductPurchasePage()"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
                             <i class="material-icons md-36">keyboard_arrow_left</i>
+                        </button>
+
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printProductPurchaseTable', 'سجل المخزون')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
                         </button>
 
                     </div>
@@ -143,7 +151,7 @@
 
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row" id="printProductPurchaseTable">
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -193,19 +201,22 @@
                             <td>{{$index+1}}</td>
                             <td>{{productPurchase.code}}</td>
                             <td>{{productPurchase.product.name}}</td>
-                            <td class="fit">
-                                <span ng-show="dateType==='H'">{{productPurchase.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                <span ng-show="dateType==='G'">{{productPurchase.date | date: 'yyyy-MM-dd'}}</span>
-                                <span class="label label-info">{{productPurchase.date | date: 'hh:mm a'}}</span>
+                            <td>
+                                <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{productPurchase.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{productPurchase.date | date: 'yyyy-MM-dd'}}</span>
+                                <span class="label label-info no-print">{{productPurchase.date | date: 'hh:mm a'}}</span>
                             </td>
                             <td>{{productPurchase.seller.contact.shortName}}</td>
                             <td>{{productPurchase.quantity}}</td>
                             <td>{{productPurchase.unitPurchasePrice | currency:' SAR ':2}}</td>
-                            <td>{{productPurchase.remain}}</td>
+                            <td
+                                ng-class="{'success': productPurchase.remain > 0, 'danger': productPurchase.remain <=0}">
+                                <span>{{productPurchase.remain}}</span>
+                            </td>
                             <td>{{productPurchase.person.contact.shortName}}</td>
                         </tr>
-                        <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                            ng-show="!productPurchases || productPurchases.length ==0">
+                        <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
+                            ng-if="!productPurchases || productPurchases.length ==0">
                             <td colspan="9">
                                 <p>
                                     <span>لا توجد سلع حتى الآن </span>

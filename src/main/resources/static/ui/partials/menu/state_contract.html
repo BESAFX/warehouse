@@ -136,6 +136,14 @@
                             <i class="material-icons md-36">keyboard_arrow_left</i>
                         </button>
 
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printContractTable', 'سجل العقود')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
                     </div>
 
                 </div>
@@ -152,97 +160,103 @@
 
             </div>
 
-            <div class="row" ng-show="toggleList===1">
+            <div class="row" ng-show="toggleList===1" id="printContractTable">
 
                 <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th class="fit no-print">
-                            <label id="checkAllContracts" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
-                                   for="checkbox-0">
-                                <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
-                                       ng-model="contracts.checkAll" ng-change="checkAllContracts()">
-                            </label>
-                        </th>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="fit no-print">
+                                <label id="checkAllContracts" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                                       for="checkbox-0">
+                                    <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
+                                           ng-model="contracts.checkAll" ng-change="checkAllContracts()">
+                                </label>
+                            </th>
 
-                        <th>
-                            <span>#</span>
-                        </th>
+                            <th>
+                                <span>#</span>
+                            </th>
 
-                        <th>
-                            <span>العميل</span>
-                        </th>
+                            <th>
+                                <span>رقم العقد</span>
+                            </th>
 
-                        <th>
-                            <span>جوال العميل</span>
-                        </th>
+                            <th>
+                                <span>العميل</span>
+                            </th>
 
-                        <th>
-                            <span>المستثمر</span>
-                        </th>
+                            <th>
+                                <span>جوال العميل</span>
+                            </th>
 
-                        <th>
-                            <span>المبلغ</span>
-                        </th>
+                            <th>
+                                <span>المستثمر</span>
+                            </th>
 
-                        <th>
-                            <span>المدفوع</span>
-                        </th>
+                            <th>
+                                <span>المبلغ</span>
+                            </th>
 
-                        <th>
-                            <span>المتبقي</span>
-                        </th>
+                            <th>
+                                <span>المدفوع</span>
+                            </th>
 
-                        <th>
-                            <span>آخر عملية دفع</span>
-                        </th>
+                            <th>
+                                <span>المتبقي</span>
+                            </th>
 
-                        <th>
-                            <span>بواسطة</span>
-                        </th>
+                            <th>
+                                <span>آخر عملية دفع</span>
+                            </th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="contract in contracts | filter:contracts.searchText"
-                        ng-class="{'mdl-color--primary-dark' : contract.isSelected, 'mdl-color-text--white' : contract.isSelected}"
-                        context-menu="rowMenuContract">
-                        <td class="fit no-print">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
-                                   for="checkbox-contract-{{contract.id}}">
-                                <input type="checkbox"
-                                       id="checkbox-contract-{{contract.id}}"
-                                       class="mdl-checkbox__input"
-                                       ng-model="contract.isSelected" ng-click="checkContract()">
-                            </label>
-                        </td>
-                        <td>{{$index+1}}</td>
-                        <td>{{contract.customer.contact.shortName}}</td>
-                        <td>{{contract.customer.contact.mobile}}</td>
-                        <td>{{contract.seller.contact.shortName}}</td>
-                        <td>{{contract.totalPrice}}</td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <span ng-show="dateType==='H'">{{contract.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-show="dateType==='G'">{{contract.date | date: 'yyyy-MM-dd'}}</span>
-                            <span class="label label-info">{{contract.date | date: 'hh:mm a'}}</span>
-                        </td>
-                        <td>{{contract.person.contact.shortName}}</td>
-                    </tr>
-                    <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                        ng-show="!contracts || contracts.length ==0">
-                        <td colspan="10">
-                            <p ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
-                                <span>لا توجد عقود حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
-                                <a href="" ng-click="newContract()">اضغط هنا</a>
-                            </p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                            <th>
+                                <span>بواسطة</span>
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="contract in contracts | filter:contracts.searchText"
+                            ng-class="{'mdl-color--primary-dark' : contract.isSelected, 'mdl-color-text--white' : contract.isSelected}"
+                            ng-dblclick="ModalProvider.openContractDetailsModel(contract)"
+                            context-menu="rowMenuContract">
+                            <td class="fit no-print">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
+                                       for="checkbox-contract-{{contract.id}}">
+                                    <input type="checkbox"
+                                           id="checkbox-contract-{{contract.id}}"
+                                           class="mdl-checkbox__input"
+                                           ng-model="contract.isSelected" ng-click="checkContract()">
+                                </label>
+                            </td>
+                            <td>{{$index+1}}</td>
+                            <td>{{contract.code}}</td>
+                            <td>{{contract.customer.contact.shortName}}</td>
+                            <td>{{contract.customer.contact.mobile}}</td>
+                            <td>{{contract.seller.contact.shortName}}</td>
+                            <td>{{contract.totalPrice | currency:' SAR':2}}</td>
+                            <td>{{contract.paid | currency:' SAR':2}}</td>
+                            <td>{{contract.remain | currency:' SAR':2}}</td>
+                            <td>
+                                <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.date | date: 'yyyy-MM-dd'}}</span>
+                                <span class="label label-info no-print">{{contract.date | date: 'hh:mm a'}}</span>
+                            </td>
+                            <td>{{contract.person.contact.shortName}}</td>
+                        </tr>
+                        <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
+                            ng-if="!contracts || contracts.length ==0">
+                            <td colspan="11">
+                                <p ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
+                                    <span>لا توجد عقود حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
+                                    <a href="" ng-click="newContract()">اضغط هنا</a>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 
@@ -291,7 +305,8 @@
                                         ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])"
                                         ng-click="newContract();"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
+                                         height="24">
                                 </button>
                                 <button uib-tooltip="تعديل"
                                         tooltip-append-to-body="true"
@@ -299,7 +314,8 @@
                                         ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_UPDATE'])"
                                         ng-click="ModalProvider.openContractUpdateModel(contract)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24" height="24">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24"
+                                         height="24">
                                 </button>
                                 <button uib-tooltip="حذف"
                                         tooltip-append-to-body="true"
@@ -307,7 +323,8 @@
                                         ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_DELETE'])"
                                         ng-click="deleteContract(contract)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24"
+                                         height="24">
                                 </button>
                             </div>
                         </div>

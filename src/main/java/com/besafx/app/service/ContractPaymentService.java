@@ -6,6 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public interface ContractPaymentService extends PagingAndSortingRepository<ContractPayment, Long>, JpaSpecificationExecutor<ContractPayment> {
@@ -13,4 +15,6 @@ public interface ContractPaymentService extends PagingAndSortingRepository<Contr
     ContractPayment findTopByOrderByCodeDesc();
 
     ContractPayment findByCodeAndIdIsNot(Integer code, Long id);
+
+    List<ContractPayment> findByContractId(Long id);
 }

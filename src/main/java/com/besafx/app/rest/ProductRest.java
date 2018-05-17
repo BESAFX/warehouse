@@ -10,7 +10,6 @@ import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
-import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping(value = "/api/product/")
@@ -44,6 +43,7 @@ public class ProductRest {
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PRODUCT_CREATE')")
+    @Transactional
     public String create(@RequestBody Product product) {
         Product topProduct = productService.findTopByOrderByCodeDesc();
         if (topProduct == null) {
@@ -66,6 +66,7 @@ public class ProductRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PRODUCT_UPDATE')")
+    @Transactional
     public String update(@RequestBody Product product) {
         if (productService.findByCodeAndIdIsNot(product.getCode(), product.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
@@ -90,6 +91,7 @@ public class ProductRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PRODUCT_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
         Product product = productService.findOne(id);
         if (product != null) {

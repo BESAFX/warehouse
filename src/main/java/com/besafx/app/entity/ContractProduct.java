@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Entity

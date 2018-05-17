@@ -1,9 +1,7 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
-import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
-import com.besafx.app.init.Initializer;
 import com.besafx.app.search.ContractSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
@@ -21,8 +19,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/contract/")
@@ -34,8 +34,22 @@ public class ContractRest {
             "**," +
             "customer[id,contact[id,mobile,shortName]]," +
             "seller[id,contact[id,mobile,shortName]]," +
+            "-sponsor1," +
+            "-sponsor2," +
             "-contractProducts," +
             "-contractPremiums," +
+            "-contractPayments," +
+            "person[id,contact[id,shortName]]";
+
+    private final String FILTER_DETAILS = "" +
+            "**," +
+            "seller[id,contact[id,mobile,shortName]]," +
+            "customer[id,contact[id,mobile,shortName]]," +
+            "sponsor1[id,contact[id,mobile,shortName]]," +
+            "sponsor2[id,contact[id,mobile,shortName]]," +
+            "contractProducts[**,-contract,productPurchase[id,product[id,name]]]," +
+            "contractPremiums[**,-contract,-contractPayments]," +
+            "contractPayments[**,person[id,contact[id,shortName]],-contract,-contractPremium,-bankTransaction]," +
             "person[id,contact[id,shortName]]";
 
     @Autowired
@@ -43,6 +57,12 @@ public class ContractRest {
 
     @Autowired
     private ContractProductService contractProductService;
+
+    @Autowired
+    private BankTransactionService bankTransactionService;
+
+    @Autowired
+    private ContractPaymentService contractPaymentService;
 
     @Autowired
     private ContractPremiumService contractPremiumService;
@@ -56,6 +76,7 @@ public class ContractRest {
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_CONTRACT_CREATE')")
+    @Transactional
     public String create(@RequestBody Contract contract) {
         Contract topContract = contractService.findTopByOrderByCodeDesc();
         if (topContract == null) {
@@ -69,14 +90,14 @@ public class ContractRest {
         contract = contractService.save(contract);
         LOG.info("ربط الأصناف المطلوبة مع العقد");
         ListIterator<ContractProduct> contractProductListIterator = contract.getContractProducts().listIterator();
-        while (contractProductListIterator.hasNext()){
+        while (contractProductListIterator.hasNext()) {
             ContractProduct contractProduct = contractProductListIterator.next();
             contractProduct.setContract(contract);
             contractProductListIterator.set(contractProductService.save(contractProduct));
         }
         LOG.info("ربط الأقساط مع العقد");
         ListIterator<ContractPremium> contractPremiumListIterator = contract.getContractPremiums().listIterator();
-        while (contractPremiumListIterator.hasNext()){
+        while (contractPremiumListIterator.hasNext()) {
             ContractPremium contractPremium = contractPremiumListIterator.next();
             contractPremium.setContract(contract);
             contractPremiumListIterator.set(contractPremiumService.save(contractPremium));
@@ -85,7 +106,7 @@ public class ContractRest {
         builder.append("تم إنشاء العقد بنجاح بمجموع أسعار = ");
         builder.append(contract.getTotalPrice());
         builder.append("، وأصناف عدد " + contract.getContractProducts().size() + " صنف");
-        builder.append("، تسدد على " + contract.getContractPremiums().size() +  " قسط");
+        builder.append("، تسدد على " + contract.getContractPremiums().size() + " قسط");
         notificationService.notifyAll(Notification
                                               .builder()
                                               .message(builder.toString())
@@ -96,22 +117,47 @@ public class ContractRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_CONTRACT_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
         Contract contract = contractService.findOne(id);
         if (contract != null) {
+            LOG.info("حذف كل سلع العقد");
+            contractProductService.delete(contract.getContractProducts());
+            LOG.info("حذف كل معاملات البنك لدفعات العقد");
+            bankTransactionService.delete(
+                    contract
+                            .getContractPayments()
+                            .stream()
+                            .map(ContractPayment::getBankTransaction)
+                            .collect(Collectors.toList())
+                                         );
+            LOG.info("حذف كل دفعات العقد");
+            contractPaymentService.delete(contract.getContractPayments());
+            LOG.info("حذف كل أقساط العقد");
+            contractPremiumService.delete(contract.getContractPremiums());
+            LOG.info("حذف العقد");
             contractService.delete(id);
-            notificationService.notifyAll(Notification
-                                                  .builder()
-                                                  .message("تم حذف العقد وكل ما يتعلق به من حسابات بنجاح")
-                                                  .type("error").build());
+            notificationService.notifyAll(
+                    Notification
+                            .builder()
+                            .message("تم حذف العقد وكل ما يتعلق به من حسابات بنجاح")
+                            .type("error").build());
         }
     }
 
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
                                        contractService.findOne(id));
+    }
+
+    @GetMapping(value = "findMyContracts", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findMyContracts() {
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
+                                       contractService.findBySeller(caller.getCompany().getSeller()));
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)

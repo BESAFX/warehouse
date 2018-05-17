@@ -4,6 +4,8 @@ app.controller("menuCtrl", [
     'SellerService',
     'ProductPurchaseService',
     'ContractService',
+    'ContractPremiumService',
+    'BankService',
     'BankTransactionService',
     'AttachTypeService',
     'PersonService',
@@ -19,6 +21,8 @@ app.controller("menuCtrl", [
               SellerService,
               ProductPurchaseService,
               ContractService,
+              ContractPremiumService,
+              BankService,
               BankTransactionService,
               AttachTypeService,
               PersonService,
@@ -54,6 +58,10 @@ app.controller("menuCtrl", [
                 }
                 case 'contract': {
                     $scope.pageTitle = 'العقود';
+                    break;
+                }
+                case 'contractPremium': {
+                    $scope.pageTitle = 'الاقساط والدفعات';
                     break;
                 }
                 case 'bankTransaction': {
@@ -118,6 +126,11 @@ app.controller("menuCtrl", [
             $scope.searchContracts({});
             $rootScope.refreshGUI();
         };
+        $scope.openStateContractPremium = function () {
+            $scope.toggleState = 'contractPremium';
+            $scope.searchContractPremiums({});
+            $rootScope.refreshGUI();
+        };
         $scope.openStateBankTransaction = function () {
             $scope.toggleState = 'bankTransaction';
             $scope.searchBankTransactions({});
@@ -145,6 +158,7 @@ app.controller("menuCtrl", [
         };
         $scope.openStateReport = function () {
             $scope.toggleState = 'report';
+            $scope.toggleReport = 'mainReportFrame';
             $rootScope.refreshGUI();
         };
 
@@ -168,6 +182,26 @@ app.controller("menuCtrl", [
                 CompanyService.update($scope.selectedCompany).then(function (data) {
                     $scope.selectedCompany = data;
                 });
+            });
+        };
+        $scope.findMyContracts = function () {
+            ContractService.findMyContracts().then(function (value) {
+                $scope.myContracts = value;
+            });
+        };
+        $scope.findMyBanks = function () {
+            BankService.findMyBanks().then(function (value) {
+                $scope.myBanks = value;
+            });
+        };
+        $scope.findMyBankTransactions = function () {
+            BankTransactionService.findMyBankTransactions().then(function (value) {
+                $scope.myBankTransactions = value;
+            });
+        };
+        $scope.findMyProductPurchases = function () {
+            ProductPurchaseService.findMyProductPurchases().then(function (value) {
+                $scope.myProductPurchases = value;
             });
         };
 
@@ -622,7 +656,8 @@ app.controller("menuCtrl", [
 
             modalInstance.result.then(function (paramProductPurchase) {
                 $scope.searchProductPurchases(paramProductPurchase);
-            }, function () {});
+            }, function () {
+            });
         };
         $scope.searchProductPurchases = function (paramProductPurchase) {
             var search = [];
@@ -637,7 +672,7 @@ app.controller("menuCtrl", [
                 search.push(sortBy.name + ',' + sortBy.direction);
                 search.push('&');
             });
-            if($scope.pageProductPurchase.sorts.length === 0){
+            if ($scope.pageProductPurchase.sorts.length === 0) {
                 search.push('sort=date,desc&');
             }
             //ProductPurchase Filters
@@ -797,7 +832,8 @@ app.controller("menuCtrl", [
 
             modalInstance.result.then(function (paramContract) {
                 $scope.searchContracts(paramContract);
-            }, function () {});
+            }, function () {
+            });
         };
         $scope.searchContracts = function (paramContract) {
             var search = [];
@@ -812,7 +848,7 @@ app.controller("menuCtrl", [
                 search.push(sortBy.name + ',' + sortBy.direction);
                 search.push('&');
             });
-            if($scope.pageContract.sorts.length === 0){
+            if ($scope.pageContract.sorts.length === 0) {
                 search.push('sort=date,desc&');
             }
             //Contract Filters
@@ -968,6 +1004,30 @@ app.controller("menuCtrl", [
                 }
             });
         };
+        $scope.newContractProduct = function (contract) {
+            ModalProvider.openContractProductCreateModel(contract).result.then(function (data) {
+                if (!contract.contractProducts) {
+                    contract.contractProducts = [];
+                }
+                return contract.contractProducts.splice(0, 0, data);
+            });
+        };
+        $scope.newContractPremium = function (contract) {
+            ModalProvider.openContractPremiumCreateModel(contract).result.then(function (data) {
+                if (!contract.contractPremiums) {
+                    contract.contractPremiums = [];
+                }
+                return contract.contractPremiums.splice(0, 0, data);
+            });
+        };
+        $scope.newContractPayment = function (contract) {
+            ModalProvider.openContractPaymentCreateModel(contract).result.then(function (data) {
+                if (!contract.contractPayments) {
+                    contract.contractPayments = [];
+                }
+                return contract.contractPayments.splice(0, 0, data);
+            });
+        };
         $scope.rowMenuContract = [
             {
                 html: '<div class="drop-menu">' +
@@ -992,8 +1052,188 @@ app.controller("menuCtrl", [
                 click: function ($itemScope, $event, value) {
                     $scope.deleteContract($itemScope.contract);
                 }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/product.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>اضافة سلعة...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_PRODUCT_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.newContractProduct($itemScope.contract);
+                }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/calendar.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>اضافة قسط...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.newContractPremium($itemScope.contract);
+                }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/bankTransaction.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>تسديد دفعة مالية...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_PAYMENT_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+                    $scope.newContractPayment($itemScope.contract);
+                }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/about.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>التفاصيل...</span>' +
+                '</div>',
+                enabled: function () {
+                    return true;
+                },
+                click: function ($itemScope, $event, value) {
+                    ModalProvider.openContractDetailsModel($itemScope.contract);
+                }
             }
         ];
+
+        /**************************************************************************************************************
+         *                                                                                                            *
+         * ContractPremium                                                                                            *
+         *                                                                                                            *
+         **************************************************************************************************************/
+        $scope.contractPremiums = [];
+        $scope.paramContractPremium = {};
+        $scope.contractPremiums.checkAll = false;
+
+        $scope.pageContractPremium = {};
+        $scope.pageContractPremium.sorts = [];
+        $scope.pageContractPremium.page = 0;
+        $scope.pageContractPremium.totalPages = 0;
+        $scope.pageContractPremium.currentPage = $scope.pageContractPremium.page + 1;
+        $scope.pageContractPremium.currentPageString = ($scope.pageContractPremium.page + 1) + ' / ' + $scope.pageContractPremium.totalPages;
+        $scope.pageContractPremium.size = 25;
+        $scope.pageContractPremium.first = true;
+        $scope.pageContractPremium.last = true;
+
+        $scope.openContractPremiumsFilter = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/contractPremium/contractPremiumFilter.html',
+                controller: 'contractPremiumFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            modalInstance.result.then(function (paramContractPremium) {
+                $scope.searchContractPremiums(paramContractPremium);
+            }, function () {
+            });
+        };
+        $scope.searchContractPremiums = function (paramContractPremium) {
+            var search = [];
+            search.push('size=');
+            search.push($scope.pageContractPremium.size);
+            search.push('&');
+            search.push('page=');
+            search.push($scope.pageContractPremium.page);
+            search.push('&');
+            angular.forEach($scope.pageContractPremium.sorts, function (sortBy) {
+                search.push('sort=');
+                search.push(sortBy.name + ',' + sortBy.direction);
+                search.push('&');
+            });
+            if ($scope.pageContractPremium.sorts.length === 0) {
+                search.push('sort=dueDate,desc&');
+            }
+            if (paramContractPremium.dueDateFrom) {
+                search.push('dueDateFrom=');
+                search.push(paramContractPremium.dueDateFrom.getTime());
+                search.push('&');
+            }
+            if (paramContractPremium.dueDateTo) {
+                search.push('dueDateTo=');
+                search.push(paramContractPremium.dueDateTo.getTime());
+                search.push('&');
+            }
+            if (paramContractPremium.contractCodeFrom) {
+                search.push('contractCodeFrom=');
+                search.push(paramContractPremium.contractCodeFrom);
+                search.push('&');
+            }
+            if (paramContractPremium.contractCodeTo) {
+                search.push('contractCodeTo=');
+                search.push(paramContractPremium.contractCodeTo);
+                search.push('&');
+            }
+            if (paramContractPremium.contractDateFrom) {
+                search.push('contractDateFrom=');
+                search.push(paramContractPremium.contractDateFrom.getTime());
+                search.push('&');
+            }
+            if (paramContractPremium.contractDateTo) {
+                search.push('contractDateTo=');
+                search.push(paramContractPremium.contractDateTo.getTime());
+                search.push('&');
+            }
+            if (paramContractPremium.customerName) {
+                search.push('customerName=');
+                search.push(paramContractPremium.customerName);
+                search.push('&');
+            }
+            if (paramContractPremium.customerMobile) {
+                search.push('customerMobile=');
+                search.push(paramContractPremium.customerMobile);
+                search.push('&');
+            }
+            if (paramContractPremium.sellerName) {
+                search.push('sellerName=');
+                search.push(paramContractPremium.sellerName);
+                search.push('&');
+            }
+            if (paramContractPremium.sellerMobile) {
+                search.push('sellerMobile=');
+                search.push(paramContractPremium.sellerMobile);
+                search.push('&');
+            }
+
+            search.push('filterCompareType=or');
+
+            ContractPremiumService.filter(search.join("")).then(function (data) {
+                $scope.contractPremiums = data.content;
+
+                $scope.pageContractPremium.currentPage = $scope.pageContractPremium.page + 1;
+                $scope.pageContractPremium.first = data.first;
+                $scope.pageContractPremium.last = data.last;
+                $scope.pageContractPremium.number = data.number;
+                $scope.pageContractPremium.numberOfElements = data.numberOfElements;
+                $scope.pageContractPremium.size = data.size;
+                $scope.pageContractPremium.totalElements = data.totalElements;
+                $scope.pageContractPremium.totalPages = data.totalPages;
+                $scope.pageContractPremium.currentPageString = ($scope.pageContractPremium.page + 1) + ' / ' + $scope.pageContractPremium.totalPages;
+
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
+        $scope.selectNextContractPremiumsPage = function () {
+            $scope.pageContractPremium.page++;
+            $scope.searchContractPremiums($scope.paramContractPremium);
+        };
+        $scope.selectPrevContractPremiumsPage = function () {
+            $scope.pageContractPremium.page--;
+            $scope.searchContractPremiums($scope.paramContractPremium);
+        };
 
         /**************************************************************************************************************
          *                                                                                                            *
@@ -1028,7 +1268,8 @@ app.controller("menuCtrl", [
 
             modalInstance.result.then(function (paramBankTransaction) {
                 $scope.searchBankTransactions(paramBankTransaction);
-            }, function () {});
+            }, function () {
+            });
         };
         $scope.searchBankTransactions = function (paramBankTransaction) {
             var search = [];
@@ -1043,7 +1284,7 @@ app.controller("menuCtrl", [
                 search.push(sortBy.name + ',' + sortBy.direction);
                 search.push('&');
             });
-            if($scope.pageBankTransaction.sorts.length === 0){
+            if ($scope.pageBankTransaction.sorts.length === 0) {
                 search.push('sort=date,desc&');
             }
             if (paramBankTransaction.codeFrom) {
@@ -1265,7 +1506,7 @@ app.controller("menuCtrl", [
          * Print                                                                                                      *
          *                                                                                                            *
          **************************************************************************************************************/
-        $scope.printToCart = function (printSectionId) {
+        $scope.printToCart = function (printSectionId, title) {
             var innerContents = document.getElementById(printSectionId).innerHTML;
             var popupWindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
             popupWindow.document.open();
@@ -1275,10 +1516,33 @@ app.controller("menuCtrl", [
                 '<link rel="stylesheet" type="text/css" href="/ui/app.css" />' +
                 '<link rel="stylesheet" type="text/css" href="/ui/css/style.css" />' +
                 '</head>' +
-                '<body onload="window.print()">' + innerContents + '' +
+                '<body onload="window.print()">' +
+                '<h4>' + title + '</h4>' +
+                innerContents + '' +
+                '</body>' +
                 '</html>'
             );
             popupWindow.document.close();
+        };
+
+        /**************************************************************************************************************
+         *                                                                                                            *
+         * Report                                                                                                     *
+         *                                                                                                            *
+         **************************************************************************************************************/
+        $scope.toggleReport = 'mainReportFrame';
+        $scope.fetchAllBanks = function () {
+            BankService.findAll().then(function (value) {
+                $scope.banks = value;
+            });
+        };
+        $scope.openReportCashBalance = function () {
+            $scope.toggleReport = 'cashBalance';
+            $rootScope.refreshGUI();
+        };
+        $scope.openReportWithdrawCash = function () {
+            $scope.toggleReport = 'withdrawCash';
+            $rootScope.refreshGUI();
         };
 
         $timeout(function () {

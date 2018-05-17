@@ -67,13 +67,13 @@ public class ProductPurchase implements Serializable {
         return productPurchase;
     }
 
-    public Double getRemain(){
-        try{
+    public Double getRemain() {
+        try {
             return this.quantity - this.contractProducts
                     .stream()
                     .mapToDouble(ContractProduct::getQuantity)
                     .sum();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0.0;
         }
     }

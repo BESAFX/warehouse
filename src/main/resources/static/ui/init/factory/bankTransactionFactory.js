@@ -15,17 +15,22 @@ app.factory("BankTransactionService",
                 return $http
                     .get("/api/bankTransaction/createTransfer/" + amount + "/" + fromSellerId + "/" + toSellerId + "/" + note)
                     .then(function (response) {
-                    return response.data;
-                });
+                        return response.data;
+                    });
             },
             createWithdrawCash: function (amount, note) {
                 return $http.get("/api/bankTransaction/createWithdrawCash/" + amount + "/" + note)
                     .then(function (response) {
-                    return response.data;
-                });
+                        return response.data;
+                    });
             },
             findOne: function (id) {
                 return $http.get("/api/bankTransaction/findOne/" + id).then(function (response) {
+                    return response.data;
+                });
+            },
+            findMyBankTransactions: function () {
+                return $http.get("/api/bankTransaction/findMyBankTransactions").then(function (response) {
                     return response.data;
                 });
             },

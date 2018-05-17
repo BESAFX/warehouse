@@ -37,8 +37,8 @@ app.controller('transferCreateCtrl', ['SellerService', 'BankTransactionService',
             search.push($scope.page);
             search.push('&');
 
-            switch ($scope.buffer.searchBy){
-                case "name":{
+            switch ($scope.buffer.searchBy) {
+                case "name": {
                     search.push('name=');
                     search.push($select.search);
                     search.push('&');
@@ -67,8 +67,8 @@ app.controller('transferCreateCtrl', ['SellerService', 'BankTransactionService',
             BankTransactionService
                 .createTransfer($scope.buffer.amount, $scope.buffer.fromSeller.id, $scope.buffer.toSeller.id, $scope.buffer.note)
                 .then(function (data) {
-                $uibModalInstance.close(data);
-            });
+                    $uibModalInstance.close(data);
+                });
         };
 
         $scope.cancel = function () {

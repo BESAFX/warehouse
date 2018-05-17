@@ -50,33 +50,48 @@ public class ContractSearch {
                                 ) {
         List<Specification<Contract>> predicates = new ArrayList<>();
         //Contract Specification
-        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"),  value)));
-        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"),  value)));
-        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"),  new DateTime(value).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"),  new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
+        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime
+                (value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value)
+                .plusDays(1).withTimeAtStartOfDay().toDate())));
         //Customer Specification
-        Optional.ofNullable(customerCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("customer").get("code"),  value)));
-        Optional.ofNullable(customerCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("customer").get("code"),  value)));
-        Optional.ofNullable(customerRegisterDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("customer").get("registerDate"),  new DateTime(value).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(customerRegisterDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("customer").get("registerDate"),  new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(customerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customer").get("contact").get("name"), "%" + value + "%")));
-        Optional.ofNullable(customerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customer").get("contact").get("mobile"), "%" + value + "%")));
+        Optional.ofNullable(customerCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("customer").get
+                ("code"), value)));
+        Optional.ofNullable(customerCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("customer").get
+                ("code"), value)));
+        Optional.ofNullable(customerRegisterDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get
+                ("customer").get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(customerRegisterDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("customer")
+                                                                                                                                 .get("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(customerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customer").get("contact").get
+                ("name"), "%" + value + "%")));
+        Optional.ofNullable(customerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customer").get("contact").get
+                ("mobile"), "%" + value + "%")));
         //Seller Specification
-        Optional.ofNullable(sellerCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("seller").get("code"),  value)));
-        Optional.ofNullable(sellerCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("seller").get("code"),  value)));
-        Optional.ofNullable(sellerRegisterDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("seller").get("registerDate"),  new DateTime(value).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(sellerRegisterDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("seller").get("registerDate"),  new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(sellerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"), "%" + value + "%")));
-        Optional.ofNullable(sellerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get("mobile"), "%" + value + "%")));
+        Optional.ofNullable(sellerCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("seller").get
+                ("code"), value)));
+        Optional.ofNullable(sellerCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("seller").get("code"),
+                                                                                                                   value)));
+        Optional.ofNullable(sellerRegisterDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("seller")
+                                                                                                                                    .get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(sellerRegisterDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("seller").get
+                ("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+        Optional.ofNullable(sellerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"),
+                                                                                                    "%" + value + "%")));
+        Optional.ofNullable(sellerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get
+                ("mobile"), "%" + value + "%")));
 
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
             for (int i = 1; i < predicates.size(); i++) {
-                if(filterCompareType == null){
-                    result =  Specifications.where(result).and(predicates.get(i));
+                if (filterCompareType == null) {
+                    result = Specifications.where(result).and(predicates.get(i));
                     continue;
                 }
-                result = filterCompareType.equalsIgnoreCase("and") ? Specifications.where(result).and(predicates.get(i)) : Specifications.where(result).or(predicates.get(i));
+                result = filterCompareType.equalsIgnoreCase("and") ? Specifications.where(result).and(predicates.get(i)) : Specifications.where
+                        (result).or(predicates.get(i));
             }
             return contractService.findAll(result, pageRequest);
         } else {

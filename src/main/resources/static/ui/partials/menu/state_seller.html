@@ -136,6 +136,14 @@
                             <i class="material-icons md-36">keyboard_arrow_left</i>
                         </button>
 
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printSellerTable', 'سجل المستثمرين')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
                     </div>
 
                 </div>
@@ -152,82 +160,82 @@
 
             </div>
 
-            <div class="row" ng-show="toggleList===1">
+            <div class="row" ng-show="toggleList===1" id="printSellerTable">
 
                 <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th class="fit no-print">
-                            <label id="checkAllSellers" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
-                                   for="checkbox-0">
-                                <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
-                                       ng-model="sellers.checkAll" ng-change="checkAllSellers()">
-                            </label>
-                        </th>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="fit no-print">
+                                <label id="checkAllSellers" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                                       for="checkbox-0">
+                                    <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
+                                           ng-model="sellers.checkAll" ng-change="checkAllSellers()">
+                                </label>
+                            </th>
 
-                        <th>
-                            <span>#</span>
-                        </th>
+                            <th>
+                                <span>#</span>
+                            </th>
 
-                        <th>
-                            <span>الاسم</span>
-                        </th>
+                            <th>
+                                <span>الاسم</span>
+                            </th>
 
-                        <th>
-                            <span>الجنسية</span>
-                        </th>
+                            <th>
+                                <span>الجنسية</span>
+                            </th>
 
-                        <th>
-                            <span>السجل المدني</span>
-                        </th>
+                            <th>
+                                <span>السجل المدني</span>
+                            </th>
 
-                        <th>
-                            <span>الجوال</span>
-                        </th>
+                            <th>
+                                <span>الجوال</span>
+                            </th>
 
-                        <th>
-                            <span>الهاتف</span>
-                        </th>
+                            <th>
+                                <span>الهاتف</span>
+                            </th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="seller in sellers | filter:sellers.searchText"
-                        ng-class="{'mdl-color--primary-dark' : seller.isSelected, 'mdl-color-text--white' : seller.isSelected}"
-                        context-menu="rowMenuSeller">
-                        <td class="fit no-print">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
-                                   for="checkbox-seller-{{seller.id}}">
-                                <input type="checkbox"
-                                       id="checkbox-seller-{{seller.id}}"
-                                       class="mdl-checkbox__input"
-                                       ng-model="seller.isSelected" ng-click="checkSeller()">
-                            </label>
-                        </td>
-                        <td>{{$index+1}}</td>
-                        <td>
-                            <span class="label label-success">{{seller.enabled ? 'مفعل' : ''}}</span>
-                            <span class="label label-danger">{{seller.enabled ? '' : 'معطل'}}</span>
-                            {{seller.contact.shortName}}
-                        </td>
-                        <td>{{seller.contact.nationality}}</td>
-                        <td>{{seller.contact.identityNumber}}</td>
-                        <td>{{seller.contact.mobile}}</td>
-                        <td>{{seller.contact.phone}}</td>
-                    </tr>
-                    <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                        ng-show="!sellers || sellers.length ==0">
-                        <td colspan="7">
-                            <p ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
-                                <span>لا يوجد مستثمرين حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
-                                <a href="" ng-click="newSeller()">اضغط هنا</a>
-                            </p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="seller in sellers | filter:sellers.searchText"
+                            ng-class="{'mdl-color--primary-dark' : seller.isSelected, 'mdl-color-text--white' : seller.isSelected}"
+                            context-menu="rowMenuSeller">
+                            <td class="fit no-print">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
+                                       for="checkbox-seller-{{seller.id}}">
+                                    <input type="checkbox"
+                                           id="checkbox-seller-{{seller.id}}"
+                                           class="mdl-checkbox__input"
+                                           ng-model="seller.isSelected" ng-click="checkSeller()">
+                                </label>
+                            </td>
+                            <td>{{$index+1}}</td>
+                            <td>
+                                <span class="label label-success no-print">{{seller.enabled ? 'مفعل' : ''}}</span>
+                                <span class="label label-danger no-print">{{seller.enabled ? '' : 'معطل'}}</span>
+                                {{seller.contact.shortName}}
+                            </td>
+                            <td>{{seller.contact.nationality}}</td>
+                            <td>{{seller.contact.identityNumber}}</td>
+                            <td>{{seller.contact.mobile}}</td>
+                            <td>{{seller.contact.phone}}</td>
+                        </tr>
+                        <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
+                            ng-if="!sellers || sellers.length ==0">
+                            <td colspan="7">
+                                <p ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
+                                    <span>لا يوجد مستثمرين حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
+                                    <a href="" ng-click="newSeller()">اضغط هنا</a>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 
@@ -276,7 +284,8 @@
                                         ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])"
                                         ng-click="newSeller();"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
+                                         height="24">
                                 </button>
                                 <button uib-tooltip="تعديل"
                                         tooltip-append-to-body="true"
@@ -284,7 +293,8 @@
                                         ng-if="contains(me.team.authorities, ['ROLE_SELLER_UPDATE'])"
                                         ng-click="ModalProvider.openSellerUpdateModel(seller)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24" height="24">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24"
+                                         height="24">
                                 </button>
                                 <button uib-tooltip="حذف"
                                         tooltip-append-to-body="true"
@@ -292,7 +302,8 @@
                                         ng-if="contains(me.team.authorities, ['ROLE_SELLER_DELETE'])"
                                         ng-click="deleteSeller(seller)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24" height="24">
+                                    <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24"
+                                         height="24">
                                 </button>
                             </div>
                         </div>

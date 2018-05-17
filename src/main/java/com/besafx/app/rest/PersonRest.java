@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,7 @@ public class PersonRest {
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_CREATE')")
+    @Transactional
     public String create(@RequestBody Person person) {
         if (personService.findByEmail(person.getEmail()) != null) {
             throw new CustomException("هذا البريد الإلكتروني غير متاح ، فضلاً ادخل بريد آخر غير مستخدم");
@@ -83,6 +85,7 @@ public class PersonRest {
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_UPDATE')")
+    @Transactional
     public String update(@RequestBody Person person) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
@@ -107,6 +110,7 @@ public class PersonRest {
     @PutMapping(value = "updateProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    @Transactional
     public String updateProfile(@RequestBody Person person) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
@@ -130,6 +134,7 @@ public class PersonRest {
     @PutMapping(value = "enable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_ENABLE')")
+    @Transactional
     public String enable(@RequestBody Person person) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
@@ -149,6 +154,7 @@ public class PersonRest {
     @PutMapping(value = "disable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PERSON_DISABLE')")
+    @Transactional
     public String disable(@RequestBody Person person) {
         Person object = personService.findOne(person.getId());
         if (object != null) {
@@ -168,6 +174,7 @@ public class PersonRest {
     @GetMapping(value = "setDateType/{type}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    @Transactional
     public void setDateType(@PathVariable(value = "type") String type) {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         Options options = new Options();
@@ -182,6 +189,7 @@ public class PersonRest {
     @GetMapping(value = "setStyle/{style}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    @Transactional
     public void setStyle(@PathVariable(value = "style") String style) {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         Options options = JSONConverter.toObject(caller.getOptions(), Options.class);
@@ -193,6 +201,7 @@ public class PersonRest {
     @GetMapping(value = "setIconSet/{iconSet}/{iconSetType}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PROFILE_UPDATE')")
+    @Transactional
     public void setIconSet(@PathVariable(value = "iconSet") String iconSet, @PathVariable(value = "iconSetType") String iconSetType) {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         Options options = JSONConverter.toObject(caller.getOptions(), Options.class);
