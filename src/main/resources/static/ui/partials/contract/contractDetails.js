@@ -29,28 +29,19 @@ app.controller('contractDetailsCtrl', ['ContractService', 'ContractProductServic
 
         $scope.newContractProduct = function () {
             ModalProvider.openContractProductCreateModel($scope.contract).result.then(function (data) {
-                if (!$scope.contract.contractProducts) {
-                    $scope.contract.contractProducts = [];
-                }
-                return $scope.contract.contractProducts.splice(0, 0, data);
+                $scope.refreshContractProducts();
             });
         };
 
         $scope.newContractPremium = function () {
             ModalProvider.openContractPremiumCreateModel($scope.contract).result.then(function (data) {
-                if (!$scope.contract.contractPremiums) {
-                    $scope.contract.contractPremiums = [];
-                }
-                return $scope.contract.contractPremiums.splice(0, 0, data);
+                $scope.refreshContractPremiums();
             });
         };
 
         $scope.newContractPayment = function () {
             ModalProvider.openContractPaymentCreateModel($scope.contract).result.then(function (data) {
-                if (!$scope.contract.contractPayments) {
-                    $scope.contract.contractPayments = [];
-                }
-                return $scope.contract.contractPayments.splice(0, 0, data);
+                $scope.refreshContractPayments();
             });
         };
 
@@ -71,6 +62,17 @@ app.controller('contractDetailsCtrl', ['ContractService', 'ContractProductServic
                     ContractPremiumService.remove(contractPremium.id).then(function () {
                         var index = $scope.contract.contractPremiums.indexOf(contractPremium);
                         $scope.contract.contractPremiums.splice(index, 1);
+                    });
+                }
+            });
+        };
+
+        $scope.deleteContractPayment = function (contractPayment) {
+            ModalProvider.openConfirmModel("العقود", "delete", "هل تود حذف الدفعة فعلاً؟").result.then(function (value) {
+                if (value) {
+                    ContractPaymentService.remove(contractPayment.id).then(function () {
+                        var index = $scope.contract.contractPayments.indexOf(contractPayment);
+                        $scope.contract.contractPayments.splice(index, 1);
                     });
                 }
             });

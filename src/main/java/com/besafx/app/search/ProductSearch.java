@@ -28,8 +28,8 @@ public class ProductSearch {
     public Page<Product> filter(
             final Integer codeFrom,
             final Integer codeTo,
-            final Date registerDateFrom,
-            final Date registerDateTo,
+            final Long registerDateFrom,
+            final Long registerDateTo,
             final String name,
             final Long parentId,
             Pageable pageRequest) {

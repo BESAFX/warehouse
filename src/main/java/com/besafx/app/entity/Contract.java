@@ -131,4 +131,12 @@ public class Contract implements Serializable {
             return 0.0;
         }
     }
+
+    public Date getLastPaymentDate() {
+        try {
+            return this.contractPayments.stream().map(ContractPayment::getDate).max(Date::compareTo).get();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 }

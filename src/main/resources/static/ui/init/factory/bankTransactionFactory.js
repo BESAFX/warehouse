@@ -34,6 +34,12 @@ app.factory("BankTransactionService",
                     return response.data;
                 });
             },
+            findByDateBetweenOrTransactionTypeCodeIn: function (param) {
+                return $http.get("/api/bankTransaction/findByDateBetweenOrTransactionTypeCodeIn?" + param)
+                    .then(function (response) {
+                    return response.data;
+                });
+            },
             filter: function (search) {
                 return $http.get("/api/bankTransaction/filter?" + search).then(function (response) {
                     return response.data;

@@ -57,6 +57,12 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
 
         };
 
+        $scope.findSellerBalance = function (seller) {
+            SellerService.findSellerBalance(seller.id).then(function (value) {
+               return $scope.buffer.seller = value;
+            })
+        };
+
         $scope.addProductPurchase = function () {
             $scope.productPurchases.push({});
         };

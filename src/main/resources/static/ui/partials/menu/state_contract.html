@@ -239,9 +239,9 @@
                             <td>{{contract.paid | currency:' SAR':2}}</td>
                             <td>{{contract.remain | currency:' SAR':2}}</td>
                             <td>
-                                <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.date | date: 'yyyy-MM-dd'}}</span>
-                                <span class="label label-info no-print">{{contract.date | date: 'hh:mm a'}}</span>
+                                <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
+                                <span class="label label-info no-print">{{contract.lastPaymentDate | date: 'hh:mm a'}}</span>
                             </td>
                             <td>{{contract.person.contact.shortName}}</td>
                         </tr>

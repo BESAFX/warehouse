@@ -28,8 +28,8 @@ public class SellerSearch {
     public Page<Seller> filter(
             final Integer codeFrom,
             final Integer codeTo,
-            final Date registerDateFrom,
-            final Date registerDateTo,
+            final Long registerDateFrom,
+            final Long registerDateTo,
             final String name,
             final String mobile,
             final String phone,

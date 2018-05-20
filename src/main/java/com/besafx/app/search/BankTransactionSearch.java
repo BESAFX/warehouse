@@ -28,25 +28,48 @@ public class BankTransactionSearch {
     public Page<BankTransaction> filter(
             final Integer codeFrom,
             final Integer codeTo,
-            final Date dateFrom,
-            final Date dateTo,
+            final Long dateFrom,
+            final Long dateTo,
             final String sellerName,
             final String sellerMobile,
             final String sellerIdentityNumber,
+            final List<String> transactionTypeCodes,
             Pageable pageRequest) {
+
         List<Specification<BankTransaction>> predicates = new ArrayList<>();
-        Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
-        Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
-        Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime
-                (value).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(dateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value)
-                .plusDays(1).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(sellerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"),
-                                                                                                    "%" + value + "%")));
-        Optional.ofNullable(sellerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get
-                ("mobile"), "%" + value + "%")));
-        Optional.ofNullable(sellerIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get
-                ("identityNumber"), "%" + value + "%")));
+
+        Optional.ofNullable(codeFrom)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
+
+        Optional.ofNullable(codeTo)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
+
+        Optional.ofNullable(dateFrom)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+
+        Optional.ofNullable(dateTo)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+
+        Optional.ofNullable(sellerName)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"), "%" + value + "%")));
+
+        Optional.ofNullable(sellerMobile)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.like(root.get("seller").get("contact").get("mobile"), "%" + value + "%")));
+
+        Optional.ofNullable(sellerIdentityNumber)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.like(root.get("seller").get("contact").get("identityNumber"), "%" + value + "%")));
+
+        Optional.ofNullable(transactionTypeCodes)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> root.get("transactionType").get("code").in(transactionTypeCodes)));
+
 
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);

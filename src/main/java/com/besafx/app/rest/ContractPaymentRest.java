@@ -6,6 +6,7 @@ import com.besafx.app.entity.Contract;
 import com.besafx.app.entity.ContractPayment;
 import com.besafx.app.entity.Person;
 import com.besafx.app.init.Initializer;
+import com.besafx.app.search.ContractPaymentSearch;
 import com.besafx.app.service.BankTransactionService;
 import com.besafx.app.service.ContractPaymentService;
 import com.besafx.app.service.ContractService;
@@ -19,6 +20,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,8 +41,18 @@ public class ContractPaymentRest {
             "-bankTransaction," +
             "person[id,contact[id,shortName]]";
 
+    private final String FILTER_DETAILS = "" +
+            "**," +
+            "contract[id,code,customer[id,contact[id,shortName]]]," +
+            "-contractPremium," +
+            "-bankTransaction," +
+            "person[id,contact[id,shortName]]";
+
     @Autowired
     private ContractPaymentService contractPaymentService;
+
+    @Autowired
+    private ContractPaymentSearch contractPaymentSearch;
 
     @Autowired
     private ContractService contractService;
@@ -127,5 +139,43 @@ public class ContractPaymentRest {
     public String findByContract(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        contractPaymentService.findByContractId(id));
+    }
+
+    @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String filter(
+            //ContractPayment Filters
+            @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
+            @RequestParam(value = "dateTo", required = false) final Long dateTo,
+            //Contract Filters
+            @RequestParam(value = "contractCodeFrom", required = false) final Integer contractCodeFrom,
+            @RequestParam(value = "contractCodeTo", required = false) final Integer contractCodeTo,
+            @RequestParam(value = "contractDateFrom", required = false) final Long contractDateFrom,
+            @RequestParam(value = "contractDateTo", required = false) final Long contractDateTo,
+            //Customer Filters
+            @RequestParam(value = "customerName", required = false) final String customerName,
+            @RequestParam(value = "customerMobile", required = false) final String customerMobile,
+            //Seller Filters
+            @RequestParam(value = "sellerName", required = false) final String sellerName,
+            @RequestParam(value = "sellerMobile", required = false) final String sellerMobile,
+            @RequestParam(value = "filterCompareType", required = false) final String filterCompareType,
+            Pageable pageable) {
+        return SquigglyUtils.stringify(
+                Squiggly.init(
+                        new ObjectMapper(),
+                        "**,".concat("content[").concat(FILTER_DETAILS).concat("]")),
+                contractPaymentSearch.filter(
+                        dateFrom,
+                        dateTo,
+                        contractCodeFrom,
+                        contractCodeTo,
+                        contractDateFrom,
+                        contractDateTo,
+                        customerName,
+                        customerMobile,
+                        sellerName,
+                        sellerMobile,
+                        filterCompareType,
+                        pageable));
     }
 }

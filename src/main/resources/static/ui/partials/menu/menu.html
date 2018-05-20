@@ -204,7 +204,7 @@
                                      ng-src="/ui/img/{{iconSet}}/contractPremium.{{iconSetType}}"
                                      width="24"
                                      height="24">
-                               <span>سجل الأقساط والدفعات</span>
+                               <span>سجل الأقساط</span>
                             </span>
                         </li>
 
@@ -773,6 +773,12 @@
         <div ng-if="toggleState==='contractPremium'" class="row" style="margin-top: 10px">
 
             <div ng-include="'ui/partials/menu/state_contractPremium.html'"></div>
+
+        </div>
+
+        <div ng-if="toggleState==='contractPayment'" class="row" style="margin-top: 10px">
+
+            <div ng-include="'ui/partials/menu/state_contractPayment.html'"></div>
 
         </div>
 

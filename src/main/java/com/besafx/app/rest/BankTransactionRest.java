@@ -2,6 +2,7 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
+import com.besafx.app.entity.Bank;
 import com.besafx.app.entity.BankTransaction;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Seller;
@@ -19,13 +20,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/bankTransaction/")
@@ -227,16 +233,49 @@ public class BankTransactionRest {
                                        bankTransactionService.findBySeller(caller.getCompany().getSeller()));
     }
 
+    @GetMapping(value = "findByDateBetweenOrTransactionTypeCodeIn", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findByDateBetweenOrTransactionTypeCodeIn(
+            @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
+            @RequestParam(value = "dateTo", required = false) final Long dateTo,
+            @RequestParam(value = "transactionTypeCodes", required = false) final List<String> transactionTypeCodes) {
+
+        List<Specification<BankTransaction>> predicates = new ArrayList<>();
+
+        Optional.ofNullable(dateFrom)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime(value).withTimeAtStartOfDay().toDate())));
+
+        Optional.ofNullable(dateTo)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
+
+        Optional.ofNullable(transactionTypeCodes)
+                .ifPresent(value -> predicates.add(
+                        (root, cq, cb) -> root.get("transactionType").get("code").in(transactionTypeCodes)));
+
+        if (!predicates.isEmpty()) {
+            Specification result = predicates.get(0);
+            for (int i = 1; i < predicates.size(); i++) {
+                result = Specifications.where(result).and(predicates.get(i));
+            }
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), bankTransactionService.findAll(result));
+        } else {
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), new ArrayList<>());
+        }
+    }
+
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String filter(
             @RequestParam(value = "codeFrom", required = false) final Integer codeFrom,
             @RequestParam(value = "codeTo", required = false) final Integer codeTo,
-            @RequestParam(value = "dateFrom", required = false) final Date dateFrom,
-            @RequestParam(value = "dateTo", required = false) final Date dateTo,
+            @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
+            @RequestParam(value = "dateTo", required = false) final Long dateTo,
             @RequestParam(value = "sellerName", required = false) final String sellerName,
             @RequestParam(value = "sellerMobile", required = false) final String sellerMobile,
             @RequestParam(value = "sellerIdentityNumber", required = false) final String sellerIdentityNumber,
+            @RequestParam(value = "transactionTypeCodes", required = false) final List<String> transactionTypeCodes,
             Pageable pageable) {
         return SquigglyUtils.stringify(
                 Squiggly.init(
@@ -250,6 +289,7 @@ public class BankTransactionRest {
                         sellerName,
                         sellerMobile,
                         sellerIdentityNumber,
+                        transactionTypeCodes,
                         pageable));
     }
 }

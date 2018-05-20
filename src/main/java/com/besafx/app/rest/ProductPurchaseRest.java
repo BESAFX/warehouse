@@ -86,7 +86,7 @@ public class ProductPurchaseRest {
         builder.append("، قيمة شراء " + productPurchase.getProduct().getName());
         builder.append("، عدد /  " + productPurchase.getQuantity());
         builder.append("، بسعر الوحدة /  " + productPurchase.getUnitPurchasePrice());
-        builder.append("، " + productPurchase.getNote());
+        builder.append("، " + productPurchase.getNote() == null ? "" : productPurchase.getNote());
         bankTransactionWithdrawPurchase.setNote(builder.toString());
         bankTransactionService.save(bankTransactionWithdrawPurchase);
 
@@ -157,13 +157,13 @@ public class ProductPurchaseRest {
             //ProductPurchase Filters
             @RequestParam(value = "codeFrom", required = false) final Integer codeFrom,
             @RequestParam(value = "codeTo", required = false) final Integer codeTo,
-            @RequestParam(value = "dateFrom", required = false) final Date dateFrom,
-            @RequestParam(value = "dateTo", required = false) final Date dateTo,
+            @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
+            @RequestParam(value = "dateTo", required = false) final Long dateTo,
             //Product Filters
             @RequestParam(value = "productCodeFrom", required = false) final Integer productCodeFrom,
             @RequestParam(value = "productCodeTo", required = false) final Integer productCodeTo,
-            @RequestParam(value = "productRegisterDateFrom", required = false) final Date productRegisterDateFrom,
-            @RequestParam(value = "productRegisterDateTo", required = false) final Date productRegisterDateTo,
+            @RequestParam(value = "productRegisterDateFrom", required = false) final Long productRegisterDateFrom,
+            @RequestParam(value = "productRegisterDateTo", required = false) final Long productRegisterDateTo,
             @RequestParam(value = "productName", required = false) final String productName,
             @RequestParam(value = "productParentId", required = false) final Long productParentId,
             //Seller Filters

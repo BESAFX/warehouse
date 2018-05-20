@@ -119,8 +119,8 @@ public class CustomerRest {
     public String filter(
             @RequestParam(value = "codeFrom", required = false) final Integer codeFrom,
             @RequestParam(value = "codeTo", required = false) final Integer codeTo,
-            @RequestParam(value = "registerDateFrom", required = false) final Date registerDateFrom,
-            @RequestParam(value = "registerDateTo", required = false) final Date registerDateTo,
+            @RequestParam(value = "registerDateFrom", required = false) final Long registerDateFrom,
+            @RequestParam(value = "registerDateTo", required = false) final Long registerDateTo,
             @RequestParam(value = "name", required = false) final String name,
             @RequestParam(value = "mobile", required = false) final String mobile,
             @RequestParam(value = "phone", required = false) final String phone,

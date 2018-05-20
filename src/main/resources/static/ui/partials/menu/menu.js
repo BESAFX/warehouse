@@ -5,6 +5,7 @@ app.controller("menuCtrl", [
     'ProductPurchaseService',
     'ContractService',
     'ContractPremiumService',
+    'ContractPaymentService',
     'BankService',
     'BankTransactionService',
     'AttachTypeService',
@@ -22,6 +23,7 @@ app.controller("menuCtrl", [
               ProductPurchaseService,
               ContractService,
               ContractPremiumService,
+              ContractPaymentService,
               BankService,
               BankTransactionService,
               AttachTypeService,
@@ -61,7 +63,11 @@ app.controller("menuCtrl", [
                     break;
                 }
                 case 'contractPremium': {
-                    $scope.pageTitle = 'الاقساط والدفعات';
+                    $scope.pageTitle = 'الاقساط';
+                    break;
+                }
+                case 'contractPayment': {
+                    $scope.pageTitle = 'الدفعات';
                     break;
                 }
                 case 'bankTransaction': {
@@ -129,6 +135,11 @@ app.controller("menuCtrl", [
         $scope.openStateContractPremium = function () {
             $scope.toggleState = 'contractPremium';
             $scope.searchContractPremiums({});
+            $rootScope.refreshGUI();
+        };
+        $scope.openStateContractPayment = function () {
+            $scope.toggleState = 'contractPayment';
+            $scope.searchContractPayments({});
             $rootScope.refreshGUI();
         };
         $scope.openStateBankTransaction = function () {
@@ -1237,11 +1248,144 @@ app.controller("menuCtrl", [
 
         /**************************************************************************************************************
          *                                                                                                            *
+         * ContractPayment                                                                                            *
+         *                                                                                                            *
+         **************************************************************************************************************/
+        $scope.contractPayments = [];
+        $scope.paramContractPayment = {};
+        $scope.contractPayments.checkAll = false;
+
+        $scope.pageContractPayment = {};
+        $scope.pageContractPayment.sorts = [];
+        $scope.pageContractPayment.page = 0;
+        $scope.pageContractPayment.totalPages = 0;
+        $scope.pageContractPayment.currentPage = $scope.pageContractPayment.page + 1;
+        $scope.pageContractPayment.currentPageString = ($scope.pageContractPayment.page + 1) + ' / ' + $scope.pageContractPayment.totalPages;
+        $scope.pageContractPayment.size = 25;
+        $scope.pageContractPayment.first = true;
+        $scope.pageContractPayment.last = true;
+
+        $scope.openContractPaymentsFilter = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/ui/partials/contractPayment/contractPaymentFilter.html',
+                controller: 'contractPaymentFilterCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            modalInstance.result.then(function (paramContractPayment) {
+                $scope.searchContractPayments(paramContractPayment);
+            }, function () {
+            });
+        };
+        $scope.searchContractPayments = function (paramContractPayment) {
+            var search = [];
+            search.push('size=');
+            search.push($scope.pageContractPayment.size);
+            search.push('&');
+            search.push('page=');
+            search.push($scope.pageContractPayment.page);
+            search.push('&');
+            angular.forEach($scope.pageContractPayment.sorts, function (sortBy) {
+                search.push('sort=');
+                search.push(sortBy.name + ',' + sortBy.direction);
+                search.push('&');
+            });
+            if ($scope.pageContractPayment.sorts.length === 0) {
+                search.push('sort=date,desc&');
+            }
+            if (paramContractPayment.dateFrom) {
+                search.push('dateFrom=');
+                search.push(paramContractPayment.dateFrom.getTime());
+                search.push('&');
+            }
+            if (paramContractPayment.dateTo) {
+                search.push('dateTo=');
+                search.push(paramContractPayment.dateTo.getTime());
+                search.push('&');
+            }
+            if (paramContractPayment.contractCodeFrom) {
+                search.push('contractCodeFrom=');
+                search.push(paramContractPayment.contractCodeFrom);
+                search.push('&');
+            }
+            if (paramContractPayment.contractCodeTo) {
+                search.push('contractCodeTo=');
+                search.push(paramContractPayment.contractCodeTo);
+                search.push('&');
+            }
+            if (paramContractPayment.contractDateFrom) {
+                search.push('contractDateFrom=');
+                search.push(paramContractPayment.contractDateFrom.getTime());
+                search.push('&');
+            }
+            if (paramContractPayment.contractDateTo) {
+                search.push('contractDateTo=');
+                search.push(paramContractPayment.contractDateTo.getTime());
+                search.push('&');
+            }
+            if (paramContractPayment.customerName) {
+                search.push('customerName=');
+                search.push(paramContractPayment.customerName);
+                search.push('&');
+            }
+            if (paramContractPayment.customerMobile) {
+                search.push('customerMobile=');
+                search.push(paramContractPayment.customerMobile);
+                search.push('&');
+            }
+            if (paramContractPayment.sellerName) {
+                search.push('sellerName=');
+                search.push(paramContractPayment.sellerName);
+                search.push('&');
+            }
+            if (paramContractPayment.sellerMobile) {
+                search.push('sellerMobile=');
+                search.push(paramContractPayment.sellerMobile);
+                search.push('&');
+            }
+
+            search.push('filterCompareType=or');
+
+            ContractPaymentService.filter(search.join("")).then(function (data) {
+                $scope.contractPayments = data.content;
+
+                $scope.pageContractPayment.currentPage = $scope.pageContractPayment.page + 1;
+                $scope.pageContractPayment.first = data.first;
+                $scope.pageContractPayment.last = data.last;
+                $scope.pageContractPayment.number = data.number;
+                $scope.pageContractPayment.numberOfElements = data.numberOfElements;
+                $scope.pageContractPayment.size = data.size;
+                $scope.pageContractPayment.totalElements = data.totalElements;
+                $scope.pageContractPayment.totalPages = data.totalPages;
+                $scope.pageContractPayment.currentPageString = ($scope.pageContractPayment.page + 1) + ' / ' + $scope.pageContractPayment.totalPages;
+
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
+        $scope.selectNextContractPaymentsPage = function () {
+            $scope.pageContractPayment.page++;
+            $scope.searchContractPayments($scope.paramContractPayment);
+        };
+        $scope.selectPrevContractPaymentsPage = function () {
+            $scope.pageContractPayment.page--;
+            $scope.searchContractPayments($scope.paramContractPayment);
+        };
+
+        /**************************************************************************************************************
+         *                                                                                                            *
          * BankTransaction                                                                                            *
          *                                                                                                            *
          **************************************************************************************************************/
         $scope.bankTransactions = [];
         $scope.paramBankTransaction = {};
+        $scope.paramBankTransaction.transactionTypeCodes = [];
         $scope.bankTransactions.checkAll = false;
 
         $scope.pageBankTransaction = {};
@@ -1320,6 +1464,11 @@ app.controller("menuCtrl", [
             if (paramBankTransaction.sellerIdentityNumber) {
                 search.push('sellerIdentityNumber=');
                 search.push(paramBankTransaction.sellerIdentityNumber);
+                search.push('&');
+            }
+            if (paramBankTransaction.transactionTypeCode) {
+                search.push('transactionTypeCodes=');
+                search.push([paramBankTransaction.transactionTypeCode]);
                 search.push('&');
             }
 
@@ -1508,21 +1657,21 @@ app.controller("menuCtrl", [
          **************************************************************************************************************/
         $scope.printToCart = function (printSectionId, title) {
             var innerContents = document.getElementById(printSectionId).innerHTML;
-            var popupWindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
-            popupWindow.document.open();
-            popupWindow.document.write('' +
-                '<html>' +
-                '<head>' +
-                '<link rel="stylesheet" type="text/css" href="/ui/app.css" />' +
-                '<link rel="stylesheet" type="text/css" href="/ui/css/style.css" />' +
-                '</head>' +
-                '<body onload="window.print()">' +
-                '<h4>' + title + '</h4>' +
-                innerContents + '' +
-                '</body>' +
-                '</html>'
-            );
-            popupWindow.document.close();
+            var mywindow = window.open(title, 'new div', 'height=400,width=600');
+            mywindow.document.write('<html><head><title></title>');
+            mywindow.document.write('<link rel="stylesheet" href="/ui/app.css" type="text/css" />');
+            mywindow.document.write('<link rel="stylesheet" href="/ui/css/style.css" type="text/css" />');
+            mywindow.document.write('</head><body >');
+            mywindow.document.write(innerContents);
+            mywindow.document.write('</body></html>');
+            mywindow.document.close();
+            mywindow.focus();
+            setTimeout(function(){
+                mywindow.print();
+                mywindow.close();
+            },1000);
+
+            return true;
         };
 
         /**************************************************************************************************************
@@ -1531,18 +1680,80 @@ app.controller("menuCtrl", [
          *                                                                                                            *
          **************************************************************************************************************/
         $scope.toggleReport = 'mainReportFrame';
+        //السيولة النقدية
+        $scope.openReportCashBalance = function () {
+            $scope.toggleReport = 'cashBalance';
+            $rootScope.refreshGUI();
+        };
+        //تقرير المصروفات
+        $scope.openReportWithdrawCash = function () {
+            $scope.toggleReport = 'withdrawCash';
+            $rootScope.refreshGUI();
+        };
+        //أرصدة المستثمرين
+        $scope.openReportSellerBalance = function () {
+            $scope.toggleReport = 'sellerBalance';
+            $rootScope.refreshGUI();
+        };
+        //تقرير العقود
+        $scope.openReportContracts = function () {
+            $scope.toggleReport = 'contracts';
+            $rootScope.refreshGUI();
+        };
+        //حركة العمليات اليومية
+        $scope.openReportBankTransactions = function () {
+            $scope.toggleReport = 'bankTransactions';
+            $rootScope.refreshGUI();
+        };
+        //كشف حساب مستثمر
+        $scope.openReportSellerStatement = function () {
+            $scope.toggleReport = 'sellerStatement';
+            $rootScope.refreshGUI();
+        };
+        //تقرير التحصيل والسداد
+        $scope.openReportContractPremiums = function () {
+            $scope.toggleReport = 'contractPremiums';
+            $rootScope.refreshGUI();
+        };
+        //تقرير أرباح التحصيل
+        $scope.openReportContractPaymentsProfit = function () {
+            $scope.toggleReport = 'contractPaymentsProfit';
+            $rootScope.refreshGUI();
+        };
+
+        $scope.paramWithdrawCash = {};
         $scope.fetchAllBanks = function () {
             BankService.findAll().then(function (value) {
                 $scope.banks = value;
             });
         };
-        $scope.openReportCashBalance = function () {
-            $scope.toggleReport = 'cashBalance';
-            $rootScope.refreshGUI();
+        $scope.fetchWithdrawCashes = function () {
+            var search = [];
+            if ($scope.paramWithdrawCash.dateTo) {
+                search.push('dateTo=');
+                search.push($scope.paramWithdrawCash.dateTo.getTime());
+                search.push('&');
+            }
+            if ($scope.paramWithdrawCash.dateFrom) {
+                search.push('dateFrom=');
+                search.push($scope.paramWithdrawCash.dateFrom.getTime());
+                search.push('&');
+            }
+
+            search.push('transactionTypeCodes=');
+            search.push(['Withdraw_Cash']);
+
+            BankTransactionService.findByDateBetweenOrTransactionTypeCodeIn(search.join("")).then(function (data) {
+                $scope.withdrawCashes = data;
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
         };
-        $scope.openReportWithdrawCash = function () {
-            $scope.toggleReport = 'withdrawCash';
-            $rootScope.refreshGUI();
+        $scope.fetchAllSellerBalance = function () {
+            SellerService.findAllSellerBalance().then(function (value) {
+                $scope.sellersBalance = value;
+            })
         };
 
         $timeout(function () {

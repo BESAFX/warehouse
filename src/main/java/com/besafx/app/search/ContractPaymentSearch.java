@@ -1,7 +1,7 @@
 package com.besafx.app.search;
 
-import com.besafx.app.entity.ContractPremium;
-import com.besafx.app.service.ContractPremiumService;
+import com.besafx.app.entity.ContractPayment;
+import com.besafx.app.service.ContractPaymentService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,22 +13,21 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class ContractPremiumSearch {
+public class ContractPaymentSearch {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContractPremiumSearch.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ContractPaymentSearch.class);
 
     @Autowired
-    private ContractPremiumService contractPremiumService;
+    private ContractPaymentService contractPaymentService;
 
-    public Page<ContractPremium> filter(
-            //ContractPremium Filters
-            final Long dueDateFrom,
-            final Long dueDateTo,
+    public Page<ContractPayment> filter(
+            //ContractPayment Filters
+            final Long dateFrom,
+            final Long dateTo,
             //Contract Filters
             final Integer contractCodeFrom,
             final Integer contractCodeTo,
@@ -43,16 +42,16 @@ public class ContractPremiumSearch {
             final String filterCompareType,
             Pageable pageRequest) {
 
-        List<Specification<ContractPremium>> predicates = new ArrayList<>();
-        //ContractPremium Specification
-        Optional.ofNullable(dueDateFrom)
+        List<Specification<ContractPayment>> predicates = new ArrayList<>();
+        //ContractPayment Specification
+        Optional.ofNullable(dateFrom)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("dueDate"),
+                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"),
                                                                   new DateTime(value).withTimeAtStartOfDay().toDate())));
 
-        Optional.ofNullable(dueDateTo)
+        Optional.ofNullable(dateTo)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("dueDate"),
+                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"),
                                                                new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
 
         //Contract Specification
@@ -103,9 +102,9 @@ public class ContractPremiumSearch {
                         Specifications.where(result).and(predicates.get(i)) :
                         Specifications.where(result).or(predicates.get(i));
             }
-            return contractPremiumService.findAll(result, pageRequest);
+            return contractPaymentService.findAll(result, pageRequest);
         } else {
-            return contractPremiumService.findAll(pageRequest);
+            return contractPaymentService.findAll(pageRequest);
         }
     }
 }

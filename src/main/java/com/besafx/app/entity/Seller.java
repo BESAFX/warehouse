@@ -53,6 +53,15 @@ public class Seller implements Serializable {
     @OneToMany(mappedBy = "seller")
     private List<ProductPurchase> productPurchases = new ArrayList<>();
 
+    @Transient
+    private Double balance;
+
+    @Transient
+    private Double totalDeposits;
+
+    @Transient
+    private Double totalWithdraws;
+
     @JsonCreator
     public static Seller Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -65,6 +74,14 @@ public class Seller implements Serializable {
             return this.contact.getNickname().concat(" ").concat(this.contact.getName());
         } catch (Exception ex) {
             return "";
+        }
+    }
+
+    public Date getLastContractDate() {
+        try {
+            return this.contracts.stream().map(Contract::getWrittenDate).max(Date::compareTo).get();
+        } catch (Exception ex) {
+            return null;
         }
     }
 }

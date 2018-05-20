@@ -18,6 +18,11 @@ app.factory("ContractPaymentService",
                 return $http.get("/api/contractPayment/findByContract/" + id).then(function (response) {
                     return response.data;
                 });
+            },
+            filter: function (search) {
+                return $http.get("/api/contractPayment/filter?" + search).then(function (response) {
+                    return response.data;
+                });
             }
         };
     }]);

@@ -29,13 +29,13 @@ public class ProductPurchaseSearch {
             //ProductPurchase Filters
             final Integer codeFrom,
             final Integer codeTo,
-            final Date dateFrom,
-            final Date dateTo,
+            final Long dateFrom,
+            final Long dateTo,
             //Product Filters
             final Integer productCodeFrom,
             final Integer productCodeTo,
-            final Date productRegisterDateFrom,
-            final Date productRegisterDateTo,
+            final Long productRegisterDateFrom,
+            final Long productRegisterDateTo,
             final String productName,
             final Long productParentId,
             //Seller Filters

@@ -45,6 +45,7 @@
                                ng-model="buffer.seller"
                                required="required"
                                disable-validation-message=""
+                               on-select="findSellerBalance(buffer.seller)"
                                theme="bootstrap">
                         <ui-select-match placeholder="اختر المستثمر">
                             {{$select.selected.contact.shortName}}
@@ -97,7 +98,7 @@
                            type="number"
                            readonly
                            class="form-control"
-                           ng-model="seller.balance">
+                           ng-model="buffer.seller.balance">
                 </div>
             </div>
 
@@ -181,19 +182,19 @@
 
                                         <div class="mdl-menu__item--full-bleed-divider"></div>
                                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
-                                                <span class="mdl-list__item-primary-content">
-                                                    <span class="material-icons mdl-list__item-avatar"
-                                                          style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/product.{{iconSetType}}')"></span>
-                                                    <div ng-bind-html="product.name | highlight: $select.search"></div>
-                                                    <span class="mdl-list__item-sub-title">
-                                                        <span>رقم التصنيف / </span>
-                                                        {{product.code}}
-                                                    </span>
-                                                    <span class="mdl-list__item-sub-title">
-                                                        <span>الاسم / </span>
-                                                        {{product.name}}
-                                                    </span>
+                                            <span class="mdl-list__item-primary-content">
+                                                <span class="material-icons mdl-list__item-avatar"
+                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/product.{{iconSetType}}')"></span>
+                                                <div ng-bind-html="product.name | highlight: $select.search"></div>
+                                                <span class="mdl-list__item-sub-title">
+                                                    <span>رقم التصنيف / </span>
+                                                    {{product.code}}
                                                 </span>
+                                                <span class="mdl-list__item-sub-title">
+                                                    <span>الاسم / </span>
+                                                    {{product.name}}
+                                                </span>
+                                            </span>
                                         </li>
 
                                     </ui-select-choices>

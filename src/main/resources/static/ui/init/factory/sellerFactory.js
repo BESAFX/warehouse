@@ -19,6 +19,16 @@ app.factory("SellerService",
                     return response.data;
                 });
             },
+            findSellerBalance: function (id) {
+                return $http.get("/api/seller/findSellerBalance/" + id).then(function (response) {
+                    return response.data;
+                });
+            },
+            findAllSellerBalance: function () {
+                return $http.get("/api/seller/findAllSellerBalance").then(function (response) {
+                    return response.data;
+                });
+            },
             filter: function (search) {
                 return $http.get("/api/seller/filter?" + search).then(function (response) {
                     return response.data;

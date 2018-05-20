@@ -102,13 +102,13 @@ public class ContractPremiumRest {
     @ResponseBody
     public String filter(
             //ContractPremium Filters
-            @RequestParam(value = "dueDateFrom", required = false) final Date dueDateFrom,
-            @RequestParam(value = "dueDateTo", required = false) final Date dueDateTo,
+            @RequestParam(value = "dueDateFrom", required = false) final Long dueDateFrom,
+            @RequestParam(value = "dueDateTo", required = false) final Long dueDateTo,
             //Contract Filters
             @RequestParam(value = "contractCodeFrom", required = false) final Integer contractCodeFrom,
             @RequestParam(value = "contractCodeTo", required = false) final Integer contractCodeTo,
-            @RequestParam(value = "contractDateFrom", required = false) final Date contractDateFrom,
-            @RequestParam(value = "contractDateTo", required = false) final Date contractDateTo,
+            @RequestParam(value = "contractDateFrom", required = false) final Long contractDateFrom,
+            @RequestParam(value = "contractDateTo", required = false) final Long contractDateTo,
             //Customer Filters
             @RequestParam(value = "customerName", required = false) final String customerName,
             @RequestParam(value = "customerMobile", required = false) final String customerMobile,

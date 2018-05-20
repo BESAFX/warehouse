@@ -2,11 +2,14 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
+import com.besafx.app.entity.Bank;
 import com.besafx.app.entity.BankTransaction;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.Seller;
+import com.besafx.app.entity.projection.BankTransactionAmount;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.SellerSearch;
+import com.besafx.app.service.BankService;
 import com.besafx.app.service.BankTransactionService;
 import com.besafx.app.service.ContactService;
 import com.besafx.app.service.SellerService;
@@ -15,6 +18,7 @@ import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
+import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 
 @RestController
 @RequestMapping(value = "/api/seller/")
@@ -51,6 +57,9 @@ public class SellerRest {
 
     @Autowired
     private SellerSearch sellerSearch;
+
+    @Autowired
+    private BankService bankService;
 
     @Autowired
     private ContactService contactService;
@@ -152,13 +161,87 @@ public class SellerRest {
                                        sellerService.findOne(id));
     }
 
+    @GetMapping(value = "findSellerBalance/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findSellerBalance(@PathVariable(value = "id") Long id) {
+        Seller seller = sellerService.findOne(id);
+
+        Double depositAmount = bankTransactionService
+                .findBySellerAndTransactionTypeIn(seller,
+                                                  Lists.newArrayList(
+                                                          Initializer.transactionTypeDeposit,
+                                                          Initializer.transactionTypeDepositPayment,
+                                                          Initializer.transactionTypeDepositTransfer),
+                                                  BankTransactionAmount.class)
+                .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
+
+        Double withdrawAmount = bankTransactionService
+                .findBySellerAndTransactionTypeIn(seller,
+                                                  Lists.newArrayList(
+                                                          Initializer.transactionTypeWithdraw,
+                                                          Initializer.transactionTypeWithdrawCash,
+                                                          Initializer.transactionTypeWithdrawPurchase,
+                                                          Initializer.transactionTypeWithdrawTransfer),
+                                                  BankTransactionAmount.class)
+                .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
+
+        LOG.info("مجموع الإيداعات = " + depositAmount);
+        seller.setTotalDeposits(depositAmount);
+
+        LOG.info("مجموع السحبيات = " + withdrawAmount);
+        seller.setTotalWithdraws(withdrawAmount);
+
+        seller.setBalance(depositAmount - withdrawAmount);
+
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), seller);
+    }
+
+    @GetMapping(value = "findAllSellerBalance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findAllSellerBalance() {
+        List<Seller> sellers = Lists.newArrayList(sellerService.findAll());
+        ListIterator<Seller> bankListIterator = sellers.listIterator();
+        while (bankListIterator.hasNext()) {
+
+            Seller seller = bankListIterator.next();
+
+            Double depositAmount = bankTransactionService
+                    .findBySellerAndTransactionTypeIn(seller,
+                                                      Lists.newArrayList(
+                                                              Initializer.transactionTypeDeposit,
+                                                              Initializer.transactionTypeDepositPayment,
+                                                              Initializer.transactionTypeDepositTransfer),
+                                                      BankTransactionAmount.class)
+                    .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
+
+            Double withdrawAmount = bankTransactionService
+                    .findBySellerAndTransactionTypeIn(seller,
+                                                      Lists.newArrayList(
+                                                              Initializer.transactionTypeWithdraw,
+                                                              Initializer.transactionTypeWithdrawCash,
+                                                              Initializer.transactionTypeWithdrawPurchase,
+                                                              Initializer.transactionTypeWithdrawTransfer),
+                                                      BankTransactionAmount.class)
+                    .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
+
+            LOG.info("مجموع الإيداعات = " + depositAmount);
+            seller.setTotalDeposits(depositAmount);
+
+            LOG.info("مجموع السحبيات = " + withdrawAmount);
+            seller.setTotalWithdraws(withdrawAmount);
+
+            seller.setBalance(depositAmount - withdrawAmount);
+        }
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), sellers);
+    }
+
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String filter(
             @RequestParam(value = "codeFrom", required = false) final Integer codeFrom,
             @RequestParam(value = "codeTo", required = false) final Integer codeTo,
-            @RequestParam(value = "registerDateFrom", required = false) final Date registerDateFrom,
-            @RequestParam(value = "registerDateTo", required = false) final Date registerDateTo,
+            @RequestParam(value = "registerDateFrom", required = false) final Long registerDateFrom,
+            @RequestParam(value = "registerDateTo", required = false) final Long registerDateTo,
             @RequestParam(value = "name", required = false) final String name,
             @RequestParam(value = "mobile", required = false) final String mobile,
             @RequestParam(value = "phone", required = false) final String phone,
