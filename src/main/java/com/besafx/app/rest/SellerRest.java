@@ -1,5 +1,6 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.async.TransactionalService;
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
@@ -76,6 +77,9 @@ public class SellerRest {
 
     @Autowired
     private ContractService contractService;
+
+    @Autowired
+    private TransactionalService transactionalService;
 
     @Autowired
     private NotificationService notificationService;
@@ -158,7 +162,7 @@ public class SellerRest {
         if (seller != null) {
 
             LOG.info("رفض العملية فى حال كان هو المستثمر الرئيسي");
-            if(Initializer.company.getSeller().equals(seller)){
+            if(Initializer.company.getSeller().getId().equals(seller.getId())){
                 throw new CustomException("لا يمكن حذف المستثمر الرئيسي للبرنامج");
             }
 
@@ -201,10 +205,7 @@ public class SellerRest {
             productPurchaseService.delete(seller.getProductPurchases());
 
             LOG.info("تفريغ كل المعاملات المالية لهذا المستثمر");
-            seller.getBankTransactions().stream().forEach(bankTransaction -> {
-                bankTransaction.setSeller(null);
-                bankTransactionService.save(bankTransaction);
-            });
+            transactionalService.setBankTransactionsSellerToNull(seller);
 
             LOG.info("حذف المستثمر");
             sellerService.delete(seller);
