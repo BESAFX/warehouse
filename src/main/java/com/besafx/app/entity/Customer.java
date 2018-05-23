@@ -8,7 +8,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -40,6 +42,9 @@ public class Customer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "contact")
     private Contact contact;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Contract> contracts = new ArrayList<>();
 
     @JsonCreator
     public static Customer Create(String jsonString) throws IOException {

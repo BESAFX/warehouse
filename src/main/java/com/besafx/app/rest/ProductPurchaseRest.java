@@ -2,6 +2,7 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.entity.BankTransaction;
+import com.besafx.app.entity.ContractPayment;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.ProductPurchase;
 import com.besafx.app.init.Initializer;
@@ -37,6 +38,7 @@ public class ProductPurchaseRest {
             "**," +
             "-contractProducts," +
             "product[id,name]," +
+            "-bankTransaction," +
             "seller[id,contact[id,shortName]]," +
             "person[id,contact[id,shortName]]";
 
@@ -88,7 +90,9 @@ public class ProductPurchaseRest {
         builder.append("، بسعر الوحدة /  " + productPurchase.getUnitPurchasePrice());
         builder.append("، " + productPurchase.getNote() == null ? "" : productPurchase.getNote());
         bankTransactionWithdrawPurchase.setNote(builder.toString());
-        bankTransactionService.save(bankTransactionWithdrawPurchase);
+
+        productPurchase.setBankTransaction(bankTransactionService.save(bankTransactionWithdrawPurchase));
+        productPurchase = productPurchaseService.save(productPurchase);
 
         notificationService.notifyAll(Notification
                                               .builder()
@@ -101,8 +105,17 @@ public class ProductPurchaseRest {
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_PRODUCT_PURCHASE_DELETE')")
+    @Transactional
     public void delete(@PathVariable Long id) {
-
+        ProductPurchase productPurchase = productPurchaseService.findOne(id);
+        if (productPurchase != null) {
+            bankTransactionService.delete(productPurchase.getBankTransaction());
+            productPurchaseService.delete(id);
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم حذف المخزون وكل ما يتعلق به من حسابات بنجاح")
+                                                  .type("error").build());
+        }
     }
 
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

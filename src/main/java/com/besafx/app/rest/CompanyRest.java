@@ -1,6 +1,7 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.entity.Company;
+import com.besafx.app.init.Initializer;
 import com.besafx.app.service.CompanyService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -47,6 +48,7 @@ public class CompanyRest {
         Company object = companyService.findOne(company.getId());
         if (object != null) {
             company = companyService.save(company);
+            Initializer.company = company;
             notificationService.notifyAll(Notification
                                                   .builder()
                                                   .message("تم تعديل بيانات الشركة بنجاح")

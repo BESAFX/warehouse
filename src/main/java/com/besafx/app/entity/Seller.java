@@ -53,6 +53,9 @@ public class Seller implements Serializable {
     @OneToMany(mappedBy = "seller")
     private List<ProductPurchase> productPurchases = new ArrayList<>();
 
+    @OneToMany(mappedBy = "seller")
+    private List<BankTransaction> bankTransactions = new ArrayList<>();
+
     @Transient
     private Double balance;
 

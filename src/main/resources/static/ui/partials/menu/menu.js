@@ -377,7 +377,7 @@ app.controller("menuCtrl", [
             });
         };
         $scope.deleteCustomer = function (customer) {
-            ModalProvider.openConfirmModel("المستخدمين", "delete", "هل تود حذف العميل فعلاً؟").result.then(function (value) {
+            ModalProvider.openConfirmModel("العملاء والكفلاء", "delete", "هل تود حذف العميل فعلاً؟").result.then(function (value) {
                 if (value) {
                     CustomerService.remove(customer.id).then(function () {
                         var index = $scope.customers.indexOf(customer);

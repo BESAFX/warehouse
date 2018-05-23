@@ -2,17 +2,11 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.Bank;
-import com.besafx.app.entity.BankTransaction;
-import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Seller;
+import com.besafx.app.entity.*;
 import com.besafx.app.entity.projection.BankTransactionAmount;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.SellerSearch;
-import com.besafx.app.service.BankService;
-import com.besafx.app.service.BankTransactionService;
-import com.besafx.app.service.ContactService;
-import com.besafx.app.service.SellerService;
+import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +28,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/seller/")
@@ -45,12 +40,14 @@ public class SellerRest {
             "**," +
             "-productPurchases," +
             "-contracts," +
+            "-bankTransactions," +
             "seller[id]";
 
     private final String FILTER_DETAILS = "" +
             "**," +
             "productPurchases[**,product[id,name],-seller,-contractProducts,person[id,contact[id,shortName]]]," +
             "-contracts," +
+            "-bankTransactions," +
             "seller[id]";
 
     @Autowired
@@ -66,11 +63,26 @@ public class SellerRest {
     private BankTransactionService bankTransactionService;
 
     @Autowired
+    private ContractProductService contractProductService;
+
+    @Autowired
+    private ContractPaymentService contractPaymentService;
+
+    @Autowired
+    private ContractPremiumService contractPremiumService;
+
+    @Autowired
+    private ProductPurchaseService productPurchaseService;
+
+    @Autowired
+    private ContractService contractService;
+
+    @Autowired
     private NotificationService notificationService;
 
     @PostMapping(value = "create/{openCash}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_TEAM_CREATE')")
+    @PreAuthorize("hasRole('ROLE_SELLER_CREATE')")
     @Transactional
     public String create(@PathVariable(value = "openCash") Double openCash, @RequestBody Seller seller) {
         Seller topSeller = sellerService.findTopByOrderByCodeDesc();
@@ -117,7 +129,7 @@ public class SellerRest {
 
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_TEAM_UPDATE')")
+    @PreAuthorize("hasRole('ROLE_SELLER_UPDATE')")
     @Transactional
     public String update(@RequestBody Seller seller) {
         if (sellerService.findByCodeAndIdIsNot(seller.getCode(), seller.getId()) != null) {
@@ -139,12 +151,64 @@ public class SellerRest {
 
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_TEAM_DELETE')")
+    @PreAuthorize("hasRole('ROLE_SELLER_DELETE')")
     @Transactional
     public void delete(@PathVariable Long id) {
         Seller seller = sellerService.findOne(id);
         if (seller != null) {
-            sellerService.delete(id);
+
+            LOG.info("رفض العملية فى حال كان هو المستثمر الرئيسي");
+            if(Initializer.company.getSeller().equals(seller)){
+                throw new CustomException("لا يمكن حذف المستثمر الرئيسي للبرنامج");
+            }
+
+            LOG.info("حذف كل سلع العقود");
+            contractProductService.delete(seller.getContracts()
+                                                  .stream()
+                                                  .flatMap(contract -> contract.getContractProducts().stream())
+                                                  .collect(Collectors.toList()));
+
+            LOG.info("حذف كل معاملات البنك لدفعات العقود");
+            bankTransactionService.delete(
+                    seller.getContracts()
+                            .stream()
+                            .flatMap(contract -> contract.getContractPayments().stream())
+                            .map(ContractPayment::getBankTransaction)
+                            .collect(Collectors.toList()));
+
+            LOG.info("حذف كل دفعات العقود");
+            contractPaymentService.delete(seller.getContracts()
+                                                  .stream()
+                                                  .flatMap(contract -> contract.getContractPayments().stream())
+                                                  .collect(Collectors.toList()));
+
+            LOG.info("حذف كل أقساط العقود");
+            contractPremiumService.delete(seller.getContracts()
+                                                  .stream()
+                                                  .flatMap(contract -> contract.getContractPremiums().stream())
+                                                  .collect(Collectors.toList()));
+
+            LOG.info("حذف العقود");
+            contractService.delete(seller.getContracts());
+
+            LOG.info("حذف حركات الشراء لهذا المستثمر");
+            bankTransactionService.delete(seller.getProductPurchases()
+                                                .stream()
+                                                .map(ProductPurchase::getBankTransaction)
+                                                .collect(Collectors.toList()));
+
+            LOG.info("حذف المشتريات لهذا المستثمر");
+            productPurchaseService.delete(seller.getProductPurchases());
+
+            LOG.info("تفريغ كل المعاملات المالية لهذا المستثمر");
+            seller.getBankTransactions().stream().forEach(bankTransaction -> {
+                bankTransaction.setSeller(null);
+                bankTransactionService.save(bankTransaction);
+            });
+
+            LOG.info("حذف المستثمر");
+            sellerService.delete(seller);
+
             notificationService.notifyAll(Notification
                                                   .builder()
                                                   .message("تم حذف المستثمر وكل ما يتعلق به من عقود وحسابات بنجاح")
