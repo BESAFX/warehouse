@@ -117,27 +117,11 @@
                     </tr>
                     <tr ng-if="contractPremiums.length > 0">
                         <td class="info" colspan="5">
-                            <span class="pull-left">اجمالي الأقساط</span>
+                            <span class="pull-left">المجموع</span>
                         </td>
-                        <td colspan="3">
-                            {{contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}
-                        </td>
-                    </tr>
-                    <tr ng-if="contractPremiums.length > 0">
-                        <td class="success" colspan="5">
-                            <span class="pull-left">اجمالي المسدد</span>
-                        </td>
-                        <td colspan="3">
-                            {{contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}
-                        </td>
-                    </tr>
-                    <tr ng-if="contractPremiums.length > 0">
-                        <td class="danger" colspan="5">
-                            <span class="pull-left">اجمالي الباقي</span>
-                        </td>
-                        <td colspan="3">
-                            {{contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}
-                        </td>
+                        <td class="success" colspan="1">{{contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>

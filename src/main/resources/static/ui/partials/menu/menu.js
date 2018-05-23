@@ -1046,7 +1046,7 @@ app.controller("menuCtrl", [
                 '<span>جديد...</span>' +
                 '</div>',
                 enabled: function () {
-                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CUSTOMER_CREATE']);
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.newContract();
@@ -1058,7 +1058,7 @@ app.controller("menuCtrl", [
                 '<span>حذف...</span>' +
                 '</div>',
                 enabled: function () {
-                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SELLER_DELETE']);
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_DELETE']);
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.deleteContract($itemScope.contract);
@@ -1245,6 +1245,80 @@ app.controller("menuCtrl", [
             $scope.pageContractPremium.page--;
             $scope.searchContractPremiums($scope.paramContractPremium);
         };
+        $scope.checkAllContractPremiums = function () {
+            var elements = document.querySelectorAll('.check');
+            for (var i = 0, n = elements.length; i < n; i++) {
+                var element = elements[i];
+                if ($('#checkAllContractPremiums input').is(":checked")) {
+                    element.MaterialCheckbox.check();
+                }
+                else {
+                    element.MaterialCheckbox.uncheck();
+                }
+            }
+            angular.forEach($scope.contractPremiums, function (contractPremium) {
+                contractPremium.isSelected = $scope.contractPremiums.checkAll;
+            });
+        };
+        $scope.checkContractPremium = function () {
+            var elements = document.querySelectorAll('.check');
+            for (var i = 0, n = elements.length; i < n; i++) {
+                var element = elements[i];
+                if ($('.check input:checked').length == $('.check input').length) {
+                    document.querySelector('#checkAllContractPremiums').MaterialCheckbox.check();
+                } else {
+                    document.querySelector('#checkAllContractPremiums').MaterialCheckbox.uncheck();
+                }
+            }
+        };
+        $scope.rowMenuContractPremium = [
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/add.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>جديد...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']);
+                },
+                click: function ($itemScope, $event, value) {
+
+                }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/delete.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>حذف...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CONTRACT_PREMIUM_DELETE']);
+                },
+                click: function ($itemScope, $event, value) {
+
+                }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/send.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>إرسال رسالة...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SMS_SEND']);
+                },
+                click: function ($itemScope, $event, value) {
+                    var contractPremiums = [];
+                    angular.forEach($scope.contractPremiums, function (contractPremium) {
+                        if(contractPremium.isSelected){
+                            contractPremiums.push(contractPremium);
+                        }
+                    });
+                    if(contractPremiums.length === 0){
+                        ModalProvider.openConfirmModel('إرسال رسائل الأقساط', 'send', 'فضلا قم باختيار قسط واحد على الأقل');
+                        return;
+                    }
+                    ModalProvider.openContractPremiumSendMessageModel(contractPremiums);
+                }
+            }
+        ];
 
         /**************************************************************************************************************
          *                                                                                                            *
@@ -1655,7 +1729,7 @@ app.controller("menuCtrl", [
          * Print                                                                                                      *
          *                                                                                                            *
          **************************************************************************************************************/
-        $scope.printToCart = function (printSectionId, title) {
+        $rootScope.printToCart = function (printSectionId, title) {
             var innerContents = document.getElementById(printSectionId).innerHTML;
             var mywindow = window.open(title, 'new div', 'height=400,width=600');
             mywindow.document.write('<html><head><title></title>');
@@ -1722,6 +1796,8 @@ app.controller("menuCtrl", [
         };
 
         $scope.paramWithdrawCash = {};
+        $scope.sellerStatement = {};
+        $scope.contractPaymentProfit = {};
         $scope.fetchAllBanks = function () {
             BankService.findAll().then(function (value) {
                 $scope.banks = value;
@@ -1754,6 +1830,30 @@ app.controller("menuCtrl", [
             SellerService.findAllSellerBalance().then(function (value) {
                 $scope.sellersBalance = value;
             })
+        };
+        $scope.fetchAllSellerCombo = function () {
+            SellerService.findAllCombo().then(function (value) {
+                $scope.sellersCombo = value;
+            });
+        };
+        $scope.fetchSellerStatementContracts = function () {
+            ContractService.findBySeller($scope.sellerStatement.seller.id).then(function (value) {
+                $scope.sellerStatement.contracts = value;
+            });
+        };
+        $scope.fetchSellerStatementBanks = function () {
+            BankService.findBySeller($scope.sellerStatement.seller.id).then(function (value) {
+                $scope.sellerStatement.banks = value;
+            });
+        };
+        $scope.fetchContractPaymentsProfit = function () {
+          ContractPaymentService.findByDateBetween(
+              $scope.contractPaymentProfit.dateFrom.getTime(),
+              $scope.contractPaymentProfit.dateTo.getTime()
+          )
+              .then(function (value) {
+                  $scope.contractPaymentProfit.contractPayments = value;
+              });
         };
 
         $timeout(function () {

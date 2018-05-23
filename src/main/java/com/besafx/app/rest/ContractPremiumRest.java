@@ -1,11 +1,13 @@
 package com.besafx.app.rest;
 
+import com.besafx.app.config.SendSMS;
 import com.besafx.app.entity.ContractPayment;
 import com.besafx.app.entity.ContractPremium;
 import com.besafx.app.search.ContractPremiumSearch;
 import com.besafx.app.service.BankTransactionService;
 import com.besafx.app.service.ContractPaymentService;
 import com.besafx.app.service.ContractPremiumService;
+import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +21,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +54,9 @@ public class ContractPremiumRest {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private SendSMS sendSMS;
 
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -81,6 +90,33 @@ public class ContractPremiumRest {
                                                   .builder()
                                                   .message("تم حذف القسط من العقد وكل الدفعات المرتبطة بهذا القسط بنجاح")
                                                   .type("error").build());
+        }
+    }
+
+    @PostMapping(value = "sendMessage/{contractPremiumIds}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_SMS_SEND')")
+    public void sendMessage(@RequestBody String content, @PathVariable List<Long> contractPremiumIds) throws Exception {
+        ListIterator<Long> listIterator = contractPremiumIds.listIterator();
+        while (listIterator.hasNext()){
+            Long id = listIterator.next();
+            ContractPremium contractPremium = contractPremiumService.findOne(id);
+            String message = content.replaceAll("#amount#", contractPremium.getAmount().toString())
+                                    .replaceAll("#dueDate#", DateConverter.getDateInFormat(contractPremium.getDueDate()));
+            Future<String> task = sendSMS.sendMessage(contractPremium.getContract().getCustomer().getContact().getMobile(),
+                                                      message);
+            String taskResult = task.get();
+            StringBuilder builder = new StringBuilder();
+            builder.append("تم إرسال رسالة إلى الرقم / ");
+            builder.append(contractPremium.getContract().getCustomer().getContact().getMobile());
+            builder.append(" محتواها ما يلي : ");
+            builder.append(message);
+            builder.append(" ، نتيجة الإرسال: ");
+            builder.append(taskResult);
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message(builder.toString())
+                                                  .type("information").build());
         }
     }
 

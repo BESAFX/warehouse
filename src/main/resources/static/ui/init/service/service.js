@@ -294,8 +294,28 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             backdrop: 'static',
             keyboard: false,
             resolve: {
-                contract: function () {
-                    return contract;
+                contract: ['ContractService', function (ContractService) {
+                    return ContractService.findOne(contract.id).then(function (data) {
+                        return data;
+                    });
+                }]
+            }
+        });
+    };
+
+    this.openContractPremiumSendMessageModel = function (contractPremiums) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contractPremium/contractPremiumSendMessage.html',
+            controller: "contractPremiumSendMessageCtrl",
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                contractPremiums: function () {
+                    return contractPremiums;
                 }
             }
         });

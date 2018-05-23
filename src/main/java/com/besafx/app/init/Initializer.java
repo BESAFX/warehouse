@@ -18,6 +18,8 @@ public class Initializer implements CommandLineRunner {
 
     private final static Logger LOG = LoggerFactory.getLogger(Initializer.class);
 
+    public static Company company;
+
     public static Bank bank;
 
     public static TransactionType transactionTypeDeposit;
@@ -166,6 +168,7 @@ public class Initializer implements CommandLineRunner {
                                             "ROLE_WITHDRAW_CREATE",
                                             "ROLE_TRANSFER_CREATE",
                                             "ROLE_WITHDRAW_CASH_CREATE",
+                                            "ROLE_SMS_SEND",
                                             "ROLE_CUSTOMER_CREATE",
                                             "ROLE_CUSTOMER_UPDATE",
                                             "ROLE_CUSTOMER_DELETE",
@@ -212,6 +215,8 @@ public class Initializer implements CommandLineRunner {
     private void init() {
 
         LOG.info("تعريف بعض المتغيرات الهامة");
+
+        company = companyService.findFirstBy();
 
         bank = bankService.findFirstBy();
 

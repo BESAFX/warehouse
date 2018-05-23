@@ -53,6 +53,25 @@
                     </a>
                 </div>
 
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#panel-5-contract-details"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>طباعة العقد</span>
+                    </a>
+                    <a href="#panel-6-contract-details"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>طباعة سند لأمر</span>
+                    </a>
+                    <a href="#panel-7-contract-details"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>طباعة كمبيالة</span>
+                    </a>
+                    <a href="#panel-8-contract-details"
+                       class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <span>طباعة سند إستلام</span>
+                    </a>
+                </div>
+
                 <div class="mdl-tabs__panel is-active" id="panel-1-contract-details">
 
                     <div class="form-group row">
@@ -236,7 +255,7 @@
                                             <button uib-tooltip="إضافة قسط"
                                                     tooltip-append-to-body="true"
                                                     type="button"
-                                                    ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']) && (contract.contractPremiums | sumByKey:'paid') < contract.totalPrice"
+                                                    ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']) && (contract.contractPremiums | sumByKey:'amount') < contract.totalPrice"
                                                     ng-click="newContractPremium()"
                                                     class="mdl-button mdl-js-button mdl-js-ripple-effect">
                                                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}"
@@ -370,6 +389,820 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-5-contract-details">
+
+                    <div class="form-group row">
+
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printContract1', 'طباعة العقد')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
+                    </div>
+
+                    <div class="form-group row" id="printContract1">
+
+                        <div class="template-border">
+
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h3 class="text-center">عقد بيع بالأقساط</h3>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-right template-box">
+                                        <strong>التاريخ / </strong>
+                                        <span>{{today | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-left template-box">
+                                        <strong>رقم العقد / </strong>
+                                        {{contract.code}}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-right template-box">
+                                        <strong>الموافق / </strong>
+                                        <span>{{today | date: 'yyyy-MM-dd'}}</span>
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="template-body">
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <p class="text-right">
+                                            <span>بسم الله والحمد لله والصلاة والسلام على رسول الله، بعون الله وتوفيقه تم الاتفاق بين كل من: </span>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <p class="text-right">
+                                            <span>الطرف الأول / البائع:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                        <p class="text-right">
+                                            <strong>{{contract.seller.contact.shortName}}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <span>هاتف:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <strong>{{contract.seller.contact.mobile}}</strong>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <p class="text-right">
+                                            <span>الطرف الثاني / المشتري:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                        <p class="text-right">
+                                            <strong>{{contract.customer.contact.shortName}}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <span>العمل:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <strong>{{contract.customer.contact.qualification}}</strong>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <span>رقم البطاقة:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <strong>{{contract.customer.contact.identityNumber}}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <span>هاتف العمل:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <strong>{{contract.customer.contact.phone}}</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <span>جوال:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <p class="text-right">
+                                            <strong>{{contract.customer.contact.mobile}}</strong>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <p class="text-right">
+                                            <span>نعم أنا الطرف الثاني لقد اشتريت من الطرف الأول: </span>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <p class="text-right">
+                                            <span>بمبلغ: </span>
+                                            <strong>{{contract.totalPrice | currency:'':2}}</strong>
+                                            <span> ريال سعودي فقط لا غير</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <p class="text-right">
+                                            <span>على أن يكون السداد على أقساط شهرية بمعدل:</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <p class="text-right">
+                                            <span>لكل شهر اعتباراً من:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                        <p class="text-right">
+                                            <span>وقمت بدفع دفعة مالية مقدمة وقدرها:</span>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <p class="text-right">
+                                            <span>على أن التزم بالسداد شهرياً دون أي تأخير أو مماطلة، وفي حالة عدم التزامي بسداد قسطين متتالين أكون ملزم بسداد كامل الأقساط المتبقية دفعة واحدة دون اعتراض ورضيت وقبلت بجميع بنود هذا العقد</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="template-box">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                            <p class="text-right">
+                                                <span>أقر أنا المدعو:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"></div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>العمل:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>رقم البطاقة:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>هاتف العمل:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>جوال:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <p class="text-right">
+                                                <span>أقر وأعترف أنني أكفل المدعو/ </span>
+                                                <strong>{{contract.customer.contact.shortName}}</strong>
+                                                <span>، كفالة غارمية فى حالة الحياة والممات بمبلغ وقدره/ </span>
+                                                {{contract.totalPrice | currency:'':2}}
+                                                <span> ريال سعودي فقط لا غير ، دون أي تهاون أو تأخير</span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <br>
+
+                                <div class="template-box">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                            <p class="text-right">
+                                                <span>أقر أنا المدعو:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5"></div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>العمل:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>رقم البطاقة:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>هاتف العمل:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                            <p class="text-right">
+                                                <span>جوال:</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <p class="text-right">
+                                                <span>أقر وأعترف أنني أكفل المدعو/ </span>
+                                                <strong>{{contract.customer.contact.shortName}}</strong>
+                                                <span>، كفالة غارمية فى حالة الحياة والممات بمبلغ وقدره/ </span>
+                                                {{contract.totalPrice | currency:'':2}}
+                                                <span> ريال سعودي فقط لا غير ، دون أي تهاون أو تأخير</span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <hr>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">البائع</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">المشتري</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">الكفيل الغارم الأول</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">الكفيل الغارم الثاني</h5>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">({{contract.seller.contact.shortName}})</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">({{contract.customer.contact.shortName}})</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">({{contract.sponsor1.contact.shortName}})</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">({{contract.sponsor2.contact.shortName}})</h5>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-6-contract-details">
+
+                    <div class="form-group row">
+
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printContract2', 'طباعة سند لأمر')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
+                    </div>
+
+                    <div class="form-group row" id="printContract2">
+
+                        <div class="template-border">
+
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h3 class="text-center">سند لأمر</h3>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-right template-box">
+                                        <strong>التاريخ / </strong>
+                                        <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{today | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{today | date: 'yyyy-MM-dd'}}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-left template-box">
+                                        <strong>المبلغ / </strong>
+                                        {{contract.totalPrice | currency:' SAR ':2}}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <div class="template-body">
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <p class="text-right">
+                                        <span>أتعهد بأن أدفع بموجب هذا السند لأمر / </span>
+                                        <strong>{{contract.seller.contact.shortName}}</strong>
+                                        <span>، المبلغ الموضح أعلاه ومقداره : </span>
+                                        <span>{{contract.totalPrice | currency:'':2}}</span>
+                                        <span> ريال سعودي فقط لا غير. </span>
+                                    </p>
+                                    <p class="text-center">ولحامل هذة الورقة حق الرجوع بدون مصروفات أو احتجاج.</p>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td class="fit">اسم المدين</td>
+                                            <td>{{contract.customer.contact.shortName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>التوقيع</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>رقم الجوال</td>
+                                            <td>{{contract.customer.contact.mobile}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>العنوان</td>
+                                            <td>{{contract.customer.contact.address}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <h3 class="text-center">مقبول كضامن احتياطي</h3>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <p class="text-right">
+                                        <span>أكفـــل السيد / </span>
+                                        <strong>{{contract.customer.contact.shortName}}</strong>
+                                        <span>، كفالة غرم وأداء تضامنية فى تسديد دينه موضوع السند المحرر أعلاه للمكرم / </span>
+                                        <span>{{contract.seller.contact.shortName}}</span>
+                                        <span> في موعد استحقاقه وهذا السند واجب الدفع دون الرجوع بلا مصروفات وبدون احتجاج.</span>
+                                    </p>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">اسم الضامن</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">العنوان</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">التوقيع</h5>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-7-contract-details">
+
+                    <div class="form-group row">
+
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printContract3', 'طباعة كمبيالة')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
+                    </div>
+
+                    <div class="form-group row" id="printContract3">
+
+                        <div class="template-border">
+
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h3 class="text-center">كمبيالة تستحق السداد</h3>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-right template-box">
+                                        <strong>التاريخ / </strong>
+                                        <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{today | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{today | date: 'yyyy-MM-dd'}}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-left template-box">
+                                        <strong>المبلغ / </strong>
+                                        {{contract.totalPrice | currency:' SAR ':2}}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <div class="template-body">
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <p class="text-right">
+                                        <span>أتعهد بأن أدفع بموجب هذا السند لأمر / </span>
+                                        <strong>{{contract.seller.contact.shortName}}</strong>
+                                        <span>، المبلغ الموضح أعلاه ومقداره : </span>
+                                        <span>{{contract.totalPrice | currency:'':2}}</span>
+                                        <span> ريال سعودي فقط لا غير. </span>
+                                        <span>فى تاريخ / -----------------------------، مكان التحرير / -----------------------------</span>
+                                    </p>
+                                    <p class="text-center">
+                                        <span>أتعهد أنا المدين الموضحة بياناتي أدناه بأن أدفع المبلغ المكتوب أعلاه بدون تأخير أو تأجيل ، </span>
+                                        <span>كما أتعهد أنا الكفيل الموضحة بياناتي أدناه بأن ألتزم بدفع قيمة الكمبيالة عن مكفولي فى حال تأخره عن السداد لأي سبب وهذة كفالة غرم وأداء.</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td class="fit">اسم المدين</td>
+                                            <td>{{contract.customer.contact.shortName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fit">التوقيع</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fit">رقم الجوال</td>
+                                            <td>{{contract.customer.contact.mobile}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fit">رقم البطاقة</td>
+                                            <td>{{contract.customer.contact.identityNumber}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fit">العنوان</td>
+                                            <td>{{contract.customer.contact.address}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">اسم الكفيل</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">العنوان</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">التوقيع</h5>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mdl-tabs__panel" id="panel-8-contract-details">
+
+                    <div class="form-group row">
+
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printContract4', 'طباعة سند إستلام بضاعة')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
+                    </div>
+
+                    <div class="form-group row" id="printContract4">
+
+                        <div class="template-border">
+
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h3 class="text-center">سند إستلام بضاعة</h3>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p class="pull-right template-box">
+                                        <strong>التاريخ / </strong>
+                                        <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{today | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                        <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{today | date: 'yyyy-MM-dd'}}</span>
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <div class="template-body">
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <p class="text-right">
+                                        <span>نعم أنا المدعو / </span>
+                                        <strong>{{contract.customer.contact.shortName}}</strong>
+                                        <span>، أفيدكم باستلام البضاعة الموضحة أدناه وهي كالآتي : </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+
+                                            <th>
+                                                <span>السلعة</span>
+                                            </th>
+
+                                            <th>
+                                                <span>الكمية</span>
+                                            </th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="contractProduct in contract.contractProducts">
+                                            <td>{{contractProduct.productPurchase.product.name}}</td>
+                                            <td>{{contractProduct.quantity}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <p class="text-right">
+                                        <span>وهذة البضاعة كاملة سالمة من العيوب علما بأنني استلمتها وأنا بكامل قواي العقلية، </span>
+                                        <span>وبحالتها الراهنة وعاينتها معاينة منافية للجهالة وقبلتها وحزتها وتأكددت من عددها وتصرفت بها، </span>
+                                        <span>وعلى ذلك أوقع ولا يحق لي المطالبة أو الاعتراض بعد استلام البضاعة وخروجها من المحل.</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <h2 class="text-center">الختم</h2>
+                                    </div>
+
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="2">المحرر</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fit">الأسم</td>
+                                                <td>{{contract.customer.contact.shortName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fit">رقم الجوال</td>
+                                                <td>{{contract.customer.contact.mobile}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fit">رقم البطاقة</td>
+                                                <td>{{contract.customer.contact.identityNumber}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fit">التوقيع</td>
+                                                <td>---------------------------------------</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>

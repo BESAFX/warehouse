@@ -139,4 +139,35 @@ public class Contract implements Serializable {
             return null;
         }
     }
+
+    //حساب ربح العقد
+    public Double getCapitalCash() {
+        try {
+            return this.contractProducts
+                    .stream()
+                    .mapToDouble(contractProduct -> contractProduct.getQuantity() * contractProduct.getProductPurchase().getUnitPurchasePrice())
+                    .sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    //حساب الربح
+    public Double getProfit() {
+        try {
+            return this.getTotalPrice() - this.getCapitalCash();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    //حساب نسبة الربح
+    public Double getProfitPercentage() {
+        try {
+            return (this.getProfit() / this.getCapitalCash()) * 100;
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
 }

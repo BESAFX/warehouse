@@ -38,6 +38,12 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             selected: false,
             category: 'الإدارة'
         });
+        $scope.roles.push({
+            name: 'إرسال الرسائل',
+            value: 'ROLE_SMS_SEND',
+            selected: false,
+            category: 'الإدارة'
+        });
         //////////////////////////Customer//////////////////////////////////////////
         $scope.roles.push({
             name: 'إنشاء حسابات العملاء',

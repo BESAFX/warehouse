@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,9 +58,6 @@ public class SellerRest {
 
     @Autowired
     private SellerSearch sellerSearch;
-
-    @Autowired
-    private BankService bankService;
 
     @Autowired
     private ContactService contactService;
@@ -159,6 +157,13 @@ public class SellerRest {
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
                                        sellerService.findOne(id));
+    }
+
+    @GetMapping(value = "findAllCombo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findAllCombo() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
+                                       sellerService.findAll(new Sort(Sort.Direction.ASC, "contact.shortName")));
     }
 
     @GetMapping(value = "findSellerBalance/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

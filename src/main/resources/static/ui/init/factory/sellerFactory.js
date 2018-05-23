@@ -29,6 +29,11 @@ app.factory("SellerService",
                     return response.data;
                 });
             },
+            findAllCombo: function () {
+                return $http.get("/api/seller/findAllCombo").then(function (response) {
+                    return response.data;
+                });
+            },
             filter: function (search) {
                 return $http.get("/api/seller/filter?" + search).then(function (response) {
                     return response.data;

@@ -43,7 +43,7 @@ public class ContractPaymentRest {
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "contract[id,code,customer[id,contact[id,shortName]]]," +
+            "contract[id,code,totalPrice,seller[id,contact[id,shortName]],customer[id,contact[id,shortName,mobile]]]," +
             "-contractPremium," +
             "-bankTransaction," +
             "person[id,contact[id,shortName]]";
@@ -139,6 +139,16 @@ public class ContractPaymentRest {
     public String findByContract(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        contractPaymentService.findByContractId(id));
+    }
+
+    @GetMapping(value = "findByDateBetween/{startDate}/{endDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findByDateBetween(@PathVariable(value = "startDate") Long startDate, @PathVariable(value = "endDate") Long endDate) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
+                                       contractPaymentService.findByDateBetween(
+                                               new DateTime(startDate).withTimeAtStartOfDay().toDate(),
+                                               new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
+                                      ));
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)

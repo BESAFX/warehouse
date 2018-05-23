@@ -19,6 +19,11 @@ app.factory("ContractPremiumService",
             remove: function (id) {
                 return $http.delete("/api/contractPremium/delete/" + id);
             },
+            sendMessage: function (message, ids) {
+                return $http.post("/api/contractPremium/sendMessage/" + ids, message).then(function (response) {
+                    return response.data;
+                });
+            },
             filter: function (search) {
                 return $http.get("/api/contractPremium/filter?" + search).then(function (response) {
                     return response.data;

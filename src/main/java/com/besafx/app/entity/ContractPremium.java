@@ -70,4 +70,23 @@ public class ContractPremium implements Serializable {
             return 0.0;
         }
     }
+
+    public String getState() {
+        try {
+            double remain = this.getRemain();
+            if (remain == 0) {
+                return "تم السداد";
+            }  else if (remain > 0 && remain < this.amount) {
+                return "سداد جزئي";
+            } else if (this.dueDate.after(new Date())) {
+                return "غير مستحق";
+            }else if (remain == this.amount) {
+                return "غير مسدد";
+            }else{
+                return "غير معروف";
+            }
+        } catch (Exception ex) {
+            return "";
+        }
+    }
 }

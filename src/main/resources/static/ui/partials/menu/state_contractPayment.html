@@ -144,11 +144,15 @@
                             </th>
 
                             <th>
+                                <span>البيان</span>
+                            </th>
+
+                            <th>
                                 <span>المبلغ</span>
                             </th>
 
                             <th>
-                                <span>البيان</span>
+                                <span>الربح</span>
                             </th>
 
                         </tr>
@@ -162,24 +166,24 @@
                                 <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                 <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPayment.date | date: 'yyyy-MM-dd'}}</span>
                             </td>
-                            <td>{{contractPayment.amount | currency:' SAR ':2}}</td>
                             <td>{{contractPayment.note}}</td>
+                            <td>{{contractPayment.amount | currency:' SAR ':2}}</td>
+                            <td>{{contractPayment.profit | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!contractPayments || contractPayments.length ==0">
-                            <td colspan="7">
+                            <td colspan="8">
                                 <p>
                                     <span>لا توجد دفعات حتى الآن </span>
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <td class="info" colspan="4">
-                                <span class="pull-left">إجمالي الدفعات</span>
+                            <td class="info" colspan="5">
+                                <span class="pull-left">المجموع</span>
                             </td>
-                            <td colspan="3">
-                                {{contractPayments | sumByKey:'amount' | currency:' SAR ':2}}
-                            </td>
+                            <td colspan="1">{{contractPayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                            <td colspan="1">{{contractPayments | sumByKey:'profit' | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>

@@ -44,7 +44,7 @@ public class ContractRest {
     private final String FILTER_DETAILS = "" +
             "**," +
             "seller[id,contact[id,mobile,shortName]]," +
-            "customer[id,contact[id,mobile,shortName]]," +
+            "customer[id,contact[id,mobile,identityNumber,address,shortName]]," +
             "sponsor1[id,contact[id,mobile,shortName]]," +
             "sponsor2[id,contact[id,mobile,shortName]]," +
             "contractProducts[**,-contract,productPurchase[id,product[id,name]]]," +
@@ -69,6 +69,9 @@ public class ContractRest {
 
     @Autowired
     private ContractSearch contractSearch;
+
+    @Autowired
+    private SellerService sellerService;
 
     @Autowired
     private NotificationService notificationService;
@@ -158,6 +161,13 @@ public class ContractRest {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
                                        contractService.findBySeller(caller.getCompany().getSeller()));
+    }
+
+    @GetMapping(value = "findBySeller/{sellerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findBySeller(@PathVariable(value = "sellerId") Long sellerId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
+                                       contractService.findBySeller(sellerService.findOne(sellerId)));
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)

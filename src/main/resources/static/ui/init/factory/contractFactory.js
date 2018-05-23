@@ -11,6 +11,11 @@ app.factory("ContractService",
                     return response.data;
                 });
             },
+            findBySeller: function (sellerId) {
+                return $http.get("/api/contract/findBySeller/" + sellerId).then(function (response) {
+                    return response.data;
+                });
+            },
             create: function (contract) {
                 return $http.post("/api/contract/create", contract).then(function (response) {
                     return response.data;

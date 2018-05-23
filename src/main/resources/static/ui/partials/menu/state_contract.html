@@ -195,7 +195,15 @@
                             </th>
 
                             <th>
-                                <span>المبلغ</span>
+                                <span>رأس المال</span>
+                            </th>
+
+                            <th>
+                                <span>الربح</span>
+                            </th>
+
+                            <th>
+                                <span>الأجمالي</span>
                             </th>
 
                             <th>
@@ -235,6 +243,8 @@
                             <td>{{contract.customer.contact.shortName}}</td>
                             <td>{{contract.customer.contact.mobile}}</td>
                             <td>{{contract.seller.contact.shortName}}</td>
+                            <td>{{contract.capitalCash | currency:' SAR':2}}</td>
+                            <td>{{contract.profit | currency:' SAR':2}}</td>
                             <td>{{contract.totalPrice | currency:' SAR':2}}</td>
                             <td>{{contract.paid | currency:' SAR':2}}</td>
                             <td>{{contract.remain | currency:' SAR':2}}</td>
@@ -247,7 +257,7 @@
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!contracts || contracts.length ==0">
-                            <td colspan="11">
+                            <td colspan="2">
                                 <p ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
                                     <span>لا توجد عقود حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
                                     <a href="" ng-click="newContract()">اضغط هنا</a>

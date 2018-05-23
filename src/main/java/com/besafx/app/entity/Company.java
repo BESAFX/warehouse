@@ -49,6 +49,10 @@ public class Company implements Serializable {
 
     private String commericalRegisteration;
 
+    private String yamamahUserName;
+
+    private String yamamahPassword;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String logo;

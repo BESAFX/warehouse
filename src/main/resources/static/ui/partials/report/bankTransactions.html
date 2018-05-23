@@ -101,8 +101,10 @@
                         <td>{{bankTransaction.note}}</td>
                     </tr>
                     <tr ng-if="bankTransactions.length > 0">
-                        <td class="success" colspan="3">الإجمالي</td>
-                        <td colspan="2">{{bankTransactions | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                        <td class="info" colspan="3">
+                            <span class="pull-left">المجموع الكلي</span>
+                        </td>
+                        <td class="success" colspan="2">{{bankTransactions | sumByKey:'amount' | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -19,6 +19,12 @@ app.factory("ContractPaymentService",
                     return response.data;
                 });
             },
+            findByDateBetween: function (startDate, endDate) {
+                return $http.get("/api/contractPayment/findByDateBetween/" + startDate + "/" + endDate)
+                    .then(function (response) {
+                    return response.data;
+                });
+            },
             filter: function (search) {
                 return $http.get("/api/contractPayment/filter?" + search).then(function (response) {
                     return response.data;

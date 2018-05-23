@@ -127,6 +127,14 @@
                         <thead>
                         <tr>
 
+                            <th class="fit no-print">
+                                <label id="checkAllContractPremiums" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                                       for="checkbox-0">
+                                    <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
+                                           ng-model="contractPremiums.checkAll" ng-change="checkAllContractPremiums()">
+                                </label>
+                            </th>
+
                             <th>
                                 <span>#</span>
                             </th>
@@ -140,7 +148,15 @@
                             </th>
 
                             <th>
+                                <span>جوال العميل</span>
+                            </th>
+
+                            <th>
                                 <span>تاريخ الاستحقاق</span>
+                            </th>
+
+                            <th>
+                                <span>الحالة</span>
                             </th>
 
                             <th>
@@ -158,49 +174,46 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="contractPremium in contractPremiums | filter:contractPremiums.searchText">
+                        <tr ng-repeat="contractPremium in contractPremiums | filter:contractPremiums.searchText"
+                            ng-class="{'mdl-color--primary-dark' : contractPremium.isSelected, 'mdl-color-text--white' : contractPremium.isSelected}"
+                            context-menu="rowMenuContractPremium">
+                            <td class="fit no-print">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
+                                       for="checkbox-contractPremium-{{contractPremium.id}}">
+                                    <input type="checkbox"
+                                           id="checkbox-contractPremium-{{contractPremium.id}}"
+                                           class="mdl-checkbox__input"
+                                           ng-model="contractPremium.isSelected" ng-click="checkContractPremium()">
+                                </label>
+                            </td>
                             <td>{{$index+1}}</td>
                             <td>{{contractPremium.contract.code}}</td>
                             <td>{{contractPremium.contract.customer.contact.shortName}}</td>
+                            <td>{{contractPremium.contract.customer.contact.mobile}}</td>
                             <td>
                                 <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                 <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPremium.dueDate | date: 'yyyy-MM-dd'}}</span>
                             </td>
+                            <td>{{contractPremium.state}}</td>
                             <td>{{contractPremium.amount | currency:' SAR ':2}}</td>
                             <td>{{contractPremium.paid | currency:' SAR ':2}}</td>
                             <td>{{contractPremium.remain | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!contractPremiums || contractPremiums.length ==0">
-                            <td colspan="7">
+                            <td colspan="10">
                                 <p>
                                     <span>لا يوجد أقساط حتى الآن </span>
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <td class="info" colspan="4">
-                                <span class="pull-left">اجمالي الأقساط</span>
+                            <td class="info" colspan="7">
+                                <span class="pull-left">المجموع الكلي</span>
                             </td>
-                            <td colspan="3">
-                                {{contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="success" colspan="4">
-                                <span class="pull-left">اجمالي المسدد</span>
-                            </td>
-                            <td colspan="3">
-                                {{contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="danger" colspan="4">
-                                <span class="pull-left">اجمالي الباقي</span>
-                            </td>
-                            <td colspan="3">
-                                {{contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}
-                            </td>
+                            <td class="success" colspan="1">{{contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>

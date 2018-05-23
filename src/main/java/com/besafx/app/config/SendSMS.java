@@ -1,5 +1,7 @@
 package com.besafx.app.config;
 
+import com.besafx.app.init.Initializer;
+import com.google.common.collect.Lists;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +28,8 @@ public class SendSMS {
 
     private final static Logger log = LoggerFactory.getLogger(SendSMS.class);
 
-    private void getCredit() throws JSONException {
+    @Async("threadMultiplePool")
+    public Future<Integer> getCredit() throws JSONException {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -31,8 +37,8 @@ public class SendSMS {
         String uri = new String("http://api.yamamah.com/GetCredit/{userName}/{password}");
 
         Map<String, String> vars = new HashMap<>();
-        vars.put("userName", "966599233472");
-        vars.put("password", "0504975344");
+        vars.put("userName", Initializer.company.getYamamahUserName());
+        vars.put("password", Initializer.company.getYamamahPassword());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Content-Type", "application/json");
@@ -44,10 +50,17 @@ public class SendSMS {
         String response = restTemplate.postForObject(uri, httpEntity, String.class, vars);
 
         JSONObject jsonObj = new JSONObject(response);
-        log.info(jsonObj.toString());
+        log.info("Credits = " + jsonObj.getJSONObject("GetCreditPostResult").getInt("Credit"));
+        return new AsyncResult<>(jsonObj.getJSONObject("GetCreditPostResult").getInt("Credit"));
     }
 
-    public String sendMessage(List<String> mobileList, String message) {
+    @Async("threadMultiplePool")
+    public Future<String> sendMessage(String mobile, String message) {
+        return sendMessage(Lists.newArrayList(mobile), message);
+    }
+
+    @Async("threadMultiplePool")
+    public Future<String> sendMessage(List<String> mobileList, String message) {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -59,9 +72,9 @@ public class SendSMS {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
         JSONObject json = new JSONObject();
-        json.put("Username", "966599233472");
-        json.put("Password", "0504975344");
-        json.put("Tagname", "ANNI");
+        json.put("Username", Initializer.company.getYamamahPassword());
+        json.put("Password", Initializer.company.getYamamahPassword());
+        json.put("Tagname", "MADAR");
         json.put("RecepientNumber", String.join(",", mobileList.stream().distinct().collect(Collectors.toList())));
         json.put("VariableList", "");
         json.put("ReplacementList", "");
@@ -74,6 +87,7 @@ public class SendSMS {
         String response = restTemplate.postForObject(uri, httpEntity, String.class);
 
         JSONObject jsonObj = new JSONObject(response);
-        return jsonObj.toString();
+        log.info("Message Response = " + jsonObj.getString("StatusDescription"));
+        return new AsyncResult<>(jsonObj.getString("StatusDescription"));
     }
 }

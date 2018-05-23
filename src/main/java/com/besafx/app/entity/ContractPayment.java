@@ -65,4 +65,22 @@ public class ContractPayment implements Serializable {
         ContractPayment contractPayment = mapper.readValue(jsonString, ContractPayment.class);
         return contractPayment;
     }
+
+    //حساب رأس المال
+    public Double getCapitalCash() {
+        try {
+            return this.amount - this.getProfit();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    //حساب الربح
+    public Double getProfit() {
+        try {
+            return (this.amount * this.contract.getProfitPercentage()) / 100;
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
 }

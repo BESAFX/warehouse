@@ -6,7 +6,7 @@
 
             <div class="panel-heading">البيانات العامة</div>
 
-            <div class="panel-body modal-body-free">
+            <div class="panel-body">
 
                 <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
@@ -39,141 +39,158 @@
                            class="mdl-tabs__tab">
                             <span>المخزون</span>
                         </a>
+                        <a href="#panel-7-company"
+                           class="mdl-tabs__tab">
+                            <span>رسائل SMS</span>
+                        </a>
                     </div>
 
-                    <div class="mdl-tabs__panel is-active" id="panel-1-company">
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free is-active" id="panel-1-company">
 
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                             ng-show="form.$invalid && form.$submitted">
-                            <div class="alert alert-danger" role="alert">
-                                <strong>فضلاً اكمل الحقول المطلوبة</strong>
-                            </div>
-                        </div>
+                        <form name="form1"
+                              ng-submit="submitCompany()"
+                              novalidate="novalidate"
+                              focus-group=""
+                              focus-stack=""
+                              focus-group-head="loop"
+                              focus-group-tail="loop">
 
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <label for="name" class="control-label">اسم الشركة</label>
-                                <input id="name"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.name">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                 ng-show="form1.$invalid && form1.$submitted">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                                </div>
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <label for="address" class="control-label">العنوان</label>
-                                <input id="address"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.address">
+                            <div class="form-group row">
+
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label for="name" class="control-label">اسم الشركة</label>
+                                    <input id="name"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.name">
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label for="address" class="control-label">العنوان</label>
+                                    <input id="address"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.address">
+                                </div>
+
                             </div>
 
-                        </div>
+                            <div class="form-group row">
 
-                        <div class="form-group row">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="phone" class="control-label">الهاتف</label>
+                                    <input id="phone"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.phone">
+                                </div>
 
-                            <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                <label for="phone" class="control-label">الهاتف</label>
-                                <input id="phone"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.phone">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="mobile" class="control-label">الجوال</label>
+                                    <input id="mobile"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.mobile">
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="fax" class="control-label">الفاكس</label>
+                                    <input id="fax"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.fax">
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label for="email" class="control-label">البريد الإلكتروني</label>
+                                    <input id="email"
+                                           type="email"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.email">
+                                </div>
+
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                <label for="mobile" class="control-label">الجوال</label>
-                                <input id="mobile"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.mobile">
+                            <div class="form-group row">
+
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label for="website" class="control-label">الموقع الرسمي</label>
+                                    <input id="website"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.website">
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label for="commericalRegisteration" class="control-label">السجل
+                                        التجاري</label>
+                                    <input id="commericalRegisteration"
+                                           type="text"
+                                           focus-index="1"
+                                           required="required"
+                                           disable-validation-message=""
+                                           class="form-control"
+                                           ng-model="selectedCompany.commericalRegisteration">
+                                </div>
+
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                <label for="fax" class="control-label">الفاكس</label>
-                                <input id="fax"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.fax">
-                            </div>
+                            <div class="form-group row">
 
-                            <div class="form-group col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                <label for="email" class="control-label">البريد الإلكتروني</label>
-                                <input id="email"
-                                       type="email"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.email">
-                            </div>
+                                <div class="panel-footer">
 
-                        </div>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <label for="website" class="control-label">الموقع الرسمي</label>
-                                <input id="website"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.website">
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <label for="commericalRegisteration" class="control-label">السجل
-                                    التجاري</label>
-                                <input id="commericalRegisteration"
-                                       type="text"
-                                       focus-index="1"
-                                       required="required"
-                                       disable-validation-message=""
-                                       class="form-control"
-                                       ng-model="selectedCompany.commericalRegisteration">
-                            </div>
-
-                        </div>
-
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                                <button uib-tooltip="حفظ"
-                                        tooltip-append-to-body="true"
-                                        type="button"
-                                        ng-click="submitCompany()"
-                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect pull-right">
+                                        <button uib-tooltip="حفظ"
+                                                tooltip-append-to-body="true"
+                                                type="submit"
+                                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect pull-right">
                                         <span class="mdl-list__item-primary-content">
                                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/save.{{iconSetType}}"
                                                  width="24" height="24">
                                             <span>حفظ البيانات</span>
                                         </span>
-                                </button>
+                                        </button>
+
+                                    </div>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        </form>
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-2-company">
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-2-company">
 
                         <div class="form-group row">
 
@@ -200,7 +217,7 @@
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-3-company">
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-3-company">
 
                         <div class="form-group row" ng-if="myContracts.length > 0">
 
@@ -244,7 +261,23 @@
                                         </th>
 
                                         <th>
-                                            <span>المبلغ</span>
+                                            <span>آخر عملية دفع</span>
+                                        </th>
+
+                                        <th>
+                                            <span>رأس المال</span>
+                                        </th>
+
+                                        <th>
+                                            <span>الربح</span>
+                                        </th>
+
+                                        <th>
+                                            <span>نسبة الربح</span>
+                                        </th>
+
+                                        <th>
+                                            <span>الأجمالي</span>
                                         </th>
 
                                         <th>
@@ -253,14 +286,6 @@
 
                                         <th>
                                             <span>المتبقي</span>
-                                        </th>
-
-                                        <th>
-                                            <span>آخر عملية دفع</span>
-                                        </th>
-
-                                        <th>
-                                            <span>بواسطة</span>
                                         </th>
 
                                     </tr>
@@ -273,21 +298,34 @@
                                         <td>{{contract.customer.contact.shortName}}</td>
                                         <td>{{contract.customer.contact.mobile}}</td>
                                         <td>{{contract.seller.contact.shortName}}</td>
-                                        <td>{{contract.totalPrice | currency:' SAR':2}}</td>
-                                        <td>{{contract.paid | currency:' SAR':2}}</td>
-                                        <td>{{contract.remain | currency:' SAR':2}}</td>
                                         <td>
                                             <span ng-show="dateType==='H'">{{contract.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                             <span ng-show="dateType==='G'">{{contract.date | date: 'yyyy-MM-dd'}}</span>
                                             <span class="label label-info">{{contract.date | date: 'hh:mm a'}}</span>
                                         </td>
-                                        <td>{{contract.person.contact.shortName}}</td>
+                                        <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
+                                        <td>{{contract.profit | currency:' SAR ':2}}</td>
+                                        <td>{{contract.profitPercentage | currency:' % ':2}}</td>
+                                        <td>{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                        <td>{{contract.paid | currency:' SAR ':2}}</td>
+                                        <td>{{contract.remain | currency:' SAR ':2}}</td>
                                     </tr>
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                         ng-show="!myContracts || myContracts.length ==0">
                                         <td colspan="11">
                                             <span>لا توجد عقود حتى الآن</span>
                                         </td>
+                                    </tr>
+                                    <tr ng-if="myContracts.length > 0">
+                                        <td class="info" colspan="6">
+                                            <span class="pull-left">المجموع الكلي</span>
+                                        </td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -297,7 +335,7 @@
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-4-company">
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-4-company">
 
                         <div class="form-group row">
 
@@ -334,7 +372,7 @@
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-5-company">
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-5-company">
 
                         <div class="form-group row" ng-if="myBankTransactions.length > 0">
 
@@ -377,10 +415,6 @@
                                             <span>البيان</span>
                                         </th>
 
-                                        <th>
-                                            <span>بواسطة</span>
-                                        </th>
-
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -393,7 +427,6 @@
                                         <td>{{bankTransaction.transactionType.name}}</td>
                                         <td class="fit">{{bankTransaction.amount | currency:' SAR ':2}}</td>
                                         <td>{{bankTransaction.note}}</td>
-                                        <td>{{bankTransaction.person.contact.shortName}}</td>
                                     </tr>
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                         ng-show="!myBankTransactions || myBankTransactions.length ==0">
@@ -411,7 +444,7 @@
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-6-company">
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-6-company">
 
                         <div class="form-group row" ng-if="myProductPurchases.length > 0">
 
@@ -504,6 +537,86 @@
                             </div>
 
                         </div>
+
+                    </div>
+
+                    <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-7-company">
+
+                        <form name="form2"
+                              ng-submit="submitCompany()"
+                              novalidate="novalidate"
+                              focus-group=""
+                              focus-stack=""
+                              focus-group-head="loop"
+                              focus-group-tail="loop">
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                                 ng-show="form2.$invalid && form2.$submitted">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>فضلاً اكمل الحقول المطلوبة</strong>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label for="yamamahUserName" class="control-label">اسم المستخدم</label>
+                                    <input id="yamamahUserName"
+                                           dir="ltr"
+                                           type="text"
+                                           required="required"
+                                           disable-validation-message=""
+                                           placeholder="ادخل اسم المستخدم أو رقم الجوال لحساب اليمامة للرسائل"
+                                           class="form-control"
+                                           ng-model="selectedCompany.yamamahUserName">
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <label for="yamamahPassword" class="control-label">كلمة المرور</label>
+                                    <input id="yamamahPassword"
+                                           dir="ltr"
+                                           type="password"
+                                           required="required"
+                                           disable-validation-message=""
+                                           placeholder="ادخل كلمة المرور لحساب اليمامة للرسائل"
+                                           class="form-control"
+                                           ng-model="selectedCompany.yamamahPassword">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+
+                                <h3 class="box-info">
+                                    <span>الرصيد = </span>
+                                </h3>
+
+                            </div>
+
+                            <div class="form-group row">
+
+                                <div class="panel-footer">
+
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                        <button uib-tooltip="حفظ"
+                                                tooltip-append-to-body="true"
+                                                type="submit"
+                                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect pull-right">
+                                        <span class="mdl-list__item-primary-content">
+                                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/save.{{iconSetType}}"
+                                                 width="24" height="24">
+                                            <span>حفظ البيانات</span>
+                                        </span>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
 
                     </div>
 
