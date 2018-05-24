@@ -119,6 +119,7 @@ gulp.task('scripts', function () {
         './init/factory/bankTransactionFactory.js',
         './init/factory/attachTypeFactory.js',
         './init/factory/personFactory.js',
+        './init/factory/smsFactory.js',
         './init/factory/teamFactory.js',
 
         './init/service/service.js',

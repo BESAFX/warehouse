@@ -10,6 +10,7 @@ app.controller("menuCtrl", [
     'BankTransactionService',
     'AttachTypeService',
     'PersonService',
+    'SmsService',
     'TeamService',
     'ModalProvider',
     '$scope',
@@ -28,6 +29,7 @@ app.controller("menuCtrl", [
               BankTransactionService,
               AttachTypeService,
               PersonService,
+              SmsService,
               TeamService,
               ModalProvider,
               $scope,
@@ -215,6 +217,11 @@ app.controller("menuCtrl", [
         $scope.findMyProductPurchases = function () {
             ProductPurchaseService.findMyProductPurchases().then(function (value) {
                 $scope.myProductPurchases = value;
+            });
+        };
+        $scope.findSmsCredit = function () {
+            SmsService.getCredit().then(function (value) {
+                $scope.selectedCompany.credit = value;
             });
         };
 

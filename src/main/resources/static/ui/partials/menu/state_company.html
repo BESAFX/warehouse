@@ -40,6 +40,7 @@
                             <span>المخزون</span>
                         </a>
                         <a href="#panel-7-company"
+                           ng-click="findSmsCredit()"
                            class="mdl-tabs__tab">
                             <span>رسائل SMS</span>
                         </a>
@@ -611,6 +612,7 @@
 
                                 <h3 class="box-info">
                                     <span>الرصيد = </span>
+                                    {{selectedCompany.credit}}
                                 </h3>
 
                             </div>
