@@ -75,7 +75,7 @@ public class ProductPurchaseRest {
         BankTransaction bankTransactionWithdrawPurchase = new BankTransaction();
         bankTransactionWithdrawPurchase.setBank(Initializer.bank);
         bankTransactionWithdrawPurchase.setSeller(productPurchase.getSeller());
-        bankTransactionWithdrawPurchase.setAmount(productPurchase.getQuantity() + productPurchase.getUnitPurchasePrice());
+        bankTransactionWithdrawPurchase.setAmount(productPurchase.getQuantity() * productPurchase.getUnitPurchasePrice());
         bankTransactionWithdrawPurchase.setTransactionType(Initializer.transactionTypeWithdrawPurchase);
         bankTransactionWithdrawPurchase.setDate(new DateTime().toDate());
         bankTransactionWithdrawPurchase.setPerson(caller);
@@ -88,7 +88,7 @@ public class ProductPurchaseRest {
         builder.append("، قيمة شراء " + productPurchase.getProduct().getName());
         builder.append("، عدد /  " + productPurchase.getQuantity());
         builder.append("، بسعر الوحدة /  " + productPurchase.getUnitPurchasePrice());
-        builder.append("، " + productPurchase.getNote() == null ? "" : productPurchase.getNote());
+        builder.append(" ، " + (productPurchase.getNote() == null ? "" : productPurchase.getNote()));
         bankTransactionWithdrawPurchase.setNote(builder.toString());
 
         productPurchase.setBankTransaction(bankTransactionService.save(bankTransactionWithdrawPurchase));

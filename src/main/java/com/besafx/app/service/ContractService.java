@@ -15,6 +15,8 @@ public interface ContractService extends PagingAndSortingRepository<Contract, Lo
 
     Contract findTopByOrderByCodeDesc();
 
+    Contract findByCode(Long code);
+
     Contract findByCodeAndIdIsNot(Long code, Long id);
 
     List<Contract> findBySeller(Seller seller);

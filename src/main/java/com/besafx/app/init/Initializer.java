@@ -85,7 +85,7 @@ public class Initializer implements CommandLineRunner {
             seller.setRegisterDate(new DateTime().toDate());
             seller.setEnabled(true);
             Contact contact = new Contact();
-            contact.setName("مؤسسة مدار للتقسيط");
+            contact.setName("مؤسسة المدار للتقسيط");
             seller.setContact(contactService.save(contact));
 
             LOG.info("إنشاء حساب الشركة");

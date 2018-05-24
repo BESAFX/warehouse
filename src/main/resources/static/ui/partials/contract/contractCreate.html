@@ -52,7 +52,14 @@
                         <div class="form-group row">
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="seller" class="control-label">المستثمر</label>
+                                <label for="seller" class="control-label">
+                                    <span>المستثمر</span>
+                                    <strong>
+                                        <a href=""
+                                           ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])"
+                                           ng-click="newSeller()">مستثمر جديد</a>
+                                    </strong>
+                                </label>
                                 <ui-select id="seller"
                                            ng-model="contract.seller"
                                            required="required"
@@ -101,7 +108,14 @@
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="customer" class="control-label">العميل</label>
+                                <label for="customer" class="control-label">
+                                    <span>العميل</span>
+                                    <strong>
+                                        <a href=""
+                                           ng-if="contains(me.team.authorities, ['ROLE_CUSTOMER_CREATE'])"
+                                           ng-click="newCustomer()">عميل جديد</a>
+                                    </strong>
+                                </label>
                                 <ui-select id="customer"
                                            ng-model="contract.customer"
                                            required="required"
@@ -153,7 +167,14 @@
                         <div class="form-group row">
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="sponsor1" class="control-label">الكفيل الأول</label>
+                                <label for="sponsor1" class="control-label">
+                                    <span>الكفيل الأول</span>
+                                    <strong>
+                                        <a href=""
+                                           ng-if="contains(me.team.authorities, ['ROLE_CUSTOMER_CREATE'])"
+                                           ng-click="newCustomer()">كفيل جديد</a>
+                                    </strong>
+                                </label>
                                 <ui-select id="sponsor1"
                                            ng-model="contract.sponsor1"
                                            theme="bootstrap">
@@ -199,7 +220,14 @@
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="sponsor2" class="control-label">الكفيل الثاني</label>
+                                <label for="sponsor2" class="control-label">
+                                    <span>الكفيل الثاني</span>
+                                    <strong>
+                                        <a href=""
+                                           ng-if="contains(me.team.authorities, ['ROLE_CUSTOMER_CREATE'])"
+                                           ng-click="newCustomer()">كفيل جديد</a>
+                                    </strong>
+                                </label>
                                 <ui-select id="sponsor2"
                                            ng-model="contract.sponsor2"
                                            theme="bootstrap">
@@ -242,6 +270,28 @@
 
                                     </ui-select-choices>
                                 </ui-select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="box-info" ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
+                                <p>
+                                    <span>في حال عدم حصولك على المستثمر المراد، يمكنك إنشاء مستثمر من </span>
+                                    <span><a href="" ng-click="newSeller()">هنا</a></span>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="box-info" ng-if="contains(me.team.authorities, ['ROLE_CUSTOMER_CREATE'])">
+                                <p>
+                                    <span>في حال عدم حصولك على العميل أو الكفيل المراد، يمكنك إنشاء عميل أو كفيل من </span>
+                                    <span><a href="" ng-click="newCustomer()">هنا</a></span>
+                                </p>
                             </div>
 
                         </div>
@@ -396,6 +446,25 @@
 
                         <div class="form-group row">
 
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <label for="code" class="control-label">رقم العقد</label>
+                                <div dir="ltr" class="input-group" id="code">
+                                    <span class="input-group-addon">غير مكرر</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="1"
+                                           class="form-control"
+                                           placeholder="اجباري"
+                                           required="required"
+                                           disable-validation-message=""
+                                           ng-model="contract.code">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-init="buffer.calendar='H'">
                                 <label for="calendar" class="control-label">نوع التقويم</label>
@@ -412,7 +481,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-if="buffer.calendar==='H'">
-                                <label for="dateFrom" class="control-label">تاريخ كتابة العقد من</label>
+                                <label for="dateFrom" class="control-label">تاريخ كتابة العقد</label>
                                 <div dir="ltr" class="input-group">
                                     <input dir="rtl"
                                            id="dateFrom"
@@ -430,7 +499,7 @@
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
                                  ng-if="buffer.calendar==='G'">
-                                <label for="G-dateFrom" class="control-label">تاريخ كتابة العقد من</label>
+                                <label for="G-dateFrom" class="control-label">تاريخ كتابة العقد</label>
                                 <input id="G-dateFrom"
                                        class="form-control"
                                        dir="ltr"
@@ -483,15 +552,42 @@
                                 </div>
                             </div>
 
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label for="discount" class="control-label">الخصم</label>
+                                <div dir="ltr" class="input-group" id="discount">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="0"
+                                           class="form-control"
+                                           required="required"
+                                           disable-validation-message=""
+                                           placeholder="اجباري"
+                                           ng-model="contract.discount">
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
 
                     <div class="mdl-tabs__panel" id="panel-4-contract">
 
-                        <div ng-if="!totalPrice" class="box-danger">
-                            <p>يجب أن يكون مجموع العقد أكبر من صفر حتى يكون هناك أقساط</p>
+                        <div class="form-group row">
+
+                            <div class="box-info">
+                                <p>يمكنك إضافة الاقساط لاحقاً عند تسديد الدفعات المالية</p>
+                            </div>
+
                         </div>
+
+                       <div class="form-group row">
+
+                           <div ng-if="!totalPrice" class="box-danger">
+                               <p>يجب أن يكون مجموع العقد أكبر من صفر حتى يكون هناك أقساط</p>
+                           </div>
+
+                       </div>
 
                         <div ng-if="totalPrice">
 

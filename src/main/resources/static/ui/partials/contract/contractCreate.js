@@ -1,5 +1,5 @@
-app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'SellerService', 'ProductPurchaseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (ContractService, CustomerService, SellerService, ProductPurchaseService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'SellerService', 'ProductPurchaseService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (ContractService, CustomerService, SellerService, ProductPurchaseService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 
@@ -20,6 +20,24 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
         $scope.totalPrice = 0;
 
         $scope.reaminPrice = 0;
+
+        $scope.newCustomer = function () {
+            ModalProvider.openCustomerCreateModel().result.then(function (data) {
+                $scope.customers.splice(0, 0, data);
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
+
+        $scope.newSeller = function () {
+            ModalProvider.openSellerCreateModel().result.then(function (data) {
+                $scope.sellers.splice(0, 0, data);
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
 
         $scope.searchSellers = function ($select, $event) {
 

@@ -16,7 +16,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'عميل جديد';
+                    return 'عميل / كفيل جديد';
                 },
                 action: function () {
                     return 'create';
@@ -39,7 +39,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'تعديل بيانات عميل';
+                    return 'تعديل بيانات عميل / كفيل';
                 },
                 action: function () {
                     return 'update';

@@ -1,6 +1,7 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
+import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
 import com.besafx.app.search.ContractSearch;
 import com.besafx.app.service.*;
@@ -81,11 +82,9 @@ public class ContractRest {
     @PreAuthorize("hasRole('ROLE_CONTRACT_CREATE')")
     @Transactional
     public String create(@RequestBody Contract contract) {
-        Contract topContract = contractService.findTopByOrderByCodeDesc();
-        if (topContract == null) {
-            contract.setCode(Long.valueOf(1));
-        } else {
-            contract.setCode(topContract.getCode() + 1);
+        Contract tempContract = contractService.findByCode(contract.getCode());
+        if (tempContract != null) {
+            throw new CustomException("عفواً، رقم العقد المدخل غير متاح، حاول برقم آخر");
         }
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         contract.setPerson(caller);

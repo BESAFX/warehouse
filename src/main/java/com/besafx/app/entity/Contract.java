@@ -41,6 +41,8 @@ public class Contract implements Serializable {
 
     private Double lawFees;
 
+    private Double discount;
+
     @ManyToOne
     @JoinColumn(name = "seller")
     private Seller seller;

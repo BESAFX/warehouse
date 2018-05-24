@@ -149,10 +149,12 @@ app.controller("menuCtrl", [
         };
         $scope.openStateTeam = function () {
             $scope.toggleState = 'team';
+            $scope.fetchTeamTableData();
             $rootScope.refreshGUI();
         };
         $scope.openStatePerson = function () {
             $scope.toggleState = 'person';
+            $scope.fetchPersonTableData();
             $rootScope.refreshGUI();
         };
         $scope.openStateProfile = function () {

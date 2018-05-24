@@ -30,9 +30,20 @@ public class ProductRest {
     private final String FILTER_TABLE = "" +
             "**," +
             "person[id,contact[id,shortName]]," +
-            "product[id,name]," +
+            "parent[id,name]," +
             "childs[id,name]," +
             "-productPurchases";
+
+    private final String FILTER_PARENT = "" +
+            "id," +
+            "code," +
+            "name";
+
+    private final String FILTER_CHILD = "" +
+            "id," +
+            "code," +
+            "name," +
+            "parent[id,name]";
 
     @Autowired
     private ProductService productService;
@@ -113,14 +124,14 @@ public class ProductRest {
     @GetMapping(value = "findParents", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findParents() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_PARENT),
                                        productService.findByParentIsNull());
     }
 
-    @GetMapping(value = "findChilds/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findChilds/{parentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findChilds(@PathVariable Long id) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       productService.findByParentId(id));
+    public String findChilds(@PathVariable(value = "parentId") Long parentId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_CHILD),
+                                       productService.findByParentId(parentId));
     }
 }

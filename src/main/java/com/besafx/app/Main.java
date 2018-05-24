@@ -36,7 +36,7 @@ public class Main {
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return (container -> {
-            container.setSessionTimeout(3600);  // session timeout value
+            container.setSessionTimeout(0);  // session timeout value
         });
     }
 }

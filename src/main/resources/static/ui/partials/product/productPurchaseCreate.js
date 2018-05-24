@@ -1,5 +1,5 @@
-app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 'ProductPurchaseService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (SellerService, ProductService, ProductPurchaseService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 'ProductPurchaseService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (SellerService, ProductService, ProductPurchaseService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 
@@ -8,6 +8,37 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
         $scope.productPurchases = [];
 
         $scope.sellers = [];
+
+        $scope.newParent = function () {
+            ModalProvider.openParentCreateModel().result.then(function (data) {
+                $scope.parents.splice(0, 0, data);
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
+
+        $scope.newProduct = function () {
+            ModalProvider.openProductCreateModel().result.then(function (data) {
+
+            });
+        };
+
+        $scope.refreshParents = function (isOpen) {
+            if(isOpen){
+                ProductService.findParents().then(function (value) {
+                    $scope.parents = value;
+                });
+            }
+        };
+
+        $scope.refreshChilds = function (isOpen) {
+            if(isOpen){
+                ProductService.findChilds($scope.buffer.parent.id).then(function (value) {
+                    return $scope.buffer.parent.childs = value;
+                });
+            }
+        };
 
         $scope.searchSellers = function ($select, $event) {
 
@@ -89,9 +120,6 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
         };
 
         $timeout(function () {
-            ProductService.findParents().then(function (value) {
-                $scope.parents = value;
-            });
             window.componentHandler.upgradeAllRegistered();
         }, 600);
 

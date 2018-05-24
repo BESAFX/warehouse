@@ -90,16 +90,33 @@
 
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="balance" class="control-label">الرصيد</label>
-                <div dir="ltr" class="input-group" id="balance">
-                    <span class="input-group-addon">ريال سعودي</span>
-                    <input dir="rtl"
-                           type="number"
-                           readonly
-                           class="form-control"
-                           ng-model="buffer.seller.balance">
+            <div class="form-group row">
+
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <label for="balance" class="control-label">الرصيد</label>
+                    <div dir="ltr" class="input-group" id="balance">
+                        <span class="input-group-addon">ريال سعودي</span>
+                        <input dir="rtl"
+                               type="number"
+                               readonly
+                               class="form-control"
+                               ng-model="buffer.seller.balance">
+                    </div>
                 </div>
+
+            </div>
+
+            <div class="form-group row" ng-if="contains(me.team.authorities, ['ROLE_PRODUCT_CREATE'])">
+
+                <div class="box-info">
+                    <p>
+                        <span>يمكنك انشاء اصناف رئيسية جديدة من </span>
+                        <span><a href="" ng-click="newParent()">هنا</a></span>
+                        <span>كما يمكنك انشاء اصناف فرعية جديدة من </span>
+                        <span><a href="" ng-click="newProduct()">هنا</a></span>
+                    </p>
+                </div>
+
             </div>
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -142,6 +159,7 @@
                                            ng-model="buffer.parent"
                                            required="required"
                                            disable-validation-message=""
+                                           uis-open-close="refreshParents(isOpen)"
                                            theme="bootstrap">
                                     <ui-select-match placeholder="اختر التصنيف">
                                         {{$select.selected.name}}
@@ -173,6 +191,7 @@
                                            ng-model="productPurchase.product"
                                            required="required"
                                            disable-validation-message=""
+                                           uis-open-close="refreshChilds(isOpen)"
                                            theme="bootstrap">
                                     <ui-select-match placeholder="اختر السلعة">
                                         {{$select.selected.name}}

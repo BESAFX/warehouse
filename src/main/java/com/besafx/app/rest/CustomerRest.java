@@ -136,8 +136,11 @@ public class CustomerRest {
             LOG.info("حذف العقود");
             contractService.delete(customer.getContracts());
 
+            LOG.info("حذف بيانات الاتصال");
+            contactService.delete(customer.getContact());
+
             LOG.info("حذف العميل");
-            customerService.delete(id);
+            customerService.delete(customer);
 
             notificationService.notifyAll(Notification
                                                   .builder()

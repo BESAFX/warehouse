@@ -207,6 +207,9 @@ public class SellerRest {
             LOG.info("تفريغ كل المعاملات المالية لهذا المستثمر");
             transactionalService.setBankTransactionsSellerToNull(seller);
 
+            LOG.info("حذف بيانات الاتصال");
+            contactService.delete(seller.getContact());
+
             LOG.info("حذف المستثمر");
             sellerService.delete(seller);
 

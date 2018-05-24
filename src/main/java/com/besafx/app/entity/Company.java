@@ -49,6 +49,10 @@ public class Company implements Serializable {
 
     private String commericalRegisteration;
 
+    private String licenceCode;
+
+    private String taxCode;
+
     private String yamamahUserName;
 
     private String yamamahPassword;
