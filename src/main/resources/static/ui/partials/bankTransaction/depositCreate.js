@@ -57,6 +57,12 @@ app.controller('depositCreateCtrl', ['SellerService', 'BankTransactionService', 
 
         };
 
+        $scope.findSellerBalance = function () {
+            SellerService.findSellerBalance($scope.bankTransaction.seller.id).then(function (value) {
+                return $scope.bankTransaction.seller = value;
+            });
+        };
+
         $scope.submit = function () {
             BankTransactionService.createDeposit($scope.bankTransaction).then(function (data) {
                 $uibModalInstance.close(data);

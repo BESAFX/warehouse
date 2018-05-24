@@ -46,10 +46,15 @@ public class SellerRest {
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "productPurchases[**,product[id,name],-seller,-contractProducts,person[id,contact[id,shortName]]]," +
+            "productPurchases[**,product[id,name],-bankTransaction,-seller,-contractProducts,person[id,contact[id,shortName]]]," +
             "-contracts," +
             "-bankTransactions," +
             "seller[id]";
+
+    private final String FILTER_COMBO =
+            "id," +
+            "code," +
+            "contact[id,shortName,mobile]";
 
     @Autowired
     private SellerService sellerService;
@@ -230,7 +235,7 @@ public class SellerRest {
     @GetMapping(value = "findAllCombo", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findAllCombo() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_COMBO),
                                        sellerService.findAll(new Sort(Sort.Direction.ASC, "contact.shortName")));
     }
 
