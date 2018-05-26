@@ -36,6 +36,12 @@ public class Attach implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     private String name;
 
+    private String mimeType;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String description;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String link;

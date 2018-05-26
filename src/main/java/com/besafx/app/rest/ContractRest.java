@@ -40,6 +40,7 @@ public class ContractRest {
             "-contractProducts," +
             "-contractPremiums," +
             "-contractPayments," +
+            "-contractAttaches," +
             "person[id,contact[id,shortName]]";
 
     private final String FILTER_DETAILS = "" +
@@ -51,6 +52,7 @@ public class ContractRest {
             "contractProducts[**,-contract,productPurchase[id,product[id,name]]]," +
             "contractPremiums[**,-contract,-contractPayments]," +
             "contractPayments[**,person[id,contact[id,shortName]],-contract,-contractPremium,-bankTransaction]," +
+            "contractAttaches[**,-contract,attach[**,person[id,contact[shortName]]]]," +
             "person[id,contact[id,shortName]]";
 
     @Autowired

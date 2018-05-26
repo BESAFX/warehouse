@@ -1,7 +1,13 @@
-app.controller('contractDetailsCtrl', ['ContractService', 'ContractProductService', 'ContractPremiumService', 'ContractPaymentService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'contract',
-    function (ContractService, ContractProductService, ContractPremiumService, ContractPaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, contract) {
+app.controller('contractDetailsCtrl', ['ContractService', 'ContractAttachService', 'ContractProductService', 'ContractPremiumService', 'ContractPaymentService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'contract',
+    function (ContractService, ContractAttachService, ContractProductService, ContractPremiumService, ContractPaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance, contract) {
+
+        $scope.contract = {};
+
+        $scope.contract.contractAttaches = [];
 
         $scope.contract = contract;
+
+        $scope.files = [];
 
         $scope.refreshContract = function () {
             ContractService.findOne($scope.contract.id).then(function (data) {
@@ -77,6 +83,44 @@ app.controller('contractDetailsCtrl', ['ContractService', 'ContractProductServic
                 }
             });
         };
+
+        //////////////////////////File Manager///////////////////////////////////
+        $scope.uploadFiles = function () {
+            document.getElementById('uploader').click();
+        };
+
+        $scope.uploadAll = function () {
+            if($scope.files.length > 0){
+                ContractAttachService.upload($scope.contract, $scope.files).then(function (value) {
+                    Array.prototype.push.apply($scope.contract.contractAttaches, value);
+                });
+            }else{
+                ModalProvider.openConfirmModel('العقود', 'attach_file', 'فضلاً اختر على الأقل ملف واحد للتحميل');
+            }
+        };
+
+        $scope.deleteContractAttach = function (contractAttach) {
+            ModalProvider.openConfirmModel("العقود", "delete", "هل تود حذف المستند فعلاً؟").result.then(function (value) {
+                if (value) {
+                    ContractAttachService.remove(contractAttach).then(function (data) {
+                        if(data){
+                            var index = $scope.contract.contractAttaches.indexOf(contractAttach);
+                            $scope.contract.contractAttaches.splice(index, 1);
+                        }else{
+                            ModalProvider.openConfirmModel("العقود", "delete", "يبدو أن الملف لم يعد موجوداً بوحدات التخزين، هل تود حذفه نهائياً؟").result.then(function (value) {
+                                if(value){
+                                    ContractAttachService.removeWhatever(contractAttach).then(function () {
+                                        var index = $scope.contract.contractAttaches.indexOf(contractAttach);
+                                        $scope.contract.contractAttaches.splice(index, 1);
+                                    })
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        };
+        //////////////////////////File Manager///////////////////////////////////
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');

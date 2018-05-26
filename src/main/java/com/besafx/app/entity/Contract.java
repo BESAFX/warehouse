@@ -78,6 +78,9 @@ public class Contract implements Serializable {
     @OneToMany(mappedBy = "contract")
     private List<ContractPayment> contractPayments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "contract")
+    private List<ContractAttach> contractAttaches = new ArrayList<>();
+
     @JsonCreator
     public static Contract Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

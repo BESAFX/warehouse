@@ -988,3 +988,21 @@ p {
     cursor: not-allowed!important;
     opacity: 0.5!important;
 }
+
+.long-td{
+    width: 30%;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.long-td:hover{
+    z-index: 1;
+    background-color: #FFFFCC;
+    color: black!important;
+    max-width: unset;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+}

@@ -182,11 +182,11 @@ app.controller("menuCtrl", [
          * Company                                                                                                    *
          *                                                                                                            *
          **************************************************************************************************************/
-        $scope.selectedCompany = {};
+        $rootScope.selectedCompany = {};
         $rootScope.sms = {};
         $scope.submitCompany = function () {
-            CompanyService.update($scope.selectedCompany).then(function (data) {
-                $scope.selectedCompany = data;
+            CompanyService.update($rootScope.selectedCompany).then(function (data) {
+                $rootScope.selectedCompany = data;
             });
         };
         $scope.browseCompanyLogo = function () {
@@ -194,9 +194,9 @@ app.controller("menuCtrl", [
         };
         $scope.uploadCompanyLogo = function (files) {
             CompanyService.uploadCompanyLogo(files[0]).then(function (data) {
-                $scope.selectedCompany.logo = data;
-                CompanyService.update($scope.selectedCompany).then(function (data) {
-                    $scope.selectedCompany = data;
+                $rootScope.selectedCompany.logo = data;
+                CompanyService.update($rootScope.selectedCompany).then(function (data) {
+                    $rootScope.selectedCompany = data;
                 });
             });
         };
@@ -1907,7 +1907,7 @@ app.controller("menuCtrl", [
 
         $timeout(function () {
             CompanyService.get().then(function (data) {
-                $scope.selectedCompany = data;
+                $rootScope.selectedCompany = data;
             });
             PersonService.findAllCombo().then(function (data) {
                 $scope.personsCombo = data;

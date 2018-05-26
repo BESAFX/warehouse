@@ -112,6 +112,7 @@ gulp.task('scripts', function () {
         './init/factory/productFactory.js',
         './init/factory/productPurchaseFactory.js',
         './init/factory/contractFactory.js',
+        './init/factory/contractAttachFactory.js',
         './init/factory/contractProductFactory.js',
         './init/factory/contractPaymentFactory.js',
         './init/factory/contractPremiumFactory.js',
