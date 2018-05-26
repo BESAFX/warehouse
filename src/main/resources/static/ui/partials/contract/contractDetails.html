@@ -417,11 +417,11 @@
 
                         <div class="template-border">
 
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <h3 class="text-center">عقد بيع بالأقساط</h3>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-pull-4 col-sm-pull-4 col-md-pull-4 col-lg-pull-4">
+                                <h3 class="text-center template-box">عقد بيع بالأقساط</h3>
                             </div>
 
-                            <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <p class="pull-right template-box">
@@ -439,7 +439,7 @@
 
                             </div>
 
-                            <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <p class="pull-right template-box">
@@ -522,7 +522,7 @@
 
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
-                                            <span>رقم البطاقة:</span>
+                                            <span>رقم الهوية:</span>
                                         </p>
                                     </div>
 
@@ -620,6 +620,16 @@
 
                                 </div>
 
+                                <div class="row">
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-pull-4 col-sm-pull-4 col-md-pull-4 col-lg-pull-4">
+                                        <h5 class="text-center template-box">إقرار كفالة غرامية</h5>
+                                    </div>
+
+                                </div>
+
+                                <br>
+
                                 <div class="template-box">
 
                                     <div class="row">
@@ -627,6 +637,7 @@
                                         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                             <p class="text-right">
                                                 <span>أقر أنا المدعو:</span>
+                                                {{contract.sponsor1.contact.shortName}}
                                             </p>
                                         </div>
 
@@ -635,6 +646,7 @@
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
                                                 <span>العمل:</span>
+                                                {{contract.sponsor1.contact.qualification}}
                                             </p>
                                         </div>
 
@@ -646,7 +658,8 @@
 
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
-                                                <span>رقم البطاقة:</span>
+                                                <span>رقم الهوية:</span>
+                                                {{contract.sponsor1.contact.identityNumber}}
                                             </p>
                                         </div>
 
@@ -655,6 +668,7 @@
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
                                                 <span>هاتف العمل:</span>
+                                                {{contract.sponsor1.contact.phone}}
                                             </p>
                                         </div>
 
@@ -663,6 +677,7 @@
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
                                                 <span>جوال:</span>
+                                                {{contract.sponsor1.contact.mobile}}
                                             </p>
                                         </div>
 
@@ -695,6 +710,7 @@
                                         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                             <p class="text-right">
                                                 <span>أقر أنا المدعو:</span>
+                                                {{contract.sponsor2.contact.shortName}}
                                             </p>
                                         </div>
 
@@ -703,6 +719,7 @@
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
                                                 <span>العمل:</span>
+                                                {{contract.sponsor2.contact.qualification}}
                                             </p>
                                         </div>
 
@@ -714,7 +731,8 @@
 
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
-                                                <span>رقم البطاقة:</span>
+                                                <span>رقم الهوية:</span>
+                                                {{contract.sponsor2.contact.identityNumber}}
                                             </p>
                                         </div>
 
@@ -723,6 +741,7 @@
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
                                                 <span>هاتف العمل:</span>
+                                                {{contract.sponsor2.contact.phone}}
                                             </p>
                                         </div>
 
@@ -731,6 +750,7 @@
                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <p class="text-right">
                                                 <span>جوال:</span>
+                                                {{contract.sponsor2.contact.mobile}}
                                             </p>
                                         </div>
 
@@ -779,28 +799,42 @@
                                 <div class="row">
 
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <h5 class="text-center">({{contract.seller.contact.shortName}})</h5>
+                                        <h5 class="text-center">-------------------</h5>
                                     </div>
 
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <h5 class="text-center">({{contract.customer.contact.shortName}})</h5>
+                                        <h5 class="text-center">-------------------</h5>
                                     </div>
 
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <h5 class="text-center">({{contract.sponsor1.contact.shortName}})</h5>
+                                        <h5 class="text-center">-------------------</h5>
                                     </div>
 
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <h5 class="text-center">({{contract.sponsor2.contact.shortName}})</h5>
+                                        <h5 class="text-center">-------------------</h5>
+                                    </div>
+
+                                </div>
+
+                                <br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">شاهد أول</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">فرع مؤسسة فريح التجارية</h5>
+                                    </div>
+
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <h5 class="text-center">الختم</h5>
                                     </div>
 
                                 </div>
 
                                 <div class="row">
-
-                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <h5 class="text-center">-------------------</h5>
-                                    </div>
 
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <h5 class="text-center">-------------------</h5>
@@ -1037,7 +1071,7 @@
                                             <td>{{contract.customer.contact.mobile}}</td>
                                         </tr>
                                         <tr>
-                                            <td class="fit">رقم البطاقة</td>
+                                            <td class="fit">رقم الهوية</td>
                                             <td>{{contract.customer.contact.identityNumber}}</td>
                                         </tr>
                                         <tr>
@@ -1192,7 +1226,7 @@
                                                 <td>{{contract.customer.contact.mobile}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="fit">رقم البطاقة</td>
+                                                <td class="fit">رقم الهوية</td>
                                                 <td>{{contract.customer.contact.identityNumber}}</td>
                                             </tr>
                                             <tr>

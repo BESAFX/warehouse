@@ -52,4 +52,28 @@ public class Customer implements Serializable {
         Customer customer = mapper.readValue(jsonString, Customer.class);
         return customer;
     }
+
+    public Double getContractsTotalPrice() {
+        try {
+            return this.contracts.stream().mapToDouble(Contract::getTotalPrice).sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getContractsPaid() {
+        try {
+            return this.contracts.stream().mapToDouble(Contract::getPaid).sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getContractsRemain() {
+        try {
+            return this.contracts.stream().mapToDouble(Contract::getRemain).sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
 }

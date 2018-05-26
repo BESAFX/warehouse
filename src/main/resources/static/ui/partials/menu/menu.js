@@ -183,6 +183,7 @@ app.controller("menuCtrl", [
          *                                                                                                            *
          **************************************************************************************************************/
         $scope.selectedCompany = {};
+        $rootScope.sms = {};
         $scope.submitCompany = function () {
             CompanyService.update($scope.selectedCompany).then(function (data) {
                 $scope.selectedCompany = data;
@@ -219,9 +220,11 @@ app.controller("menuCtrl", [
                 $scope.myProductPurchases = value;
             });
         };
-        $scope.findSmsCredit = function () {
+        $rootScope.findSmsCredit = function () {
             SmsService.getCredit().then(function (value) {
-                $scope.selectedCompany.credit = value;
+                $rootScope.sms.credit = value.GetCreditPostResult.Credit;
+                $rootScope.sms.description = value.GetCreditPostResult.Description;
+                return $rootScope.sms;
             });
         };
 
@@ -430,6 +433,28 @@ app.controller("menuCtrl", [
                 },
                 click: function ($itemScope, $event, value) {
                     $scope.deleteCustomer($itemScope.customer);
+                }
+            },
+            {
+                html: '<div class="drop-menu">' +
+                '<img src="/ui/img/' + $rootScope.iconSet + '/send.' + $rootScope.iconSetType + '" width="24" height="24">' +
+                '<span>إرسال رسالة...</span>' +
+                '</div>',
+                enabled: function () {
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SMS_SEND']);
+                },
+                click: function ($itemScope, $event, value) {
+                    var customers = [];
+                    angular.forEach($scope.customers, function (customer) {
+                        if (customer.isSelected) {
+                            customers.push(customer);
+                        }
+                    });
+                    if (customers.length === 0) {
+                        ModalProvider.openConfirmModel('إرسال رسائل الأقساط', 'send', 'فضلا قم باختيار قسط واحد على الأقل');
+                        return;
+                    }
+                    ModalProvider.openCustomerSendMessageModel(customers);
                 }
             }
         ];
@@ -1316,11 +1341,11 @@ app.controller("menuCtrl", [
                 click: function ($itemScope, $event, value) {
                     var contractPremiums = [];
                     angular.forEach($scope.contractPremiums, function (contractPremium) {
-                        if(contractPremium.isSelected){
+                        if (contractPremium.isSelected) {
                             contractPremiums.push(contractPremium);
                         }
                     });
-                    if(contractPremiums.length === 0){
+                    if (contractPremiums.length === 0) {
                         ModalProvider.openConfirmModel('إرسال رسائل الأقساط', 'send', 'فضلا قم باختيار قسط واحد على الأقل');
                         return;
                     }
@@ -1740,7 +1765,7 @@ app.controller("menuCtrl", [
          **************************************************************************************************************/
         $rootScope.printToCart = function (printSectionId, title) {
             var innerContents = document.getElementById(printSectionId).innerHTML;
-            var mywindow = window.open(title, 'new div', 'height=400,width=600');
+            var mywindow = window.open(title, '_blank', 'height=400,width=600');
             mywindow.document.write('<html><head><title></title>');
             mywindow.document.write('<link rel="stylesheet" href="/ui/app.css" type="text/css" />');
             mywindow.document.write('<link rel="stylesheet" href="/ui/css/style.css" type="text/css" />');
@@ -1749,11 +1774,10 @@ app.controller("menuCtrl", [
             mywindow.document.write('</body></html>');
             mywindow.document.close();
             mywindow.focus();
-            setTimeout(function(){
+            $timeout(function () {
                 mywindow.print();
                 mywindow.close();
-            },1000);
-
+            }, 1000);
             return true;
         };
 
@@ -1793,6 +1817,11 @@ app.controller("menuCtrl", [
             $scope.toggleReport = 'sellerStatement';
             $rootScope.refreshGUI();
         };
+        //كشف حساب عميل
+        $scope.openReportCustomerStatement = function () {
+            $scope.toggleReport = 'customerStatement';
+            $rootScope.refreshGUI();
+        };
         //تقرير التحصيل والسداد
         $scope.openReportContractPremiums = function () {
             $scope.toggleReport = 'contractPremiums';
@@ -1806,6 +1835,7 @@ app.controller("menuCtrl", [
 
         $scope.paramWithdrawCash = {};
         $scope.sellerStatement = {};
+        $scope.customerStatement = {};
         $scope.contractPaymentProfit = {};
         $scope.fetchAllBanks = function () {
             BankService.findAll().then(function (value) {
@@ -1845,6 +1875,11 @@ app.controller("menuCtrl", [
                 $scope.sellersCombo = value;
             });
         };
+        $scope.fetchAllCustomerCombo = function () {
+            CustomerService.findAllCombo().then(function (value) {
+                $scope.customersCombo = value;
+            });
+        };
         $scope.fetchSellerStatementContracts = function () {
             ContractService.findBySeller($scope.sellerStatement.seller.id).then(function (value) {
                 $scope.sellerStatement.contracts = value;
@@ -1856,13 +1891,18 @@ app.controller("menuCtrl", [
             });
         };
         $scope.fetchContractPaymentsProfit = function () {
-          ContractPaymentService.findByDateBetween(
-              $scope.contractPaymentProfit.dateFrom.getTime(),
-              $scope.contractPaymentProfit.dateTo.getTime()
-          )
-              .then(function (value) {
-                  $scope.contractPaymentProfit.contractPayments = value;
-              });
+            ContractPaymentService.findByDateBetween(
+                $scope.contractPaymentProfit.dateFrom.getTime(),
+                $scope.contractPaymentProfit.dateTo.getTime()
+            )
+                .then(function (value) {
+                    $scope.contractPaymentProfit.contractPayments = value;
+                });
+        };
+        $scope.findCustomerDetails = function () {
+            CustomerService.findOne($scope.customerStatement.customer.id).then(function (value) {
+                return $scope.customerStatement.customer = value;
+            });
         };
 
         $timeout(function () {

@@ -187,7 +187,7 @@
                             </th>
 
                             <th>
-                                <span>السجل المدني</span>
+                                <span>رقم الهوية</span>
                             </th>
 
                             <th>
@@ -196,6 +196,18 @@
 
                             <th>
                                 <span>الهاتف</span>
+                            </th>
+
+                            <th>
+                                <span>إجمالي العقود</span>
+                            </th>
+
+                            <th>
+                                <span>المدفوع</span>
+                            </th>
+
+                            <th>
+                                <span>المتبقي</span>
                             </th>
 
                         </tr>
@@ -223,15 +235,26 @@
                             <td>{{customer.contact.identityNumber}}</td>
                             <td>{{customer.contact.mobile}}</td>
                             <td>{{customer.contact.phone}}</td>
+                            <td>{{customer.contractsTotalPrice | currency:' SAR ':2}}</td>
+                            <td>{{customer.contractsPaid | currency:' SAR ':2}}</td>
+                            <td>{{customer.contractsRemain | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!customers || customers.length ==0">
-                            <td colspan="7">
+                            <td colspan="10">
                                 <p ng-if="contains(me.team.authorities, ['ROLE_CUSTOMER_CREATE'])">
                                     <span>لا يوجد عملاء أو كفلاء حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
                                     <a href="" ng-click="newCustomer()">اضغط هنا</a>
                                 </p>
                             </td>
+                        </tr>
+                        <tr ng-if="customers.length > 0">
+                            <td class="info" colspan="7">
+                                <span class="pull-left">المجموع الكلي</span>
+                            </td>
+                            <td class="success" colspan="1">{{customers | sumByKey:'contractsTotalPrice' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{customers | sumByKey:'contractsPaid' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{customers | sumByKey:'contractsRemain' | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>

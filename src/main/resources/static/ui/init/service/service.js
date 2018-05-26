@@ -51,6 +51,24 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openCustomerSendMessageModel = function (customers) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/customer/customerSendMessage.html',
+            controller: "customerSendMessageCtrl",
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                customers: function () {
+                    return customers;
+                }
+            }
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * Seller Model                                               *

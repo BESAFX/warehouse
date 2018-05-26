@@ -546,6 +546,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .table > tbody > tr > td, .table > tfoot > tr > td {
     font-size: 15px !important;
     font-weight: 800 !important;
+    text-align: right !important;
 }
 
 .mdl-tabs__tab {
@@ -578,10 +579,7 @@ WebKit inertia scrolling is being added here for any present/future devices that
 .input-group-btn:last-child > .btn,
 .input-group-btn:last-child > .btn-group > .btn,
 .input-group-btn:last-child > .dropdown-toggle {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    border-top-left-radius: 3px !important;
-    border-bottom-left-radius: 3px !important;
+    border-radius: 3px 0 0 3px;
 }
 
 .text-overflow-dots {
@@ -791,9 +789,14 @@ WebKit inertia scrolling is being added here for any present/future devices that
         font-family: 'Droid Arabic Naskh', 'Roboto Condensed', sans-serif;
     }
 
+    html,
+    body{
+        background: white!important;
+    }
+
     .table > thead > tr > th, .table > tbody > tr > th,
     .table > tfoot > tr > th, .table > thead > tr > td,
-    .table > tbody > tr > td, .table > tfoot > tr > td {
+    .table > tbody > tr > td, .table > tfoot > tr > td  {
         text-align: right !important;
         font-family: 'Droid Arabic Naskh', 'Roboto Condensed', sans-serif;
         font-size: 12px !important;
@@ -979,4 +982,9 @@ p {
 .mdl-list__item-sub-title {
     margin-right: 76px !important;
     white-space: normal !important;
+}
+
+.mdl-button[disabled][disabled], .mdl-button.mdl-button--disabled.mdl-button--disabled{
+    cursor: not-allowed!important;
+    opacity: 0.5!important;
 }

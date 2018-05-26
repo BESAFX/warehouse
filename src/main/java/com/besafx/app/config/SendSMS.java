@@ -32,7 +32,7 @@ public class SendSMS {
     private final static Logger log = LoggerFactory.getLogger(SendSMS.class);
 
     @Async("threadMultiplePool")
-    public Future<Integer> getCredit() throws JSONException {
+    public Future<String> getCredit() throws JSONException {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -55,7 +55,7 @@ public class SendSMS {
         JSONObject jsonObj = new JSONObject(response);
         log.info("Object = " + jsonObj.toString());
         log.info("Credits = " + jsonObj.getJSONObject("GetCreditPostResult").getInt("Credit"));
-        return new AsyncResult<>(jsonObj.getJSONObject("GetCreditPostResult").getInt("Credit"));
+        return new AsyncResult<>(jsonObj.toString());
     }
 
     @Async("threadMultiplePool")
@@ -76,7 +76,7 @@ public class SendSMS {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
         JSONObject json = new JSONObject();
-        json.put("Username", Initializer.company.getYamamahPassword());
+        json.put("Username", Initializer.company.getYamamahUserName());
         json.put("Password", Initializer.company.getYamamahPassword());
         json.put("Tagname", "MADAR");
         json.put("RecepientNumber", String.join(",", mobileList.stream().distinct().collect(Collectors.toList())));

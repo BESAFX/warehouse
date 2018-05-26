@@ -1,8 +1,8 @@
 app.factory("CustomerService",
     ['$http', '$log', function ($http, $log) {
         return {
-            findAll: function () {
-                return $http.get("/api/customer/findAll").then(function (response) {
+            findAllCombo: function () {
+                return $http.get("/api/customer/findAllCombo").then(function (response) {
                     return response.data;
                 });
             },
@@ -21,6 +21,11 @@ app.factory("CustomerService",
             },
             update: function (customer) {
                 return $http.put("/api/customer/update", customer).then(function (response) {
+                    return response.data;
+                });
+            },
+            sendMessage: function (message, ids) {
+                return $http.post("/api/customer/sendMessage/" + ids, message).then(function (response) {
                     return response.data;
                 });
             },

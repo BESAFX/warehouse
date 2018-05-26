@@ -195,6 +195,14 @@
                             </th>
 
                             <th>
+                                <span>آخر عملية دفع</span>
+                            </th>
+
+                            <th>
+                                <span>بواسطة</span>
+                            </th>
+
+                            <th>
                                 <span>رأس المال</span>
                             </th>
 
@@ -212,14 +220,6 @@
 
                             <th>
                                 <span>المتبقي</span>
-                            </th>
-
-                            <th>
-                                <span>آخر عملية دفع</span>
-                            </th>
-
-                            <th>
-                                <span>بواسطة</span>
                             </th>
 
                         </tr>
@@ -243,17 +243,17 @@
                             <td>{{contract.customer.contact.shortName}}</td>
                             <td>{{contract.customer.contact.mobile}}</td>
                             <td>{{contract.seller.contact.shortName}}</td>
-                            <td>{{contract.capitalCash | currency:' SAR':2}}</td>
-                            <td>{{contract.profit | currency:' SAR':2}}</td>
-                            <td>{{contract.totalPrice | currency:' SAR':2}}</td>
-                            <td>{{contract.paid | currency:' SAR':2}}</td>
-                            <td>{{contract.remain | currency:' SAR':2}}</td>
                             <td>
                                 <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                 <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
                                 <span class="label label-info no-print">{{contract.lastPaymentDate | date: 'hh:mm a'}}</span>
                             </td>
                             <td>{{contract.person.contact.shortName}}</td>
+                            <td>{{contract.capitalCash | currency:' SAR':2}}</td>
+                            <td>{{contract.profit | currency:' SAR':2}}</td>
+                            <td>{{contract.totalPrice | currency:' SAR':2}}</td>
+                            <td>{{contract.paid | currency:' SAR':2}}</td>
+                            <td>{{contract.remain | currency:' SAR':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!contracts || contracts.length ==0">
@@ -263,6 +263,16 @@
                                     <a href="" ng-click="newContract()">اضغط هنا</a>
                                 </p>
                             </td>
+                        </tr>
+                        <tr ng-if="contracts.length > 0">
+                            <td class="info" colspan="8">
+                                <span class="pull-left">المجموع الكلي</span>
+                            </td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>

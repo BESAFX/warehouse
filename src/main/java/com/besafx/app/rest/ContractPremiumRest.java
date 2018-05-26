@@ -107,10 +107,12 @@ public class ContractPremiumRest {
                                                       message);
             String taskResult = task.get();
             StringBuilder builder = new StringBuilder();
-            builder.append("تم إرسال رسالة إلى الرقم / ");
+            builder.append("الرقم / ");
             builder.append(contractPremium.getContract().getCustomer().getContact().getMobile());
-            builder.append(" محتواها ما يلي : ");
+            builder.append("<br/>");
+            builder.append(" محتوى الرسالة : ");
             builder.append(message);
+            builder.append("<br/>");
             builder.append(" ، نتيجة الإرسال: ");
             builder.append(taskResult);
             notificationService.notifyAll(Notification

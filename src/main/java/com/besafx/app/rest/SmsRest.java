@@ -26,6 +26,6 @@ public class SmsRest {
     @GetMapping(value = "getCredit", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getCredit() throws JSONException, ExecutionException, InterruptedException {
-        return sendSMS.getCredit().get().toString();
+        return sendSMS.getCredit().get();
     }
 }

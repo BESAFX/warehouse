@@ -1,10 +1,13 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
+import com.besafx.app.config.SendSMS;
 import com.besafx.app.entity.ContractPayment;
+import com.besafx.app.entity.ContractPremium;
 import com.besafx.app.entity.Customer;
 import com.besafx.app.search.CustomerSearch;
 import com.besafx.app.service.*;
+import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,11 +18,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,7 +35,18 @@ public class CustomerRest {
 
     private final static Logger LOG = LoggerFactory.getLogger(CustomerRest.class);
 
-    private final String FILTER_TABLE = "**,-contracts";
+    private final String FILTER_TABLE = "" +
+            "**," +
+            "-contracts";
+
+    private final String FILTER_DETAILS = "" +
+            "**," +
+            "contracts[**,-customer,seller[id,contact[id,mobile,shortName]],sponsor1[id,contact[id,mobile,shortName]],sponsor2[id,contact[id,mobile,shortName]],-contractProducts,contractPremiums[**,-contract,-contractPayments],-contractPayments,person[id,contact[id,shortName]]]";
+
+    private final String FILTER_COMBO = "" +
+            "id," +
+            "code," +
+            "contact[id,shortName,mobile]";
 
     @Autowired
     private CustomerService customerService;
@@ -56,6 +74,9 @@ public class CustomerRest {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private SendSMS sendSMS;
 
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -149,17 +170,44 @@ public class CustomerRest {
         }
     }
 
-    @GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "sendMessage/{customerIds}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findAll() {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       Lists.newArrayList(customerService.findAll()));
+    @PreAuthorize("hasRole('ROLE_SMS_SEND')")
+    public void sendMessage(@RequestBody String content, @PathVariable List<Long> customerIds) throws Exception {
+        ListIterator<Long> listIterator = customerIds.listIterator();
+        while (listIterator.hasNext()){
+            Long id = listIterator.next();
+            Customer customer = customerService.findOne(id);
+            String message = content.replaceAll("#remain#", customer.getContractsRemain().toString());
+            Future<String> task = sendSMS.sendMessage(customer.getContact().getMobile(), message);
+            String taskResult = task.get();
+            StringBuilder builder = new StringBuilder();
+            builder.append("الرقم / ");
+            builder.append(customer.getContact().getMobile());
+            builder.append("<br/>");
+            builder.append(" محتوى الرسالة : ");
+            builder.append(message);
+            builder.append("<br/>");
+            builder.append(" ، نتيجة الإرسال: ");
+            builder.append(taskResult);
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message(builder.toString())
+                                                  .type("information").build());
+        }
+    }
+
+    @GetMapping(value = "findAllCombo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findAllCombo() {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_COMBO),
+                                       customerService.findAll(new Sort(Sort.Direction.ASC, "contact.shortName")));
     }
 
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
                                        customerService.findOne(id));
     }
 

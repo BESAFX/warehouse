@@ -26,7 +26,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -51,7 +50,7 @@ public class SellerRest {
             "-bankTransactions," +
             "seller[id]";
 
-    private final String FILTER_COMBO =
+    private final String FILTER_COMBO = "" +
             "id," +
             "code," +
             "contact[id,shortName,mobile]";
@@ -167,35 +166,35 @@ public class SellerRest {
         if (seller != null) {
 
             LOG.info("رفض العملية فى حال كان هو المستثمر الرئيسي");
-            if(Initializer.company.getSeller().getId().equals(seller.getId())){
+            if (Initializer.company.getSeller().getId().equals(seller.getId())) {
                 throw new CustomException("لا يمكن حذف المستثمر الرئيسي للبرنامج");
             }
 
             LOG.info("حذف كل سلع العقود");
             contractProductService.delete(seller.getContracts()
-                                                  .stream()
-                                                  .flatMap(contract -> contract.getContractProducts().stream())
-                                                  .collect(Collectors.toList()));
+                                                .stream()
+                                                .flatMap(contract -> contract.getContractProducts().stream())
+                                                .collect(Collectors.toList()));
 
             LOG.info("حذف كل معاملات البنك لدفعات العقود");
             bankTransactionService.delete(
                     seller.getContracts()
-                            .stream()
-                            .flatMap(contract -> contract.getContractPayments().stream())
-                            .map(ContractPayment::getBankTransaction)
-                            .collect(Collectors.toList()));
+                          .stream()
+                          .flatMap(contract -> contract.getContractPayments().stream())
+                          .map(ContractPayment::getBankTransaction)
+                          .collect(Collectors.toList()));
 
             LOG.info("حذف كل دفعات العقود");
             contractPaymentService.delete(seller.getContracts()
-                                                  .stream()
-                                                  .flatMap(contract -> contract.getContractPayments().stream())
-                                                  .collect(Collectors.toList()));
+                                                .stream()
+                                                .flatMap(contract -> contract.getContractPayments().stream())
+                                                .collect(Collectors.toList()));
 
             LOG.info("حذف كل أقساط العقود");
             contractPremiumService.delete(seller.getContracts()
-                                                  .stream()
-                                                  .flatMap(contract -> contract.getContractPremiums().stream())
-                                                  .collect(Collectors.toList()));
+                                                .stream()
+                                                .flatMap(contract -> contract.getContractPremiums().stream())
+                                                .collect(Collectors.toList()));
 
             LOG.info("حذف العقود");
             contractService.delete(seller.getContracts());

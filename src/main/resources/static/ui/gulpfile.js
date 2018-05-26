@@ -131,6 +131,7 @@ gulp.task('scripts', function () {
         './partials/menu/menu.js',
         './partials/customer/customerCreateUpdate.js',
         './partials/customer/customerFilter.js',
+        './partials/customer/customerSendMessage.js',
         './partials/seller/sellerCreateUpdate.js',
         './partials/seller/sellerFilter.js',
         './partials/productPurchase/productPurchaseFilter.js',
