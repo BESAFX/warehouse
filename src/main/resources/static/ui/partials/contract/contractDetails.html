@@ -237,7 +237,15 @@
                                 </th>
 
                                 <th>
-                                    <span>سعر التكلفة الإجمالي</span>
+                                    <span>سعر البيع للوحدة</span>
+                                </th>
+
+                                <th>
+                                    <span>القيمة المضافة للوحدة</span>
+                                </th>
+
+                                <th>
+                                    <span>الاجمالي</span>
                                 </th>
 
                                 <th>
@@ -250,7 +258,9 @@
                             <tr ng-repeat="contractProduct in contract.contractProducts">
                                 <td>{{contractProduct.productPurchase.product.name}}</td>
                                 <td>{{contractProduct.quantity}}</td>
-                                <td>{{(contractProduct.quantity * contractProduct.unitSellPrice) | currency:' SAR ':2}}</td>
+                                <td>{{contractProduct.unitSellPrice | currency:' SAR ':2}}</td>
+                                <td>{{contractProduct.unitVat | currency:' SAR ':2}}</td>
+                                <td>{{contractProduct.totalPriceAfterVat | currency:' SAR ':2}}</td>
                                 <td>
                                     <div class="row">
                                         <button uib-tooltip="إضافة سلعة"
@@ -276,15 +286,18 @@
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                 ng-show="!contract.contractProducts || contract.contractProducts.length ==0">
-                                <td colspan="4">
+                                <td colspan="6">
                                     <span>لا توجد سلع حتى الآن لهذا العقد </span>
                                 </td>
                             </tr>
                             <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
                                 <td colspan="2" class="text-left warning">
-                                    <span>إجمالي قيمة العقد</span>
+                                    <span class="pull-left">المجموع</span>
                                 </td>
-                                <td colspan="2">{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{contract.contractProducts | sumByKey:'unitSellPrice' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{contract.contractProducts | sumByKey:'unitVat' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{(contract.contractProducts | sumByKey:'totalPriceAfterVat' | currency:' SAR ':2}}</td>
+                                <td colspan="1"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -367,7 +380,7 @@
                                 <td colspan="2" class="text-left warning">
                                     <span>إجمالي قيمة العقد</span>
                                 </td>
-                                <td colspan="3">{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                <td colspan="3">{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
                             </tr>
                             <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
                                 <td colspan="2" class="text-left success">
@@ -463,7 +476,7 @@
                                 <td colspan="2" class="text-left warning">
                                     <span>إجمالي قيمة العقد</span>
                                 </td>
-                                <td colspan="3">{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                <td colspan="3">{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
                             </tr>
                             <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
                                 <td colspan="2" class="text-left success">

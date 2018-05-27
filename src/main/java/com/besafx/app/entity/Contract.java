@@ -99,6 +99,25 @@ public class Contract implements Serializable {
         }
     }
 
+    public Double getTotalVat() {
+        try {
+            return this.contractProducts
+                    .stream()
+                    .mapToDouble(contractProduct -> contractProduct.getQuantity() * contractProduct.getUnitVat())
+                    .sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getTotalPriceAfterDiscountAndVat() {
+        try {
+            return (this.getTotalPrice() + this.getTotalVat()) - this.discount;
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
     public Double getTotalPremium() {
         try {
             return this.contractPremiums
@@ -112,7 +131,7 @@ public class Contract implements Serializable {
 
     public Double getRemainPremium() {
         try {
-            return this.getTotalPrice() - this.getTotalPremium();
+            return this.getTotalPriceAfterDiscountAndVat() - this.getTotalPremium();
         } catch (Exception ex) {
             return 0.0;
         }
@@ -131,7 +150,7 @@ public class Contract implements Serializable {
 
     public Double getRemain() {
         try {
-            return getTotalPrice() - getPaid();
+            return getTotalPriceAfterDiscountAndVat() - getPaid();
         } catch (Exception ex) {
             return 0.0;
         }

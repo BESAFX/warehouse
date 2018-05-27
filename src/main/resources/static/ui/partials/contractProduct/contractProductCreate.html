@@ -66,7 +66,15 @@
                                         </th>
 
                                         <th>
-                                            <span>إجمالي البيع</span>
+                                            <span>القيمة المضافة للوحدة</span>
+                                        </th>
+
+                                        <th>
+                                            <span>إجمالي البيع قبل القيمة المضافة</span>
+                                        </th>
+
+                                        <th>
+                                            <span>إجمالي البيع بعد القيمة المضافة</span>
                                         </th>
 
                                     </tr>
@@ -105,12 +113,26 @@
                                                    type="text"
                                                    readonly
                                                    class="form-control"
-                                                   value="{{productPurchase.requiredQuantity * productPurchase.unitSellPrice | currency:'':2}}">
+                                                   value="{{productPurchase.unitVat = (productPurchase.unitSellPrice * 5 / 100) | currency:'':2}}">
+                                        </td>
+                                        <td>
+                                            <input dir="rtl"
+                                                   type="text"
+                                                   readonly
+                                                   class="form-control"
+                                                   value="{{(productPurchase.requiredQuantity * productPurchase.unitSellPrice) | currency:'':2}}">
+                                        </td>
+                                        <td>
+                                            <input dir="rtl"
+                                                   type="text"
+                                                   readonly
+                                                   class="form-control"
+                                                   value="{{(productPurchase.requiredQuantity * productPurchase.unitSellPrice) + (productPurchase.unitVat * productPurchase.requiredQuantity) | currency:'':2}}">
                                         </td>
                                     </tr>
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                         ng-show="!contract.seller.productPurchases || contract.seller.productPurchases.length ==0">
-                                        <td colspan="6">
+                                        <td colspan="8">
                                             <p ng-if="!contract.seller.id">
                                                 <span>فضلاً اختر المستثمر أولاً لعرض كافة السلعة الموجودة بحسابه</span>
                                             </p>
@@ -123,10 +145,10 @@
                                         </td>
                                     </tr>
                                     <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
-                                        <td colspan="5" class="text-left info">
+                                        <td colspan="6" class="text-left info">
                                             <span>رأس المال</span>
                                         </td>
-                                        <td colspan="1">
+                                        <td colspan="2">
                                             <input dir="rtl"
                                                    type="text"
                                                    disabled
@@ -135,10 +157,10 @@
                                         </td>
                                     </tr>
                                     <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
-                                        <td colspan="5" class="text-left success">
+                                        <td colspan="6" class="text-left success">
                                             <span>نسبة الربح</span>
                                         </td>
-                                        <td colspan="1">
+                                        <td colspan="2">
                                             <input dir="rtl"
                                                    type="text"
                                                    disabled
@@ -148,15 +170,27 @@
                                         </td>
                                     </tr>
                                     <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
-                                        <td colspan="5" class="text-left warning">
-                                            <span>إجمالي قيمة العقد</span>
+                                        <td colspan="6" class="text-left warning">
+                                            <span>إجمالي الأصناف قبل (القيمة المضافة)</span>
                                         </td>
-                                        <td colspan="1">
+                                        <td colspan="2">
                                             <input dir="rtl"
                                                    type="text"
                                                    disabled
                                                    class="form-control"
                                                    value="{{totalPrice | currency:'':2}}">
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
+                                        <td colspan="6" class="text-left warning">
+                                            <span>إجمالي الأصناف بعد (القيمة المضافة)</span>
+                                        </td>
+                                        <td colspan="2">
+                                            <input dir="rtl"
+                                                   type="text"
+                                                   disabled
+                                                   class="form-control"
+                                                   value="{{totalPriceAfterVat | currency:'':2}}">
                                         </td>
                                     </tr>
                                     </tbody>

@@ -34,6 +34,8 @@ public class ContractProduct implements Serializable {
 
     private Double unitSellPrice;
 
+    private Double unitVat;
+
     @ManyToOne
     @JoinColumn(name = "contract")
     private Contract contract;
@@ -47,5 +49,13 @@ public class ContractProduct implements Serializable {
         ObjectMapper mapper = new ObjectMapper();
         ContractProduct contractProduct = mapper.readValue(jsonString, ContractProduct.class);
         return contractProduct;
+    }
+
+    public Double getTotalPriceAfterVat() {
+        try {
+            return (this.quantity * this.unitSellPrice) + (this.quantity * this.unitVat);
+        } catch (Exception ex) {
+            return 0.0;
+        }
     }
 }

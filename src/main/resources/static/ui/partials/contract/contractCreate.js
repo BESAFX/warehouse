@@ -5,6 +5,8 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
 
         $scope.contract = {};
 
+        $scope.contract.discount = 0;
+
         $scope.customers = [];
 
         $scope.sellers = [];
@@ -13,11 +15,15 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
 
         $scope.contractPremiums = [];
 
+        $scope.contractPremiumsSum = 0;
+
         $scope.capitalCash = 0;
 
         $scope.profitPercentage = 0;
 
         $scope.totalPrice = 0;
+
+        $scope.totalPriceAfterDiscountAndVat = 0;
 
         $scope.reaminPrice = 0;
 
@@ -147,11 +153,17 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
             });
         };
 
-        //إجمالي العقد
+        //إجمالي العقد قبل (الخصم + القيمة المضافة)
+        //إجمالي العقد بعد (الخصم + القيمة المضافة)
         $scope.findTotalPrice = function () {
             $scope.totalPrice = 0;
+            $scope.totalPriceAfterDiscountAndVat = 0;
             angular.forEach($scope.productPurchases, function (productPurchase) {
                 $scope.totalPrice = $scope.totalPrice + (productPurchase.requiredQuantity * productPurchase.unitSellPrice);
+                $scope.totalPriceAfterDiscountAndVat = $scope.totalPriceAfterDiscountAndVat +
+                    (productPurchase.requiredQuantity * productPurchase.unitSellPrice) +
+                    (productPurchase.requiredQuantity * (productPurchase.unitSellPrice * 5 / 100)) -
+                    $scope.contract.discount;
             });
             return $scope.totalPrice;
         };
@@ -187,7 +199,9 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
 
         //حساب الباقي من اجمالي العقد عند اضافة الأقساط
         $scope.findRemainPrice = function () {
-            $scope.remainPrice = $scope.findTotalPrice() - $scope.findContractPremiumsSum();
+            $scope.findTotalPrice();
+            //يتم حساب الباقي بعد (الخصم + القيمة المضافة)
+            $scope.remainPrice = $scope.totalPriceAfterDiscountAndVat - $scope.findContractPremiumsSum();
         };
 
         $scope.submit = function () {
@@ -198,6 +212,7 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
                     var contractProduct = {};
                     contractProduct.quantity = productPurchase.requiredQuantity;
                     contractProduct.unitSellPrice = productPurchase.unitSellPrice;
+                    contractProduct.unitVat = productPurchase.unitVat;
                     contractProduct.productPurchase = productPurchase;
                     $scope.contract.contractProducts.push(contractProduct);
                 }

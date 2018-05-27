@@ -211,6 +211,14 @@
                             </th>
 
                             <th>
+                                <span>القيمة المضافة</span>
+                            </th>
+
+                            <th>
+                                <span>الخصم</span>
+                            </th>
+
+                            <th>
                                 <span>الأجمالي</span>
                             </th>
 
@@ -249,15 +257,17 @@
                                 <span class="label label-info no-print">{{contract.lastPaymentDate | date: 'hh:mm a'}}</span>
                             </td>
                             <td>{{contract.person.contact.shortName}}</td>
-                            <td>{{contract.capitalCash | currency:' SAR':2}}</td>
-                            <td>{{contract.profit | currency:' SAR':2}}</td>
-                            <td>{{contract.totalPrice | currency:' SAR':2}}</td>
-                            <td>{{contract.paid | currency:' SAR':2}}</td>
-                            <td>{{contract.remain | currency:' SAR':2}}</td>
+                            <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
+                            <td>{{contract.profit | currency:' SAR ':2}}</td>
+                            <td>{{contract.totalVat | currency:' SAR ':2}}</td>
+                            <td>{{contract.discount | currency:' SAR ':2}}</td>
+                            <td>{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
+                            <td>{{contract.paid | currency:' SAR ':2}}</td>
+                            <td>{{contract.remain | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!contracts || contracts.length ==0">
-                            <td colspan="13">
+                            <td colspan="15">
                                 <p ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
                                     <span>لا توجد عقود حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
                                     <a href="" ng-click="newContract()">اضغط هنا</a>
@@ -270,7 +280,9 @@
                             </td>
                             <td class="success" colspan="1">{{contracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
                             <td class="success" colspan="1">{{contracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'totalVat' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'discount' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{contracts | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
                             <td class="success" colspan="1">{{contracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
                             <td class="success" colspan="1">{{contracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
                         </tr>

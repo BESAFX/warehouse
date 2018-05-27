@@ -11,7 +11,7 @@ app.controller('contractProductCreateCtrl', ['ContractService', 'ContractProduct
 
         $scope.totalPrice = 0;
 
-        $scope.reaminPrice = 0;
+        $scope.totalPriceAfterVat = 0;
 
         //رأس المال
         $scope.findCapitalCash = function () {
@@ -21,11 +21,16 @@ app.controller('contractProductCreateCtrl', ['ContractService', 'ContractProduct
             });
         };
 
-        //إجمالي العقد
+        //إجمالي الاصناف قبل (القيمة المضافة)
+        //إجمالي الاصناف بعد (القيمة المضافة)
         $scope.findTotalPrice = function () {
             $scope.totalPrice = 0;
+            $scope.totalPriceAfterVat = 0;
             angular.forEach($scope.contract.seller.productPurchases, function (productPurchase) {
                 $scope.totalPrice = $scope.totalPrice + (productPurchase.requiredQuantity * productPurchase.unitSellPrice);
+                $scope.totalPriceAfterVat = $scope.totalPriceAfterVat +
+                    (productPurchase.requiredQuantity * productPurchase.unitSellPrice) +
+                    (productPurchase.requiredQuantity * (productPurchase.unitSellPrice * 5 / 100));
             });
             return $scope.totalPrice;
         };
@@ -45,6 +50,7 @@ app.controller('contractProductCreateCtrl', ['ContractService', 'ContractProduct
                     var contractProduct = {};
                     contractProduct.quantity = productPurchase.requiredQuantity;
                     contractProduct.unitSellPrice = productPurchase.unitSellPrice;
+                    contractProduct.unitVat = productPurchase.unitVat;
                     contractProduct.productPurchase = productPurchase;
                     contractProduct.contract = {}; //هامة جداًَ لربط السلعة مع العقد
                     contractProduct.contract.id = $scope.contract.id; //هامة جداًَ لربط السلعة مع العقد
