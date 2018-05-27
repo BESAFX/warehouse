@@ -57,6 +57,8 @@ public class Company implements Serializable {
 
     private String yamamahPassword;
 
+    private Double vatFactor;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String logo;

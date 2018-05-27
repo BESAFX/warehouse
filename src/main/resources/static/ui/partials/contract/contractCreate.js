@@ -45,6 +45,15 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
             });
         };
 
+        $scope.newProductPurchase = function () {
+            ModalProvider.openProductPurchaseCreateModel().result.then(function (data) {
+                $scope.productPurchases.splice(0, 0, data);
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
+
         $scope.searchSellers = function ($select, $event) {
 
             // no event means first load!
@@ -162,7 +171,7 @@ app.controller('contractCreateCtrl', ['ContractService', 'CustomerService', 'Sel
                 $scope.totalPrice = $scope.totalPrice + (productPurchase.requiredQuantity * productPurchase.unitSellPrice);
                 $scope.totalPriceAfterDiscountAndVat = $scope.totalPriceAfterDiscountAndVat +
                     (productPurchase.requiredQuantity * productPurchase.unitSellPrice) +
-                    (productPurchase.requiredQuantity * (productPurchase.unitSellPrice * 5 / 100)) -
+                    (productPurchase.requiredQuantity * (productPurchase.unitSellPrice * $rootScope.selectedCompany.vatFactor)) -
                     $scope.contract.discount;
             });
             return $scope.totalPrice;

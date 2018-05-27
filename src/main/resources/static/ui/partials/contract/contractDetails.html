@@ -296,7 +296,7 @@
                                 </td>
                                 <td colspan="1">{{contract.contractProducts | sumByKey:'unitSellPrice' | currency:' SAR ':2}}</td>
                                 <td colspan="1">{{contract.contractProducts | sumByKey:'unitVat' | currency:' SAR ':2}}</td>
-                                <td colspan="1">{{(contract.contractProducts | sumByKey:'totalPriceAfterVat' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{contract.contractProducts | sumByKey:'totalPriceAfterVat' | currency:' SAR ':2}}</td>
                                 <td colspan="1"></td>
                             </tr>
                             </tbody>
@@ -377,22 +377,13 @@
                                 </td>
                             </tr>
                             <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
-                                <td colspan="2" class="text-left warning">
-                                    <span>إجمالي قيمة العقد</span>
+                                <td colspan="1" class="text-left warning">
+                                    <span class="pull-left">المجموع</span>
                                 </td>
-                                <td colspan="3">{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
-                            </tr>
-                            <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
-                                <td colspan="2" class="text-left success">
-                                    <span>إجمالي المدفوع</span>
-                                </td>
-                                <td colspan="3">{{contract.contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                            </tr>
-                            <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
-                                <td colspan="2" class="text-left danger">
-                                    <span>إجمالي الباقي</span>
-                                </td>
-                                <td colspan="3">{{contract.contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{contract.contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{contract.contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{contract.contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                                <td></td>
                             </tr>
                             </tbody>
                         </table>

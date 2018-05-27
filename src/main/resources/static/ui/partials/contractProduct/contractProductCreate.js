@@ -30,7 +30,7 @@ app.controller('contractProductCreateCtrl', ['ContractService', 'ContractProduct
                 $scope.totalPrice = $scope.totalPrice + (productPurchase.requiredQuantity * productPurchase.unitSellPrice);
                 $scope.totalPriceAfterVat = $scope.totalPriceAfterVat +
                     (productPurchase.requiredQuantity * productPurchase.unitSellPrice) +
-                    (productPurchase.requiredQuantity * (productPurchase.unitSellPrice * 5 / 100));
+                    (productPurchase.requiredQuantity * (productPurchase.unitSellPrice * $rootScope.selectedCompany.vatFactor));
             });
             return $scope.totalPrice;
         };
