@@ -138,6 +138,7 @@ gulp.task('scripts', function () {
         './partials/productPurchase/productPurchaseFilter.js',
         './partials/contract/contractFilter.js',
         './partials/contract/contractCreate.js',
+        './partials/contract/contractOldCreate.js',
         './partials/contract/contractDetails.js',
         './partials/contractProduct/contractProductCreate.js',
         './partials/contractPayment/contractPaymentFilter.js',

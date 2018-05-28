@@ -1039,6 +1039,14 @@ app.controller("menuCtrl", [
                 }, 300);
             });
         };
+        $scope.newOldContract = function () {
+            ModalProvider.openContractOldCreateModel().result.then(function (data) {
+                $scope.contracts.splice(0, 0, data);
+                $timeout(function () {
+                    window.componentHandler.upgradeAllRegistered();
+                }, 300);
+            });
+        };
         $scope.deleteContract = function (contract) {
             ModalProvider.openConfirmModel("العقود", "delete", "هل تود حذف العقد فعلاً؟").result.then(function (value) {
                 if (value) {

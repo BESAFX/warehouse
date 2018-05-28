@@ -104,6 +104,10 @@
                         </th>
 
                         <th>
+                            <span>الخصم</span>
+                        </th>
+
+                        <th>
                             <span>الأجمالي</span>
                         </th>
 
@@ -131,7 +135,8 @@
                         <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
                         <td>{{contract.profit | currency:' SAR ':2}}</td>
                         <td>{{contract.profitPercentage | currency:' % ':2}}</td>
-                        <td>{{contract.totalPrice | currency:' SAR ':2}}</td>
+                        <td>{{contract.discount | currency:' SAR ':2}}</td>
+                        <td>{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
                         <td>{{contract.paid | currency:' SAR ':2}}</td>
                         <td>{{contract.remain | currency:' SAR ':2}}</td>
                     </tr>
@@ -142,7 +147,8 @@
                         <td class="success" colspan="1">{{contracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
                         <td class="success" colspan="1">{{contracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
                         <td class="success" colspan="1">{{contracts | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{contracts | sumByKey:'discount' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{contracts | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
                         <td class="success" colspan="1">{{contracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
                         <td class="success" colspan="1">{{contracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
                     </tr>

@@ -244,7 +244,20 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             controller: 'contractCreateCtrl',
             backdrop: 'static',
             keyboard: false,
-            size: 'lg'
+            windowClass: 'xlg'
+        });
+    };
+
+    this.openContractOldCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/contract/contractOldCreate.html',
+            controller: 'contractOldCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'xlg'
         });
     };
 

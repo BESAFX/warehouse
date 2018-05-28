@@ -37,10 +37,6 @@
                             <span>تحديد السلع</span>
                         </a>
 
-                        <a href="#panel-3-contract" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <span>معلومات العقد</span>
-                        </a>
-
                         <a href="#panel-4-contract" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             <span>الأقساط</span>
                         </a>
@@ -51,7 +47,7 @@
 
                         <div class="form-group row">
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
                                 <label for="seller" class="control-label">
                                     <span>المستثمر</span>
                                     <strong>
@@ -107,7 +103,7 @@
                                 </ui-select>
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
                                 <label for="customer" class="control-label">
                                     <span>العميل</span>
                                     <strong>
@@ -162,11 +158,7 @@
                                 </ui-select>
                             </div>
 
-                        </div>
-
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
                                 <label for="sponsor1" class="control-label">
                                     <span>الكفيل الأول</span>
                                     <strong>
@@ -219,7 +211,7 @@
                                 </ui-select>
                             </div>
 
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
                                 <label for="sponsor2" class="control-label">
                                     <span>الكفيل الثاني</span>
                                     <strong>
@@ -276,22 +268,126 @@
 
                         <div class="form-group row">
 
-                            <div class="box-info" ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
-                                <p>
-                                    <span>في حال عدم حصولك على المستثمر المراد، يمكنك إنشاء مستثمر من </span>
-                                    <span><a href="" ng-click="newSeller()">هنا</a></span>
-                                </p>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                <label for="code" class="control-label">رقم العقد</label>
+                                <div dir="ltr" class="input-group" id="code">
+                                    <span class="input-group-addon">غير مكرر</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="1"
+                                           class="form-control"
+                                           placeholder="اجباري"
+                                           required="required"
+                                           disable-validation-message=""
+                                           ng-model="contract.code">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                <label for="discount" class="control-label">الخصم</label>
+                                <div dir="ltr" class="input-group" id="discount">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="0"
+                                           class="form-control"
+                                           required="required"
+                                           disable-validation-message=""
+                                           ng-change="findRemainPrice()"
+                                           placeholder="اجباري"
+                                           ng-model="contract.discount">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3"
+                                 ng-init="buffer.calendar='H'">
+                                <label for="calendar" class="control-label">نوع التقويم</label>
+                                <select id="calendar"
+                                        style="height: 40px"
+                                        class="form-control"
+                                        ng-model="buffer.calendar"
+                                        required="required"
+                                        disable-validation-message="">
+                                    <option value="H">تقويم هجري</option>
+                                    <option value="G">تقويم ميلادي</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3"
+                                 ng-if="buffer.calendar==='H'">
+                                <label for="dateFrom" class="control-label">تاريخ كتابة العقد</label>
+                                <div dir="ltr" class="input-group">
+                                    <input dir="rtl"
+                                           id="dateFrom"
+                                           type="text"
+                                           class="form-control is-calendarPicker"
+                                           ng-model="contract.writtenDate"
+                                           calendarType="ummalqura"
+                                           language="en"
+                                           dateFormat="yyyy/mm/dd"
+                                           showOnFocus="false"
+                                           readonly="readonly"
+                                           required="required"
+                                           disable-validation-message=""
+                                           kdatepicker>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3"
+                                 ng-if="buffer.calendar==='G'">
+                                <label for="G-dateFrom" class="control-label">تاريخ كتابة العقد</label>
+                                <input id="G-dateFrom"
+                                       class="form-control"
+                                       dir="ltr"
+                                       type="text"
+                                       name="input"
+                                       required="required"
+                                       disable-validation-message=""
+                                       ng-model="contract.writtenDate"
+                                       datetime="yyyy-MM-dd"/>
                             </div>
 
                         </div>
 
                         <div class="form-group row">
 
-                            <div class="box-info" ng-if="contains(me.team.authorities, ['ROLE_CUSTOMER_CREATE'])">
-                                <p>
-                                    <span>في حال عدم حصولك على العميل أو الكفيل المراد، يمكنك إنشاء عميل أو كفيل من </span>
-                                    <span><a href="" ng-click="newCustomer()">هنا</a></span>
-                                </p>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                <label for="paperFees" class="control-label">الرسوم الإدارية</label>
+                                <div dir="ltr" class="input-group" id="paperFees">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="0"
+                                           class="form-control"
+                                           placeholder="اختياري"
+                                           ng-model="contract.paperFees">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                <label for="commissionFees" class="control-label">عمولة العقد</label>
+                                <div dir="ltr" class="input-group" id="commissionFees">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="0"
+                                           class="form-control"
+                                           placeholder="اختياري"
+                                           ng-model="contract.commissionFees">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                                <label for="lawFees" class="control-label">رسوم المحاماة</label>
+                                <div dir="ltr" class="input-group" id="lawFees">
+                                    <span class="input-group-addon">ريال سعودي</span>
+                                    <input dir="rtl"
+                                           type="number"
+                                           min="0"
+                                           class="form-control"
+                                           placeholder="اختياري"
+                                           ng-model="contract.lawFees">
+                                </div>
                             </div>
 
                         </div>
@@ -299,12 +395,6 @@
                     </div>
 
                     <div class="mdl-tabs__panel" id="panel-2-contract">
-
-                        <div class="form-group row">
-                            <div class="alert alert-info" role="alert">
-                                <strong>ملاحظة هامة: يتم احتساب نسبة الأرباح لسعر البيع فقط للأصناف دون اضافة الخصم والقيمة المضافة</strong>
-                            </div>
-                        </div>
 
                         <div class="form-group row">
 
@@ -329,6 +419,8 @@
                             </button>
 
                         </div>
+
+                        <hr>
 
                         <div class="form-group row">
 
@@ -487,136 +579,6 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="mdl-tabs__panel" id="panel-3-contract">
-
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="code" class="control-label">رقم العقد</label>
-                                <div dir="ltr" class="input-group" id="code">
-                                    <span class="input-group-addon">غير مكرر</span>
-                                    <input dir="rtl"
-                                           type="number"
-                                           min="1"
-                                           class="form-control"
-                                           placeholder="اجباري"
-                                           required="required"
-                                           disable-validation-message=""
-                                           ng-model="contract.code">
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                                 ng-init="buffer.calendar='H'">
-                                <label for="calendar" class="control-label">نوع التقويم</label>
-                                <select id="calendar"
-                                        style="height: 40px"
-                                        class="form-control"
-                                        ng-model="buffer.calendar"
-                                        required="required"
-                                        disable-validation-message="">
-                                    <option value="H">تقويم هجري</option>
-                                    <option value="G">تقويم ميلادي</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                                 ng-if="buffer.calendar==='H'">
-                                <label for="dateFrom" class="control-label">تاريخ كتابة العقد</label>
-                                <div dir="ltr" class="input-group">
-                                    <input dir="rtl"
-                                           id="dateFrom"
-                                           type="text"
-                                           class="form-control is-calendarPicker"
-                                           ng-model="contract.writtenDate"
-                                           calendarType="ummalqura"
-                                           language="en"
-                                           dateFormat="yyyy/mm/dd"
-                                           showOnFocus="false"
-                                           readonly="readonly"
-                                           kdatepicker>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                                 ng-if="buffer.calendar==='G'">
-                                <label for="G-dateFrom" class="control-label">تاريخ كتابة العقد</label>
-                                <input id="G-dateFrom"
-                                       class="form-control"
-                                       dir="ltr"
-                                       type="text"
-                                       name="input"
-                                       ng-model="contract.writtenDate"
-                                       datetime="yyyy-MM-dd"/>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group row">
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="paperFees" class="control-label">الرسوم الإدارية</label>
-                                <div dir="ltr" class="input-group" id="paperFees">
-                                    <span class="input-group-addon">ريال سعودي</span>
-                                    <input dir="rtl"
-                                           type="number"
-                                           min="0"
-                                           class="form-control"
-                                           placeholder="اختياري"
-                                           ng-model="contract.paperFees">
-                                </div>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="commissionFees" class="control-label">عمولة العقد</label>
-                                <div dir="ltr" class="input-group" id="commissionFees">
-                                    <span class="input-group-addon">ريال سعودي</span>
-                                    <input dir="rtl"
-                                           type="number"
-                                           min="0"
-                                           class="form-control"
-                                           placeholder="اختياري"
-                                           ng-model="contract.commissionFees">
-                                </div>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="lawFees" class="control-label">رسوم المحاماة</label>
-                                <div dir="ltr" class="input-group" id="lawFees">
-                                    <span class="input-group-addon">ريال سعودي</span>
-                                    <input dir="rtl"
-                                           type="number"
-                                           min="0"
-                                           class="form-control"
-                                           placeholder="اختياري"
-                                           ng-model="contract.lawFees">
-                                </div>
-                            </div>
-
-                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label for="discount" class="control-label">الخصم</label>
-                                <div dir="ltr" class="input-group" id="discount">
-                                    <span class="input-group-addon">ريال سعودي</span>
-                                    <input dir="rtl"
-                                           type="number"
-                                           min="0"
-                                           class="form-control"
-                                           required="required"
-                                           disable-validation-message=""
-                                           ng-change="findRemainPrice()"
-                                           placeholder="اجباري"
-                                           ng-model="contract.discount">
-                                </div>
                             </div>
 
                         </div>

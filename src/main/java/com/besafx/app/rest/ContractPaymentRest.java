@@ -75,8 +75,7 @@ public class ContractPaymentRest {
             contractPayment.setCode(topContractPayment.getCode() + 1);
         }
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        Contract contract = contractService.findOne(contractPayment.getContractPremium().getContract().getId());
-        contractPayment.setContract(contract);
+        Contract contract = contractService.findOne(contractPayment.getContract().getId());
         contractPayment.setDate(new DateTime().toDate());
         contractPayment.setPerson(caller);
 

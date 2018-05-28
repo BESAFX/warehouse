@@ -7,6 +7,8 @@ app.controller('contractPaymentCreateCtrl', ['ContractPremiumService', 'Contract
 
         $scope.contractPayment = {};
 
+        $scope.contractPayment.contract = contract;
+
         $scope.submit = function () {
             ContractPaymentService.create($scope.contractPayment).then(function (data) {
                 ContractPaymentService.findOne(data.id).then(function (value) {
