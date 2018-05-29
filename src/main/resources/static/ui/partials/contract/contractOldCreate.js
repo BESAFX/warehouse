@@ -159,6 +159,15 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
         };
 
         $scope.submit = function () {
+            //فحص هل السلع المطلوبة فارغة
+            if($scope.productPurchases.length === 0){
+                ModalProvider.openConfirmModel("العقود", "assignment", "فضلاً حدد على الأقل سلعة واحدة تود شرائها")
+                    .result
+                    .then(function (value) {
+                        $scope.form.$setPristine();
+                    });
+                return;
+            }
             var wrapperUtil = {};
             wrapperUtil.obj1 = $scope.contract;
             wrapperUtil.obj2 = $scope.productPurchases;

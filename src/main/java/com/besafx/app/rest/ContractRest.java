@@ -3,6 +3,7 @@ package com.besafx.app.rest;
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
+import com.besafx.app.init.Initializer;
 import com.besafx.app.search.ContractSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
@@ -80,7 +81,16 @@ public class ContractRest {
     private ContractSearch contractSearch;
 
     @Autowired
+    private CustomerService customerService;
+
+    @Autowired
     private SellerService sellerService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductPurchaseService productPurchaseService;
 
     @Autowired
     private NotificationService notificationService;
@@ -129,53 +139,129 @@ public class ContractRest {
     @PreAuthorize("hasRole('ROLE_CONTRACT_CREATE')")
     @Transactional
     public String createOld(@RequestBody String wrapperUtil) {
-        //Object1 represent List<ProductPurchase>
-        try {
-            LOG.info(wrapperUtil);
 
-            JSONObject jsonObject_wrapper = new JSONObject(wrapperUtil);
+        LOG.info(wrapperUtil);
 
-            JSONObject jsonObject_contract = jsonObject_wrapper.getJSONObject("obj1");
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
 
-            LOG.info("إنشاء العقد");
-            Contract contract = new Contract();
-            contract.setCode(jsonObject_contract.getLong("code"));
-            contract.setDiscount(jsonObject_contract.getDouble("discount"));
-            contract.setPaperFees(jsonObject_contract.getDouble("paperFees"));
-            contract.setCommissionFees(jsonObject_contract.getDouble("commissionFees"));
-            contract.setLawFees(jsonObject_contract.getDouble("lawFees"));
-            contract.setWrittenDate(DateConverter.parseHijriDateStringWithFormat(jsonObject_contract.getString("writtenDate"), "dd/MM/yyyy"));
+        JSONObject jsonObject_wrapper = new JSONObject(wrapperUtil);
 
-            LOG.info("إنشاء القسط");
-            ContractPremium contractPremium = new ContractPremium();
-            contractPremium.setContract(contract);
-            contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
-            contractPremium.setDueDate(contract.getWrittenDate());
+        JSONObject jsonObject_contract = jsonObject_wrapper.getJSONObject("obj1");
 
-            LOG.info("إنشاء الدفعة المالية");
-            ContractPayment contractPayment = new ContractPayment();
-            contractPayment.setCode("");
-            contractPayment.setContract(contract);
-            contractPayment.setContractPremium(contractPremium);
-            contractPayment.setAmount(contractPremium.getAmount());
-            contractPayment.setDate(contractPremium.getDueDate());
-            contractPayment.setBankTransaction();
-            contractPayment.setPerson();
+        LOG.info("إنشاء العقد");
+        Contract contract = new Contract();
+        contract.setCode(jsonObject_contract.getLong("code"));
+        contract.setDiscount(jsonObject_contract.getDouble("discount"));
+        contract.setPaperFees(jsonObject_contract.has("paperFees") ? jsonObject_contract.getDouble("paperFees") : null);
+        contract.setCommissionFees(jsonObject_contract.has("commissionFees") ? jsonObject_contract.getDouble("commissionFees") : null);
+        contract.setLawFees(jsonObject_contract.has("lawFees") ? jsonObject_contract.getDouble("lawFees") : null);
+        contract.setWrittenDate(DateConverter.parseJsonStringDate(jsonObject_contract.getString("writtenDate")));
+        contract.setCustomer(customerService.findOne(jsonObject_contract.getJSONObject("customer").getLong("id")));
+        contract.setSeller(sellerService.findOne(jsonObject_contract.getJSONObject("seller").getLong("id")));
+        contract.setSponsor1(jsonObject_contract.has("sponsor1") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor1").getLong("id")) : null);
+        contract.setSponsor2(jsonObject_contract.has("sponsor2") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor2").getLong("id")) : null);
+        contract = contractService.save(contract);
 
-            LOG.info("شراء الأصناف");
+        LOG.info("إنشاء القسط");
+        ContractPremium contractPremium = new ContractPremium();
+        contractPremium.setContract(contract);
+        contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
+        contractPremium.setDueDate(contract.getWrittenDate());
+        contractPremium = contractPremiumService.save(contractPremium);
 
-            LOG.info("ربط الأصناف بالعقود");
+        LOG.info("إنشاء الدفعة المالية");
+        ContractPayment contractPayment = new ContractPayment();
+        ContractPayment topContractPayment = contractPaymentService.findTopByOrderByCodeDesc();
+        if (topContractPayment == null) {
+            contractPayment.setCode(1);
+        } else {
+            contractPayment.setCode(topContractPayment.getCode() + 1);
+        }
+        contractPayment.setContract(contract);
+        contractPayment.setContractPremium(contractPremium);
+        contractPayment.setAmount(contractPremium.getAmount());
+        contractPayment.setDate(contractPremium.getDueDate());
 
-            JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
+        LOG.info("عملية سداد للدفعة");
+        BankTransaction bankTransaction = new BankTransaction();
+        {
+            bankTransaction.setAmount(contractPayment.getAmount());
+            bankTransaction.setBank(Initializer.bank);
+            bankTransaction.setSeller(contract.getSeller());
+            bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
+            bankTransaction.setDate(contractPayment.getDate());
+            bankTransaction.setPerson(caller);
+            StringBuilder builder = new StringBuilder();
+            builder.append("إيداع مبلغ نقدي بقيمة ");
+            builder.append(bankTransaction.getAmount());
+            builder.append("ريال سعودي، ");
+            builder.append(" لـ / ");
+            builder.append(bankTransaction.getSeller().getContact().getShortName());
+            builder.append("، قسط مستحق بتاريخ ");
+            builder.append(DateConverter.getDateInFormat(contractPayment.getContractPremium().getDueDate()));
+            builder.append("، للعقد رقم / " + contract.getCode());
+            bankTransaction.setNote(builder.toString());
+        }
 
-            LOG.info("حلقات السلع- شراء السلع ومن ثم ربطها مع العقد");
-            for(int i = 0; i < jsonArray_productPurchases.length(); i++){
-                JSONObject jsonObject_productPurchase = jsonArray_productPurchases.getJSONObject(i);
-                LOG.info(jsonObject_productPurchase.get("unitVat").toString());
+        contractPayment.setBankTransaction(bankTransactionService.save(bankTransaction));
+        contractPayment.setPerson(caller);
+        contractPayment.setNote(bankTransaction.getNote());
+        contractPayment = contractPaymentService.save(contractPayment);
+
+        LOG.info("شراء الأصناف");
+        JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
+        for(int i = 0; i < jsonArray_productPurchases.length(); i++){
+
+            JSONObject jsonObject_productPurchase = jsonArray_productPurchases.getJSONObject(i);
+
+            ProductPurchase productPurchase = new ProductPurchase();
+            ProductPurchase topProductPurchase = productPurchaseService.findTopByOrderByCodeDesc();
+            if (topProductPurchase == null) {
+                productPurchase.setCode(1);
+            } else {
+                productPurchase.setCode(topProductPurchase.getCode() + 1);
+            }
+            productPurchase.setDate(contract.getWrittenDate());
+            productPurchase.setSeller(contract.getSeller());
+            productPurchase.setProduct(productService.findOne(jsonObject_productPurchase.getJSONObject("product").getLong("id")));
+            productPurchase.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
+            productPurchase.setUnitPurchasePrice(jsonObject_productPurchase.getDouble("unitPurchasePrice"));
+
+            LOG.info("إنشاء عملية السحب للشراء");
+            BankTransaction bankTransactionWithdrawPurchase = new BankTransaction();
+            {
+                bankTransactionWithdrawPurchase.setBank(Initializer.bank);
+                bankTransactionWithdrawPurchase.setSeller(productPurchase.getSeller());
+                bankTransactionWithdrawPurchase.setAmount(productPurchase.getQuantity() * productPurchase.getUnitPurchasePrice());
+                bankTransactionWithdrawPurchase.setTransactionType(Initializer.transactionTypeWithdrawPurchase);
+                bankTransactionWithdrawPurchase.setDate(productPurchase.getDate());
+                bankTransactionWithdrawPurchase.setPerson(caller);
+                StringBuilder builder = new StringBuilder();
+                builder.append("سحب مبلغ نقدي بقيمة ");
+                builder.append(bankTransactionWithdrawPurchase.getAmount());
+                builder.append("ريال سعودي، ");
+                builder.append(" من / ");
+                builder.append(bankTransactionWithdrawPurchase.getSeller().getContact().getShortName());
+                builder.append("، قيمة شراء " + productPurchase.getProduct().getName());
+                builder.append("، عدد /  " + productPurchase.getQuantity());
+                builder.append("، بسعر الوحدة /  " + productPurchase.getUnitPurchasePrice());
+                builder.append(" ، " + (productPurchase.getNote() == null ? "" : productPurchase.getNote()));
+                bankTransactionWithdrawPurchase.setNote(builder.toString());
             }
 
-        }catch (Exception ex){
-            ex.printStackTrace();
+            productPurchase.setBankTransaction(bankTransactionService.save(bankTransactionWithdrawPurchase));
+            productPurchase.setPerson(caller);
+            productPurchase.setNote(bankTransactionWithdrawPurchase.getNote());
+            productPurchase = productPurchaseService.save(productPurchase);
+
+            LOG.info("ربط الأصناف بالعقود");
+            ContractProduct contractProduct = new ContractProduct();
+            contractProduct.setContract(contract);
+            contractProduct.setProductPurchase(productPurchase);
+            contractProduct.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
+            contractProduct.setUnitSellPrice(jsonObject_productPurchase.getDouble("unitSellPrice"));
+            contractProduct.setUnitVat(jsonObject_productPurchase.getDouble("unitVat"));
+            contractProductService.save(contractProduct);
         }
 
         return "";

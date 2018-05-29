@@ -4,6 +4,7 @@ import org.joda.time.*;
 import org.joda.time.chrono.IslamicChronology;
 import org.joda.time.format.DateTimeFormat;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -140,6 +141,17 @@ public class DateConverter {
     public static Date parseHijriDateStringWithFormat(String date, String format) throws Exception {
         org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(format).withChronology(IslamicChronology.getInstance());
         return formatter.parseDateTime(date).toDate();
+    }
+
+    public static Date parseJsonStringDate(String jsonDateString){
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+            return inputFormat.parse(jsonDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static Date getCurrentWeekStart() {
