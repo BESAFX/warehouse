@@ -151,6 +151,10 @@ public class ContractRest {
         LOG.info("إنشاء العقد");
         Contract contract = new Contract();
         contract.setCode(jsonObject_contract.getLong("code"));
+        Contract tempContract = contractService.findByCode(contract.getCode());
+        if (tempContract != null) {
+            throw new CustomException("عفواً، رقم العقد المدخل غير متاح، حاول برقم آخر");
+        }
         contract.setDiscount(jsonObject_contract.getDouble("discount"));
         contract.setPaperFees(jsonObject_contract.has("paperFees") ? jsonObject_contract.getDouble("paperFees") : null);
         contract.setCommissionFees(jsonObject_contract.has("commissionFees") ? jsonObject_contract.getDouble("commissionFees") : null);
@@ -168,6 +172,7 @@ public class ContractRest {
         contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
         contractPremium.setDueDate(contract.getWrittenDate());
         contractPremium = contractPremiumService.save(contractPremium);
+        contract.getContractPremiums().add(contractPremium);
 
         LOG.info("إنشاء الدفعة المالية");
         ContractPayment contractPayment = new ContractPayment();
@@ -206,7 +211,7 @@ public class ContractRest {
         contractPayment.setBankTransaction(bankTransactionService.save(bankTransaction));
         contractPayment.setPerson(caller);
         contractPayment.setNote(bankTransaction.getNote());
-        contractPayment = contractPaymentService.save(contractPayment);
+        contract.getContractPayments().add(contractPaymentService.save(contractPayment));
 
         LOG.info("شراء الأصناف");
         JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
@@ -261,10 +266,19 @@ public class ContractRest {
             contractProduct.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
             contractProduct.setUnitSellPrice(jsonObject_productPurchase.getDouble("unitSellPrice"));
             contractProduct.setUnitVat(jsonObject_productPurchase.getDouble("unitVat"));
-            contractProductService.save(contractProduct);
+            contract.getContractProducts().add(contractProductService.save(contractProduct));
         }
 
-        return "";
+        StringBuilder builder = new StringBuilder();
+        builder.append("تم إنشاء العقد بنجاح بمجموع أسعار = ");
+        builder.append(contract.getTotalPrice());
+        builder.append("، وأصناف عدد " + contract.getContractProducts().size() + " صنف");
+        builder.append("، تسدد على " + contract.getContractPremiums().size() + " قسط");
+        notificationService.notifyAll(Notification
+                                              .builder()
+                                              .message(builder.toString())
+                                              .type("success").build());
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contract);
     }
 
     @DeleteMapping(value = "delete/{id}")

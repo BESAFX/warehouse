@@ -3,18 +3,6 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
 
         $scope.buffer = {};
 
-        $scope.contract = {};
-
-        $scope.contract.discount = 0;
-
-        $scope.contract.paid = 0;
-
-        $scope.customers = [];
-
-        $scope.sellers = [];
-
-        $scope.productPurchases = [];
-
         $scope.newCustomer = function () {
             ModalProvider.openCustomerCreateModel().result.then(function (data) {
                 $scope.customers.splice(0, 0, data);
@@ -158,6 +146,24 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
             $scope.productPurchases.splice(index, 1);
         };
 
+        $scope.clear = function () {
+
+            $scope.contract = {};
+
+            $scope.contract.discount = 0;
+
+            $scope.contract.paid = 0;
+
+            $scope.customers = [];
+
+            $scope.sellers = [];
+
+            $scope.productPurchases = [];
+
+            $scope.form.$setPristine();
+
+        };
+
         $scope.submit = function () {
             //فحص هل السلع المطلوبة فارغة
             if($scope.productPurchases.length === 0){
@@ -171,47 +177,9 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
             var wrapperUtil = {};
             wrapperUtil.obj1 = $scope.contract;
             wrapperUtil.obj2 = $scope.productPurchases;
-            ContractService.createOld(wrapperUtil);
-
-
-            // //شراء السلع المحددة بالكميات المدخلة
-            // var tempProductPurchases = [];
-            // $scope.contract.contractProducts = [];
-            // angular.forEach($scope.productPurchases, function (productPurchase) {
-            //     var tempProductPurchase = JSON.parse(JSON.stringify(productPurchase));
-            //     tempProductPurchase.seller = $scope.contract.seller;
-            //     ProductPurchaseService.create(tempProductPurchase).then(function (data) {
-            //         tempProductPurchases.push(data);
-            //         //ربط الأصناف بالعقد
-            //         var contractProduct = {};
-            //         contractProduct.quantity = productPurchase.quantity;
-            //         contractProduct.unitSellPrice = productPurchase.unitSellPrice;
-            //         contractProduct.unitVat = productPurchase.unitVat;
-            //         contractProduct.productPurchase = data;
-            //         $scope.contract.contractProducts.push(contractProduct);
-            //     });
-            // });
-
-            // //ربط الأقساط بالعقد
-            // $scope.contract.contractPremiums = [];
-            // $scope.contractPremium = {};
-            // if ($scope.contract.paid > 0) {
-            //     $scope.contractPremium.amount = $scope.contract.paid;
-            //     $scope.contractPremium.dueDate = $scope.contract.writtenDate;
-            //     $scope.contract.contractPremiums.push($scope.contractPremium);
-            // }
-            //
-            // ContractService.create($scope.contract).then(function (data) {
-            //     if ($scope.contract.paid > 0) {
-            //         //إنشاء دفعة مالية بالمبالغ الواصلة
-            //         var contractPayment = {};
-            //         contractPayment.amount = $scope.contractPremium.amount;
-            //         contractPayment.date = $scope.contractPremium.dueDate;
-            //         contractPayment.contractPremium = $scope.contractPremium;
-            //         contractPayment.contract = data;
-            //         ContractPaymentService.create(contractPayment);
-            //     }
-            // });
+            ContractService.createOld(wrapperUtil).then(function (value) {
+                $scope.clear();
+            });
         };
 
         $scope.cancel = function () {
@@ -219,6 +187,7 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
         };
 
         $timeout(function () {
+            $scope.clear();
             window.componentHandler.upgradeAllRegistered();
         }, 600);
 

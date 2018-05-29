@@ -306,6 +306,14 @@
                                         </th>
 
                                         <th>
+                                            <span>القيمة المضافة</span>
+                                        </th>
+
+                                        <th>
+                                            <span>الخصم</span>
+                                        </th>
+
+                                        <th>
                                             <span>الأجمالي</span>
                                         </th>
 
@@ -328,20 +336,22 @@
                                         <td>{{contract.customer.contact.mobile}}</td>
                                         <td>{{contract.seller.contact.shortName}}</td>
                                         <td>
-                                            <span ng-show="dateType==='H'">{{contract.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                            <span ng-show="dateType==='G'">{{contract.date | date: 'yyyy-MM-dd'}}</span>
-                                            <span class="label label-info">{{contract.date | date: 'hh:mm a'}}</span>
+                                            <span ng-show="dateType==='H'">{{contract.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                            <span ng-show="dateType==='G'">{{contract.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
+                                            <span class="label label-info">{{contract.lastPaymentDate | date: 'hh:mm a'}}</span>
                                         </td>
                                         <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
                                         <td>{{contract.profit | currency:' SAR ':2}}</td>
                                         <td>{{contract.profitPercentage | currency:' % ':2}}</td>
-                                        <td>{{contract.totalPrice | currency:' SAR ':2}}</td>
+                                        <td>{{contract.totalVat | currency:' SAR ':2}}</td>
+                                        <td>{{contract.discount | currency:' SAR ':2}}</td>
+                                        <td>{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
                                         <td>{{contract.paid | currency:' SAR ':2}}</td>
                                         <td>{{contract.remain | currency:' SAR ':2}}</td>
                                     </tr>
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                         ng-show="!myContracts || myContracts.length ==0">
-                                        <td colspan="11">
+                                        <td colspan="14">
                                             <span>لا توجد عقود حتى الآن</span>
                                         </td>
                                     </tr>
@@ -352,7 +362,9 @@
                                         <td class="success" colspan="1">{{myContracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
                                         <td class="success" colspan="1">{{myContracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
                                         <td class="success" colspan="1">{{myContracts | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'totalVat' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'discount' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myContracts | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
                                         <td class="success" colspan="1">{{myContracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
                                         <td class="success" colspan="1">{{myContracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
                                     </tr>
