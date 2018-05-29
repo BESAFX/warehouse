@@ -135,7 +135,7 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
         };
 
         $scope.refreshParents = function (isOpen) {
-            if(isOpen){
+            if (isOpen) {
                 ProductService.findParents().then(function (value) {
                     $scope.parents = value;
                 });
@@ -143,7 +143,7 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
         };
 
         $scope.refreshChilds = function (isOpen) {
-            if(isOpen){
+            if (isOpen) {
                 ProductService.findChilds($scope.buffer.parent.id).then(function (value) {
                     return $scope.buffer.parent.childs = value;
                 });
@@ -159,44 +159,50 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
         };
 
         $scope.submit = function () {
-            //شراء السلع المحددة بالكميات المدخلة
-            var tempProductPurchases = [];
-            $scope.contract.contractProducts = [];
-            angular.forEach($scope.productPurchases, function (productPurchase) {
-                var tempProductPurchase = JSON.parse(JSON.stringify(productPurchase));
-                tempProductPurchase.seller = $scope.contract.seller;
-                ProductPurchaseService.create(tempProductPurchase).then(function (data) {
-                    tempProductPurchases.push(data);
-                    //ربط الأصناف بالعقد
-                    var contractProduct = {};
-                    contractProduct.quantity = productPurchase.quantity;
-                    contractProduct.unitSellPrice = productPurchase.unitSellPrice;
-                    contractProduct.unitVat = productPurchase.unitVat;
-                    contractProduct.productPurchase = data;
-                    $scope.contract.contractProducts.push(contractProduct);
-                });
-            });
+            var wrapperUtil = {};
+            wrapperUtil.obj1 = $scope.contract;
+            wrapperUtil.obj2 = $scope.productPurchases;
+            ContractService.createOld(wrapperUtil);
 
-            //ربط الأقساط بالعقد
-            $scope.contract.contractPremiums = [];
-            $scope.contractPremium = {};
-            if ($scope.contract.paid > 0) {
-                $scope.contractPremium.amount = $scope.contract.paid;
-                $scope.contractPremium.dueDate = $scope.contract.writtenDate;
-                $scope.contract.contractPremiums.push($scope.contractPremium);
-            }
 
-            ContractService.create($scope.contract).then(function (data) {
-                if ($scope.contract.paid > 0) {
-                    //إنشاء دفعة مالية بالمبالغ الواصلة
-                    var contractPayment = {};
-                    contractPayment.amount = $scope.contractPremium.amount;
-                    contractPayment.date = $scope.contractPremium.dueDate;
-                    contractPayment.contractPremium = $scope.contractPremium;
-                    contractPayment.contract = data;
-                    ContractPaymentService.create(contractPayment);
-                }
-            });
+            // //شراء السلع المحددة بالكميات المدخلة
+            // var tempProductPurchases = [];
+            // $scope.contract.contractProducts = [];
+            // angular.forEach($scope.productPurchases, function (productPurchase) {
+            //     var tempProductPurchase = JSON.parse(JSON.stringify(productPurchase));
+            //     tempProductPurchase.seller = $scope.contract.seller;
+            //     ProductPurchaseService.create(tempProductPurchase).then(function (data) {
+            //         tempProductPurchases.push(data);
+            //         //ربط الأصناف بالعقد
+            //         var contractProduct = {};
+            //         contractProduct.quantity = productPurchase.quantity;
+            //         contractProduct.unitSellPrice = productPurchase.unitSellPrice;
+            //         contractProduct.unitVat = productPurchase.unitVat;
+            //         contractProduct.productPurchase = data;
+            //         $scope.contract.contractProducts.push(contractProduct);
+            //     });
+            // });
+
+            // //ربط الأقساط بالعقد
+            // $scope.contract.contractPremiums = [];
+            // $scope.contractPremium = {};
+            // if ($scope.contract.paid > 0) {
+            //     $scope.contractPremium.amount = $scope.contract.paid;
+            //     $scope.contractPremium.dueDate = $scope.contract.writtenDate;
+            //     $scope.contract.contractPremiums.push($scope.contractPremium);
+            // }
+            //
+            // ContractService.create($scope.contract).then(function (data) {
+            //     if ($scope.contract.paid > 0) {
+            //         //إنشاء دفعة مالية بالمبالغ الواصلة
+            //         var contractPayment = {};
+            //         contractPayment.amount = $scope.contractPremium.amount;
+            //         contractPayment.date = $scope.contractPremium.dueDate;
+            //         contractPayment.contractPremium = $scope.contractPremium;
+            //         contractPayment.contract = data;
+            //         ContractPaymentService.create(contractPayment);
+            //     }
+            // });
         };
 
         $scope.cancel = function () {

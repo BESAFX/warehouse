@@ -5,12 +5,17 @@ import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.*;
 import com.besafx.app.search.ContractSearch;
 import com.besafx.app.service.*;
+import com.besafx.app.util.DateConverter;
+import com.besafx.app.util.WrapperUtil;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
+import org.jfree.util.Log;
 import org.joda.time.DateTime;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +26,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
@@ -116,6 +122,63 @@ public class ContractRest {
                                               .message(builder.toString())
                                               .type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contract);
+    }
+
+    @PostMapping(value = "createOld", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_CONTRACT_CREATE')")
+    @Transactional
+    public String createOld(@RequestBody String wrapperUtil) {
+        //Object1 represent List<ProductPurchase>
+        try {
+            LOG.info(wrapperUtil);
+
+            JSONObject jsonObject_wrapper = new JSONObject(wrapperUtil);
+
+            JSONObject jsonObject_contract = jsonObject_wrapper.getJSONObject("obj1");
+
+            LOG.info("إنشاء العقد");
+            Contract contract = new Contract();
+            contract.setCode(jsonObject_contract.getLong("code"));
+            contract.setDiscount(jsonObject_contract.getDouble("discount"));
+            contract.setPaperFees(jsonObject_contract.getDouble("paperFees"));
+            contract.setCommissionFees(jsonObject_contract.getDouble("commissionFees"));
+            contract.setLawFees(jsonObject_contract.getDouble("lawFees"));
+            contract.setWrittenDate(DateConverter.parseHijriDateStringWithFormat(jsonObject_contract.getString("writtenDate"), "dd/MM/yyyy"));
+
+            LOG.info("إنشاء القسط");
+            ContractPremium contractPremium = new ContractPremium();
+            contractPremium.setContract(contract);
+            contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
+            contractPremium.setDueDate(contract.getWrittenDate());
+
+            LOG.info("إنشاء الدفعة المالية");
+            ContractPayment contractPayment = new ContractPayment();
+            contractPayment.setCode("");
+            contractPayment.setContract(contract);
+            contractPayment.setContractPremium(contractPremium);
+            contractPayment.setAmount(contractPremium.getAmount());
+            contractPayment.setDate(contractPremium.getDueDate());
+            contractPayment.setBankTransaction();
+            contractPayment.setPerson();
+
+            LOG.info("شراء الأصناف");
+
+            LOG.info("ربط الأصناف بالعقود");
+
+            JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
+
+            LOG.info("حلقات السلع- شراء السلع ومن ثم ربطها مع العقد");
+            for(int i = 0; i < jsonArray_productPurchases.length(); i++){
+                JSONObject jsonObject_productPurchase = jsonArray_productPurchases.getJSONObject(i);
+                LOG.info(jsonObject_productPurchase.get("unitVat").toString());
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return "";
     }
 
     @DeleteMapping(value = "delete/{id}")
