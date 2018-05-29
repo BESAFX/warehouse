@@ -164,54 +164,59 @@ public class ContractRest {
         contract.setSeller(sellerService.findOne(jsonObject_contract.getJSONObject("seller").getLong("id")));
         contract.setSponsor1(jsonObject_contract.has("sponsor1") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor1").getLong("id")) : null);
         contract.setSponsor2(jsonObject_contract.has("sponsor2") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor2").getLong("id")) : null);
+        contract.setPerson(caller);
         contract = contractService.save(contract);
 
-        LOG.info("إنشاء القسط");
-        ContractPremium contractPremium = new ContractPremium();
-        contractPremium.setContract(contract);
-        contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
-        contractPremium.setDueDate(contract.getWrittenDate());
-        contractPremium = contractPremiumService.save(contractPremium);
-        contract.getContractPremiums().add(contractPremium);
+        if(jsonObject_contract.getDouble("paid") > 0){
 
-        LOG.info("إنشاء الدفعة المالية");
-        ContractPayment contractPayment = new ContractPayment();
-        ContractPayment topContractPayment = contractPaymentService.findTopByOrderByCodeDesc();
-        if (topContractPayment == null) {
-            contractPayment.setCode(1);
-        } else {
-            contractPayment.setCode(topContractPayment.getCode() + 1);
+            LOG.info("إنشاء القسط");
+            ContractPremium contractPremium = new ContractPremium();
+            contractPremium.setContract(contract);
+            contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
+            contractPremium.setDueDate(contract.getWrittenDate());
+            contractPremium = contractPremiumService.save(contractPremium);
+            contract.getContractPremiums().add(contractPremium);
+
+            LOG.info("إنشاء الدفعة المالية");
+            ContractPayment contractPayment = new ContractPayment();
+            ContractPayment topContractPayment = contractPaymentService.findTopByOrderByCodeDesc();
+            if (topContractPayment == null) {
+                contractPayment.setCode(1);
+            } else {
+                contractPayment.setCode(topContractPayment.getCode() + 1);
+            }
+            contractPayment.setContract(contract);
+            contractPayment.setContractPremium(contractPremium);
+            contractPayment.setAmount(contractPremium.getAmount());
+            contractPayment.setDate(contractPremium.getDueDate());
+
+            LOG.info("عملية سداد للدفعة");
+            BankTransaction bankTransaction = new BankTransaction();
+            {
+                bankTransaction.setAmount(contractPayment.getAmount());
+                bankTransaction.setBank(Initializer.bank);
+                bankTransaction.setSeller(contract.getSeller());
+                bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
+                bankTransaction.setDate(contractPayment.getDate());
+                bankTransaction.setPerson(caller);
+                StringBuilder builder = new StringBuilder();
+                builder.append("إيداع مبلغ نقدي بقيمة ");
+                builder.append(bankTransaction.getAmount());
+                builder.append("ريال سعودي، ");
+                builder.append(" لـ / ");
+                builder.append(bankTransaction.getSeller().getContact().getShortName());
+                builder.append("، قسط مستحق بتاريخ ");
+                builder.append(DateConverter.getDateInFormat(contractPayment.getContractPremium().getDueDate()));
+                builder.append("، للعقد رقم / " + contract.getCode());
+                bankTransaction.setNote(builder.toString());
+            }
+
+            contractPayment.setBankTransaction(bankTransactionService.save(bankTransaction));
+            contractPayment.setPerson(caller);
+            contractPayment.setNote(bankTransaction.getNote());
+            contract.getContractPayments().add(contractPaymentService.save(contractPayment));
+
         }
-        contractPayment.setContract(contract);
-        contractPayment.setContractPremium(contractPremium);
-        contractPayment.setAmount(contractPremium.getAmount());
-        contractPayment.setDate(contractPremium.getDueDate());
-
-        LOG.info("عملية سداد للدفعة");
-        BankTransaction bankTransaction = new BankTransaction();
-        {
-            bankTransaction.setAmount(contractPayment.getAmount());
-            bankTransaction.setBank(Initializer.bank);
-            bankTransaction.setSeller(contract.getSeller());
-            bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
-            bankTransaction.setDate(contractPayment.getDate());
-            bankTransaction.setPerson(caller);
-            StringBuilder builder = new StringBuilder();
-            builder.append("إيداع مبلغ نقدي بقيمة ");
-            builder.append(bankTransaction.getAmount());
-            builder.append("ريال سعودي، ");
-            builder.append(" لـ / ");
-            builder.append(bankTransaction.getSeller().getContact().getShortName());
-            builder.append("، قسط مستحق بتاريخ ");
-            builder.append(DateConverter.getDateInFormat(contractPayment.getContractPremium().getDueDate()));
-            builder.append("، للعقد رقم / " + contract.getCode());
-            bankTransaction.setNote(builder.toString());
-        }
-
-        contractPayment.setBankTransaction(bankTransactionService.save(bankTransaction));
-        contractPayment.setPerson(caller);
-        contractPayment.setNote(bankTransaction.getNote());
-        contract.getContractPayments().add(contractPaymentService.save(contractPayment));
 
         LOG.info("شراء الأصناف");
         JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
