@@ -25,9 +25,9 @@
                             'ROLE_CUSTOMER_UPDATE',
                             'ROLE_CUSTOMER_DELETE',
                             'ROLE_CUSTOMER_NOTE_CREATE',
-                            'ROLE_SELLER_CREATE',
-                            'ROLE_SELLER_UPDATE',
-                            'ROLE_SELLER_DELETE',
+                            'ROLE_SUPPLIER_CREATE',
+                            'ROLE_SUPPLIER_UPDATE',
+                            'ROLE_SUPPLIER_DELETE',
                             'ROLE_PRODUCT_CREATE',
                             'ROLE_PRODUCT_UPDATE',
                             'ROLE_PRODUCT_DELETE',
@@ -68,7 +68,7 @@
                             <span class="mdl-list__item-primary-content">
                                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/customer.{{iconSetType}}" width="24"
                                      height="24">
-                               <span>سجل العملاء / الكفلاء</span>
+                               <span>سجل العملاء</span>
                             </span>
                         </li>
 
@@ -78,7 +78,7 @@
                             <span class="mdl-list__item-primary-content">
                                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
                                      height="24">
-                               <span>عميل / كفيل جديد...</span>
+                               <span>عميل جديد...</span>
                             </span>
                         </li>
 
@@ -86,25 +86,25 @@
 
                         <li class="mdl-menu__item mdl-list__item"
                             ng-show="contains(me.team.authorities, [
-                            'ROLE_SELLER_CREATE',
-                            'ROLE_SELLER_UPDATE',
-                            'ROLE_SELLER_DELETE'
+                            'ROLE_SUPPLIER_CREATE',
+                            'ROLE_SUPPLIER_UPDATE',
+                            'ROLE_SUPPLIER_DELETE'
                             ])"
-                            ng-click="openStateSeller()">
+                            ng-click="openStateSupplier()">
                             <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/seller.{{iconSetType}}" width="24"
+                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/supplier.{{iconSetType}}" width="24"
                                      height="24">
-                               <span>سجل المستثمرين</span>
+                               <span>سجل الموردين</span>
                             </span>
                         </li>
 
                         <li class="mdl-menu__item mdl-list__item"
-                            ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])"
-                            ng-click="newSeller()">
+                            ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])"
+                            ng-click="newSupplier()">
                             <span class="mdl-list__item-primary-content">
                                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
                                      height="24">
-                               <span>مستثمر جديد...</span>
+                               <span>مورد جديد...</span>
                             </span>
                         </li>
 
@@ -153,58 +153,6 @@
                                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
                                      height="24">
                                <span>شراء سلعة جديدة...</span>
-                            </span>
-                        </li>
-
-                        <li class="mdl-menu__item--full-bleed-divider"></li>
-
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-show="contains(me.team.authorities, [
-                            'ROLE_CONTRACT_CREATE',
-                            'ROLE_CONTRACT_DELETE',
-                            'ROLE_PRODUCT_PURCHASE_CREATE'
-                            ])"
-                            ng-click="openStateContract()">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/contract.{{iconSetType}}" width="24"
-                                     height="24">
-                               <span>العقود</span>
-                            </span>
-                        </li>
-
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])"
-                            ng-click="newContract()">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
-                                     height="24">
-                               <span>عقد جديد...</span>
-                            </span>
-                        </li>
-
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])"
-                            ng-click="newOldContract()">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
-                                     height="24">
-                               <span>عقد قديم...</span>
-                            </span>
-                        </li>
-
-                        <li class="mdl-menu__item mdl-list__item"
-                            ng-show="contains(me.team.authorities, [
-                            'ROLE_CONTRACT_PREMIUM_CREATE',
-                            'ROLE_CONTRACT_PREMIUM_UPDATE',
-                            'ROLE_CONTRACT_PREMIUM_DELETE',
-                            ])"
-                            ng-click="openStateContractPremium()">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon"
-                                     ng-src="/ui/img/{{iconSet}}/contractPremium.{{iconSetType}}"
-                                     width="24"
-                                     height="24">
-                               <span>سجل الأقساط</span>
                             </span>
                         </li>
 
@@ -613,25 +561,25 @@
                          ng-src="/ui/img/{{iconSet}}/customer.{{iconSetType}}"
                          width="24"
                          height="24">
-                    <span>سجل العملاء / الكفلاء</span>
+                    <span>سجل العملاء</span>
                 </span>
             </a>
 
             <a class="mdl-navigation__link mdl-menu__item mdl-list__item"
                href=""
                ng-show="contains(me.team.authorities, [
-                            'ROLE_SELLER_CREATE',
-                            'ROLE_SELLER_UPDATE',
-                            'ROLE_SELLER_DELETE'
+                            'ROLE_SUPPLIER_CREATE',
+                            'ROLE_SUPPLIER_UPDATE',
+                            'ROLE_SUPPLIER_DELETE'
                             ])"
-               ng-click="openStateSeller()"
-               ng-class="{'mdl-navigation__link-active mdl-color--primary': toggleState==='seller'}">
+               ng-click="openStateSupplier()"
+               ng-class="{'mdl-navigation__link-active mdl-color--primary': toggleState==='supplier'}">
                 <span class="mdl-list__item-primary-content">
                     <img class="material-icons mdl-list__item-icon"
-                         ng-src="/ui/img/{{iconSet}}/seller.{{iconSetType}}"
+                         ng-src="/ui/img/{{iconSet}}/supplier.{{iconSetType}}"
                          width="24"
                          height="24">
-                    <span>سجل المستثمرين</span>
+                    <span>سجل الموردين</span>
                 </span>
             </a>
 
@@ -664,10 +612,10 @@
                             'ROLE_PRODUCT_PURCHASE_CREATE'
                             ])"
                ng-click="openStateContract()"
-               ng-class="{'mdl-navigation__link-active mdl-color--primary': toggleState==='contract'}">
+               ng-class="{'mdl-navigation__link-active mdl-color--primary': toggleState==='billPurchase'}">
                 <span class="mdl-list__item-primary-content">
                     <img class="material-icons mdl-list__item-icon"
-                         ng-src="/ui/img/{{iconSet}}/contract.{{iconSetType}}"
+                         ng-src="/ui/img/{{iconSet}}/billPurchase.{{iconSetType}}"
                          width="24"
                          height="24">
                     <span>العقود</span>
@@ -752,9 +700,9 @@
 
         </div>
 
-        <div ng-if="toggleState==='seller'" class="row" style="margin-top: 10px">
+        <div ng-if="toggleState==='supplier'" class="row" style="margin-top: 10px">
 
-            <div ng-include="'ui/partials/menu/state_seller.html'"></div>
+            <div ng-include="'ui/partials/menu/state_supplier.html'"></div>
 
         </div>
 
@@ -764,7 +712,7 @@
 
         </div>
 
-        <div ng-if="toggleState==='contract'" class="row" style="margin-top: 10px">
+        <div ng-if="toggleState==='billPurchase'" class="row" style="margin-top: 10px">
 
             <div ng-include="'ui/partials/menu/state_contract.html'"></div>
 
@@ -776,7 +724,7 @@
 
         </div>
 
-        <div ng-if="toggleState==='contractPayment'" class="row" style="margin-top: 10px">
+        <div ng-if="toggleState==='billPurchasePayment'" class="row" style="margin-top: 10px">
 
             <div ng-include="'ui/partials/menu/state_contractPayment.html'"></div>
 
@@ -828,7 +776,7 @@
 
     <footer class="mdl-mini-footer mdl-color--primary mdl-color-text--white">
         <div class="row" style="margin: auto">
-            <span dir="rtl">مؤسسة المدار للتقسيط | Madar Institution</span>
+            <span dir="rtl">مؤسسة الدرع لتقنية المعلومات | Shield Institution</span>
         </div>
     </footer>
 

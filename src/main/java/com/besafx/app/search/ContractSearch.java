@@ -1,6 +1,6 @@
 package com.besafx.app.search;
 
-import com.besafx.app.entity.Contract;
+import com.besafx.app.entity.BillPurchase;
 import com.besafx.app.service.ContractService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +24,8 @@ public class ContractSearch {
     @Autowired
     private ContractService contractService;
 
-    public Page<Contract> filter(
-            //Contract Filters
+    public Page<BillPurchase> filter(
+            //BillPurchase Filters
             final Integer codeFrom,
             final Integer codeTo,
             final Long dateFrom,
@@ -38,18 +37,18 @@ public class ContractSearch {
             final Long customerRegisterDateTo,
             final String customerName,
             final String customerMobile,
-            //Seller Filters
-            final Integer sellerCodeFrom,
-            final Integer sellerCodeTo,
-            final Long sellerRegisterDateFrom,
-            final Long sellerRegisterDateTo,
-            final String sellerName,
-            final String sellerMobile,
+            //Supplier Filters
+            final Integer supplierCodeFrom,
+            final Integer supplierCodeTo,
+            final Long supplierRegisterDateFrom,
+            final Long supplierRegisterDateTo,
+            final String supplierName,
+            final String supplierMobile,
             final String filterCompareType,
             Pageable pageRequest
-                                ) {
-        List<Specification<Contract>> predicates = new ArrayList<>();
-        //Contract Specification
+                                    ) {
+        List<Specification<BillPurchase>> predicates = new ArrayList<>();
+        //BillPurchase Specification
         Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(dateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"), new DateTime
@@ -69,18 +68,18 @@ public class ContractSearch {
                 ("name"), "%" + value + "%")));
         Optional.ofNullable(customerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("customer").get("contact").get
                 ("mobile"), "%" + value + "%")));
-        //Seller Specification
-        Optional.ofNullable(sellerCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("seller").get
+        //Supplier Specification
+        Optional.ofNullable(supplierCodeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("supplier").get
                 ("code"), value)));
-        Optional.ofNullable(sellerCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("seller").get("code"),
+        Optional.ofNullable(supplierCodeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("supplier").get("code"),
                                                                                                                    value)));
-        Optional.ofNullable(sellerRegisterDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("seller")
+        Optional.ofNullable(supplierRegisterDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("supplier")
                                                                                                                                     .get("registerDate"), new DateTime(value).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(sellerRegisterDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("seller").get
+        Optional.ofNullable(supplierRegisterDateTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("supplier").get
                 ("registerDate"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
-        Optional.ofNullable(sellerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"),
+        Optional.ofNullable(supplierName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("name"),
                                                                                                     "%" + value + "%")));
-        Optional.ofNullable(sellerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get
+        Optional.ofNullable(supplierMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("supplier").get("contact").get
                 ("mobile"), "%" + value + "%")));
 
         if (!predicates.isEmpty()) {

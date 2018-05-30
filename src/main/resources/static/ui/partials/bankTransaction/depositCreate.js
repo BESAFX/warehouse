@@ -1,5 +1,5 @@
-app.controller('depositCreateCtrl', ['SellerService', 'BankTransactionService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (SellerService, BankTransactionService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('depositCreateCtrl', ['SupplierService', 'BankTransactionService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (SupplierService, BankTransactionService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 
@@ -7,14 +7,14 @@ app.controller('depositCreateCtrl', ['SellerService', 'BankTransactionService', 
 
         $scope.bankTransaction = {};
 
-        $scope.sellers = [];
+        $scope.suppliers = [];
 
-        $scope.searchSellers = function ($select, $event) {
+        $scope.searchSuppliers = function ($select, $event) {
 
             // no event means first load!
             if (!$event) {
                 $scope.page = 0;
-                $scope.sellers = [];
+                $scope.suppliers = [];
             } else {
                 $event.stopPropagation();
                 $event.preventDefault();
@@ -50,16 +50,16 @@ app.controller('depositCreateCtrl', ['SellerService', 'BankTransactionService', 
                     break;
             }
 
-            return SellerService.filter(search.join("")).then(function (data) {
+            return SupplierService.filter(search.join("")).then(function (data) {
                 $scope.buffer.last = data.last;
-                return $scope.sellers = $scope.sellers.concat(data.content);
+                return $scope.suppliers = $scope.suppliers.concat(data.content);
             });
 
         };
 
-        $scope.findSellerBalance = function () {
-            SellerService.findSellerBalance($scope.bankTransaction.seller.id).then(function (value) {
-                return $scope.bankTransaction.seller = value;
+        $scope.findSupplierBalance = function () {
+            SupplierService.findSupplierBalance($scope.bankTransaction.supplier.id).then(function (value) {
+                return $scope.bankTransaction.supplier = value;
             });
         };
 

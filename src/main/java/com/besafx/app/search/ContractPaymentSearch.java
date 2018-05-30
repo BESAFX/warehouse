@@ -1,7 +1,7 @@
 package com.besafx.app.search;
 
-import com.besafx.app.entity.ContractPayment;
-import com.besafx.app.service.ContractPaymentService;
+import com.besafx.app.entity.BillPurchasePayment;
+import com.besafx.app.service.BillPurchasePaymentService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,13 @@ public class ContractPaymentSearch {
     private static final Logger LOG = LoggerFactory.getLogger(ContractPaymentSearch.class);
 
     @Autowired
-    private ContractPaymentService contractPaymentService;
+    private BillPurchasePaymentService billPurchasePaymentService;
 
-    public Page<ContractPayment> filter(
-            //ContractPayment Filters
+    public Page<BillPurchasePayment> filter(
+            //BillPurchasePayment Filters
             final Long dateFrom,
             final Long dateTo,
-            //Contract Filters
+            //BillPurchase Filters
             final Integer contractCodeFrom,
             final Integer contractCodeTo,
             final Long contractDateFrom,
@@ -36,14 +36,14 @@ public class ContractPaymentSearch {
             //Customer Filters
             final String customerName,
             final String customerMobile,
-            //Seller Filters
-            final String sellerName,
-            final String sellerMobile,
+            //Supplier Filters
+            final String supplierName,
+            final String supplierMobile,
             final String filterCompareType,
             Pageable pageRequest) {
 
-        List<Specification<ContractPayment>> predicates = new ArrayList<>();
-        //ContractPayment Specification
+        List<Specification<BillPurchasePayment>> predicates = new ArrayList<>();
+        //BillPurchasePayment Specification
         Optional.ofNullable(dateFrom)
                 .ifPresent(value -> predicates.add(
                         (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("date"),
@@ -54,42 +54,42 @@ public class ContractPaymentSearch {
                         (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"),
                                                                new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
 
-        //Contract Specification
+        //BillPurchase Specification
         Optional.ofNullable(contractCodeFrom)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("contract").get("code"), value)));
+                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("billPurchase").get("code"), value)));
 
         Optional.ofNullable(contractCodeTo)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("contract").get("code"), value)));
+                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("billPurchase").get("code"), value)));
 
         Optional.ofNullable(contractDateFrom)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("contract").get("date"),
+                        (root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("billPurchase").get("date"),
                                                                   new DateTime(value).withTimeAtStartOfDay().toDate())));
 
         Optional.ofNullable(contractDateTo)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("contract").get("date"),
+                        (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("billPurchase").get("date"),
                                                                new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
 
         //Customer Specification
         Optional.ofNullable(customerName)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("contract").get("customer").get("contact").get("name"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("billPurchase").get("customer").get("contact").get("name"), "%" + value + "%")));
 
         Optional.ofNullable(customerMobile)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("contract").get("customer").get("contact").get("mobile"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("billPurchase").get("customer").get("contact").get("mobile"), "%" + value + "%")));
 
-        //Seller Specification
-        Optional.ofNullable(sellerName)
+        //Supplier Specification
+        Optional.ofNullable(supplierName)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("contract").get("seller").get("contact").get("name"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("billPurchase").get("supplier").get("contact").get("name"), "%" + value + "%")));
 
-        Optional.ofNullable(sellerMobile)
+        Optional.ofNullable(supplierMobile)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("contract").get("seller").get("contact").get("mobile"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("billPurchase").get("supplier").get("contact").get("mobile"), "%" + value + "%")));
 
         if (!predicates.isEmpty()) {
             Specification result = predicates.get(0);
@@ -102,9 +102,9 @@ public class ContractPaymentSearch {
                         Specifications.where(result).and(predicates.get(i)) :
                         Specifications.where(result).or(predicates.get(i));
             }
-            return contractPaymentService.findAll(result, pageRequest);
+            return billPurchasePaymentService.findAll(result, pageRequest);
         } else {
-            return contractPaymentService.findAll(pageRequest);
+            return billPurchasePaymentService.findAll(pageRequest);
         }
     }
 }

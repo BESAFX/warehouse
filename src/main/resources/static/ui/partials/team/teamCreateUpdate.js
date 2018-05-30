@@ -82,22 +82,22 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             selected: false,
             category: 'الإدارة'
         });
-        //////////////////////////Seller//////////////////////////////////////////
+        //////////////////////////Supplier//////////////////////////////////////////
         $scope.roles.push({
-            name: 'إنشاء حسابات المستثمرين',
-            value: 'ROLE_SELLER_CREATE',
+            name: 'إنشاء حسابات الموردين',
+            value: 'ROLE_SUPPLIER_CREATE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
-            name: 'تعديل حسابات المستثمرين',
-            value: 'ROLE_SELLER_UPDATE',
+            name: 'تعديل حسابات الموردين',
+            value: 'ROLE_SUPPLIER_UPDATE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
-            name: 'حذف حسابات المستثمرين',
-            value: 'ROLE_SELLER_DELETE',
+            name: 'حذف حسابات الموردين',
+            value: 'ROLE_SUPPLIER_DELETE',
             selected: false,
             category: 'الإدارة'
         });

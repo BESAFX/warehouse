@@ -9,7 +9,7 @@
             <span class="mdl-list__item-primary-content">
                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/bankTransaction.{{iconSetType}}" width="24" height="24">
                 <strong>اضافة مالية للعقد رقم</strong>&nbsp;
-                <span class="label label-info">{{contract.code}}</span>
+                <span class="label label-info">{{billPurchase.code}}</span>
             </span>
         </h3>
     </div>
@@ -41,7 +41,7 @@
                             <div class="box-warning">
                                 <p>
                                     <span>إجمالي قيمة العقد بعد (الخصم + القيمة المضافة) </span>&nbsp;
-                                    {{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}
+                                    {{billPurchase.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}
                                 </p>
                             </div>
 
@@ -52,7 +52,7 @@
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label for="contractPremium" class="control-label">القسط</label>
                                 <ui-select id="contractPremium"
-                                           ng-model="contractPayment.contractPremium"
+                                           ng-model="billPurchasePayment.contractPremium"
                                            required="required"
                                            disable-validation-message=""
                                            theme="bootstrap">
@@ -127,10 +127,10 @@
                                            required="required"
                                            disable-validation-message=""
                                            min="1"
-                                           ng-max="contractPayment.contractPremium.remain"
+                                           ng-max="billPurchasePayment.contractPremium.remain"
                                            class="form-control"
                                            placeholder="اجباري"
-                                           ng-model="contractPayment.amount">
+                                           ng-model="billPurchasePayment.amount">
                                 </div>
                             </div>
 
@@ -141,7 +141,7 @@
                                           msd-elastic="\n"
                                           class="form-control"
                                           placeholder="اختياري"
-                                          ng-model="contractPayment.note">
+                                          ng-model="billPurchasePayment.note">
                                 </textarea>
                             </div>
 

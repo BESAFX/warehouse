@@ -11,18 +11,18 @@ app.factory("ProductPurchaseService",
                     return response.data;
                 });
             },
-            findBySeller: function (id) {
-                return $http.get("/api/productPurchase/findBySeller/" + id).then(function (response) {
+            findBySupplier: function (id) {
+                return $http.get("/api/productPurchase/findBySupplier/" + id).then(function (response) {
                     return response.data;
                 });
             },
-            findBySellerAndRemainFull: function (id) {
-                return $http.get("/api/productPurchase/findBySellerAndRemainFull/" + id).then(function (response) {
+            findBySupplierAndRemainFull: function (id) {
+                return $http.get("/api/productPurchase/findBySupplierAndRemainFull/" + id).then(function (response) {
                     return response.data;
                 });
             },
-            findBySellerAndRemainEmpty: function (id) {
-                return $http.get("/api/productPurchase/findBySellerAndRemainEmpty/" + id).then(function (response) {
+            findBySupplierAndRemainEmpty: function (id) {
+                return $http.get("/api/productPurchase/findBySupplierAndRemainEmpty/" + id).then(function (response) {
                     return response.data;
                 });
             },

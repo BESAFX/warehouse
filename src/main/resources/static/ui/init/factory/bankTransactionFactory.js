@@ -11,9 +11,9 @@ app.factory("BankTransactionService",
                     return response.data;
                 });
             },
-            createTransfer: function (amount, fromSellerId, toSellerId, note) {
+            createTransfer: function (amount, fromSupplierId, toSupplierId, note) {
                 return $http
-                    .get("/api/bankTransaction/createTransfer/" + amount + "/" + fromSellerId + "/" + toSellerId + "/" + note)
+                    .get("/api/bankTransaction/createTransfer/" + amount + "/" + fromSupplierId + "/" + toSupplierId + "/" + note)
                     .then(function (response) {
                         return response.data;
                     });

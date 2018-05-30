@@ -1,11 +1,11 @@
-app.controller('sellerCreateUpdateCtrl', ['SellerService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'seller',
-    function (SellerService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, seller) {
+app.controller('supplierCreateUpdateCtrl', ['SupplierService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance', 'title', 'action', 'supplier',
+    function (SupplierService, $scope, $rootScope, $timeout, $log, $uibModalInstance, title, action, supplier) {
 
         $scope.buffer = {};
 
-        $scope.seller = seller;
+        $scope.supplier = supplier;
 
-        $scope.seller.openCash = 0;
+        $scope.supplier.openCash = 0;
 
         $scope.title = title;
 
@@ -14,14 +14,14 @@ app.controller('sellerCreateUpdateCtrl', ['SellerService', '$scope', '$rootScope
         $scope.submit = function () {
             switch ($scope.action) {
                 case 'create' :
-                    SellerService.create($scope.seller, $scope.seller.openCash).then(function (data) {
-                        SellerService.findOne(data.id).then(function (value) {
+                    SupplierService.create($scope.supplier, $scope.supplier.openCash).then(function (data) {
+                        SupplierService.findOne(data.id).then(function (value) {
                             $uibModalInstance.close(value);
                         });
                     });
                     break;
                 case 'update' :
-                    SellerService.update($scope.seller).then(function (data) {
+                    SupplierService.update($scope.supplier).then(function (data) {
                         $uibModalInstance.close(data);
                     });
                     break;

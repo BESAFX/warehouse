@@ -65,9 +65,9 @@
                         <tbody>
                         <tr ng-repeat="contractPremium in contractPremiums">
                             <td>{{$index+1}}</td>
-                            <td>{{contractPremium.contract.code}}</td>
-                            <td>{{contractPremium.contract.customer.contact.shortName}}</td>
-                            <td>{{contractPremium.contract.customer.contact.mobile}}</td>
+                            <td>{{contractPremium.billPurchase.code}}</td>
+                            <td>{{contractPremium.billPurchase.customer.contact.shortName}}</td>
+                            <td>{{contractPremium.billPurchase.customer.contact.mobile}}</td>
                             <td>
                                 <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                 <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPremium.dueDate | date: 'yyyy-MM-dd'}}</span>

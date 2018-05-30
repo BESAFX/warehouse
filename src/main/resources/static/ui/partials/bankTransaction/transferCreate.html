@@ -84,44 +84,44 @@
                                         disable-validation-message=""
                                         class="form-control"
                                         ng-model="buffer.searchBy">
-                                    <option value="name">اسم المستثمر</option>
-                                    <option value="identityNumber">رقم بطاقة المستثمر</option>
-                                    <option value="mobile">رقم جوال المستثمر</option>
+                                    <option value="name">اسم المورد</option>
+                                    <option value="identityNumber">رقم بطاقة المورد</option>
+                                    <option value="mobile">رقم جوال المورد</option>
                                 </select>
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="fromSeller" class="control-label">المستثمر</label>
-                                <ui-select id="fromSeller"
-                                           ng-model="buffer.fromSeller"
+                                <label for="fromSupplier" class="control-label">المورد</label>
+                                <ui-select id="fromSupplier"
+                                           ng-model="buffer.fromSupplier"
                                            required="required"
                                            disable-validation-message=""
                                            theme="bootstrap">
-                                    <ui-select-match placeholder="اختر المستثمر">
+                                    <ui-select-match placeholder="اختر المورد">
                                         {{$select.selected.contact.shortName}}
                                     </ui-select-match>
                                     <ui-select-choices
-                                            refresh="searchSellers($select)"
+                                            refresh="searchSuppliers($select)"
                                             refresh-delay="300"
-                                            repeat="fromSeller in sellers | filter: $select.search | orderBy:'code' track by $index">
+                                            repeat="fromSupplier in suppliers | filter: $select.search | orderBy:'code' track by $index">
 
                                         <div class="mdl-menu__item--full-bleed-divider"></div>
                                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                                             <span class="mdl-list__item-primary-content">
                                                 <span class="material-icons mdl-list__item-avatar"
-                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
-                                                <div ng-bind-html="fromSeller.name | highlight: $select.search"></div>
+                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/supplier.{{iconSetType}}')"></span>
+                                                <div ng-bind-html="fromSupplier.name | highlight: $select.search"></div>
                                                 <span class="mdl-list__item-sub-title">
-                                                    <span>رقم المستثمر / </span>
-                                                    {{fromSeller.code}}
+                                                    <span>رقم المورد / </span>
+                                                    {{fromSupplier.code}}
                                                 </span>
                                                 <span class="mdl-list__item-sub-title">
                                                     <span>الاسم / </span>
-                                                    {{fromSeller.contact.shortName}}
+                                                    {{fromSupplier.contact.shortName}}
                                                 </span>
                                                 <span class="mdl-list__item-sub-title">
                                                     <span>رقم الجوال / </span>
-                                                    {{fromSeller.contact.mobile}}
+                                                    {{fromSupplier.contact.mobile}}
                                                 </span>
                                             </span>
                                         </li>
@@ -130,7 +130,7 @@
                                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                                                     ng-disabled="buffer.last"
                                                     style="width: 100%; margin-top: 5px;"
-                                                    ng-click="searchSellers($select, $event);">تحميل المزيد
+                                                    ng-click="searchSuppliers($select, $event);">تحميل المزيد
                                             </button>
                                         </div>
 
@@ -146,7 +146,7 @@
                                            type="number"
                                            readonly
                                            class="form-control"
-                                           ng-model="fromSeller.balance">
+                                           ng-model="fromSupplier.balance">
                                 </div>
                             </div>
 
@@ -166,44 +166,44 @@
                                         disable-validation-message=""
                                         class="form-control"
                                         ng-model="buffer.searchBy">
-                                    <option value="name">اسم المستثمر</option>
-                                    <option value="identityNumber">رقم بطاقة المستثمر</option>
-                                    <option value="mobile">رقم جوال المستثمر</option>
+                                    <option value="name">اسم المورد</option>
+                                    <option value="identityNumber">رقم بطاقة المورد</option>
+                                    <option value="mobile">رقم جوال المورد</option>
                                 </select>
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <label for="toSeller" class="control-label">المستثمر</label>
-                                <ui-select id="toSeller"
-                                           ng-model="buffer.toSeller"
+                                <label for="toSupplier" class="control-label">المورد</label>
+                                <ui-select id="toSupplier"
+                                           ng-model="buffer.toSupplier"
                                            required="required"
                                            disable-validation-message=""
                                            theme="bootstrap">
-                                    <ui-select-match placeholder="اختر المستثمر">
+                                    <ui-select-match placeholder="اختر المورد">
                                         {{$select.selected.contact.shortName}}
                                     </ui-select-match>
                                     <ui-select-choices
-                                            refresh="searchSellers($select)"
+                                            refresh="searchSuppliers($select)"
                                             refresh-delay="300"
-                                            repeat="toSeller in sellers | filter: $select.search | orderBy:'code' track by $index">
+                                            repeat="toSupplier in suppliers | filter: $select.search | orderBy:'code' track by $index">
 
                                         <div class="mdl-menu__item--full-bleed-divider"></div>
                                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                                             <span class="mdl-list__item-primary-content">
                                                 <span class="material-icons mdl-list__item-avatar"
-                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
-                                                <div ng-bind-html="toSeller.name | highlight: $select.search"></div>
+                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/supplier.{{iconSetType}}')"></span>
+                                                <div ng-bind-html="toSupplier.name | highlight: $select.search"></div>
                                                 <span class="mdl-list__item-sub-title">
-                                                    <span>رقم المستثمر / </span>
-                                                    {{toSeller.code}}
+                                                    <span>رقم المورد / </span>
+                                                    {{toSupplier.code}}
                                                 </span>
                                                 <span class="mdl-list__item-sub-title">
                                                     <span>الاسم / </span>
-                                                    {{toSeller.contact.shortName}}
+                                                    {{toSupplier.contact.shortName}}
                                                 </span>
                                                 <span class="mdl-list__item-sub-title">
                                                     <span>رقم الجوال / </span>
-                                                    {{toSeller.contact.mobile}}
+                                                    {{toSupplier.contact.mobile}}
                                                 </span>
                                             </span>
                                         </li>
@@ -212,7 +212,7 @@
                                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                                                     ng-disabled="buffer.last"
                                                     style="width: 100%; margin-top: 5px;"
-                                                    ng-click="searchSellers($select, $event);">تحميل المزيد
+                                                    ng-click="searchSuppliers($select, $event);">تحميل المزيد
                                             </button>
                                         </div>
 
@@ -228,7 +228,7 @@
                                            type="number"
                                            readonly
                                            class="form-control"
-                                           ng-model="toSeller.balance">
+                                           ng-model="toSupplier.balance">
                                 </div>
                             </div>
 

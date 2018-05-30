@@ -1,5 +1,5 @@
-app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', 'SellerService', 'ProductService', 'ProductPurchaseService', 'ContractPaymentService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (ContractService, CustomerService, SellerService, ProductService, ProductPurchaseService, ContractPaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', 'SupplierService', 'ProductService', 'ProductPurchaseService', 'ContractPaymentService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (ContractService, CustomerService, SupplierService, ProductService, ProductPurchaseService, ContractPaymentService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 
@@ -12,25 +12,25 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
             });
         };
 
-        $scope.newSeller = function () {
-            ModalProvider.openSellerCreateModel().result.then(function (data) {
-                $scope.sellers.splice(0, 0, data);
+        $scope.newSupplier = function () {
+            ModalProvider.openSupplierCreateModel().result.then(function (data) {
+                $scope.suppliers.splice(0, 0, data);
                 $timeout(function () {
                     window.componentHandler.upgradeAllRegistered();
                 }, 300);
             });
         };
 
-        $scope.searchSellers = function ($select, $event) {
+        $scope.searchSuppliers = function ($select, $event) {
 
             // no event means first load!
             if (!$event) {
-                $scope.pageSeller = 0;
-                $scope.sellers = [];
+                $scope.pageSupplier = 0;
+                $scope.suppliers = [];
             } else {
                 $event.stopPropagation();
                 $event.preventDefault();
-                $scope.pageSeller++;
+                $scope.pageSupplier++;
             }
 
             var search = [];
@@ -40,7 +40,7 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
             search.push('&');
 
             search.push('page=');
-            search.push($scope.pageSeller);
+            search.push($scope.pageSupplier);
             search.push('&');
 
             search.push('name=');
@@ -57,9 +57,9 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
 
             search.push('filterCompareType=or');
 
-            return SellerService.filter(search.join("")).then(function (data) {
-                $scope.buffer.lastSeller = data.last;
-                return $scope.sellers = $scope.sellers.concat(data.content);
+            return SupplierService.filter(search.join("")).then(function (data) {
+                $scope.buffer.lastSupplier = data.last;
+                return $scope.suppliers = $scope.suppliers.concat(data.content);
             });
 
         };
@@ -156,7 +156,7 @@ app.controller('contractOldCreateCtrl', ['ContractService', 'CustomerService', '
 
             $scope.customers = [];
 
-            $scope.sellers = [];
+            $scope.suppliers = [];
 
             $scope.productPurchases = [];
 

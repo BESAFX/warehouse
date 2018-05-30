@@ -1,7 +1,6 @@
 package com.besafx.app.service;
 
-import com.besafx.app.entity.Contract;
-import com.besafx.app.entity.ContractAttach;
+import com.besafx.app.entity.BillSellProduct;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Service
 @Transactional
-public interface ContractAttachService extends PagingAndSortingRepository<ContractAttach, Long>, JpaSpecificationExecutor<ContractAttach> {
-    List<ContractAttach> findByContract(Contract id);
-    List<ContractAttach> findByContractId(Long id);
+public interface BillSellProductService extends PagingAndSortingRepository<BillSellProduct, Long>, JpaSpecificationExecutor<BillSellProduct> {
+    List<BillSellProduct> findByBillSellId(Long id);
 }

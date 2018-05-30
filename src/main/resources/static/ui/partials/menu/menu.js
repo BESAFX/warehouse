@@ -1,7 +1,7 @@
 app.controller("menuCtrl", [
     'CompanyService',
     'CustomerService',
-    'SellerService',
+    'SupplierService',
     'ProductPurchaseService',
     'ContractService',
     'ContractPremiumService',
@@ -20,7 +20,7 @@ app.controller("menuCtrl", [
     '$timeout',
     function (CompanyService,
               CustomerService,
-              SellerService,
+              SupplierService,
               ProductPurchaseService,
               ContractService,
               ContractPremiumService,
@@ -52,8 +52,8 @@ app.controller("menuCtrl", [
                     $scope.pageTitle = 'العملاء';
                     break;
                 }
-                case 'seller': {
-                    $scope.pageTitle = 'المستثمرين';
+                case 'supplier': {
+                    $scope.pageTitle = 'الموردين';
                     break;
                 }
                 case 'productPurchase': {
@@ -119,9 +119,9 @@ app.controller("menuCtrl", [
             $scope.searchCustomers({});
             $rootScope.refreshGUI();
         };
-        $scope.openStateSeller = function () {
-            $scope.toggleState = 'seller';
-            $scope.searchSellers({});
+        $scope.openStateSupplier = function () {
+            $scope.toggleState = 'supplier';
+            $scope.searchSuppliers({});
             $rootScope.refreshGUI();
         };
         $scope.openStateProductPurchase = function () {
@@ -389,7 +389,7 @@ app.controller("menuCtrl", [
             });
         };
         $scope.deleteCustomer = function (customer) {
-            ModalProvider.openConfirmModel("العملاء والكفلاء", "delete", "هل تود حذف العميل فعلاً؟").result.then(function (value) {
+            ModalProvider.openConfirmModel("العملاء", "delete", "هل تود حذف العميل فعلاً؟").result.then(function (value) {
                 if (value) {
                     CustomerService.remove(customer.id).then(function () {
                         var index = $scope.customers.indexOf(customer);
@@ -461,175 +461,175 @@ app.controller("menuCtrl", [
 
         /**************************************************************************************************************
          *                                                                                                            *
-         * Seller                                                                                                     *
+         * Supplier                                                                                                     *
          *                                                                                                            *
          **************************************************************************************************************/
-        $scope.sellers = [];
-        $scope.paramSeller = {};
-        $scope.sellers.checkAll = false;
+        $scope.suppliers = [];
+        $scope.paramSupplier = {};
+        $scope.suppliers.checkAll = false;
 
-        $scope.pageSeller = {};
-        $scope.pageSeller.sorts = [];
-        $scope.pageSeller.page = 0;
-        $scope.pageSeller.totalPages = 0;
-        $scope.pageSeller.currentPage = $scope.pageSeller.page + 1;
-        $scope.pageSeller.currentPageString = ($scope.pageSeller.page + 1) + ' / ' + $scope.pageSeller.totalPages;
-        $scope.pageSeller.size = 25;
-        $scope.pageSeller.first = true;
-        $scope.pageSeller.last = true;
+        $scope.pageSupplier = {};
+        $scope.pageSupplier.sorts = [];
+        $scope.pageSupplier.page = 0;
+        $scope.pageSupplier.totalPages = 0;
+        $scope.pageSupplier.currentPage = $scope.pageSupplier.page + 1;
+        $scope.pageSupplier.currentPageString = ($scope.pageSupplier.page + 1) + ' / ' + $scope.pageSupplier.totalPages;
+        $scope.pageSupplier.size = 25;
+        $scope.pageSupplier.first = true;
+        $scope.pageSupplier.last = true;
 
-        $scope.openSellersFilter = function () {
+        $scope.openSuppliersFilter = function () {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: '/ui/partials/seller/sellerFilter.html',
-                controller: 'sellerFilterCtrl',
+                templateUrl: '/ui/partials/supplier/supplierFilter.html',
+                controller: 'supplierFilterCtrl',
                 scope: $scope,
                 backdrop: 'static',
                 keyboard: false
             });
 
-            modalInstance.result.then(function (paramSeller) {
-                $scope.searchSellers(paramSeller);
+            modalInstance.result.then(function (paramSupplier) {
+                $scope.searchSuppliers(paramSupplier);
             }, function () {
             });
         };
-        $scope.searchSellers = function (paramSeller) {
+        $scope.searchSuppliers = function (paramSupplier) {
             var search = [];
             search.push('size=');
-            search.push($scope.pageSeller.size);
+            search.push($scope.pageSupplier.size);
             search.push('&');
             search.push('page=');
-            search.push($scope.pageSeller.page);
+            search.push($scope.pageSupplier.page);
             search.push('&');
-            angular.forEach($scope.pageSeller.sorts, function (sortBy) {
+            angular.forEach($scope.pageSupplier.sorts, function (sortBy) {
                 search.push('sort=');
                 search.push(sortBy.name + ',' + sortBy.direction);
                 search.push('&');
             });
-            if (paramSeller.codeFrom) {
+            if (paramSupplier.codeFrom) {
                 search.push('codeFrom=');
-                search.push(paramSeller.codeFrom);
+                search.push(paramSupplier.codeFrom);
                 search.push('&');
             }
-            if (paramSeller.codeTo) {
+            if (paramSupplier.codeTo) {
                 search.push('codeTo=');
-                search.push(paramSeller.codeTo);
+                search.push(paramSupplier.codeTo);
                 search.push('&');
             }
-            if (paramSeller.registerDateTo) {
+            if (paramSupplier.registerDateTo) {
                 search.push('registerDateTo=');
-                search.push(paramSeller.registerDateTo.getTime());
+                search.push(paramSupplier.registerDateTo.getTime());
                 search.push('&');
             }
-            if (paramSeller.registerDateFrom) {
+            if (paramSupplier.registerDateFrom) {
                 search.push('registerDateFrom=');
-                search.push(paramSeller.registerDateFrom.getTime());
+                search.push(paramSupplier.registerDateFrom.getTime());
                 search.push('&');
             }
-            if (paramSeller.name) {
+            if (paramSupplier.name) {
                 search.push('name=');
-                search.push(paramSeller.name);
+                search.push(paramSupplier.name);
                 search.push('&');
             }
-            if (paramSeller.mobile) {
+            if (paramSupplier.mobile) {
                 search.push('mobile=');
-                search.push(paramSeller.mobile);
+                search.push(paramSupplier.mobile);
                 search.push('&');
             }
-            if (paramSeller.phone) {
+            if (paramSupplier.phone) {
                 search.push('phone=');
-                search.push(paramSeller.phone);
+                search.push(paramSupplier.phone);
                 search.push('&');
             }
-            if (paramSeller.identityNumber) {
+            if (paramSupplier.identityNumber) {
                 search.push('identityNumber=');
-                search.push(paramSeller.identityNumber);
+                search.push(paramSupplier.identityNumber);
                 search.push('&');
             }
-            if (paramSeller.qualification) {
+            if (paramSupplier.qualification) {
                 search.push('qualification=');
-                search.push(paramSeller.qualification);
+                search.push(paramSupplier.qualification);
                 search.push('&');
             }
-            if (paramSeller.enabled) {
+            if (paramSupplier.enabled) {
                 search.push('enabled=');
-                search.push(paramSeller.enabled);
+                search.push(paramSupplier.enabled);
                 search.push('&');
             }
 
-            SellerService.filter(search.join("")).then(function (data) {
-                $scope.sellers = data.content;
+            SupplierService.filter(search.join("")).then(function (data) {
+                $scope.suppliers = data.content;
 
-                $scope.pageSeller.currentPage = $scope.pageSeller.page + 1;
-                $scope.pageSeller.first = data.first;
-                $scope.pageSeller.last = data.last;
-                $scope.pageSeller.number = data.number;
-                $scope.pageSeller.numberOfElements = data.numberOfElements;
-                $scope.pageSeller.size = data.size;
-                $scope.pageSeller.totalElements = data.totalElements;
-                $scope.pageSeller.totalPages = data.totalPages;
-                $scope.pageSeller.currentPageString = ($scope.pageSeller.page + 1) + ' / ' + $scope.pageSeller.totalPages;
+                $scope.pageSupplier.currentPage = $scope.pageSupplier.page + 1;
+                $scope.pageSupplier.first = data.first;
+                $scope.pageSupplier.last = data.last;
+                $scope.pageSupplier.number = data.number;
+                $scope.pageSupplier.numberOfElements = data.numberOfElements;
+                $scope.pageSupplier.size = data.size;
+                $scope.pageSupplier.totalElements = data.totalElements;
+                $scope.pageSupplier.totalPages = data.totalPages;
+                $scope.pageSupplier.currentPageString = ($scope.pageSupplier.page + 1) + ' / ' + $scope.pageSupplier.totalPages;
 
                 $timeout(function () {
                     window.componentHandler.upgradeAllRegistered();
                 }, 300);
             });
         };
-        $scope.selectNextSellersPage = function () {
-            $scope.pageSeller.page++;
-            $scope.searchSellers($scope.paramSeller);
+        $scope.selectNextSuppliersPage = function () {
+            $scope.pageSupplier.page++;
+            $scope.searchSuppliers($scope.paramSupplier);
         };
-        $scope.selectPrevSellersPage = function () {
-            $scope.pageSeller.page--;
-            $scope.searchSellers($scope.paramSeller);
+        $scope.selectPrevSuppliersPage = function () {
+            $scope.pageSupplier.page--;
+            $scope.searchSuppliers($scope.paramSupplier);
         };
-        $scope.checkAllSellers = function () {
+        $scope.checkAllSuppliers = function () {
             var elements = document.querySelectorAll('.check');
             for (var i = 0, n = elements.length; i < n; i++) {
                 var element = elements[i];
-                if ($('#checkAllSellers input').is(":checked")) {
+                if ($('#checkAllSuppliers input').is(":checked")) {
                     element.MaterialCheckbox.check();
                 }
                 else {
                     element.MaterialCheckbox.uncheck();
                 }
             }
-            angular.forEach($scope.sellers, function (seller) {
-                seller.isSelected = $scope.sellers.checkAll;
+            angular.forEach($scope.suppliers, function (supplier) {
+                supplier.isSelected = $scope.suppliers.checkAll;
             });
         };
-        $scope.checkSeller = function () {
+        $scope.checkSupplier = function () {
             var elements = document.querySelectorAll('.check');
             for (var i = 0, n = elements.length; i < n; i++) {
                 var element = elements[i];
                 if ($('.check input:checked').length == $('.check input').length) {
-                    document.querySelector('#checkAllSellers').MaterialCheckbox.check();
+                    document.querySelector('#checkAllSuppliers').MaterialCheckbox.check();
                 } else {
-                    document.querySelector('#checkAllSellers').MaterialCheckbox.uncheck();
+                    document.querySelector('#checkAllSuppliers').MaterialCheckbox.uncheck();
                 }
             }
         };
-        $scope.newSeller = function () {
-            ModalProvider.openSellerCreateModel().result.then(function (data) {
-                $scope.sellers.splice(0, 0, data);
+        $scope.newSupplier = function () {
+            ModalProvider.openSupplierCreateModel().result.then(function (data) {
+                $scope.suppliers.splice(0, 0, data);
                 $timeout(function () {
                     window.componentHandler.upgradeAllRegistered();
                 }, 300);
             });
         };
-        $scope.deleteSeller = function (seller) {
-            ModalProvider.openConfirmModel("المستثمرين", "delete", "هل تود حذف المستثمر فعلاً؟").result.then(function (value) {
+        $scope.deleteSupplier = function (supplier) {
+            ModalProvider.openConfirmModel("الموردين", "delete", "هل تود حذف المورد فعلاً؟").result.then(function (value) {
                 if (value) {
-                    SellerService.remove(seller.id).then(function () {
-                        var index = $scope.sellers.indexOf(seller);
-                        $scope.sellers.splice(index, 1);
+                    SupplierService.remove(supplier.id).then(function () {
+                        var index = $scope.suppliers.indexOf(supplier);
+                        $scope.suppliers.splice(index, 1);
                     });
                 }
             });
         };
-        $scope.rowMenuSeller = [
+        $scope.rowMenuSupplier = [
             {
                 html: '<div class="drop-menu">' +
                 '<img src="/ui/img/' + $rootScope.iconSet + '/add.' + $rootScope.iconSetType + '" width="24" height="24">' +
@@ -639,7 +639,7 @@ app.controller("menuCtrl", [
                     return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_CUSTOMER_CREATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.newSeller();
+                    $scope.newSupplier();
                 }
             },
             {
@@ -648,10 +648,10 @@ app.controller("menuCtrl", [
                 '<span>تعديل...</span>' +
                 '</div>',
                 enabled: function () {
-                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SELLER_UPDATE']);
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SUPPLIER_UPDATE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    ModalProvider.openSellerUpdateModel($itemScope.seller);
+                    ModalProvider.openSupplierUpdateModel($itemScope.supplier);
                 }
             },
             {
@@ -660,10 +660,10 @@ app.controller("menuCtrl", [
                 '<span>حذف...</span>' +
                 '</div>',
                 enabled: function () {
-                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SELLER_DELETE']);
+                    return $rootScope.contains($rootScope.me.team.authorities, ['ROLE_SUPPLIER_DELETE']);
                 },
                 click: function ($itemScope, $event, value) {
-                    $scope.deleteSeller($itemScope.seller);
+                    $scope.deleteSupplier($itemScope.supplier);
                 }
             }
         ];
@@ -767,20 +767,20 @@ app.controller("menuCtrl", [
                 search.push(paramProductPurchase.productName);
                 search.push('&');
             }
-            //Seller Filters
-            if (paramProductPurchase.sellerName) {
-                search.push('sellerName=');
-                search.push(paramProductPurchase.sellerName);
+            //Supplier Filters
+            if (paramProductPurchase.supplierName) {
+                search.push('supplierName=');
+                search.push(paramProductPurchase.supplierName);
                 search.push('&');
             }
-            if (paramProductPurchase.sellerMobile) {
-                search.push('sellerMobile=');
-                search.push(paramProductPurchase.sellerMobile);
+            if (paramProductPurchase.supplierMobile) {
+                search.push('supplierMobile=');
+                search.push(paramProductPurchase.supplierMobile);
                 search.push('&');
             }
-            if (paramProductPurchase.sellerIdentityNumber) {
-                search.push('sellerIdentityNumber=');
-                search.push(paramProductPurchase.sellerIdentityNumber);
+            if (paramProductPurchase.supplierIdentityNumber) {
+                search.push('supplierIdentityNumber=');
+                search.push(paramProductPurchase.supplierIdentityNumber);
                 search.push('&');
             }
 
@@ -868,7 +868,7 @@ app.controller("menuCtrl", [
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: '/ui/partials/contract/contractFilter.html',
+                templateUrl: '/ui/partials/billPurchase/contractFilter.html',
                 controller: 'contractFilterCtrl',
                 scope: $scope,
                 backdrop: 'static',
@@ -948,35 +948,35 @@ app.controller("menuCtrl", [
                 search.push(paramContract.customerMobile.getTime());
                 search.push('&');
             }
-            //Seller Filters
-            if (paramContract.sellerCodeFrom) {
-                search.push('sellerCodeFrom=');
-                search.push(paramContract.sellerCodeFrom);
+            //Supplier Filters
+            if (paramContract.supplierCodeFrom) {
+                search.push('supplierCodeFrom=');
+                search.push(paramContract.supplierCodeFrom);
                 search.push('&');
             }
-            if (paramContract.sellerCodeTo) {
-                search.push('sellerCodeTo=');
-                search.push(paramContract.sellerCodeTo);
+            if (paramContract.supplierCodeTo) {
+                search.push('supplierCodeTo=');
+                search.push(paramContract.supplierCodeTo);
                 search.push('&');
             }
-            if (paramContract.sellerRegisterDateTo) {
-                search.push('sellerRegisterDateTo=');
-                search.push(paramContract.sellerRegisterDateTo.getTime());
+            if (paramContract.supplierRegisterDateTo) {
+                search.push('supplierRegisterDateTo=');
+                search.push(paramContract.supplierRegisterDateTo.getTime());
                 search.push('&');
             }
-            if (paramContract.sellerRegisterDateFrom) {
-                search.push('sellerRegisterDateFrom=');
-                search.push(paramContract.sellerRegisterDateFrom.getTime());
+            if (paramContract.supplierRegisterDateFrom) {
+                search.push('supplierRegisterDateFrom=');
+                search.push(paramContract.supplierRegisterDateFrom.getTime());
                 search.push('&');
             }
-            if (paramContract.sellerName) {
-                search.push('sellerName=');
-                search.push(paramContract.sellerName.getTime());
+            if (paramContract.supplierName) {
+                search.push('supplierName=');
+                search.push(paramContract.supplierName.getTime());
                 search.push('&');
             }
-            if (paramContract.sellerMobile) {
-                search.push('sellerMobile=');
-                search.push(paramContract.sellerMobile.getTime());
+            if (paramContract.supplierMobile) {
+                search.push('supplierMobile=');
+                search.push(paramContract.supplierMobile.getTime());
                 search.push('&');
             }
             ContractService.filter(search.join("")).then(function (data) {
@@ -1248,14 +1248,14 @@ app.controller("menuCtrl", [
                 search.push(paramContractPremium.customerMobile);
                 search.push('&');
             }
-            if (paramContractPremium.sellerName) {
-                search.push('sellerName=');
-                search.push(paramContractPremium.sellerName);
+            if (paramContractPremium.supplierName) {
+                search.push('supplierName=');
+                search.push(paramContractPremium.supplierName);
                 search.push('&');
             }
-            if (paramContractPremium.sellerMobile) {
-                search.push('sellerMobile=');
-                search.push(paramContractPremium.sellerMobile);
+            if (paramContractPremium.supplierMobile) {
+                search.push('supplierMobile=');
+                search.push(paramContractPremium.supplierMobile);
                 search.push('&');
             }
 
@@ -1454,14 +1454,14 @@ app.controller("menuCtrl", [
                 search.push(paramContractPayment.customerMobile);
                 search.push('&');
             }
-            if (paramContractPayment.sellerName) {
-                search.push('sellerName=');
-                search.push(paramContractPayment.sellerName);
+            if (paramContractPayment.supplierName) {
+                search.push('supplierName=');
+                search.push(paramContractPayment.supplierName);
                 search.push('&');
             }
-            if (paramContractPayment.sellerMobile) {
-                search.push('sellerMobile=');
-                search.push(paramContractPayment.sellerMobile);
+            if (paramContractPayment.supplierMobile) {
+                search.push('supplierMobile=');
+                search.push(paramContractPayment.supplierMobile);
                 search.push('&');
             }
 
@@ -1567,19 +1567,19 @@ app.controller("menuCtrl", [
                 search.push(paramBankTransaction.dateFrom.getTime());
                 search.push('&');
             }
-            if (paramBankTransaction.sellerName) {
-                search.push('sellerName=');
-                search.push(paramBankTransaction.sellerName);
+            if (paramBankTransaction.supplierName) {
+                search.push('supplierName=');
+                search.push(paramBankTransaction.supplierName);
                 search.push('&');
             }
-            if (paramBankTransaction.sellerMobile) {
-                search.push('sellerMobile=');
-                search.push(paramBankTransaction.sellerMobile);
+            if (paramBankTransaction.supplierMobile) {
+                search.push('supplierMobile=');
+                search.push(paramBankTransaction.supplierMobile);
                 search.push('&');
             }
-            if (paramBankTransaction.sellerIdentityNumber) {
-                search.push('sellerIdentityNumber=');
-                search.push(paramBankTransaction.sellerIdentityNumber);
+            if (paramBankTransaction.supplierIdentityNumber) {
+                search.push('supplierIdentityNumber=');
+                search.push(paramBankTransaction.supplierIdentityNumber);
                 search.push('&');
             }
             if (paramBankTransaction.transactionTypeCode) {
@@ -1805,9 +1805,9 @@ app.controller("menuCtrl", [
             $scope.toggleReport = 'withdrawCash';
             $rootScope.refreshGUI();
         };
-        //أرصدة المستثمرين
-        $scope.openReportSellerBalance = function () {
-            $scope.toggleReport = 'sellerBalance';
+        //أرصدة الموردين
+        $scope.openReportSupplierBalance = function () {
+            $scope.toggleReport = 'supplierBalance';
             $rootScope.refreshGUI();
         };
         //تقرير العقود
@@ -1820,9 +1820,9 @@ app.controller("menuCtrl", [
             $scope.toggleReport = 'bankTransactions';
             $rootScope.refreshGUI();
         };
-        //كشف حساب مستثمر
-        $scope.openReportSellerStatement = function () {
-            $scope.toggleReport = 'sellerStatement';
+        //كشف حساب مورد
+        $scope.openReportSupplierStatement = function () {
+            $scope.toggleReport = 'supplierStatement';
             $rootScope.refreshGUI();
         };
         //كشف حساب عميل
@@ -1842,7 +1842,7 @@ app.controller("menuCtrl", [
         };
 
         $scope.paramWithdrawCash = {};
-        $scope.sellerStatement = {};
+        $scope.supplierStatement = {};
         $scope.customerStatement = {};
         $scope.contractPaymentProfit = {};
         $scope.fetchAllBanks = function () {
@@ -1873,14 +1873,14 @@ app.controller("menuCtrl", [
                 }, 300);
             });
         };
-        $scope.fetchAllSellerBalance = function () {
-            SellerService.findAllSellerBalance().then(function (value) {
-                $scope.sellersBalance = value;
+        $scope.fetchAllSupplierBalance = function () {
+            SupplierService.findAllSupplierBalance().then(function (value) {
+                $scope.suppliersBalance = value;
             })
         };
-        $scope.fetchAllSellerCombo = function () {
-            SellerService.findAllCombo().then(function (value) {
-                $scope.sellersCombo = value;
+        $scope.fetchAllSupplierCombo = function () {
+            SupplierService.findAllCombo().then(function (value) {
+                $scope.suppliersCombo = value;
             });
         };
         $scope.fetchAllCustomerCombo = function () {
@@ -1888,14 +1888,14 @@ app.controller("menuCtrl", [
                 $scope.customersCombo = value;
             });
         };
-        $scope.fetchSellerStatementContracts = function () {
-            ContractService.findBySeller($scope.sellerStatement.seller.id).then(function (value) {
-                $scope.sellerStatement.contracts = value;
+        $scope.fetchSupplierStatementContracts = function () {
+            ContractService.findBySupplier($scope.supplierStatement.supplier.id).then(function (value) {
+                $scope.supplierStatement.contracts = value;
             });
         };
-        $scope.fetchSellerStatementBanks = function () {
-            BankService.findBySeller($scope.sellerStatement.seller.id).then(function (value) {
-                $scope.sellerStatement.banks = value;
+        $scope.fetchSupplierStatementBanks = function () {
+            BankService.findBySupplier($scope.supplierStatement.supplier.id).then(function (value) {
+                $scope.supplierStatement.banks = value;
             });
         };
         $scope.fetchContractPaymentsProfit = function () {

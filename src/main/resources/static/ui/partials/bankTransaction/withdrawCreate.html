@@ -31,45 +31,45 @@
                         disable-validation-message=""
                         class="form-control"
                         ng-model="buffer.searchBy">
-                    <option value="name">اسم المستثمر</option>
-                    <option value="identityNumber">رقم بطاقة المستثمر</option>
-                    <option value="mobile">رقم جوال المستثمر</option>
+                    <option value="name">اسم المورد</option>
+                    <option value="identityNumber">رقم بطاقة المورد</option>
+                    <option value="mobile">رقم جوال المورد</option>
                 </select>
             </div>
 
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="seller" class="control-label">المستثمر</label>
-                <ui-select id="seller"
-                           ng-model="bankTransaction.seller"
+                <label for="supplier" class="control-label">المورد</label>
+                <ui-select id="supplier"
+                           ng-model="bankTransaction.supplier"
                            required="required"
                            disable-validation-message=""
-                           on-select="findSellerBalance()"
+                           on-select="findSupplierBalance()"
                            theme="bootstrap">
-                    <ui-select-match placeholder="اختر المستثمر">
+                    <ui-select-match placeholder="اختر المورد">
                         {{$select.selected.contact.shortName}}
                     </ui-select-match>
                     <ui-select-choices
-                            refresh="searchSellers($select)"
+                            refresh="searchSuppliers($select)"
                             refresh-delay="300"
-                            repeat="seller in sellers | filter: $select.search | orderBy:'code' track by seller.id">
+                            repeat="supplier in suppliers | filter: $select.search | orderBy:'code' track by supplier.id">
 
                         <div class="mdl-menu__item--full-bleed-divider"></div>
                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                             <span class="mdl-list__item-primary-content">
                                 <span class="material-icons mdl-list__item-avatar"
-                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
-                                <div ng-bind-html="seller.name | highlight: $select.search"></div>
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/supplier.{{iconSetType}}')"></span>
+                                <div ng-bind-html="supplier.name | highlight: $select.search"></div>
                                 <span class="mdl-list__item-sub-title">
-                                    <span>رقم المستثمر / </span>
-                                    {{seller.code}}
+                                    <span>رقم المورد / </span>
+                                    {{supplier.code}}
                                 </span>
                                 <span class="mdl-list__item-sub-title">
                                     <span>الاسم / </span>
-                                    {{seller.contact.shortName}}
+                                    {{supplier.contact.shortName}}
                                 </span>
                                 <span class="mdl-list__item-sub-title">
                                     <span>رقم الجوال / </span>
-                                    {{seller.contact.mobile}}
+                                    {{supplier.contact.mobile}}
                                 </span>
                             </span>
                         </li>
@@ -78,7 +78,7 @@
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                                     ng-disabled="buffer.last"
                                     style="width: 100%; margin-top: 5px;"
-                                    ng-click="searchSellers($select, $event);">تحميل المزيد
+                                    ng-click="searchSuppliers($select, $event);">تحميل المزيد
                             </button>
                         </div>
 
@@ -91,7 +91,7 @@
                 <div class="box-info">
                     <p>
                         <span>الرصيد قبل</span>
-                        {{bankTransaction.seller.balance}}
+                        {{bankTransaction.supplier.balance}}
                     </p>
                 </div>
 
@@ -116,7 +116,7 @@
                 <div class="box-info">
                     <p>
                         <span>الرصيد بعد</span>
-                        {{bankTransaction.seller.balance - bankTransaction.amount}}
+                        {{bankTransaction.supplier.balance - bankTransaction.amount}}
                     </p>
                 </div>
 

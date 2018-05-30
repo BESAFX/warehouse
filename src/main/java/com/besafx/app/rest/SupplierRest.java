@@ -3,10 +3,13 @@ package com.besafx.app.rest;
 import com.besafx.app.async.TransactionalService;
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
-import com.besafx.app.entity.*;
+import com.besafx.app.entity.BankTransaction;
+import com.besafx.app.entity.BillPurchasePayment;
+import com.besafx.app.entity.Person;
+import com.besafx.app.entity.Supplier;
 import com.besafx.app.entity.projection.BankTransactionAmount;
 import com.besafx.app.init.Initializer;
-import com.besafx.app.search.SellerSearch;
+import com.besafx.app.search.SupplierSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -31,24 +34,24 @@ import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/seller/")
-public class SellerRest {
+@RequestMapping(value = "/api/supplier/")
+public class SupplierRest {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SellerRest.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SupplierRest.class);
 
     private final String FILTER_TABLE = "" +
             "**," +
             "-productPurchases," +
-            "-contracts," +
+            "-billPurchases," +
             "-bankTransactions," +
-            "seller[id]";
+            "supplier[id]";
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "productPurchases[**,product[id,name],-bankTransaction,-seller,-contractProducts,person[id,contact[id,shortName]]]," +
-            "-contracts," +
+            "productPurchases[**,product[id,name],-bankTransaction,-supplier,-billPurchaseProducts,person[id,contact[id,shortName]]]," +
+            "-billPurchases," +
             "-bankTransactions," +
-            "seller[id]";
+            "supplier[id]";
 
     private final String FILTER_COMBO = "" +
             "id," +
@@ -56,22 +59,22 @@ public class SellerRest {
             "contact[id,shortName,mobile]";
 
     @Autowired
-    private SellerService sellerService;
+    private SupplierService supplierService;
 
     @Autowired
-    private SellerSearch sellerSearch;
+    private SupplierSearch supplierSearch;
 
     @Autowired
-    private ContactService contactService;
+    private BillPurchaseService billPurchaseService;
 
     @Autowired
     private BankTransactionService bankTransactionService;
 
     @Autowired
-    private ContractProductService contractProductService;
+    private BillPurchaseProductService billPurchaseProductService;
 
     @Autowired
-    private ContractPaymentService contractPaymentService;
+    private BillPurchasePaymentService billPurchasePaymentService;
 
     @Autowired
     private ContractPremiumService contractPremiumService;
@@ -90,31 +93,31 @@ public class SellerRest {
 
     @PostMapping(value = "create/{openCash}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_SELLER_CREATE')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER_CREATE')")
     @Transactional
-    public String create(@PathVariable(value = "openCash") Double openCash, @RequestBody Seller seller) {
-        Seller topSeller = sellerService.findTopByOrderByCodeDesc();
-        if (topSeller == null) {
-            seller.setCode(1);
+    public String create(@PathVariable(value = "openCash") Double openCash, @RequestBody Supplier supplier) {
+        Supplier topSupplier = supplierService.findTopByOrderByCodeDesc();
+        if (topSupplier == null) {
+            supplier.setCode(1);
         } else {
-            seller.setCode(topSeller.getCode() + 1);
+            supplier.setCode(topSupplier.getCode() + 1);
         }
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        seller.setSeller(caller.getCompany().getSeller());
-        seller.setRegisterDate(new DateTime().toDate());
-        seller.setEnabled(true);
-        seller.setContact(contactService.save(seller.getContact()));
-        seller = sellerService.save(seller);
+        supplier.setSupplier(caller.getCompany().getSupplier());
+        supplier.setRegisterDate(new DateTime().toDate());
+        supplier.setEnabled(true);
+        supplier.setContact(billPurchaseService.save(supplier.getContact()));
+        supplier = supplierService.save(supplier);
         notificationService.notifyAll(Notification
                                               .builder()
-                                              .message("تم انشاء حساب مستثمر جديد بنجاح")
+                                              .message("تم انشاء حساب مورد جديد بنجاح")
                                               .type("success").build());
         LOG.info("إنشاء الرصيد الافتتاحي وعمل عملية إيداع بالمبلغ");
         if (openCash > 0) {
             BankTransaction bankTransaction = new BankTransaction();
             bankTransaction.setAmount(openCash);
             bankTransaction.setBank(Initializer.bank);
-            bankTransaction.setSeller(seller);
+            bankTransaction.setSupplier(supplier);
             bankTransaction.setTransactionType(Initializer.transactionTypeDeposit);
             bankTransaction.setDate(new DateTime().toDate());
             bankTransaction.setPerson(caller);
@@ -123,7 +126,7 @@ public class SellerRest {
             builder.append(openCash);
             builder.append("ريال سعودي، ");
             builder.append(" لـ / ");
-            builder.append(seller.getShortName());
+            builder.append(supplier.getShortName());
             builder.append("، رصيد افتتاحي");
             bankTransaction.setNote(builder.toString());
             bankTransactionService.save(bankTransaction);
@@ -132,26 +135,26 @@ public class SellerRest {
                                                   .message(builder.toString())
                                                   .type("success").build());
         }
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), seller);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), supplier);
     }
 
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_SELLER_UPDATE')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER_UPDATE')")
     @Transactional
-    public String update(@RequestBody Seller seller) {
-        if (sellerService.findByCodeAndIdIsNot(seller.getCode(), seller.getId()) != null) {
+    public String update(@RequestBody Supplier supplier) {
+        if (supplierService.findByCodeAndIdIsNot(supplier.getCode(), supplier.getId()) != null) {
             throw new CustomException("هذا الكود مستخدم سابقاً، فضلاً قم بتغير الكود.");
         }
-        Seller object = sellerService.findOne(seller.getId());
+        Supplier object = supplierService.findOne(supplier.getId());
         if (object != null) {
-            seller.setContact(contactService.save(seller.getContact()));
-            seller = sellerService.save(seller);
+            supplier.setContact(billPurchaseService.save(supplier.getContact()));
+            supplier = supplierService.save(supplier);
             notificationService.notifyAll(Notification
                                                   .builder()
-                                                  .message("تم تعديل بيانات المستثمر بنجاح")
+                                                  .message("تم تعديل بيانات المورد بنجاح")
                                                   .type("success").build());
-            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), seller);
+            return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), supplier);
         } else {
             return null;
         }
@@ -159,67 +162,67 @@ public class SellerRest {
 
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_SELLER_DELETE')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER_DELETE')")
     @Transactional
     public void delete(@PathVariable Long id) {
-        Seller seller = sellerService.findOne(id);
-        if (seller != null) {
+        Supplier supplier = supplierService.findOne(id);
+        if (supplier != null) {
 
-            LOG.info("رفض العملية فى حال كان هو المستثمر الرئيسي");
-            if (Initializer.company.getSeller().getId().equals(seller.getId())) {
-                throw new CustomException("لا يمكن حذف المستثمر الرئيسي للبرنامج");
+            LOG.info("رفض العملية فى حال كان هو المورد الرئيسي");
+            if (Initializer.company.getSupplier().getId().equals(supplier.getId())) {
+                throw new CustomException("لا يمكن حذف المورد الرئيسي للبرنامج");
             }
 
             LOG.info("حذف كل سلع العقود");
-            contractProductService.delete(seller.getContracts()
-                                                .stream()
-                                                .flatMap(contract -> contract.getContractProducts().stream())
-                                                .collect(Collectors.toList()));
+            billPurchaseProductService.delete(supplier.getBillPurchases()
+                                                      .stream()
+                                                      .flatMap(contract -> contract.getContractProducts().stream())
+                                                      .collect(Collectors.toList()));
 
             LOG.info("حذف كل معاملات البنك لدفعات العقود");
             bankTransactionService.delete(
-                    seller.getContracts()
+                    supplier.getBillPurchases()
                           .stream()
                           .flatMap(contract -> contract.getContractPayments().stream())
-                          .map(ContractPayment::getBankTransaction)
+                          .map(BillPurchasePayment::getBankTransaction)
                           .collect(Collectors.toList()));
 
             LOG.info("حذف كل دفعات العقود");
-            contractPaymentService.delete(seller.getContracts()
-                                                .stream()
-                                                .flatMap(contract -> contract.getContractPayments().stream())
-                                                .collect(Collectors.toList()));
+            billPurchasePaymentService.delete(supplier.getBillPurchases()
+                                                      .stream()
+                                                      .flatMap(contract -> contract.getContractPayments().stream())
+                                                      .collect(Collectors.toList()));
 
             LOG.info("حذف كل أقساط العقود");
-            contractPremiumService.delete(seller.getContracts()
+            contractPremiumService.delete(supplier.getBillPurchases()
                                                 .stream()
                                                 .flatMap(contract -> contract.getContractPremiums().stream())
                                                 .collect(Collectors.toList()));
 
             LOG.info("حذف العقود");
-            contractService.delete(seller.getContracts());
+            contractService.delete(supplier.getBillPurchases());
 
-            LOG.info("حذف حركات الشراء لهذا المستثمر");
-            bankTransactionService.delete(seller.getProductPurchases()
+            LOG.info("حذف حركات الشراء لهذا المورد");
+            bankTransactionService.delete(supplier.getProductPurchases()
                                                 .stream()
                                                 .map(ProductPurchase::getBankTransaction)
                                                 .collect(Collectors.toList()));
 
-            LOG.info("حذف المشتريات لهذا المستثمر");
-            productPurchaseService.delete(seller.getProductPurchases());
+            LOG.info("حذف المشتريات لهذا المورد");
+            productPurchaseService.delete(supplier.getProductPurchases());
 
-            LOG.info("تفريغ كل المعاملات المالية لهذا المستثمر");
-            transactionalService.setBankTransactionsSellerToNull(seller);
+            LOG.info("تفريغ كل المعاملات المالية لهذا المورد");
+            transactionalService.setBankTransactionsSupplierToNull(supplier);
 
             LOG.info("حذف بيانات الاتصال");
-            contactService.delete(seller.getContact());
+            billPurchaseService.delete(supplier.getContact());
 
-            LOG.info("حذف المستثمر");
-            sellerService.delete(seller);
+            LOG.info("حذف المورد");
+            supplierService.delete(supplier);
 
             notificationService.notifyAll(Notification
                                                   .builder()
-                                                  .message("تم حذف المستثمر وكل ما يتعلق به من عقود وحسابات بنجاح")
+                                                  .message("تم حذف المورد وكل ما يتعلق به من عقود وحسابات بنجاح")
                                                   .type("error").build());
         }
     }
@@ -228,23 +231,23 @@ public class SellerRest {
     @ResponseBody
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
-                                       sellerService.findOne(id));
+                                       supplierService.findOne(id));
     }
 
     @GetMapping(value = "findAllCombo", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findAllCombo() {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_COMBO),
-                                       sellerService.findAll(new Sort(Sort.Direction.ASC, "contact.shortName")));
+                                       supplierService.findAll(new Sort(Sort.Direction.ASC, "contact.shortName")));
     }
 
-    @GetMapping(value = "findSellerBalance/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findSupplierBalance/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findSellerBalance(@PathVariable(value = "id") Long id) {
-        Seller seller = sellerService.findOne(id);
+    public String findSupplierBalance(@PathVariable(value = "id") Long id) {
+        Supplier supplier = supplierService.findOne(id);
 
         Double depositAmount = bankTransactionService
-                .findBySellerAndTransactionTypeIn(seller,
+                .findBySupplierAndTransactionTypeIn(supplier,
                                                   Lists.newArrayList(
                                                           Initializer.transactionTypeDeposit,
                                                           Initializer.transactionTypeDepositPayment,
@@ -253,7 +256,7 @@ public class SellerRest {
                 .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
         Double withdrawAmount = bankTransactionService
-                .findBySellerAndTransactionTypeIn(seller,
+                .findBySupplierAndTransactionTypeIn(supplier,
                                                   Lists.newArrayList(
                                                           Initializer.transactionTypeWithdraw,
                                                           Initializer.transactionTypeWithdrawCash,
@@ -263,27 +266,27 @@ public class SellerRest {
                 .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
         LOG.info("مجموع الإيداعات = " + depositAmount);
-        seller.setTotalDeposits(depositAmount);
+        supplier.setTotalDeposits(depositAmount);
 
         LOG.info("مجموع السحبيات = " + withdrawAmount);
-        seller.setTotalWithdraws(withdrawAmount);
+        supplier.setTotalWithdraws(withdrawAmount);
 
-        seller.setBalance(depositAmount - withdrawAmount);
+        supplier.setBalance(depositAmount - withdrawAmount);
 
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), seller);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), supplier);
     }
 
-    @GetMapping(value = "findAllSellerBalance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findAllSupplierBalance", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findAllSellerBalance() {
-        List<Seller> sellers = Lists.newArrayList(sellerService.findAll());
-        ListIterator<Seller> bankListIterator = sellers.listIterator();
+    public String findAllSupplierBalance() {
+        List<Supplier> suppliers = Lists.newArrayList(supplierService.findAll());
+        ListIterator<Supplier> bankListIterator = suppliers.listIterator();
         while (bankListIterator.hasNext()) {
 
-            Seller seller = bankListIterator.next();
+            Supplier supplier = bankListIterator.next();
 
             Double depositAmount = bankTransactionService
-                    .findBySellerAndTransactionTypeIn(seller,
+                    .findBySupplierAndTransactionTypeIn(supplier,
                                                       Lists.newArrayList(
                                                               Initializer.transactionTypeDeposit,
                                                               Initializer.transactionTypeDepositPayment,
@@ -292,7 +295,7 @@ public class SellerRest {
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
             Double withdrawAmount = bankTransactionService
-                    .findBySellerAndTransactionTypeIn(seller,
+                    .findBySupplierAndTransactionTypeIn(supplier,
                                                       Lists.newArrayList(
                                                               Initializer.transactionTypeWithdraw,
                                                               Initializer.transactionTypeWithdrawCash,
@@ -302,14 +305,14 @@ public class SellerRest {
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
             LOG.info("مجموع الإيداعات = " + depositAmount);
-            seller.setTotalDeposits(depositAmount);
+            supplier.setTotalDeposits(depositAmount);
 
             LOG.info("مجموع السحبيات = " + withdrawAmount);
-            seller.setTotalWithdraws(withdrawAmount);
+            supplier.setTotalWithdraws(withdrawAmount);
 
-            seller.setBalance(depositAmount - withdrawAmount);
+            supplier.setBalance(depositAmount - withdrawAmount);
         }
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), sellers);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), suppliers);
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -331,7 +334,7 @@ public class SellerRest {
                 Squiggly.init(
                         new ObjectMapper(),
                         "**,".concat("content[").concat(FILTER_TABLE).concat("]")),
-                sellerSearch.filter(
+                supplierSearch.filter(
                         codeFrom,
                         codeTo,
                         registerDateFrom,

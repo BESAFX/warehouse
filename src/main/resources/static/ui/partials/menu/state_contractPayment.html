@@ -17,12 +17,12 @@
         <div class="row">
 
             <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
-                <button id="contractPayment-menu-lower-right" style="width: 100%;"
+                <button id="billPurchasePayment-menu-lower-right" style="width: 100%;"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
                     <span>العمليات</span>
                 </button>
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                    for="contractPayment-menu-lower-right">
+                    for="billPurchasePayment-menu-lower-right">
 
                     <li class="mdl-menu__item mdl-list__item"
                         ng-click="openContractPaymentsFilter()">
@@ -158,17 +158,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="contractPayment in contractPayments | filter:contractPayments.searchText">
+                        <tr ng-repeat="billPurchasePayment in contractPayments | filter:contractPayments.searchText">
                             <td>{{$index+1}}</td>
-                            <td>{{contractPayment.contract.code}}</td>
-                            <td>{{contractPayment.contract.customer.contact.shortName}}</td>
+                            <td>{{billPurchasePayment.billPurchase.code}}</td>
+                            <td>{{billPurchasePayment.billPurchase.customer.contact.shortName}}</td>
                             <td>
-                                <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPayment.date | date: 'yyyy-MM-dd'}}</span>
+                                <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchasePayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchasePayment.date | date: 'yyyy-MM-dd'}}</span>
                             </td>
-                            <td>{{contractPayment.note}}</td>
-                            <td>{{contractPayment.amount | currency:' SAR ':2}}</td>
-                            <td>{{contractPayment.profit | currency:' SAR ':2}}</td>
+                            <td>{{billPurchasePayment.note}}</td>
+                            <td>{{billPurchasePayment.amount | currency:' SAR ':2}}</td>
+                            <td>{{billPurchasePayment.profit | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!contractPayments || contractPayments.length ==0">

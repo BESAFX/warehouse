@@ -1,5 +1,5 @@
-app.controller('transferCreateCtrl', ['SellerService', 'BankTransactionService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (SellerService, BankTransactionService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('transferCreateCtrl', ['SupplierService', 'BankTransactionService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (SupplierService, BankTransactionService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 
@@ -9,18 +9,18 @@ app.controller('transferCreateCtrl', ['SellerService', 'BankTransactionService',
 
         $scope.buffer.note = "";
 
-        $scope.buffer.fromSeller = {};
+        $scope.buffer.fromSupplier = {};
 
-        $scope.buffer.toSeller = {};
+        $scope.buffer.toSupplier = {};
 
-        $scope.sellers = [];
+        $scope.suppliers = [];
 
-        $scope.searchSellers = function ($select, $event) {
+        $scope.searchSuppliers = function ($select, $event) {
 
             // no event means first load!
             if (!$event) {
                 $scope.page = 0;
-                $scope.sellers = [];
+                $scope.suppliers = [];
             } else {
                 $event.stopPropagation();
                 $event.preventDefault();
@@ -56,16 +56,16 @@ app.controller('transferCreateCtrl', ['SellerService', 'BankTransactionService',
                     break;
             }
 
-            return SellerService.filter(search.join("")).then(function (data) {
+            return SupplierService.filter(search.join("")).then(function (data) {
                 $scope.buffer.last = data.last;
-                return $scope.sellers = $scope.sellers.concat(data.content);
+                return $scope.suppliers = $scope.suppliers.concat(data.content);
             });
 
         };
 
         $scope.submit = function () {
             BankTransactionService
-                .createTransfer($scope.buffer.amount, $scope.buffer.fromSeller.id, $scope.buffer.toSeller.id, $scope.buffer.note)
+                .createTransfer($scope.buffer.amount, $scope.buffer.fromSupplier.id, $scope.buffer.toSupplier.id, $scope.buffer.note)
                 .then(function (data) {
                     $uibModalInstance.close(data);
                 });

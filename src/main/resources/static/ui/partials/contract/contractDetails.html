@@ -4,9 +4,9 @@
     </a>
     <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/contract.{{iconSetType}}" width="24" height="24">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/billPurchase.{{iconSetType}}" width="24" height="24">
                 <span>تفاصيل العقد رقم / </span>&nbsp;
-                <span class="label label-info">{{contract.code}}</span>
+                <span class="label label-info">{{billPurchase.code}}</span>
             </span>
     </h3>
 </div>
@@ -30,21 +30,21 @@
         <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
             <div class="mdl-tabs__tab-bar">
-                <a href="#panel-1-contract-details"
+                <a href="#panel-1-billPurchase-details"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3 is-active">
                     <span>البيانات الاساسية</span>
                 </a>
-                <a href="#panel-2-contract-details"
+                <a href="#panel-2-billPurchase-details"
                    ng-click="refreshContractProducts()"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>السلع</span>
                 </a>
-                <a href="#panel-3-contract-details"
+                <a href="#panel-3-billPurchase-details"
                    ng-click="refreshContractPremiums()"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>الأقساط</span>
                 </a>
-                <a href="#panel-4-contract-details"
+                <a href="#panel-4-billPurchase-details"
                    ng-click="refreshContractPayments()"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>عمليات الدفع</span>
@@ -52,25 +52,25 @@
             </div>
 
             <div class="mdl-tabs__tab-bar">
-                <a href="#panel-5-contract-details"
+                <a href="#panel-5-billPurchase-details"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>طباعة العقد</span>
                 </a>
-                <a href="#panel-6-contract-details"
+                <a href="#panel-6-billPurchase-details"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>طباعة سند لأمر</span>
                 </a>
-                <a href="#panel-7-contract-details"
+                <a href="#panel-7-billPurchase-details"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>طباعة كمبيالة</span>
                 </a>
-                <a href="#panel-8-contract-details"
+                <a href="#panel-8-billPurchase-details"
                    class="mdl-tabs__tab col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <span>طباعة سند إستلام</span>
                 </a>
             </div>
 
-            <div class="mdl-tabs__panel is-active" id="panel-1-contract-details">
+            <div class="mdl-tabs__panel is-active" id="panel-1-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -79,47 +79,47 @@
                             <tbody>
                             <tr>
                                 <td>رقم العقد</td>
-                                <td>{{contract.code}}</td>
+                                <td>{{billPurchase.code}}</td>
                             </tr>
                             <tr>
                                 <td>تاريخ كتابة العقد</td>
                                 <td>
-                                    <span ng-show="dateType==='H'">{{contract.writtenDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                    <span ng-show="dateType==='G'">{{contract.writtenDate | date: 'yyyy-MM-dd'}}</span>
-                                    <span class="label label-info">{{contract.writtenDate | date: 'hh:mm a'}}</span>
+                                    <span ng-show="dateType==='H'">{{billPurchase.writtenDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                    <span ng-show="dateType==='G'">{{billPurchase.writtenDate | date: 'yyyy-MM-dd'}}</span>
+                                    <span class="label label-info">{{billPurchase.writtenDate | date: 'hh:mm a'}}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td>المستثمر</td>
-                                <td>{{contract.seller.contact.shortName}}</td>
+                                <td>المورد</td>
+                                <td>{{billPurchase.supplier.contact.shortName}}</td>
                             </tr>
                             <tr>
                                 <td>العميل</td>
-                                <td>{{contract.customer.contact.shortName}}</td>
+                                <td>{{billPurchase.customer.contact.shortName}}</td>
                             </tr>
                             <tr>
                                 <td>الكفيل الأول</td>
-                                <td>{{contract.sponsor1 ? contract.sponsor1.contact.shortName : '---'}}</td>
+                                <td>{{billPurchase.sponsor1 ? billPurchase.sponsor1.contact.shortName : '---'}}</td>
                             </tr>
                             <tr>
                                 <td>الكفيل الثاني</td>
-                                <td>{{contract.sponsor2 ? contract.sponsor2.contact.shortName : '---'}}</td>
+                                <td>{{billPurchase.sponsor2 ? billPurchase.sponsor2.contact.shortName : '---'}}</td>
                             </tr>
                             <tr>
                                 <td>الرسوم الإدارية</td>
-                                <td>{{contract.paperFees | currency:' SAR ':2}}</td>
+                                <td>{{billPurchase.paperFees | currency:' SAR ':2}}</td>
                             </tr>
                             <tr>
                                 <td>عمولة العقد</td>
-                                <td>{{contract.commissionFees | currency:' SAR ':2}}</td>
+                                <td>{{billPurchase.commissionFees | currency:' SAR ':2}}</td>
                             </tr>
                             <tr>
                                 <td>رسوم المحاماة</td>
-                                <td>{{contract.lawFees | currency:' SAR ':2}}</td>
+                                <td>{{billPurchase.lawFees | currency:' SAR ':2}}</td>
                             </tr>
                             <tr>
                                 <td>الخصم</td>
-                                <td>{{contract.discount | currency:' SAR ':2}}</td>
+                                <td>{{billPurchase.discount | currency:' SAR ':2}}</td>
                             </tr>
                             <tr>
                                 <td>المستندات</td>
@@ -155,15 +155,15 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr ng-repeat="contractAttach in contract.contractAttaches">
+                                                    <tr ng-repeat="billPurchaseAttach in billPurchase.billPurchaseAttaches">
                                                         <td>{{$index+1}}</td>
                                                         <td class="long-td">
-                                                            <a href="" ng-href="{{contractAttach.attach.link ? contractAttach.attach.link : ''}}" target="_blank">
+                                                            <a href="" ng-href="{{billPurchaseAttach.attach.link ? billPurchaseAttach.attach.link : ''}}" target="_blank">
                                                                 <i class="fa fa-files-o"></i>
-                                                                {{contractAttach.attach.name}}
+                                                                {{billPurchaseAttach.attach.name}}
                                                             </a>
                                                         </td>
-                                                        <td>{{contractAttach.attach.size/1024/1024|number:2}} MB</td>
+                                                        <td>{{billPurchaseAttach.attach.size/1024/1024|number:2}} MB</td>
                                                         <td>
                                                             <div class="row">
                                                                 <button uib-tooltip="إضافة ملفات"
@@ -179,7 +179,7 @@
                                                                         tooltip-append-to-body="true"
                                                                         type="button"
                                                                         ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_DELETE'])"
-                                                                        ng-click="deleteContractAttach(contractAttach)"
+                                                                        ng-click="deleteContractAttach(billPurchaseAttach)"
                                                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                                                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}"
                                                                          width="24" height="24">
@@ -189,7 +189,7 @@
                                                     </tr>
                                                     <tr class="blank_row"
                                                         style="height: 10px !important; background-color: #FFFFFF;"
-                                                        ng-show="!contract.contractAttaches || contract.contractAttaches.length ==0">
+                                                        ng-show="!billPurchase.billPurchaseAttaches || billPurchase.billPurchaseAttaches.length ==0">
                                                         <td colspan="4" ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
                                                             <span>يمكنك اضافة الملفات بالضغط</span>
                                                             <a href="" ng-click="uploadFiles()">هنا</a>
@@ -207,7 +207,7 @@
                                 <td>مدخل العقد</td>
                                 <td>
                                         <span class="label label-info">
-                                            {{contract.person.contact.shortName}}
+                                            {{billPurchase.person.contact.shortName}}
                                         </span>
                                 </td>
                             </tr>
@@ -219,7 +219,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-2-contract-details">
+            <div class="mdl-tabs__panel" id="panel-2-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -255,12 +255,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="contractProduct in contract.contractProducts">
-                                <td>{{contractProduct.productPurchase.product.name}}</td>
-                                <td>{{contractProduct.quantity}}</td>
-                                <td>{{contractProduct.unitSellPrice | currency:' SAR ':2}}</td>
-                                <td>{{contractProduct.unitVat | currency:' SAR ':2}}</td>
-                                <td>{{contractProduct.totalPriceAfterVat | currency:' SAR ':2}}</td>
+                            <tr ng-repeat="billPurchaseProduct in billPurchase.billPurchaseProducts">
+                                <td>{{billPurchaseProduct.productPurchase.product.name}}</td>
+                                <td>{{billPurchaseProduct.quantity}}</td>
+                                <td>{{billPurchaseProduct.unitSellPrice | currency:' SAR ':2}}</td>
+                                <td>{{billPurchaseProduct.unitVat | currency:' SAR ':2}}</td>
+                                <td>{{billPurchaseProduct.totalPriceAfterVat | currency:' SAR ':2}}</td>
                                 <td>
                                     <div class="row">
                                         <button uib-tooltip="إضافة سلعة"
@@ -276,7 +276,7 @@
                                                 tooltip-append-to-body="true"
                                                 type="button"
                                                 ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PRODUCT_DELETE'])"
-                                                ng-click="deleteContractProduct(contractProduct)"
+                                                ng-click="deleteContractProduct(billPurchaseProduct)"
                                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}"
                                                  width="24" height="24">
@@ -285,18 +285,18 @@
                                 </td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!contract.contractProducts || contract.contractProducts.length ==0">
+                                ng-show="!billPurchase.billPurchaseProducts || billPurchase.billPurchaseProducts.length ==0">
                                 <td colspan="6">
                                     <span>لا توجد سلع حتى الآن لهذا العقد </span>
                                 </td>
                             </tr>
-                            <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                            <tr ng-if="billPurchase.supplier.id && billPurchase.billPurchaseProducts.length > 0">
                                 <td colspan="2" class="text-left warning">
                                     <span class="pull-left">المجموع</span>
                                 </td>
-                                <td colspan="1">{{contract.contractProducts | sumByKey:'unitSellPrice' | currency:' SAR ':2}}</td>
-                                <td colspan="1">{{contract.contractProducts | sumByKey:'unitVat' | currency:' SAR ':2}}</td>
-                                <td colspan="1">{{contract.contractProducts | sumByKey:'totalPriceAfterVat' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{billPurchase.billPurchaseProducts | sumByKey:'unitSellPrice' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{billPurchase.billPurchaseProducts | sumByKey:'unitVat' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{billPurchase.billPurchaseProducts | sumByKey:'totalPriceAfterVat' | currency:' SAR ':2}}</td>
                                 <td colspan="1"></td>
                             </tr>
                             </tbody>
@@ -307,7 +307,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-3-contract-details">
+            <div class="mdl-tabs__panel" id="panel-3-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -339,7 +339,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="contractPremium in contract.contractPremiums">
+                            <tr ng-repeat="contractPremium in billPurchase.contractPremiums">
                                 <td>
                                     <span ng-show="dateType==='H'">{{contractPremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
                                     <span ng-show="dateType==='G'">{{contractPremium.dueDate | date: 'yyyy-MM-dd'}}</span>
@@ -352,7 +352,7 @@
                                         <button uib-tooltip="إضافة قسط"
                                                 tooltip-append-to-body="true"
                                                 type="button"
-                                                ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']) && (contract.contractPremiums | sumByKey:'amount') < contract.totalPrice"
+                                                ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PREMIUM_CREATE']) && (billPurchase.contractPremiums | sumByKey:'amount') < billPurchase.totalPrice"
                                                 ng-click="newContractPremium()"
                                                 class="mdl-button mdl-js-button mdl-js-ripple-effect">
                                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}"
@@ -371,18 +371,18 @@
                                 </td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!contract.contractPremiums || contract.contractPremiums.length ==0">
+                                ng-show="!billPurchase.contractPremiums || billPurchase.contractPremiums.length ==0">
                                 <td colspan="5">
                                     <span>لا توجد أقساط حتى الآن لهذا العقد </span>
                                 </td>
                             </tr>
-                            <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                            <tr ng-if="billPurchase.supplier.id && billPurchase.billPurchaseProducts.length > 0">
                                 <td colspan="1" class="text-left warning">
                                     <span class="pull-left">المجموع</span>
                                 </td>
-                                <td colspan="1">{{contract.contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
-                                <td colspan="1">{{contract.contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                                <td colspan="1">{{contract.contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{billPurchase.contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{billPurchase.contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                                <td colspan="1">{{billPurchase.contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
                                 <td></td>
                             </tr>
                             </tbody>
@@ -393,7 +393,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-4-contract-details">
+            <div class="mdl-tabs__panel" id="panel-4-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -425,20 +425,20 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="contractPayment in contract.contractPayments">
-                                <td>{{contractPayment.code}}</td>
+                            <tr ng-repeat="billPurchasePayment in billPurchase.contractPayments">
+                                <td>{{billPurchasePayment.code}}</td>
                                 <td>
-                                    <span ng-show="dateType==='H'">{{contractPayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                    <span ng-show="dateType==='G'">{{contractPayment.date | date: 'yyyy-MM-dd'}}</span>
+                                    <span ng-show="dateType==='H'">{{billPurchasePayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                    <span ng-show="dateType==='G'">{{billPurchasePayment.date | date: 'yyyy-MM-dd'}}</span>
                                 </td>
-                                <td>{{contractPayment.amount | currency:' SAR ':2}}</td>
-                                <td>{{contractPayment.note}}</td>
+                                <td>{{billPurchasePayment.amount | currency:' SAR ':2}}</td>
+                                <td>{{billPurchasePayment.note}}</td>
                                 <td>
                                     <div class="row">
                                         <button uib-tooltip="إضافة دفعة"
                                                 tooltip-append-to-body="true"
                                                 type="button"
-                                                ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PAYMENT_CREATE']) && (contract.contractPayments | sumByKey:'amount') < contract.totalPrice"
+                                                ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_PAYMENT_CREATE']) && (billPurchase.contractPayments | sumByKey:'amount') < billPurchase.totalPrice"
                                                 ng-click="newContractPayment()"
                                                 class="mdl-button mdl-js-button mdl-js-ripple-effect">
                                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}"
@@ -457,23 +457,23 @@
                                 </td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-show="!contract.contractPayments || contract.contractPayments.length ==0">
+                                ng-show="!billPurchase.contractPayments || billPurchase.contractPayments.length ==0">
                                 <td colspan="5">
                                     <span>لا توجد عمليات دفع حتى الآن لهذا العقد، يمكنك إضافة دفعة مالية بالضغط  </span>
                                     <a href="" ng-click="newContractPayment()">هنــا</a>
                                 </td>
                             </tr>
-                            <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                            <tr ng-if="billPurchase.supplier.id && billPurchase.billPurchaseProducts.length > 0">
                                 <td colspan="2" class="text-left warning">
                                     <span>إجمالي قيمة العقد</span>
                                 </td>
-                                <td colspan="3">{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
+                                <td colspan="3">{{billPurchase.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
                             </tr>
-                            <tr ng-if="contract.seller.id && contract.contractProducts.length > 0">
+                            <tr ng-if="billPurchase.supplier.id && billPurchase.billPurchaseProducts.length > 0">
                                 <td colspan="2" class="text-left success">
                                     <span>إجمالي الدفعات المالية</span>
                                 </td>
-                                <td colspan="3">{{contract.contractPayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                                <td colspan="3">{{billPurchase.contractPayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -483,7 +483,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-5-contract-details">
+            <div class="mdl-tabs__panel" id="panel-5-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -517,7 +517,7 @@
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 <p class="pull-left template-box">
                                     <strong>رقم العقد / </strong>
-                                    {{contract.code}}
+                                    {{billPurchase.code}}
                                 </p>
                             </div>
 
@@ -556,7 +556,7 @@
 
                                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                     <p class="text-right">
-                                        <strong>{{contract.seller.contact.shortName}}</strong>
+                                        <strong>{{billPurchase.supplier.contact.shortName}}</strong>
                                     </p>
                                 </div>
 
@@ -568,7 +568,7 @@
 
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <p class="text-right">
-                                        <strong>{{contract.seller.contact.mobile}}</strong>
+                                        <strong>{{billPurchase.supplier.contact.mobile}}</strong>
                                     </p>
                                 </div>
 
@@ -584,7 +584,7 @@
 
                                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                     <p class="text-right">
-                                        <strong>{{contract.customer.contact.shortName}}</strong>
+                                        <strong>{{billPurchase.customer.contact.shortName}}</strong>
                                     </p>
                                 </div>
 
@@ -596,7 +596,7 @@
 
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <p class="text-right">
-                                        <strong>{{contract.customer.contact.qualification}}</strong>
+                                        <strong>{{billPurchase.customer.contact.qualification}}</strong>
                                     </p>
                                 </div>
 
@@ -612,7 +612,7 @@
 
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <p class="text-right">
-                                        <strong>{{contract.customer.contact.identityNumber}}</strong>
+                                        <strong>{{billPurchase.customer.contact.identityNumber}}</strong>
                                     </p>
                                 </div>
 
@@ -624,7 +624,7 @@
 
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <p class="text-right">
-                                        <strong>{{contract.customer.contact.phone}}</strong>
+                                        <strong>{{billPurchase.customer.contact.phone}}</strong>
                                     </p>
                                 </div>
 
@@ -636,7 +636,7 @@
 
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <p class="text-right">
-                                        <strong>{{contract.customer.contact.mobile}}</strong>
+                                        <strong>{{billPurchase.customer.contact.mobile}}</strong>
                                     </p>
                                 </div>
 
@@ -657,7 +657,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <p class="text-right">
                                         <span>بمبلغ: </span>
-                                        <strong>{{contract.totalPrice | currency:'':2}}</strong>
+                                        <strong>{{billPurchase.totalPrice | currency:'':2}}</strong>
                                         <span> ريال سعودي فقط لا غير</span>
                                     </p>
                                 </div>
@@ -721,7 +721,7 @@
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <p class="text-right">
                                             <span>أقر أنا المدعو:</span>
-                                            {{contract.sponsor1.contact.shortName}}
+                                            {{billPurchase.sponsor1.contact.shortName}}
                                         </p>
                                     </div>
 
@@ -730,7 +730,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>العمل:</span>
-                                            {{contract.sponsor1.contact.qualification}}
+                                            {{billPurchase.sponsor1.contact.qualification}}
                                         </p>
                                     </div>
 
@@ -743,7 +743,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>رقم الهوية:</span>
-                                            {{contract.sponsor1.contact.identityNumber}}
+                                            {{billPurchase.sponsor1.contact.identityNumber}}
                                         </p>
                                     </div>
 
@@ -752,7 +752,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>هاتف العمل:</span>
-                                            {{contract.sponsor1.contact.phone}}
+                                            {{billPurchase.sponsor1.contact.phone}}
                                         </p>
                                     </div>
 
@@ -761,7 +761,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>جوال:</span>
-                                            {{contract.sponsor1.contact.mobile}}
+                                            {{billPurchase.sponsor1.contact.mobile}}
                                         </p>
                                     </div>
 
@@ -774,9 +774,9 @@
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <p class="text-right">
                                             <span>أقر وأعترف أنني أكفل المدعو/ </span>
-                                            <strong>{{contract.customer.contact.shortName}}</strong>
+                                            <strong>{{billPurchase.customer.contact.shortName}}</strong>
                                             <span>، كفالة غارمية فى حالة الحياة والممات بمبلغ وقدره/ </span>
-                                            {{contract.totalPrice | currency:'':2}}
+                                            {{billPurchase.totalPrice | currency:'':2}}
                                             <span> ريال سعودي فقط لا غير ، دون أي تهاون أو تأخير</span>
                                         </p>
                                     </div>
@@ -794,7 +794,7 @@
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <p class="text-right">
                                             <span>أقر أنا المدعو:</span>
-                                            {{contract.sponsor2.contact.shortName}}
+                                            {{billPurchase.sponsor2.contact.shortName}}
                                         </p>
                                     </div>
 
@@ -803,7 +803,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>العمل:</span>
-                                            {{contract.sponsor2.contact.qualification}}
+                                            {{billPurchase.sponsor2.contact.qualification}}
                                         </p>
                                     </div>
 
@@ -816,7 +816,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>رقم الهوية:</span>
-                                            {{contract.sponsor2.contact.identityNumber}}
+                                            {{billPurchase.sponsor2.contact.identityNumber}}
                                         </p>
                                     </div>
 
@@ -825,7 +825,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>هاتف العمل:</span>
-                                            {{contract.sponsor2.contact.phone}}
+                                            {{billPurchase.sponsor2.contact.phone}}
                                         </p>
                                     </div>
 
@@ -834,7 +834,7 @@
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <p class="text-right">
                                             <span>جوال:</span>
-                                            {{contract.sponsor2.contact.shortName}}
+                                            {{billPurchase.sponsor2.contact.shortName}}
                                         </p>
                                     </div>
 
@@ -847,9 +847,9 @@
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <p class="text-right">
                                             <span>أقر وأعترف أنني أكفل المدعو/ </span>
-                                            <strong>{{contract.customer.contact.shortName}}</strong>
+                                            <strong>{{billPurchase.customer.contact.shortName}}</strong>
                                             <span>، كفالة غارمية فى حالة الحياة والممات بمبلغ وقدره/ </span>
-                                            {{contract.totalPrice | currency:'':2}}
+                                            {{billPurchase.totalPrice | currency:'':2}}
                                             <span> ريال سعودي فقط لا غير ، دون أي تهاون أو تأخير</span>
                                         </p>
                                     </div>
@@ -943,7 +943,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-6-contract-details">
+            <div class="mdl-tabs__panel" id="panel-6-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -977,7 +977,7 @@
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 <p class="pull-left template-box">
                                     <strong>المبلغ / </strong>
-                                    {{contract.totalPrice | currency:' SAR ':2}}
+                                    {{billPurchase.totalPrice | currency:' SAR ':2}}
                                 </p>
                             </div>
                         </div>
@@ -992,9 +992,9 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <p class="text-right">
                                     <span>أتعهد بأن أدفع بموجب هذا السند لأمر / </span>
-                                    <strong>{{contract.seller.contact.shortName}}</strong>
+                                    <strong>{{billPurchase.supplier.contact.shortName}}</strong>
                                     <span>، المبلغ الموضح أعلاه ومقداره : </span>
-                                    <span>{{contract.totalPrice | currency:'':2}}</span>
+                                    <span>{{billPurchase.totalPrice | currency:'':2}}</span>
                                     <span> ريال سعودي فقط لا غير. </span>
                                 </p>
                                 <p class="text-center">ولحامل هذة الورقة حق الرجوع بدون مصروفات أو احتجاج.</p>
@@ -1005,7 +1005,7 @@
                                     <tbody>
                                     <tr>
                                         <td class="fit">اسم المدين</td>
-                                        <td>{{contract.customer.contact.shortName}}</td>
+                                        <td>{{billPurchase.customer.contact.shortName}}</td>
                                     </tr>
                                     <tr>
                                         <td>التوقيع</td>
@@ -1013,11 +1013,11 @@
                                     </tr>
                                     <tr>
                                         <td>رقم الجوال</td>
-                                        <td>{{contract.customer.contact.mobile}}</td>
+                                        <td>{{billPurchase.customer.contact.mobile}}</td>
                                     </tr>
                                     <tr>
                                         <td>العنوان</td>
-                                        <td>{{contract.customer.contact.address}}</td>
+                                        <td>{{billPurchase.customer.contact.address}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1030,9 +1030,9 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <p class="text-right">
                                     <span>أكفـــل السيد / </span>
-                                    <strong>{{contract.customer.contact.shortName}}</strong>
+                                    <strong>{{billPurchase.customer.contact.shortName}}</strong>
                                     <span>، كفالة غرم وأداء تضامنية فى تسديد دينه موضوع السند المحرر أعلاه للمكرم / </span>
-                                    <span>{{contract.seller.contact.shortName}}</span>
+                                    <span>{{billPurchase.supplier.contact.shortName}}</span>
                                     <span> في موعد استحقاقه وهذا السند واجب الدفع دون الرجوع بلا مصروفات وبدون احتجاج.</span>
                                 </p>
                             </div>
@@ -1078,7 +1078,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-7-contract-details">
+            <div class="mdl-tabs__panel" id="panel-7-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -1112,7 +1112,7 @@
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 <p class="pull-left template-box">
                                     <strong>المبلغ / </strong>
-                                    {{contract.totalPrice | currency:' SAR ':2}}
+                                    {{billPurchase.totalPrice | currency:' SAR ':2}}
                                 </p>
                             </div>
                         </div>
@@ -1127,9 +1127,9 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <p class="text-right">
                                     <span>أتعهد بأن أدفع بموجب هذا السند لأمر / </span>
-                                    <strong>{{contract.seller.contact.shortName}}</strong>
+                                    <strong>{{billPurchase.supplier.contact.shortName}}</strong>
                                     <span>، المبلغ الموضح أعلاه ومقداره : </span>
-                                    <span>{{contract.totalPrice | currency:'':2}}</span>
+                                    <span>{{billPurchase.totalPrice | currency:'':2}}</span>
                                     <span> ريال سعودي فقط لا غير. </span>
                                     <span>فى تاريخ / -----------------------------، مكان التحرير / -----------------------------</span>
                                 </p>
@@ -1144,7 +1144,7 @@
                                     <tbody>
                                     <tr>
                                         <td class="fit">اسم المدين</td>
-                                        <td>{{contract.customer.contact.shortName}}</td>
+                                        <td>{{billPurchase.customer.contact.shortName}}</td>
                                     </tr>
                                     <tr>
                                         <td class="fit">التوقيع</td>
@@ -1152,15 +1152,15 @@
                                     </tr>
                                     <tr>
                                         <td class="fit">رقم الجوال</td>
-                                        <td>{{contract.customer.contact.mobile}}</td>
+                                        <td>{{billPurchase.customer.contact.mobile}}</td>
                                     </tr>
                                     <tr>
                                         <td class="fit">رقم الهوية</td>
-                                        <td>{{contract.customer.contact.identityNumber}}</td>
+                                        <td>{{billPurchase.customer.contact.identityNumber}}</td>
                                     </tr>
                                     <tr>
                                         <td class="fit">العنوان</td>
-                                        <td>{{contract.customer.contact.address}}</td>
+                                        <td>{{billPurchase.customer.contact.address}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1206,7 +1206,7 @@
 
             </div>
 
-            <div class="mdl-tabs__panel" id="panel-8-contract-details">
+            <div class="mdl-tabs__panel" id="panel-8-billPurchase-details">
 
                 <div class="form-group row">
 
@@ -1245,7 +1245,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <p class="text-right">
                                     <span>نعم أنا المدعو / </span>
-                                    <strong>{{contract.customer.contact.shortName}}</strong>
+                                    <strong>{{billPurchase.customer.contact.shortName}}</strong>
                                     <span>، أفيدكم باستلام البضاعة الموضحة أدناه وهي كالآتي : </span>
                                 </p>
                             </div>
@@ -1267,9 +1267,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="contractProduct in contract.contractProducts">
-                                        <td>{{contractProduct.productPurchase.product.name}}</td>
-                                        <td>{{contractProduct.quantity}}</td>
+                                    <tr ng-repeat="billPurchaseProduct in billPurchase.billPurchaseProducts">
+                                        <td>{{billPurchaseProduct.productPurchase.product.name}}</td>
+                                        <td>{{billPurchaseProduct.quantity}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1298,15 +1298,15 @@
                                         </tr>
                                         <tr>
                                             <td class="fit">الأسم</td>
-                                            <td>{{contract.customer.contact.shortName}}</td>
+                                            <td>{{billPurchase.customer.contact.shortName}}</td>
                                         </tr>
                                         <tr>
                                             <td class="fit">رقم الجوال</td>
-                                            <td>{{contract.customer.contact.mobile}}</td>
+                                            <td>{{billPurchase.customer.contact.mobile}}</td>
                                         </tr>
                                         <tr>
                                             <td class="fit">رقم الهوية</td>
-                                            <td>{{contract.customer.contact.identityNumber}}</td>
+                                            <td>{{billPurchase.customer.contact.identityNumber}}</td>
                                         </tr>
                                         <tr>
                                             <td class="fit">التوقيع</td>

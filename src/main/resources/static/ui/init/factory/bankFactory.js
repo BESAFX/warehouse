@@ -11,8 +11,8 @@ app.factory("BankService",
                     return response.data;
                 });
             },
-            findBySeller: function (sellerId) {
-                return $http.get("/api/bank/findBySeller/" + sellerId).then(function (response) {
+            findBySupplier: function (supplierId) {
+                return $http.get("/api/bank/findBySupplier/" + supplierId).then(function (response) {
                     return response.data;
                 });
             }

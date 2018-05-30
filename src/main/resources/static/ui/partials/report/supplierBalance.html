@@ -14,7 +14,7 @@
                     </a>
                 </li>
                 <li>
-                    <span>أرصدة المستثمرين</span>
+                    <span>أرصدة الموردين</span>
                 </li>
             </ul>
         </div>
@@ -22,7 +22,7 @@
         <div class="row">
 
             <button type="button"
-                    ng-click="fetchAllSellerBalance()"
+                    ng-click="fetchAllSupplierBalance()"
                     class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                         <span class="mdl-list__item-primary-content">
                             <img class="material-icons mdl-list__item-icon"
@@ -34,7 +34,7 @@
             </button>
 
             <button type="button"
-                    ng-click="printToCart('printSellerBalanceTable', 'أرصدة المستثمرين')"
+                    ng-click="printToCart('printSupplierBalanceTable', 'أرصدة الموردين')"
                     class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                         <span class="mdl-list__item-primary-content">
                             <img class="material-icons mdl-list__item-icon"
@@ -54,11 +54,11 @@
 
     <div class="panel panel-body">
 
-        <div class="form-group row" id="printSellerBalanceTable">
+        <div class="form-group row" id="printSupplierBalanceTable">
 
             <div class="form-group row">
 
-                <h4 class="text-center">أرصدة المستثمرين لجميع الحسابات</h4>
+                <h4 class="text-center">أرصدة الموردين لجميع الحسابات</h4>
 
             </div>
 
@@ -72,7 +72,7 @@
                         </th>
 
                         <th>
-                            <span>المستثمر</span>
+                            <span>المورد</span>
                         </th>
 
                         <th>
@@ -102,18 +102,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="sellerBalance in sellersBalance">
+                    <tr ng-repeat="supplierBalance in suppliersBalance">
                         <td>{{$index+1}}</td>
-                        <td>{{sellerBalance.contact.shortName}}</td>
-                        <td>{{sellerBalance.contact.identityNumber}}</td>
-                        <td>{{sellerBalance.contact.mobile}}</td>
+                        <td>{{supplierBalance.contact.shortName}}</td>
+                        <td>{{supplierBalance.contact.identityNumber}}</td>
+                        <td>{{supplierBalance.contact.mobile}}</td>
                         <td>
-                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{sellerBalance.lastContractDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{sellerBalance.lastContractDate | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{supplierBalance.lastContractDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{supplierBalance.lastContractDate | date: 'yyyy-MM-dd'}}</span>
                         </td>
-                        <td>{{sellerBalance.totalDeposits | currency:' SAR ':2}}</td>
-                        <td>{{sellerBalance.totalWithdraws | currency:' SAR ':2}}</td>
-                        <td>{{sellerBalance.balance | currency:' SAR ':2}}</td>
+                        <td>{{supplierBalance.totalDeposits | currency:' SAR ':2}}</td>
+                        <td>{{supplierBalance.totalWithdraws | currency:' SAR ':2}}</td>
+                        <td>{{supplierBalance.balance | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -84,7 +84,7 @@
                         </th>
 
                         <th>
-                            <span>المستثمر</span>
+                            <span>المورد</span>
                         </th>
 
                         <th>
@@ -122,35 +122,35 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="contract in contracts">
+                    <tr ng-repeat="billPurchase in billPurchases">
                         <td>{{$index+1}}</td>
-                        <td>{{contract.code}}</td>
-                        <td>{{contract.customer.contact.shortName}}</td>
-                        <td>{{contract.customer.contact.mobile}}</td>
-                        <td>{{contract.seller.contact.shortName}}</td>
+                        <td>{{billPurchase.code}}</td>
+                        <td>{{billPurchase.customer.contact.shortName}}</td>
+                        <td>{{billPurchase.customer.contact.mobile}}</td>
+                        <td>{{billPurchase.supplier.contact.shortName}}</td>
                         <td>
-                            <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchase.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchase.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
                         </td>
-                        <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
-                        <td>{{contract.profit | currency:' SAR ':2}}</td>
-                        <td>{{contract.profitPercentage | currency:' % ':2}}</td>
-                        <td>{{contract.discount | currency:' SAR ':2}}</td>
-                        <td>{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
-                        <td>{{contract.paid | currency:' SAR ':2}}</td>
-                        <td>{{contract.remain | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.capitalCash | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.profit | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.profitPercentage | currency:' % ':2}}</td>
+                        <td>{{billPurchase.discount | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.paid | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.remain | currency:' SAR ':2}}</td>
                     </tr>
-                    <tr ng-if="contracts.length > 0">
+                    <tr ng-if="billPurchases.length > 0">
                         <td class="info" colspan="6">
                             <span class="pull-left">المجموع الكلي</span>
                         </td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'discount' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'discount' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchases | sumByKey:'remain' | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>

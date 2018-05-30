@@ -63,10 +63,6 @@ public class Company implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     private String logo;
 
-    @ManyToOne
-    @JoinColumn(name = "seller")
-    private Seller seller;
-
     @OneToMany(mappedBy = "company")
     private List<Person> persons = new ArrayList<>();
 

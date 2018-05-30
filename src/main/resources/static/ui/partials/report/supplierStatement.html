@@ -14,43 +14,43 @@
                     </a>
                 </li>
                 <li>
-                    <span>كشف حساب مستثمر</span>
+                    <span>كشف حساب مورد</span>
                 </li>
             </ul>
         </div>
 
         <div class="row">
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="fetchAllSellerCombo()">
+            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-init="fetchAllSupplierCombo()">
 
-                <ui-select id="seller"
-                           ng-model="sellerStatement.seller"
+                <ui-select id="supplier"
+                           ng-model="supplierStatement.supplier"
                            required="required"
                            disable-validation-message=""
-                           on-select="fetchSellerStatementContracts();fetchSellerStatementBanks();"
+                           on-select="fetchSupplierStatementContracts();fetchSupplierStatementBanks();"
                            theme="bootstrap">
-                    <ui-select-match placeholder="اختر حساب المستثمر">
+                    <ui-select-match placeholder="اختر حساب المورد">
                         {{$select.selected.contact.shortName}}
                     </ui-select-match>
-                    <ui-select-choices repeat="seller in sellersCombo | filter: $select.search | orderBy:'code' track by $index">
+                    <ui-select-choices repeat="supplier in suppliersCombo | filter: $select.search | orderBy:'code' track by $index">
 
                         <div class="mdl-menu__item--full-bleed-divider"></div>
                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                             <span class="mdl-list__item-primary-content">
                                 <span class="material-icons mdl-list__item-avatar"
-                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
-                                <div ng-bind-html="seller.name | highlight: $select.search"></div>
+                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/supplier.{{iconSetType}}')"></span>
+                                <div ng-bind-html="supplier.name | highlight: $select.search"></div>
                                 <span class="mdl-list__item-sub-title">
-                                    <span>رقم المستثمر / </span>
-                                    {{seller.code}}
+                                    <span>رقم المورد / </span>
+                                    {{supplier.code}}
                                 </span>
                                 <span class="mdl-list__item-sub-title">
                                     <span>الاسم / </span>
-                                    {{seller.contact.shortName}}
+                                    {{supplier.contact.shortName}}
                                 </span>
                                 <span class="mdl-list__item-sub-title">
                                     <span>رقم الجوال / </span>
-                                    {{seller.contact.mobile}}
+                                    {{supplier.contact.mobile}}
                                 </span>
                             </span>
                         </li>
@@ -63,8 +63,8 @@
             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
                 <button type="button"
-                        ng-disabled="!sellerStatement.seller"
-                        ng-click="printToCart('printSellerStatementTable', 'كشف حساب مستثمر')"
+                        ng-disabled="!supplierStatement.supplier"
+                        ng-click="printToCart('printSupplierStatementTable', 'كشف حساب مورد')"
                         class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon"
@@ -86,12 +86,12 @@
 
     <div class="panel panel-body">
 
-        <div class="form-group row" id="printSellerStatementTable">
+        <div class="form-group row" id="printSupplierStatementTable">
 
             <div class="form-group row">
 
-                <h4 class="text-center">كشف حساب مستثمر</h4>
-                <h6 ng-if="sellerStatement.seller" class="text-center box-danger">{{sellerStatement.seller.contact.shortName}}</h6>
+                <h4 class="text-center">كشف حساب مورد</h4>
+                <h6 ng-if="supplierStatement.supplier" class="text-center box-danger">{{supplierStatement.supplier.contact.shortName}}</h6>
 
             </div>
 
@@ -117,7 +117,7 @@
                         </th>
 
                         <th>
-                            <span>المستثمر</span>
+                            <span>المورد</span>
                         </th>
 
                         <th>
@@ -147,31 +147,31 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="contract in sellerStatement.contracts">
+                    <tr ng-repeat="billPurchase in supplierStatement.billPurchases">
                         <td>{{$index+1}}</td>
-                        <td>{{contract.code}}</td>
-                        <td>{{contract.customer.contact.shortName}}</td>
-                        <td>{{contract.customer.contact.mobile}}</td>
-                        <td>{{contract.seller.contact.shortName}}</td>
+                        <td>{{billPurchase.code}}</td>
+                        <td>{{billPurchase.customer.contact.shortName}}</td>
+                        <td>{{billPurchase.customer.contact.mobile}}</td>
+                        <td>{{billPurchase.supplier.contact.shortName}}</td>
                         <td>
-                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchase.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchase.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
                         </td>
-                        <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
-                        <td>{{contract.profit | currency:' SAR ':2}}</td>
-                        <td>{{contract.totalPrice | currency:' SAR ':2}}</td>
-                        <td>{{contract.paid | currency:' SAR ':2}}</td>
-                        <td>{{contract.remain | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.capitalCash | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.profit | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.totalPrice | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.paid | currency:' SAR ':2}}</td>
+                        <td>{{billPurchase.remain | currency:' SAR ':2}}</td>
                     </tr>
-                    <tr ng-if="sellerStatement.contracts.length > 0">
+                    <tr ng-if="supplierStatement.billPurchases.length > 0">
                         <td class="info" colspan="6">
                             <span class="pull-left">المجموع الكلي</span>
                         </td>
-                        <td class="success" colspan="1">{{sellerStatement.contracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{sellerStatement.contracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{sellerStatement.contracts | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{sellerStatement.contracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{sellerStatement.contracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{supplierStatement.billPurchases | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{supplierStatement.billPurchases | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{supplierStatement.billPurchases | sumByKey:'totalPrice' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{supplierStatement.billPurchases | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{supplierStatement.billPurchases | sumByKey:'remain' | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -211,7 +211,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="bank in sellerStatement.banks">
+                    <tr ng-repeat="bank in supplierStatement.banks">
                         <td>{{$index+1}}</td>
                         <td>{{bank.name}}</td>
                         <td>{{bank.totalWithdraws | currency:' SAR ':2}}</td>

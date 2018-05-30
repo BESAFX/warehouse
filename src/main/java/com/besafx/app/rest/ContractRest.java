@@ -7,13 +7,11 @@ import com.besafx.app.init.Initializer;
 import com.besafx.app.search.ContractSearch;
 import com.besafx.app.service.*;
 import com.besafx.app.util.DateConverter;
-import com.besafx.app.util.WrapperUtil;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
-import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,8 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
@@ -41,10 +37,10 @@ public class ContractRest {
     private final String FILTER_TABLE = "" +
             "**," +
             "customer[id,contact[id,mobile,shortName]]," +
-            "seller[id,contact[id,mobile,shortName]]," +
+            "supplier[id,contact[id,mobile,shortName]]," +
             "-sponsor1," +
             "-sponsor2," +
-            "-contractProducts," +
+            "-billPurchaseProducts," +
             "-contractPremiums," +
             "-contractPayments," +
             "-contractAttaches," +
@@ -52,27 +48,27 @@ public class ContractRest {
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "seller[id,contact[id,mobile,shortName]]," +
+            "supplier[id,contact[id,mobile,shortName]]," +
             "customer[id,contact[id,mobile,identityNumber,address,shortName]]," +
             "sponsor1[id,contact[id,mobile,shortName]]," +
             "sponsor2[id,contact[id,mobile,shortName]]," +
-            "contractProducts[**,-contract,productPurchase[id,product[id,name]]]," +
-            "contractPremiums[**,-contract,-contractPayments]," +
-            "contractPayments[**,person[id,contact[id,shortName]],-contract,-contractPremium,-bankTransaction]," +
-            "contractAttaches[**,-contract,attach[**,person[id,contact[shortName]]]]," +
+            "billPurchaseProducts[**,-billPurchase,productPurchase[id,product[id,name]]]," +
+            "contractPremiums[**,-billPurchase,-contractPayments]," +
+            "contractPayments[**,person[id,contact[id,shortName]],-billPurchase,-contractPremium,-bankTransaction]," +
+            "contractAttaches[**,-billPurchase,attach[**,person[id,contact[shortName]]]]," +
             "person[id,contact[id,shortName]]";
 
     @Autowired
     private ContractService contractService;
 
     @Autowired
-    private ContractProductService contractProductService;
+    private BillPurchaseProductService billPurchaseProductService;
 
     @Autowired
     private BankTransactionService bankTransactionService;
 
     @Autowired
-    private ContractPaymentService contractPaymentService;
+    private BillPurchasePaymentService billPurchasePaymentService;
 
     @Autowired
     private ContractPremiumService contractPremiumService;
@@ -84,7 +80,7 @@ public class ContractRest {
     private CustomerService customerService;
 
     @Autowired
-    private SellerService sellerService;
+    private SupplierService supplierService;
 
     @Autowired
     private ProductService productService;
@@ -99,39 +95,39 @@ public class ContractRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_CONTRACT_CREATE')")
     @Transactional
-    public String create(@RequestBody Contract contract) {
-        Contract tempContract = contractService.findByCode(contract.getCode());
-        if (tempContract != null) {
+    public String create(@RequestBody BillPurchase billPurchase) {
+        BillPurchase tempBillPurchase = contractService.findByCode(billPurchase.getCode());
+        if (tempBillPurchase != null) {
             throw new CustomException("عفواً، رقم العقد المدخل غير متاح، حاول برقم آخر");
         }
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        contract.setPerson(caller);
-        contract.setDate(new DateTime().toDate());
-        contract = contractService.save(contract);
+        billPurchase.setPerson(caller);
+        billPurchase.setDate(new DateTime().toDate());
+        billPurchase = contractService.save(billPurchase);
         LOG.info("ربط الأصناف المطلوبة مع العقد");
-        ListIterator<ContractProduct> contractProductListIterator = contract.getContractProducts().listIterator();
+        ListIterator<BillPurchaseProduct> contractProductListIterator = billPurchase.getContractProducts().listIterator();
         while (contractProductListIterator.hasNext()) {
-            ContractProduct contractProduct = contractProductListIterator.next();
-            contractProduct.setContract(contract);
-            contractProductListIterator.set(contractProductService.save(contractProduct));
+            BillPurchaseProduct billPurchaseProduct = contractProductListIterator.next();
+            billPurchaseProduct.setBillPurchase(billPurchase);
+            contractProductListIterator.set(billPurchaseProductService.save(billPurchaseProduct));
         }
         LOG.info("ربط الأقساط مع العقد");
-        ListIterator<ContractPremium> contractPremiumListIterator = contract.getContractPremiums().listIterator();
+        ListIterator<ContractPremium> contractPremiumListIterator = billPurchase.getContractPremiums().listIterator();
         while (contractPremiumListIterator.hasNext()) {
             ContractPremium contractPremium = contractPremiumListIterator.next();
-            contractPremium.setContract(contract);
+            contractPremium.setContract(billPurchase);
             contractPremiumListIterator.set(contractPremiumService.save(contractPremium));
         }
         StringBuilder builder = new StringBuilder();
         builder.append("تم إنشاء العقد بنجاح بمجموع أسعار = ");
-        builder.append(contract.getTotalPrice());
-        builder.append("، وأصناف عدد " + contract.getContractProducts().size() + " صنف");
-        builder.append("، تسدد على " + contract.getContractPremiums().size() + " قسط");
+        builder.append(billPurchase.getTotalPrice());
+        builder.append("، وأصناف عدد " + billPurchase.getContractProducts().size() + " صنف");
+        builder.append("، تسدد على " + billPurchase.getContractPremiums().size() + " قسط");
         notificationService.notifyAll(Notification
                                               .builder()
                                               .message(builder.toString())
                                               .type("success").build());
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contract);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchase);
     }
 
     @PostMapping(value = "createOld", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -149,72 +145,72 @@ public class ContractRest {
         JSONObject jsonObject_contract = jsonObject_wrapper.getJSONObject("obj1");
 
         LOG.info("إنشاء العقد");
-        Contract contract = new Contract();
-        contract.setCode(jsonObject_contract.getLong("code"));
-        Contract tempContract = contractService.findByCode(contract.getCode());
-        if (tempContract != null) {
+        BillPurchase billPurchase = new BillPurchase();
+        billPurchase.setCode(jsonObject_contract.getLong("code"));
+        BillPurchase tempBillPurchase = contractService.findByCode(billPurchase.getCode());
+        if (tempBillPurchase != null) {
             throw new CustomException("عفواً، رقم العقد المدخل غير متاح، حاول برقم آخر");
         }
-        contract.setDiscount(jsonObject_contract.getDouble("discount"));
-        contract.setPaperFees(jsonObject_contract.has("paperFees") ? jsonObject_contract.getDouble("paperFees") : null);
-        contract.setCommissionFees(jsonObject_contract.has("commissionFees") ? jsonObject_contract.getDouble("commissionFees") : null);
-        contract.setLawFees(jsonObject_contract.has("lawFees") ? jsonObject_contract.getDouble("lawFees") : null);
-        contract.setWrittenDate(DateConverter.parseJsonStringDate(jsonObject_contract.getString("writtenDate")));
-        contract.setCustomer(customerService.findOne(jsonObject_contract.getJSONObject("customer").getLong("id")));
-        contract.setSeller(sellerService.findOne(jsonObject_contract.getJSONObject("seller").getLong("id")));
-        contract.setSponsor1(jsonObject_contract.has("sponsor1") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor1").getLong("id")) : null);
-        contract.setSponsor2(jsonObject_contract.has("sponsor2") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor2").getLong("id")) : null);
-        contract.setPerson(caller);
-        contract = contractService.save(contract);
+        billPurchase.setDiscount(jsonObject_contract.getDouble("discount"));
+        billPurchase.setPaperFees(jsonObject_contract.has("paperFees") ? jsonObject_contract.getDouble("paperFees") : null);
+        billPurchase.setCommissionFees(jsonObject_contract.has("commissionFees") ? jsonObject_contract.getDouble("commissionFees") : null);
+        billPurchase.setLawFees(jsonObject_contract.has("lawFees") ? jsonObject_contract.getDouble("lawFees") : null);
+        billPurchase.setWrittenDate(DateConverter.parseJsonStringDate(jsonObject_contract.getString("writtenDate")));
+        billPurchase.setCustomer(customerService.findOne(jsonObject_contract.getJSONObject("customer").getLong("id")));
+        billPurchase.setSupplier(supplierService.findOne(jsonObject_contract.getJSONObject("supplier").getLong("id")));
+        billPurchase.setSponsor1(jsonObject_contract.has("sponsor1") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor1").getLong("id")) : null);
+        billPurchase.setSponsor2(jsonObject_contract.has("sponsor2") ? customerService.findOne(jsonObject_contract.getJSONObject("sponsor2").getLong("id")) : null);
+        billPurchase.setPerson(caller);
+        billPurchase = contractService.save(billPurchase);
 
         if(jsonObject_contract.getDouble("paid") > 0){
 
             LOG.info("إنشاء القسط");
             ContractPremium contractPremium = new ContractPremium();
-            contractPremium.setContract(contract);
+            contractPremium.setContract(billPurchase);
             contractPremium.setAmount(jsonObject_contract.getDouble("paid"));
-            contractPremium.setDueDate(contract.getWrittenDate());
+            contractPremium.setDueDate(billPurchase.getWrittenDate());
             contractPremium = contractPremiumService.save(contractPremium);
-            contract.getContractPremiums().add(contractPremium);
+            billPurchase.getContractPremiums().add(contractPremium);
 
             LOG.info("إنشاء الدفعة المالية");
-            ContractPayment contractPayment = new ContractPayment();
-            ContractPayment topContractPayment = contractPaymentService.findTopByOrderByCodeDesc();
-            if (topContractPayment == null) {
-                contractPayment.setCode(1);
+            BillPurchasePayment billPurchasePayment = new BillPurchasePayment();
+            BillPurchasePayment topBillPurchasePayment = billPurchasePaymentService.findTopByOrderByCodeDesc();
+            if (topBillPurchasePayment == null) {
+                billPurchasePayment.setCode(1);
             } else {
-                contractPayment.setCode(topContractPayment.getCode() + 1);
+                billPurchasePayment.setCode(topBillPurchasePayment.getCode() + 1);
             }
-            contractPayment.setContract(contract);
-            contractPayment.setContractPremium(contractPremium);
-            contractPayment.setAmount(contractPremium.getAmount());
-            contractPayment.setDate(contractPremium.getDueDate());
+            billPurchasePayment.setBillPurchase(billPurchase);
+            billPurchasePayment.setContractPremium(contractPremium);
+            billPurchasePayment.setAmount(contractPremium.getAmount());
+            billPurchasePayment.setDate(contractPremium.getDueDate());
 
             LOG.info("عملية سداد للدفعة");
             BankTransaction bankTransaction = new BankTransaction();
             {
-                bankTransaction.setAmount(contractPayment.getAmount());
+                bankTransaction.setAmount(billPurchasePayment.getAmount());
                 bankTransaction.setBank(Initializer.bank);
-                bankTransaction.setSeller(contract.getSeller());
+                bankTransaction.setSupplier(billPurchase.getSupplier());
                 bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
-                bankTransaction.setDate(contractPayment.getDate());
+                bankTransaction.setDate(billPurchasePayment.getDate());
                 bankTransaction.setPerson(caller);
                 StringBuilder builder = new StringBuilder();
                 builder.append("إيداع مبلغ نقدي بقيمة ");
                 builder.append(bankTransaction.getAmount());
                 builder.append("ريال سعودي، ");
                 builder.append(" لـ / ");
-                builder.append(bankTransaction.getSeller().getContact().getShortName());
+                builder.append(bankTransaction.getSupplier().getContact().getShortName());
                 builder.append("، قسط مستحق بتاريخ ");
-                builder.append(DateConverter.getDateInFormat(contractPayment.getContractPremium().getDueDate()));
-                builder.append("، للعقد رقم / " + contract.getCode());
+                builder.append(DateConverter.getDateInFormat(billPurchasePayment.getContractPremium().getDueDate()));
+                builder.append("، للعقد رقم / " + billPurchase.getCode());
                 bankTransaction.setNote(builder.toString());
             }
 
-            contractPayment.setBankTransaction(bankTransactionService.save(bankTransaction));
-            contractPayment.setPerson(caller);
-            contractPayment.setNote(bankTransaction.getNote());
-            contract.getContractPayments().add(contractPaymentService.save(contractPayment));
+            billPurchasePayment.setBankTransaction(bankTransactionService.save(bankTransaction));
+            billPurchasePayment.setPerson(caller);
+            billPurchasePayment.setNote(bankTransaction.getNote());
+            billPurchase.getContractPayments().add(billPurchasePaymentService.save(billPurchasePayment));
 
         }
 
@@ -231,8 +227,8 @@ public class ContractRest {
             } else {
                 productPurchase.setCode(topProductPurchase.getCode() + 1);
             }
-            productPurchase.setDate(contract.getWrittenDate());
-            productPurchase.setSeller(contract.getSeller());
+            productPurchase.setDate(billPurchase.getWrittenDate());
+            productPurchase.setSupplier(billPurchase.getSupplier());
             productPurchase.setProduct(productService.findOne(jsonObject_productPurchase.getJSONObject("product").getLong("id")));
             productPurchase.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
             productPurchase.setUnitPurchasePrice(jsonObject_productPurchase.getDouble("unitPurchasePrice"));
@@ -241,7 +237,7 @@ public class ContractRest {
             BankTransaction bankTransactionWithdrawPurchase = new BankTransaction();
             {
                 bankTransactionWithdrawPurchase.setBank(Initializer.bank);
-                bankTransactionWithdrawPurchase.setSeller(productPurchase.getSeller());
+                bankTransactionWithdrawPurchase.setSupplier(productPurchase.getSupplier());
                 bankTransactionWithdrawPurchase.setAmount(productPurchase.getQuantity() * productPurchase.getUnitPurchasePrice());
                 bankTransactionWithdrawPurchase.setTransactionType(Initializer.transactionTypeWithdrawPurchase);
                 bankTransactionWithdrawPurchase.setDate(productPurchase.getDate());
@@ -251,7 +247,7 @@ public class ContractRest {
                 builder.append(bankTransactionWithdrawPurchase.getAmount());
                 builder.append("ريال سعودي، ");
                 builder.append(" من / ");
-                builder.append(bankTransactionWithdrawPurchase.getSeller().getContact().getShortName());
+                builder.append(bankTransactionWithdrawPurchase.getSupplier().getContact().getShortName());
                 builder.append("، قيمة شراء " + productPurchase.getProduct().getName());
                 builder.append("، عدد /  " + productPurchase.getQuantity());
                 builder.append("، بسعر الوحدة /  " + productPurchase.getUnitPurchasePrice());
@@ -265,25 +261,25 @@ public class ContractRest {
             productPurchase = productPurchaseService.save(productPurchase);
 
             LOG.info("ربط الأصناف بالعقود");
-            ContractProduct contractProduct = new ContractProduct();
-            contractProduct.setContract(contract);
-            contractProduct.setProductPurchase(productPurchase);
-            contractProduct.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
-            contractProduct.setUnitSellPrice(jsonObject_productPurchase.getDouble("unitSellPrice"));
-            contractProduct.setUnitVat(jsonObject_productPurchase.getDouble("unitVat"));
-            contract.getContractProducts().add(contractProductService.save(contractProduct));
+            BillPurchaseProduct billPurchaseProduct = new BillPurchaseProduct();
+            billPurchaseProduct.setBillPurchase(billPurchase);
+            billPurchaseProduct.setProductPurchase(productPurchase);
+            billPurchaseProduct.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
+            billPurchaseProduct.setUnitSellPrice(jsonObject_productPurchase.getDouble("unitSellPrice"));
+            billPurchaseProduct.setUnitVat(jsonObject_productPurchase.getDouble("unitVat"));
+            billPurchase.getContractProducts().add(billPurchaseProductService.save(billPurchaseProduct));
         }
 
         StringBuilder builder = new StringBuilder();
         builder.append("تم إنشاء العقد بنجاح بمجموع أسعار = ");
-        builder.append(contract.getTotalPrice());
-        builder.append("، وأصناف عدد " + contract.getContractProducts().size() + " صنف");
-        builder.append("، تسدد على " + contract.getContractPremiums().size() + " قسط");
+        builder.append(billPurchase.getTotalPrice());
+        builder.append("، وأصناف عدد " + billPurchase.getContractProducts().size() + " صنف");
+        builder.append("، تسدد على " + billPurchase.getContractPremiums().size() + " قسط");
         notificationService.notifyAll(Notification
                                               .builder()
                                               .message(builder.toString())
                                               .type("success").build());
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contract);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchase);
     }
 
     @DeleteMapping(value = "delete/{id}")
@@ -291,22 +287,22 @@ public class ContractRest {
     @PreAuthorize("hasRole('ROLE_CONTRACT_DELETE')")
     @Transactional
     public void delete(@PathVariable Long id) {
-        Contract contract = contractService.findOne(id);
-        if (contract != null) {
+        BillPurchase billPurchase = contractService.findOne(id);
+        if (billPurchase != null) {
             LOG.info("حذف كل سلع العقد");
-            contractProductService.delete(contract.getContractProducts());
+            billPurchaseProductService.delete(billPurchase.getContractProducts());
             LOG.info("حذف كل معاملات البنك لدفعات العقد");
             bankTransactionService.delete(
-                    contract
+                    billPurchase
                             .getContractPayments()
                             .stream()
-                            .map(ContractPayment::getBankTransaction)
+                            .map(BillPurchasePayment::getBankTransaction)
                             .collect(Collectors.toList())
                                          );
             LOG.info("حذف كل دفعات العقد");
-            contractPaymentService.delete(contract.getContractPayments());
+            billPurchasePaymentService.delete(billPurchase.getContractPayments());
             LOG.info("حذف كل أقساط العقد");
-            contractPremiumService.delete(contract.getContractPremiums());
+            contractPremiumService.delete(billPurchase.getContractPremiums());
             LOG.info("حذف العقد");
             contractService.delete(id);
             notificationService.notifyAll(
@@ -329,20 +325,20 @@ public class ContractRest {
     public String findMyContracts() {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
-                                       contractService.findBySeller(caller.getCompany().getSeller()));
+                                       contractService.findBySupplier(caller.getCompany().getSupplier()));
     }
 
-    @GetMapping(value = "findBySeller/{sellerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findBySupplier/{supplierId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findBySeller(@PathVariable(value = "sellerId") Long sellerId) {
+    public String findBySupplier(@PathVariable(value = "supplierId") Long supplierId) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
-                                       contractService.findBySeller(sellerService.findOne(sellerId)));
+                                       contractService.findBySupplier(supplierService.findOne(supplierId)));
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String filter(
-            //Contract Filters
+            //BillPurchase Filters
             @RequestParam(value = "codeFrom", required = false) final Integer codeFrom,
             @RequestParam(value = "codeTo", required = false) final Integer codeTo,
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
@@ -354,13 +350,13 @@ public class ContractRest {
             @RequestParam(value = "customerRegisterDateTo", required = false) final Long customerRegisterDateTo,
             @RequestParam(value = "customerName", required = false) final String customerName,
             @RequestParam(value = "customerMobile", required = false) final String customerMobile,
-            //Seller Filters
-            @RequestParam(value = "sellerCodeFrom", required = false) final Integer sellerCodeFrom,
-            @RequestParam(value = "sellerCodeTo", required = false) final Integer sellerCodeTo,
-            @RequestParam(value = "sellerRegisterDateFrom", required = false) final Long sellerRegisterDateFrom,
-            @RequestParam(value = "sellerRegisterDateTo", required = false) final Long sellerRegisterDateTo,
-            @RequestParam(value = "sellerName", required = false) final String sellerName,
-            @RequestParam(value = "sellerMobile", required = false) final String sellerMobile,
+            //Supplier Filters
+            @RequestParam(value = "supplierCodeFrom", required = false) final Integer supplierCodeFrom,
+            @RequestParam(value = "supplierCodeTo", required = false) final Integer supplierCodeTo,
+            @RequestParam(value = "supplierRegisterDateFrom", required = false) final Long supplierRegisterDateFrom,
+            @RequestParam(value = "supplierRegisterDateTo", required = false) final Long supplierRegisterDateTo,
+            @RequestParam(value = "supplierName", required = false) final String supplierName,
+            @RequestParam(value = "supplierMobile", required = false) final String supplierMobile,
             @RequestParam(value = "filterCompareType", required = false) final String filterCompareType,
             Pageable pageable) {
         return SquigglyUtils.stringify(
@@ -378,12 +374,12 @@ public class ContractRest {
                         customerRegisterDateTo,
                         customerName,
                         customerMobile,
-                        sellerCodeFrom,
-                        sellerCodeTo,
-                        sellerRegisterDateFrom,
-                        sellerRegisterDateTo,
-                        sellerName,
-                        sellerMobile,
+                        supplierCodeFrom,
+                        supplierCodeTo,
+                        supplierRegisterDateFrom,
+                        supplierRegisterDateTo,
+                        supplierName,
+                        supplierMobile,
                         filterCompareType,
                         pageable));
     }

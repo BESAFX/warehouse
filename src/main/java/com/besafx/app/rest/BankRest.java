@@ -3,12 +3,12 @@ package com.besafx.app.rest;
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.entity.Bank;
 import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Seller;
+import com.besafx.app.entity.Supplier;
 import com.besafx.app.entity.projection.BankTransactionAmount;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.service.BankService;
 import com.besafx.app.service.BankTransactionService;
-import com.besafx.app.service.SellerService;
+import com.besafx.app.service.SupplierService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
@@ -40,7 +40,7 @@ public class BankRest {
     private BankTransactionService bankTransactionService;
 
     @Autowired
-    private SellerService sellerService;
+    private SupplierService supplierService;
 
     @GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -88,7 +88,7 @@ public class BankRest {
             Bank bank = bankListIterator.next();
 
             Double depositAmount = bankTransactionService
-                    .findBySellerAndTransactionTypeIn(caller.getCompany().getSeller(),
+                    .findBySupplierAndTransactionTypeIn(caller.getCompany().getSupplier(),
                                                       Lists.newArrayList(
                                                               Initializer.transactionTypeDeposit,
                                                               Initializer.transactionTypeDepositPayment,
@@ -97,7 +97,7 @@ public class BankRest {
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
             Double withdrawAmount = bankTransactionService
-                    .findBySellerAndTransactionTypeIn(caller.getCompany().getSeller(),
+                    .findBySupplierAndTransactionTypeIn(caller.getCompany().getSupplier(),
                                                       Lists.newArrayList(
                                                               Initializer.transactionTypeWithdraw,
                                                               Initializer.transactionTypeWithdrawCash,
@@ -117,17 +117,17 @@ public class BankRest {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), banks);
     }
 
-    @GetMapping(value = "findBySeller/{sellerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findBySupplier/{supplierId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findBySeller(@PathVariable(value = "sellerId") Long sellerId) {
-        Seller seller = sellerService.findOne(sellerId);
+    public String findBySupplier(@PathVariable(value = "supplierId") Long supplierId) {
+        Supplier supplier = supplierService.findOne(supplierId);
         List<Bank> banks = Lists.newArrayList(bankService.findAll());
         ListIterator<Bank> bankListIterator = banks.listIterator();
         while (bankListIterator.hasNext()) {
             Bank bank = bankListIterator.next();
 
             Double depositAmount = bankTransactionService
-                    .findBySellerAndTransactionTypeIn(seller,
+                    .findBySupplierAndTransactionTypeIn(supplier,
                                                       Lists.newArrayList(
                                                               Initializer.transactionTypeDeposit,
                                                               Initializer.transactionTypeDepositPayment,
@@ -136,7 +136,7 @@ public class BankRest {
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
             Double withdrawAmount = bankTransactionService
-                    .findBySellerAndTransactionTypeIn(seller,
+                    .findBySupplierAndTransactionTypeIn(supplier,
                                                       Lists.newArrayList(
                                                               Initializer.transactionTypeWithdraw,
                                                               Initializer.transactionTypeWithdrawCash,

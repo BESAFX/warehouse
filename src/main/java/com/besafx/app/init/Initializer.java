@@ -46,13 +46,13 @@ public class Initializer implements CommandLineRunner {
     private TransactionTypeService transactionTypeService;
 
     @Autowired
-    private SellerService sellerService;
+    private SupplierService supplierService;
 
     @Autowired
     private PersonService personService;
 
     @Autowired
-    private ContactService contactService;
+    private BillPurchaseService billPurchaseService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -79,19 +79,19 @@ public class Initializer implements CommandLineRunner {
             bank.setName("الصندوق");
             bankService.save(bank);
 
-            LOG.info("إنشاء حساب مستثمر لصاحب المؤسسة");
-            Seller seller = new Seller();
-            seller.setCode(1);
-            seller.setRegisterDate(new DateTime().toDate());
-            seller.setEnabled(true);
+            LOG.info("إنشاء حساب مورد لصاحب المؤسسة");
+            Supplier supplier = new Supplier();
+            supplier.setCode(1);
+            supplier.setRegisterDate(new DateTime().toDate());
+            supplier.setEnabled(true);
             Contact contact = new Contact();
-            contact.setName("مؤسسة المدار للتقسيط");
-            seller.setContact(contactService.save(contact));
+            contact.setName("مؤسسة الدرع لتقنية المعلومات");
+            supplier.setContact(billPurchaseService.save(contact));
 
             LOG.info("إنشاء حساب الشركة");
             company = new Company();
-            company.setName(seller.getContact().getName());
-            company.setSeller(sellerService.save(seller));
+            company.setName(supplier.getContact().getName());
+            company.setSupplier(supplierService.save(supplier));
             companyService.save(company);
 
             LOG.info("إنشاء أنواع العمليات المالية");
@@ -152,7 +152,7 @@ public class Initializer implements CommandLineRunner {
             contact.setName("بسام المهدي");
             contact.setPhoto("");
             contact.setQualification("Web Developer");
-            person.setContact(contactService.save(contact));
+            person.setContact(billPurchaseService.save(contact));
             person.setEmail("islamhaker@gmail.com");
             person.setPassword(passwordEncoder.encode("besa2009"));
             person.setHiddenPassword("besa2009");
@@ -175,9 +175,9 @@ public class Initializer implements CommandLineRunner {
                                             "ROLE_CUSTOMER_NOTE_CREATE",
                                             "ROLE_CUSTOMER_NOTE_UPDATE",
                                             "ROLE_CUSTOMER_NOTE_DELETE",
-                                            "ROLE_SELLER_CREATE",
-                                            "ROLE_SELLER_UPDATE",
-                                            "ROLE_SELLER_DELETE",
+                                            "ROLE_SUPPLIER_CREATE",
+                                            "ROLE_SUPPLIER_UPDATE",
+                                            "ROLE_SUPPLIER_DELETE",
                                             "ROLE_PRODUCT_CREATE",
                                             "ROLE_PRODUCT_UPDATE",
                                             "ROLE_PRODUCT_DELETE",

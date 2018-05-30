@@ -14,21 +14,21 @@ import java.util.List;
 
 @Data
 @Entity
-public class Seller implements Serializable {
+public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @GenericGenerator(
-            name = "sellerSequenceGenerator",
+            name = "supplierSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "SELLER_SEQUENCE"),
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "SUPPLIER_SEQUENCE"),
                     @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
             }
     )
     @Id
-    @GeneratedValue(generator = "sellerSequenceGenerator")
+    @GeneratedValue(generator = "supplierSequenceGenerator")
     private Long id;
 
     private Integer code;
@@ -44,17 +44,11 @@ public class Seller implements Serializable {
     private Contact contact;
 
     @ManyToOne
-    @JoinColumn(name = "seller")
-    private Seller seller;
+    @JoinColumn(name = "bank")
+    private Bank bank;
 
-    @OneToMany(mappedBy = "seller")
-    private List<Contract> contracts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "seller")
-    private List<ProductPurchase> productPurchases = new ArrayList<>();
-
-    @OneToMany(mappedBy = "seller")
-    private List<BankTransaction> bankTransactions = new ArrayList<>();
+    @OneToMany(mappedBy = "supplier")
+    private List<BillPurchase> billPurchases = new ArrayList<>();
 
     @Transient
     private Double balance;
@@ -66,25 +60,9 @@ public class Seller implements Serializable {
     private Double totalWithdraws;
 
     @JsonCreator
-    public static Seller Create(String jsonString) throws IOException {
+    public static Supplier Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Seller seller = mapper.readValue(jsonString, Seller.class);
-        return seller;
-    }
-
-    public String getShortName() {
-        try {
-            return this.contact.getNickname().concat(" ").concat(this.contact.getName());
-        } catch (Exception ex) {
-            return "";
-        }
-    }
-
-    public Date getLastContractDate() {
-        try {
-            return this.contracts.stream().map(Contract::getWrittenDate).max(Date::compareTo).get();
-        } catch (Exception ex) {
-            return null;
-        }
+        Supplier supplier = mapper.readValue(jsonString, Supplier.class);
+        return supplier;
     }
 }

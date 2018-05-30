@@ -71,50 +71,50 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
-     * Seller Model                                               *
+     * Supplier Model                                               *
      *                                                            *
      *************************************************************/
-    this.openSellerCreateModel = function () {
+    this.openSupplierCreateModel = function () {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/seller/sellerCreateUpdate.html',
-            controller: 'sellerCreateUpdateCtrl',
+            templateUrl: '/ui/partials/supplier/supplierCreateUpdate.html',
+            controller: 'supplierCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'مستثمر جديد';
+                    return 'مورد جديد';
                 },
                 action: function () {
                     return 'create';
                 },
-                seller: function () {
+                supplier: function () {
                     return {};
                 }
             }
         });
     };
 
-    this.openSellerUpdateModel = function (seller) {
+    this.openSupplierUpdateModel = function (supplier) {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/seller/sellerCreateUpdate.html',
-            controller: 'sellerCreateUpdateCtrl',
+            templateUrl: '/ui/partials/supplier/supplierCreateUpdate.html',
+            controller: 'supplierCreateUpdateCtrl',
             backdrop: 'static',
             keyboard: false,
             resolve: {
                 title: function () {
-                    return 'تعديل بيانات مستثمر';
+                    return 'تعديل بيانات مورد';
                 },
                 action: function () {
                     return 'update';
                 },
-                seller: function () {
-                    return seller;
+                supplier: function () {
+                    return supplier;
                 }
             }
         });
@@ -240,7 +240,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contract/contractCreate.html',
+            templateUrl: '/ui/partials/billPurchase/contractCreate.html',
             controller: 'contractCreateCtrl',
             backdrop: 'static',
             keyboard: false,
@@ -253,7 +253,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contract/contractOldCreate.html',
+            templateUrl: '/ui/partials/billPurchase/contractOldCreate.html',
             controller: 'contractOldCreateCtrl',
             backdrop: 'static',
             keyboard: false,
@@ -266,7 +266,7 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contract/contractDetails.html',
+            templateUrl: '/ui/partials/billPurchase/contractDetails.html',
             controller: 'contractDetailsCtrl',
             backdrop: 'static',
             keyboard: false,
@@ -296,12 +296,12 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
             size: 'lg',
             resolve: {
                 contract: ['ProductPurchaseService', function (ProductPurchaseService) {
-                    return ProductPurchaseService.findBySellerAndRemainFull(contract.seller.id).then(function (data) {
-                        contract.seller.productPurchases = [];
+                    return ProductPurchaseService.findBySupplierAndRemainFull(contract.supplier.id).then(function (data) {
+                        contract.supplier.productPurchases = [];
                         angular.forEach(data, function (productPurchase) {
                             productPurchase.requiredQuantity = 0;
                             productPurchase.unitSellPrice = 0;
-                            contract.seller.productPurchases.push(productPurchase);
+                            contract.supplier.productPurchases.push(productPurchase);
                         });
                         return contract;
                     });

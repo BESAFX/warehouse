@@ -2,11 +2,11 @@ package com.besafx.app.rest;
 
 import com.besafx.app.config.DropboxManager;
 import com.besafx.app.entity.Attach;
-import com.besafx.app.entity.Contract;
-import com.besafx.app.entity.ContractAttach;
+import com.besafx.app.entity.BillPurchase;
+import com.besafx.app.entity.BillPurchaseAttach;
 import com.besafx.app.service.AttachService;
-import com.besafx.app.service.ContractAttachService;
-import com.besafx.app.service.ContractService;
+import com.besafx.app.service.BillPurchaseAttachService;
+import com.besafx.app.service.BillPurchaseService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
@@ -32,24 +32,24 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @RestController
-@RequestMapping(value = "/api/contractAttach/")
-public class ContractAttachRest {
+@RequestMapping(value = "/api/billPurchaseAttach/")
+public class BillPurchaseAttachRest {
 
-    private final static Logger log = LoggerFactory.getLogger(ContractAttachRest.class);
+    private final static Logger log = LoggerFactory.getLogger(BillPurchaseAttachRest.class);
 
     public static final String FILTER_TABLE = "" +
             "id," +
             "attach[**,person[id,contact[id,shortName]]]," +
-            "contract[id]";
+            "billPurchase[id]";
 
     @Autowired
     private PersonService personService;
 
     @Autowired
-    private ContractService contractService;
+    private BillPurchaseService billPurchaseService;
 
     @Autowired
-    private ContractAttachService contractAttachService;
+    private BillPurchaseAttachService billPurchaseAttachService;
 
     @Autowired
     private AttachService attachService;
@@ -62,14 +62,14 @@ public class ContractAttachRest {
 
     @PostMapping(value = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_CONTRACT_CREATE')")
+    @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_CREATE')")
     public String upload(
-            @RequestParam(value = "contractId") Long contractId,
+            @RequestParam(value = "billPurchaseId") Long billPurchaseId,
             @RequestParam(value = "files") MultipartFile[] files,
             Principal principal) throws Exception {
 
-        List<ContractAttach> contractAttaches = new ArrayList<>();
-        Contract contract = contractService.findOne(contractId);
+        List<BillPurchaseAttach> billPurchaseAttaches = new ArrayList<>();
+        BillPurchase billPurchase = billPurchaseService.findOne(billPurchaseId);
 
         ListIterator<MultipartFile> multipartFileListIterator = Lists.newArrayList(files).listIterator();
         while (multipartFileListIterator.hasNext()) {
@@ -82,18 +82,18 @@ public class ContractAttachRest {
             attach.setDate(new DateTime().toDate());
             attach.setPerson(personService.findByEmail(principal.getName()));
 
-            String path = "/Madar/Contract_Attaches/" + contractId + "/" + attach.getName() + "." + attach.getMimeType();
+            String path = "/Shield/BillPurchase_Attaches/" + billPurchaseId + "/" + attach.getName() + "." + attach.getMimeType();
 
-            Future<Boolean> uploadContract = dropboxManager.uploadFile(file, path);
-            if (uploadContract.get()) {
-                Future<String> shareContract = dropboxManager.shareFile(path);
-                attach.setLink(shareContract.get());
+            Future<Boolean> uploadBillPurchase = dropboxManager.uploadFile(file, path);
+            if (uploadBillPurchase.get()) {
+                Future<String> shareBillPurchase = dropboxManager.shareFile(path);
+                attach.setLink(shareBillPurchase.get());
                 attach = attachService.save(attach);
 
-                ContractAttach contractAttach = new ContractAttach();
-                contractAttach.setAttach(attach);
-                contractAttach.setContract(contract);
-                contractAttaches.add(contractAttachService.save(contractAttach));
+                BillPurchaseAttach billPurchaseAttach = new BillPurchaseAttach();
+                billPurchaseAttach.setAttach(attach);
+                billPurchaseAttach.setBillPurchase(billPurchase);
+                billPurchaseAttaches.add(billPurchaseAttachService.save(billPurchaseAttach));
 
                 notificationService.notifyOne(Notification.builder()
                                                           .message("تم رفع الملف بنجاح")
@@ -101,26 +101,26 @@ public class ContractAttachRest {
                                                           .build(), principal.getName());
             }
         }
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contractAttaches);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchaseAttaches);
     }
 
     @DeleteMapping(value = "delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_CONTRACT_DELETE')")
+    @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_DELETE')")
     public Boolean delete(@PathVariable Long id, Principal principal) throws ExecutionException, InterruptedException {
-        ContractAttach contractAttach = contractAttachService.findOne(id);
-        if (contractAttach != null) {
+        BillPurchaseAttach billPurchaseAttach = billPurchaseAttachService.findOne(id);
+        if (billPurchaseAttach != null) {
 
-            String path = "/Madar/Contract_Attaches/" +
-                    contractAttach.getContract().getId() +
-                    "/" + contractAttach.getAttach().getName() +
+            String path = "/Shield/BillPurchase_Attaches/" +
+                    billPurchaseAttach.getBillPurchase().getId() +
+                    "/" + billPurchaseAttach.getAttach().getName() +
                     "." +
-                    contractAttach.getAttach().getMimeType();
+                    billPurchaseAttach.getAttach().getMimeType();
 
-            Future<Boolean> deleteContract = dropboxManager.deleteFile(path);
-            if (deleteContract.get()) {
-                contractAttachService.delete(contractAttach);
-                attachService.delete(contractAttach.getAttach());
+            Future<Boolean> deleteBillPurchase = dropboxManager.deleteFile(path);
+            if (deleteBillPurchase.get()) {
+                billPurchaseAttachService.delete(billPurchaseAttach);
+                attachService.delete(billPurchaseAttach.getAttach());
                 notificationService.notifyOne(Notification.builder()
                                                           .message("تم حذف الملف بنجاح")
                                                           .type("error").build(), principal.getName());
@@ -138,21 +138,21 @@ public class ContractAttachRest {
 
     @DeleteMapping(value = "deleteWhatever/{id}")
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_CONTRACT_DELETE')")
+    @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_DELETE')")
     public void deleteWhatever(@PathVariable Long id, Principal principal) {
-        ContractAttach contractAttach = contractAttachService.findOne(id);
-        if (contractAttach != null) {
-            contractAttachService.delete(contractAttach);
-            attachService.delete(contractAttach.getAttach());
+        BillPurchaseAttach billPurchaseAttach = billPurchaseAttachService.findOne(id);
+        if (billPurchaseAttach != null) {
+            billPurchaseAttachService.delete(billPurchaseAttach);
+            attachService.delete(billPurchaseAttach.getAttach());
             notificationService.notifyOne(Notification.builder()
                                                       .message("تم حذف الملف بنجاح")
                                                       .type("success").build(), principal.getName());
         }
     }
 
-    @GetMapping(value = "findByContract/{contractId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findByBillPurchase/{billPurchaseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findByContract(@PathVariable(value = "contractId") Long contractId) {
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contractAttachService.findByContractId(contractId));
+    public String findByBillPurchase(@PathVariable(value = "billPurchaseId") Long billPurchaseId) {
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchaseAttachService.findByBillPurchaseId(billPurchaseId));
     }
 }

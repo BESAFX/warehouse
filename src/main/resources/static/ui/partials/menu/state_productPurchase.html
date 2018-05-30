@@ -206,7 +206,7 @@
                                 <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{productPurchase.date | date: 'yyyy-MM-dd'}}</span>
                                 <span class="label label-info no-print">{{productPurchase.date | date: 'hh:mm a'}}</span>
                             </td>
-                            <td>{{productPurchase.seller.contact.shortName}}</td>
+                            <td>{{productPurchase.supplier.contact.shortName}}</td>
                             <td>{{productPurchase.quantity}}</td>
                             <td>{{productPurchase.unitPurchasePrice | currency:' SAR ':2}}</td>
                             <td

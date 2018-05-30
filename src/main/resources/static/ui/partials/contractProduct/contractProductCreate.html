@@ -9,7 +9,7 @@
             <span class="mdl-list__item-primary-content">
                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/product.{{iconSetType}}" width="24" height="24">
                 <strong>اضافة سلع جديدة للعقد رقم</strong>&nbsp;
-                <span class="label label-info">{{contract.code}}</span>
+                <span class="label label-info">{{billPurchase.code}}</span>
             </span>
         </h3>
     </div>
@@ -30,13 +30,13 @@
 
                     <div class="mdl-tabs__tab-bar">
 
-                        <a href="#panel-1-contract" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4 is-active">
+                        <a href="#panel-1-billPurchase" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4 is-active">
                             <span>المعلومات الأساسية</span>
                         </a>
 
                     </div>
 
-                    <div class="mdl-tabs__panel is-active" id="panel-1-contract">
+                    <div class="mdl-tabs__panel is-active" id="panel-1-billPurchase">
 
                         <div class="form-group row">
 
@@ -80,7 +80,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="productPurchase in contract.seller.productPurchases">
+                                    <tr ng-repeat="productPurchase in billPurchase.supplier.productPurchases">
                                         <td>{{productPurchase.product.name}}</td>
                                         <td class="fit"
                                             ng-class="{'success': productPurchase.remain > 0, 'danger': productPurchase.remain <=0}">
@@ -131,20 +131,20 @@
                                         </td>
                                     </tr>
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                        ng-show="!contract.seller.productPurchases || contract.seller.productPurchases.length ==0">
+                                        ng-show="!billPurchase.supplier.productPurchases || billPurchase.supplier.productPurchases.length ==0">
                                         <td colspan="8">
-                                            <p ng-if="!contract.seller.id">
-                                                <span>فضلاً اختر المستثمر أولاً لعرض كافة السلعة الموجودة بحسابه</span>
+                                            <p ng-if="!billPurchase.supplier.id">
+                                                <span>فضلاً اختر المورد أولاً لعرض كافة السلعة الموجودة بحسابه</span>
                                             </p>
-                                            <p ng-if="contract.seller.id">
-                                                <span>لا توجد سلع حتى الآن في حساب المستثمر / </span>
-                                                <span>{{contract.seller.contact.shortName}}</span>
+                                            <p ng-if="billPurchase.supplier.id">
+                                                <span>لا توجد سلع حتى الآن في حساب المورد / </span>
+                                                <span>{{billPurchase.supplier.contact.shortName}}</span>
                                                 <span ng-if="contains(me.team.authorities, ['ROLE_PRODUCT_PURCHASE_CREATE'])"> - لإضافة سلع جديدة قم بالضغط <a
                                                         href="" ng-click="ModalProvider.openProductPurchaseCreateModel()">هنا</a></span>
                                             </p>
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && billPurchase.supplier.productPurchases.length > 0">
                                         <td colspan="6" class="text-left info">
                                             <span>رأس المال</span>
                                         </td>
@@ -156,7 +156,7 @@
                                                    value="{{capitalCash | currency:'':2}}">
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && billPurchase.supplier.productPurchases.length > 0">
                                         <td colspan="6" class="text-left success">
                                             <span>نسبة الربح</span>
                                         </td>
@@ -169,7 +169,7 @@
                                                    value="{{profitPercentage | currency:'':2}}">
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && billPurchase.supplier.productPurchases.length > 0">
                                         <td colspan="6" class="text-left warning">
                                             <span>إجمالي الأصناف قبل (القيمة المضافة)</span>
                                         </td>
@@ -181,7 +181,7 @@
                                                    value="{{totalPrice | currency:'':2}}">
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && contract.seller.productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && billPurchase.supplier.productPurchases.length > 0">
                                         <td colspan="6" class="text-left warning">
                                             <span>إجمالي الأصناف بعد (القيمة المضافة)</span>
                                         </td>

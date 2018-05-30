@@ -1,15 +1,16 @@
 package com.besafx.app.service;
 
-import com.besafx.app.entity.ContractProduct;
+import com.besafx.app.entity.Supplier;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
-public interface ContractProductService extends PagingAndSortingRepository<ContractProduct, Long>, JpaSpecificationExecutor<ContractProduct> {
-    List<ContractProduct> findByContractId(Long id);
+public interface SupplierService extends PagingAndSortingRepository<Supplier, Long>, JpaSpecificationExecutor<Supplier> {
+
+    Supplier findTopByOrderByCodeDesc();
+
+    Supplier findByCodeAndIdIsNot(Integer code, Long id);
 }

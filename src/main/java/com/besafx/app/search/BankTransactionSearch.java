@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +29,9 @@ public class BankTransactionSearch {
             final Integer codeTo,
             final Long dateFrom,
             final Long dateTo,
-            final String sellerName,
-            final String sellerMobile,
-            final String sellerIdentityNumber,
+            final String supplierName,
+            final String supplierMobile,
+            final String supplierIdentityNumber,
             final List<String> transactionTypeCodes,
             Pageable pageRequest) {
 
@@ -54,17 +53,17 @@ public class BankTransactionSearch {
                 .ifPresent(value -> predicates.add(
                         (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
 
-        Optional.ofNullable(sellerName)
+        Optional.ofNullable(supplierName)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("name"), "%" + value + "%")));
 
-        Optional.ofNullable(sellerMobile)
+        Optional.ofNullable(supplierMobile)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("seller").get("contact").get("mobile"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("mobile"), "%" + value + "%")));
 
-        Optional.ofNullable(sellerIdentityNumber)
+        Optional.ofNullable(supplierIdentityNumber)
                 .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("seller").get("contact").get("identityNumber"), "%" + value + "%")));
+                        (root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("identityNumber"), "%" + value + "%")));
 
         Optional.ofNullable(transactionTypeCodes)
                 .ifPresent(value -> predicates.add(

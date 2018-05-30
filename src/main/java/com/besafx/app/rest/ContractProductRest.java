@@ -1,7 +1,7 @@
 package com.besafx.app.rest;
 
-import com.besafx.app.entity.ContractProduct;
-import com.besafx.app.service.ContractProductService;
+import com.besafx.app.entity.BillPurchaseProduct;
+import com.besafx.app.service.BillPurchaseProductService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,10 +27,10 @@ public class ContractProductRest {
     private final String FILTER_TABLE = "" +
             "**," +
             "productPurchase[id,product[id,name]]," +
-            "-contract";
+            "-billPurchase";
 
     @Autowired
-    private ContractProductService contractProductService;
+    private BillPurchaseProductService billPurchaseProductService;
 
     @Autowired
     private NotificationService notificationService;
@@ -39,26 +39,26 @@ public class ContractProductRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_CONTRACT_PRODUCT_CREATE')")
     @Transactional
-    public String create(@RequestBody ContractProduct contractProduct) {
-        contractProduct = contractProductService.save(contractProduct);
+    public String create(@RequestBody BillPurchaseProduct billPurchaseProduct) {
+        billPurchaseProduct = billPurchaseProductService.save(billPurchaseProduct);
         notificationService.notifyAll(Notification
                                               .builder()
                                               .message("تم اضافة سلعة للعقد بنجاح")
                                               .type("success").build());
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contractProduct);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchaseProduct);
     }
 
     @PostMapping(value = "createBatch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_CONTRACT_PRODUCT_CREATE')")
     @Transactional
-    public String createBatch(@RequestBody List<ContractProduct> contractProducts) {
-        contractProducts = Lists.newArrayList(contractProductService.save(contractProducts));
+    public String createBatch(@RequestBody List<BillPurchaseProduct> billPurchaseProducts) {
+        billPurchaseProducts = Lists.newArrayList(billPurchaseProductService.save(billPurchaseProducts));
         notificationService.notifyAll(Notification
                                               .builder()
                                               .message("تم اضافة عدد من السلع للعقد بنجاح")
                                               .type("success").build());
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contractProducts);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchaseProducts);
     }
 
     @DeleteMapping(value = "delete/{id}")
@@ -66,9 +66,9 @@ public class ContractProductRest {
     @PreAuthorize("hasRole('ROLE_CONTRACT_PRODUCT_DELETE')")
     @Transactional
     public void delete(@PathVariable Long id) {
-        ContractProduct contractProduct = contractProductService.findOne(id);
-        if (contractProduct != null) {
-            contractProductService.delete(id);
+        BillPurchaseProduct billPurchaseProduct = billPurchaseProductService.findOne(id);
+        if (billPurchaseProduct != null) {
+            billPurchaseProductService.delete(id);
             notificationService.notifyAll(Notification
                                                   .builder()
                                                   .message("تم حذف سلع من العقد بنجاح")
@@ -80,20 +80,20 @@ public class ContractProductRest {
     @ResponseBody
     public String findAll() {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       Lists.newArrayList(contractProductService.findAll()));
+                                       Lists.newArrayList(billPurchaseProductService.findAll()));
     }
 
     @GetMapping(value = "findOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       contractProductService.findOne(id));
+                                       billPurchaseProductService.findOne(id));
     }
 
     @GetMapping(value = "findByContract/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByContract(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       contractProductService.findByContractId(id));
+                                       billPurchaseProductService.findByContractId(id));
     }
 }

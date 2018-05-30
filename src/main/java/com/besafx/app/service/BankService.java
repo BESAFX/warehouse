@@ -9,5 +9,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public interface BankService extends PagingAndSortingRepository<Bank, Long>, JpaSpecificationExecutor<Bank> {
-    Bank findFirstBy();
+
 }

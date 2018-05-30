@@ -1,7 +1,7 @@
 package com.besafx.app.search;
 
-import com.besafx.app.entity.Seller;
-import com.besafx.app.service.SellerService;
+import com.besafx.app.entity.Supplier;
+import com.besafx.app.service.SupplierService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,19 +13,18 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class SellerSearch {
+public class SupplierSearch {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SellerSearch.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SupplierSearch.class);
 
     @Autowired
-    private SellerService sellerService;
+    private SupplierService supplierService;
 
-    public Page<Seller> filter(
+    public Page<Supplier> filter(
             final Integer codeFrom,
             final Integer codeTo,
             final Long registerDateFrom,
@@ -38,8 +37,8 @@ public class SellerSearch {
             final String qualification,
             final String filterCompareType,
             Pageable pageRequest
-                              ) {
-        List<Specification<Seller>> predicates = new ArrayList<>();
+                                ) {
+        List<Specification<Supplier>> predicates = new ArrayList<>();
         Optional.ofNullable(codeFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(codeTo).ifPresent(value -> predicates.add((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("code"), value)));
         Optional.ofNullable(registerDateFrom).ifPresent(value -> predicates.add((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("registerDate"),
@@ -68,9 +67,9 @@ public class SellerSearch {
                 result = filterCompareType.equalsIgnoreCase("and") ? Specifications.where(result).and(predicates.get(i)) : Specifications.where
                         (result).or(predicates.get(i));
             }
-            return sellerService.findAll(result, pageRequest);
+            return supplierService.findAll(result, pageRequest);
         } else {
-            return sellerService.findAll(pageRequest);
+            return supplierService.findAll(pageRequest);
         }
     }
 }

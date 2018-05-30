@@ -1,6 +1,6 @@
 package com.besafx.app.async;
 
-import com.besafx.app.entity.Seller;
+import com.besafx.app.entity.Supplier;
 import com.besafx.app.service.BankTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,9 @@ public class TransactionalService {
     private BankTransactionService bankTransactionService;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void setBankTransactionsSellerToNull(Seller seller) {
-        seller.getBankTransactions().stream().forEach(bankTransaction -> {
-            bankTransaction.setSeller(null);
+    public void setBankTransactionsSupplierToNull(Supplier supplier) {
+        supplier.getBankTransactions().stream().forEach(bankTransaction -> {
+            bankTransaction.setSupplier(null);
             bankTransactionService.save(bankTransaction);
         });
     }

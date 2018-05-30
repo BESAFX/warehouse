@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +37,10 @@ public class ProductPurchaseSearch {
             final Long productRegisterDateTo,
             final String productName,
             final Long productParentId,
-            //Seller Filters
-            final String sellerName,
-            final String sellerMobile,
-            final String sellerIdentityNumber,
+            //Supplier Filters
+            final String supplierName,
+            final String supplierMobile,
+            final String supplierIdentityNumber,
             Pageable pageRequest) {
 
         List<Specification<ProductPurchase>> predicates = new ArrayList<>();
@@ -68,11 +67,11 @@ public class ProductPurchaseSearch {
         Optional.ofNullable(productParentId).ifPresent(value -> predicates.add((root, cq, cb) -> cb.equal(root.get("product").get("parent").get
                 ("id"), value)));
 
-        Optional.ofNullable(sellerName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get("name"),
+        Optional.ofNullable(supplierName).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("name"),
                                                                                                     "%" + value + "%")));
-        Optional.ofNullable(sellerMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get
+        Optional.ofNullable(supplierMobile).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("supplier").get("contact").get
                 ("mobile"), "%" + value + "%")));
-        Optional.ofNullable(sellerIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("seller").get("contact").get
+        Optional.ofNullable(supplierIdentityNumber).ifPresent(value -> predicates.add((root, cq, cb) -> cb.like(root.get("supplier").get("contact").get
                 ("identityNumber"), "%" + value + "%")));
 
         if (!predicates.isEmpty()) {

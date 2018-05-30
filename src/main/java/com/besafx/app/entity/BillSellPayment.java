@@ -15,21 +15,21 @@ import java.util.Date;
 @Data
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContractPayment implements Serializable {
+public class BillSellPayment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @GenericGenerator(
-            name = "contractPaymentSequenceGenerator",
+            name = "billSellPaymentSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "CONTRACT_PAYMENT_SEQUENCE"),
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "BILL_SELL_PAYMENT_SEQUENCE"),
                     @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
             }
     )
     @Id
-    @GeneratedValue(generator = "contractPaymentSequenceGenerator")
+    @GeneratedValue(generator = "billSellPaymentSequenceGenerator")
     private Long id;
 
     private Integer code;
@@ -40,12 +40,8 @@ public class ContractPayment implements Serializable {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "contract")
-    private Contract contract;
-
-    @ManyToOne
-    @JoinColumn(name = "contractPremium")
-    private ContractPremium contractPremium;
+    @JoinColumn(name = "billSell")
+    private BillSell billSell;
 
     @ManyToOne
     @JoinColumn(name = "bankTransaction")
@@ -60,27 +56,9 @@ public class ContractPayment implements Serializable {
     private String note;
 
     @JsonCreator
-    public static ContractPayment Create(String jsonString) throws IOException {
+    public static BillSellPayment Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        ContractPayment contractPayment = mapper.readValue(jsonString, ContractPayment.class);
-        return contractPayment;
-    }
-
-    //حساب رأس المال
-    public Double getCapitalCash() {
-        try {
-            return this.amount - this.getProfit();
-        } catch (Exception ex) {
-            return 0.0;
-        }
-    }
-
-    //حساب الربح
-    public Double getProfit() {
-        try {
-            return (this.amount * this.contract.getProfitPercentage()) / 100;
-        } catch (Exception ex) {
-            return 0.0;
-        }
+        BillSellPayment billSellPayment = mapper.readValue(jsonString, BillSellPayment.class);
+        return billSellPayment;
     }
 }

@@ -41,10 +41,6 @@ public class BankTransaction implements Serializable {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "seller")
-    private Seller seller;
-
-    @ManyToOne
     @JoinColumn(name = "bank")
     private Bank bank;
 

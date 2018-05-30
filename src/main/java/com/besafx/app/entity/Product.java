@@ -77,8 +77,8 @@ public class Product implements Serializable {
         try {
             return this.productPurchases
                     .stream()
-                    .flatMap(productPurchase -> productPurchase.getContractProducts().stream())
-                    .mapToDouble(ContractProduct::getQuantity)
+                    .flatMap(productPurchase -> productPurchase.getBillPurchaseProducts().stream())
+                    .mapToDouble(BillPurchaseProduct::getQuantity)
                     .sum();
         } catch (Exception ex) {
             return 0.0;

@@ -11,21 +11,21 @@ import java.io.Serializable;
 
 @Data
 @Entity
-public class ContractAttach implements Serializable {
+public class BillPurchaseAttach implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @GenericGenerator(
-            name = "contractAttachSequenceGenerator",
+            name = "billPurchaseAttachSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "CONTRACT_ATTACH_SEQUENCE"),
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "BILL_PURCHASE_ATTACH_SEQUENCE"),
                     @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
             }
     )
     @Id
-    @GeneratedValue(generator = "contractAttachSequenceGenerator")
+    @GeneratedValue(generator = "billPurchaseAttachSequenceGenerator")
     private Long id;
 
     @ManyToOne
@@ -33,13 +33,13 @@ public class ContractAttach implements Serializable {
     private Attach attach;
 
     @ManyToOne
-    @JoinColumn(name = "contract")
-    private Contract contract;
+    @JoinColumn(name = "billPurchase")
+    private BillPurchase billPurchase;
 
     @JsonCreator
-    public static ContractAttach Create(String jsonString) throws IOException {
+    public static BillPurchaseAttach Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        ContractAttach attachment = mapper.readValue(jsonString, ContractAttach.class);
+        BillPurchaseAttach attachment = mapper.readValue(jsonString, BillPurchaseAttach.class);
         return attachment;
     }
 }

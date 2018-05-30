@@ -2,13 +2,13 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.entity.BankTransaction;
-import com.besafx.app.entity.Contract;
-import com.besafx.app.entity.ContractPayment;
+import com.besafx.app.entity.BillPurchase;
+import com.besafx.app.entity.BillPurchasePayment;
 import com.besafx.app.entity.Person;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.ContractPaymentSearch;
 import com.besafx.app.service.BankTransactionService;
-import com.besafx.app.service.ContractPaymentService;
+import com.besafx.app.service.BillPurchasePaymentService;
 import com.besafx.app.service.ContractService;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
@@ -36,20 +36,20 @@ public class ContractPaymentRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "-contract," +
+            "-billPurchase," +
             "-contractPremium," +
             "-bankTransaction," +
             "person[id,contact[id,shortName]]";
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "contract[id,code,totalPrice,seller[id,contact[id,shortName]],customer[id,contact[id,shortName,mobile]]]," +
+            "billPurchase[id,code,totalPrice,supplier[id,contact[id,shortName]],customer[id,contact[id,shortName,mobile]]]," +
             "-contractPremium," +
             "-bankTransaction," +
             "person[id,contact[id,shortName]]";
 
     @Autowired
-    private ContractPaymentService contractPaymentService;
+    private BillPurchasePaymentService billPurchasePaymentService;
 
     @Autowired
     private ContractPaymentSearch contractPaymentSearch;
@@ -67,24 +67,24 @@ public class ContractPaymentRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_CONTRACT_PAYMENT_CREATE')")
     @Transactional
-    public String create(@RequestBody ContractPayment contractPayment) {
-        ContractPayment topContractPayment = contractPaymentService.findTopByOrderByCodeDesc();
-        if (topContractPayment == null) {
-            contractPayment.setCode(1);
+    public String create(@RequestBody BillPurchasePayment billPurchasePayment) {
+        BillPurchasePayment topBillPurchasePayment = billPurchasePaymentService.findTopByOrderByCodeDesc();
+        if (topBillPurchasePayment == null) {
+            billPurchasePayment.setCode(1);
         } else {
-            contractPayment.setCode(topContractPayment.getCode() + 1);
+            billPurchasePayment.setCode(topBillPurchasePayment.getCode() + 1);
         }
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        Contract contract = contractService.findOne(contractPayment.getContract().getId());
-        contractPayment.setDate(new DateTime().toDate());
-        contractPayment.setPerson(caller);
+        BillPurchase billPurchase = contractService.findOne(billPurchasePayment.getBillPurchase().getId());
+        billPurchasePayment.setDate(new DateTime().toDate());
+        billPurchasePayment.setPerson(caller);
 
         LOG.info("عملية سداد للدفعة");
-        if (contractPayment.getAmount() > 0) {
+        if (billPurchasePayment.getAmount() > 0) {
             BankTransaction bankTransaction = new BankTransaction();
-            bankTransaction.setAmount(contractPayment.getAmount());
+            bankTransaction.setAmount(billPurchasePayment.getAmount());
             bankTransaction.setBank(Initializer.bank);
-            bankTransaction.setSeller(contract.getSeller());
+            bankTransaction.setSupplier(billPurchase.getSupplier());
             bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
             bankTransaction.setDate(new DateTime().toDate());
             bankTransaction.setPerson(caller);
@@ -93,21 +93,21 @@ public class ContractPaymentRest {
             builder.append(bankTransaction.getAmount());
             builder.append("ريال سعودي، ");
             builder.append(" لـ / ");
-            builder.append(bankTransaction.getSeller().getContact().getShortName());
+            builder.append(bankTransaction.getSupplier().getContact().getShortName());
             builder.append("، قسط مستحق بتاريخ ");
-            builder.append(DateConverter.getDateInFormat(contractPayment.getContractPremium().getDueDate()));
-            builder.append("، للعقد رقم / " + contract.getCode());
+            builder.append(DateConverter.getDateInFormat(billPurchasePayment.getContractPremium().getDueDate()));
+            builder.append("، للعقد رقم / " + billPurchase.getCode());
             bankTransaction.setNote(builder.toString());
 
-            contractPayment.setBankTransaction(bankTransactionService.save(bankTransaction));
-            contractPayment = contractPaymentService.save(contractPayment);
+            billPurchasePayment.setBankTransaction(bankTransactionService.save(bankTransaction));
+            billPurchasePayment = billPurchasePaymentService.save(billPurchasePayment);
 
             notificationService.notifyAll(Notification
                                                   .builder()
                                                   .message(builder.toString())
                                                   .type("success").build());
         }
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), contractPayment);
+        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchasePayment);
     }
 
     @DeleteMapping(value = "delete/{id}")
@@ -115,10 +115,10 @@ public class ContractPaymentRest {
     @PreAuthorize("hasRole('ROLE_CONTRACT_PAYMENT_DELETE')")
     @Transactional
     public void delete(@PathVariable Long id) {
-        ContractPayment contractPayment = contractPaymentService.findOne(id);
-        if (contractPayment != null) {
-            bankTransactionService.delete(contractPayment.getBankTransaction());
-            contractPaymentService.delete(id);
+        BillPurchasePayment billPurchasePayment = billPurchasePaymentService.findOne(id);
+        if (billPurchasePayment != null) {
+            bankTransactionService.delete(billPurchasePayment.getBankTransaction());
+            billPurchasePaymentService.delete(id);
             notificationService.notifyAll(Notification
                                                   .builder()
                                                   .message("تم حذف الدفعة وكل ما يتعلق بها من حسابات بنجاح")
@@ -130,33 +130,33 @@ public class ContractPaymentRest {
     @ResponseBody
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       contractPaymentService.findOne(id));
+                                       billPurchasePaymentService.findOne(id));
     }
 
     @GetMapping(value = "findByContract/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByContract(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       contractPaymentService.findByContractId(id));
+                                       billPurchasePaymentService.findByContractId(id));
     }
 
     @GetMapping(value = "findByDateBetween/{startDate}/{endDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String findByDateBetween(@PathVariable(value = "startDate") Long startDate, @PathVariable(value = "endDate") Long endDate) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_DETAILS),
-                                       contractPaymentService.findByDateBetween(
+                                       billPurchasePaymentService.findByDateBetween(
                                                new DateTime(startDate).withTimeAtStartOfDay().toDate(),
                                                new DateTime(endDate).plusDays(1).withTimeAtStartOfDay().toDate()
-                                      ));
+                                                                                   ));
     }
 
     @GetMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String filter(
-            //ContractPayment Filters
+            //BillPurchasePayment Filters
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo", required = false) final Long dateTo,
-            //Contract Filters
+            //BillPurchase Filters
             @RequestParam(value = "contractCodeFrom", required = false) final Integer contractCodeFrom,
             @RequestParam(value = "contractCodeTo", required = false) final Integer contractCodeTo,
             @RequestParam(value = "contractDateFrom", required = false) final Long contractDateFrom,
@@ -164,9 +164,9 @@ public class ContractPaymentRest {
             //Customer Filters
             @RequestParam(value = "customerName", required = false) final String customerName,
             @RequestParam(value = "customerMobile", required = false) final String customerMobile,
-            //Seller Filters
-            @RequestParam(value = "sellerName", required = false) final String sellerName,
-            @RequestParam(value = "sellerMobile", required = false) final String sellerMobile,
+            //Supplier Filters
+            @RequestParam(value = "supplierName", required = false) final String supplierName,
+            @RequestParam(value = "supplierMobile", required = false) final String supplierMobile,
             @RequestParam(value = "filterCompareType", required = false) final String filterCompareType,
             Pageable pageable) {
         return SquigglyUtils.stringify(
@@ -182,8 +182,8 @@ public class ContractPaymentRest {
                         contractDateTo,
                         customerName,
                         customerMobile,
-                        sellerName,
-                        sellerMobile,
+                        supplierName,
+                        supplierMobile,
                         filterCompareType,
                         pageable));
     }

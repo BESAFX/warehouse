@@ -1,5 +1,5 @@
-app.controller('withdrawCashCreateCtrl', ['SellerService', 'BankTransactionService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (SellerService, BankTransactionService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('withdrawCashCreateCtrl', ['SupplierService', 'BankTransactionService', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (SupplierService, BankTransactionService, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 

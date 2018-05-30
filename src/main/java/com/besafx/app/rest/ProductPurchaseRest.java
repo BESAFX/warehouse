@@ -2,7 +2,6 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.entity.BankTransaction;
-import com.besafx.app.entity.ContractPayment;
 import com.besafx.app.entity.Person;
 import com.besafx.app.entity.ProductPurchase;
 import com.besafx.app.init.Initializer;
@@ -25,7 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,10 +34,10 @@ public class ProductPurchaseRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "-contractProducts," +
+            "-billPurchaseProducts," +
             "product[id,name]," +
             "-bankTransaction," +
-            "seller[id,contact[id,shortName]]," +
+            "supplier[id,contact[id,shortName]]," +
             "person[id,contact[id,shortName]]";
 
     @Autowired
@@ -74,7 +72,7 @@ public class ProductPurchaseRest {
         LOG.info("إنشاء عملية السحب للشراء");
         BankTransaction bankTransactionWithdrawPurchase = new BankTransaction();
         bankTransactionWithdrawPurchase.setBank(Initializer.bank);
-        bankTransactionWithdrawPurchase.setSeller(productPurchase.getSeller());
+        bankTransactionWithdrawPurchase.setSupplier(productPurchase.getSupplier());
         bankTransactionWithdrawPurchase.setAmount(productPurchase.getQuantity() * productPurchase.getUnitPurchasePrice());
         bankTransactionWithdrawPurchase.setTransactionType(Initializer.transactionTypeWithdrawPurchase);
         bankTransactionWithdrawPurchase.setDate(new DateTime().toDate());
@@ -84,7 +82,7 @@ public class ProductPurchaseRest {
         builder.append(bankTransactionWithdrawPurchase.getAmount());
         builder.append("ريال سعودي، ");
         builder.append(" من / ");
-        builder.append(bankTransactionWithdrawPurchase.getSeller().getContact().getShortName());
+        builder.append(bankTransactionWithdrawPurchase.getSupplier().getContact().getShortName());
         builder.append("، قيمة شراء " + productPurchase.getProduct().getName());
         builder.append("، عدد /  " + productPurchase.getQuantity());
         builder.append("، بسعر الوحدة /  " + productPurchase.getUnitPurchasePrice());
@@ -130,34 +128,34 @@ public class ProductPurchaseRest {
     public String findMyProductPurchases() {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       productPurchaseService.findBySeller(caller.getCompany().getSeller()));
+                                       productPurchaseService.findBySupplier(caller.getCompany().getSupplier()));
     }
 
-    @GetMapping(value = "findBySeller/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findBySupplier/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findBySeller(@PathVariable Long id) {
+    public String findBySupplier(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       productPurchaseService.findBySellerId(id));
+                                       productPurchaseService.findBySupplierId(id));
     }
 
-    @GetMapping(value = "findBySellerAndRemainFull/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findBySupplierAndRemainFull/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findBySellerAndRemainFull(@PathVariable Long id) {
+    public String findBySupplierAndRemainFull(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        productPurchaseService
-                                               .findBySellerId(id)
+                                               .findBySupplierId(id)
                                                .stream()
                                                .filter(productPurchase -> productPurchase.getRemain() > 0)
                                                .collect(Collectors.toList())
                                       );
     }
 
-    @GetMapping(value = "findBySellerAndRemainEmpty/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findBySupplierAndRemainEmpty/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findBySellerAndRemainEmpty(@PathVariable Long id) {
+    public String findBySupplierAndRemainEmpty(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        productPurchaseService
-                                               .findBySellerId(id)
+                                               .findBySupplierId(id)
                                                .stream()
                                                .filter(productPurchase -> productPurchase.getRemain() <= 0)
                                                .collect(Collectors.toList())
@@ -179,10 +177,10 @@ public class ProductPurchaseRest {
             @RequestParam(value = "productRegisterDateTo", required = false) final Long productRegisterDateTo,
             @RequestParam(value = "productName", required = false) final String productName,
             @RequestParam(value = "productParentId", required = false) final Long productParentId,
-            //Seller Filters
-            @RequestParam(value = "sellerName", required = false) final String sellerName,
-            @RequestParam(value = "sellerMobile", required = false) final String sellerMobile,
-            @RequestParam(value = "sellerIdentityNumber", required = false) final String sellerIdentityNumber,
+            //Supplier Filters
+            @RequestParam(value = "supplierName", required = false) final String supplierName,
+            @RequestParam(value = "supplierMobile", required = false) final String supplierMobile,
+            @RequestParam(value = "supplierIdentityNumber", required = false) final String supplierIdentityNumber,
             Pageable pageable) {
         return SquigglyUtils.stringify(
                 Squiggly.init(
@@ -199,9 +197,9 @@ public class ProductPurchaseRest {
                         productRegisterDateTo,
                         productName,
                         productParentId,
-                        sellerName,
-                        sellerMobile,
-                        sellerIdentityNumber,
+                        supplierName,
+                        supplierMobile,
+                        supplierIdentityNumber,
                         pageable));
     }
 }

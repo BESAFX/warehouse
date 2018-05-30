@@ -28,24 +28,24 @@
             </div>
             <div class="mdl-card__actions">
                 <a class="card-image__filename">
-                    <span>العملاء/الكفلاء</span>
+                    <span>العملاء</span>
                 </a>
             </div>
         </div>
 
         <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 parent text-center"
              ng-show="contains(me.team.authorities, [
-            'ROLE_SELLER_CREATE',
-            'ROLE_SELLER_UPDATE',
-            'ROLE_SELLER_DELETE',
+            'ROLE_SUPPLIER_CREATE',
+            'ROLE_SUPPLIER_UPDATE',
+            'ROLE_SUPPLIER_DELETE',
             ])"
-             ng-click="openStateSeller()">
-            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')">
+             ng-click="openStateSupplier()">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/supplier.{{iconSetType}}')">
                 <div class="mdl-card__title mdl-card--expand"></div>
             </div>
             <div class="mdl-card__actions">
                 <a class="card-image__filename">
-                    <span>المستثمرين</span>
+                    <span>الموردين</span>
                 </a>
             </div>
         </div>
@@ -73,7 +73,7 @@
             'ROLE_CONTRACT_DELETE',
             ])"
              ng-click="openStateContract()">
-            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/contract.{{iconSetType}}')">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/billPurchase.{{iconSetType}}')">
                 <div class="mdl-card__title mdl-card--expand"></div>
             </div>
             <div class="mdl-card__actions">
@@ -107,7 +107,7 @@
             'ROLE_CONTRACT_PAYMENT_DELETE',
             ])"
              ng-click="openStateContractPayment()">
-            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/contractPayment.{{iconSetType}}')">
+            <div class="card-image mdl-card" style="background-image: url('/ui/img/{{iconSet}}/billPurchasePayment.{{iconSetType}}')">
                 <div class="mdl-card__title mdl-card--expand"></div>
             </div>
             <div class="mdl-card__actions">

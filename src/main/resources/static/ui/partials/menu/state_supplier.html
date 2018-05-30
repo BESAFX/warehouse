@@ -9,7 +9,7 @@
                     </a>
                 </li>
                 <li>
-                    <span>سجل المستثمرين</span>
+                    <span>سجل الموردين</span>
                 </li>
             </ul>
         </div>
@@ -17,24 +17,24 @@
         <div class="row">
 
             <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
-                <button id="seller-menu-lower-right" style="width: 100%;"
+                <button id="supplier-menu-lower-right" style="width: 100%;"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
                     <span>العمليات</span>
                 </button>
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                    for="seller-menu-lower-right">
+                    for="supplier-menu-lower-right">
                     <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
-                        ng-click="openSellersFilter()">
+                        ng-click="openSuppliersFilter()">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
                         <span>البحث المتقدم</span>
                     </span>
                     </li>
-                    <li class="mdl-menu__item mdl-list__item" ng-click="newSeller()"
-                        ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
+                    <li class="mdl-menu__item mdl-list__item" ng-click="newSupplier()"
+                        ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
-                        <span>مستثمر جديد...</span>
+                        <span>مورد جديد...</span>
                     </span>
                     </li>
                 </ul>
@@ -66,11 +66,11 @@
     </div>
 </div>
 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])">
     <div class="panel panel-body box-info">
         <p>
-            <span>مرحباً بك عزيزي العميل ، يمكنك إنشاء حساب مستثمر من خلال هذا الرابط </span>
-            <a href="" ng-click="newSeller()">اضغط هنا</a>
+            <span>مرحباً بك عزيزي العميل ، يمكنك إنشاء حساب مورد من خلال هذا الرابط </span>
+            <a href="" ng-click="newSupplier()">اضغط هنا</a>
         </p>
     </div>
 </div>
@@ -83,16 +83,16 @@
                 style="margin-top: 2px;">
                 <li>
                     <a href=""
-                       ng-click="openSellersFilter()"
+                       ng-click="openSuppliersFilter()"
                        tooltip-append-to-body="true"
                        uib-tooltip="تحديث البيانات">
                         <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
                     </a>
                     <a href=""
-                       ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])"
-                       ng-click="newSeller()"
+                       ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])"
+                       ng-click="newSupplier()"
                        tooltip-append-to-body="true"
-                       uib-tooltip="مستثمر جديد">
+                       uib-tooltip="مورد جديد">
                         <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24" height="24">
                     </a>
                 </li>
@@ -103,7 +103,7 @@
         </div>
         <div class="panel-body">
 
-            <div class="form-group row" ng-if="pageSeller.totalElements > 0 && (toggleList===1 || toggleList===2)">
+            <div class="form-group row" ng-if="pageSupplier.totalElements > 0 && (toggleList===1 || toggleList===2)">
 
                 <div class="pull-right btn-toolbar">
 
@@ -111,9 +111,9 @@
 
                         <button uib-tooltip="السابق"
                                 tooltip-append-to-body="true"
-                                ng-disabled="pageSeller.first"
+                                ng-disabled="pageSupplier.first"
                                 type="button"
-                                ng-click="selectPrevSellersPage()"
+                                ng-click="selectPrevSuppliersPage()"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
                             <i class="material-icons md-36">keyboard_arrow_right</i>
                         </button>
@@ -124,14 +124,14 @@
                                    readonly
                                    class="form-control"
                                    style="text-align: center!important;"
-                                   ng-model="pageSeller.currentPageString">
+                                   ng-model="pageSupplier.currentPageString">
                         </div>
 
                         <button uib-tooltip="التالي"
                                 tooltip-append-to-body="true"
-                                ng-disabled="pageSeller.last"
+                                ng-disabled="pageSupplier.last"
                                 type="button"
-                                ng-click="selectNextSellersPage()"
+                                ng-click="selectNextSuppliersPage()"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
                             <i class="material-icons md-36">keyboard_arrow_left</i>
                         </button>
@@ -139,7 +139,7 @@
                         <button uib-tooltip="طباعة"
                                 tooltip-append-to-body="true"
                                 type="button"
-                                ng-click="printToCart('printSellerTable', 'سجل المستثمرين')"
+                                ng-click="printToCart('printSupplierTable', 'سجل الموردين')"
                                 class="mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                             <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
                         </button>
@@ -154,23 +154,23 @@
                            class="form-control"
                            placeholder="بحث سريع"
                            ng-change="refreshGUI()"
-                           ng-model="sellers.searchText">
+                           ng-model="suppliers.searchText">
 
                 </div>
 
             </div>
 
-            <div class="row" ng-show="toggleList===1" id="printSellerTable">
+            <div class="row" ng-show="toggleList===1" id="printSupplierTable">
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th class="fit no-print">
-                                <label id="checkAllSellers" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                                <label id="checkAllSuppliers" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
                                        for="checkbox-0">
                                     <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
-                                           ng-model="sellers.checkAll" ng-change="checkAllSellers()">
+                                           ng-model="suppliers.checkAll" ng-change="checkAllSuppliers()">
                                 </label>
                             </th>
 
@@ -201,35 +201,35 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="seller in sellers | filter:sellers.searchText"
-                            ng-class="{'mdl-color--primary-dark' : seller.isSelected, 'mdl-color-text--white' : seller.isSelected}"
-                            context-menu="rowMenuSeller">
+                        <tr ng-repeat="supplier in suppliers | filter:suppliers.searchText"
+                            ng-class="{'mdl-color--primary-dark' : supplier.isSelected, 'mdl-color-text--white' : supplier.isSelected}"
+                            context-menu="rowMenuSupplier">
                             <td class="fit no-print">
                                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
-                                       for="checkbox-seller-{{seller.id}}">
+                                       for="checkbox-supplier-{{supplier.id}}">
                                     <input type="checkbox"
-                                           id="checkbox-seller-{{seller.id}}"
+                                           id="checkbox-supplier-{{supplier.id}}"
                                            class="mdl-checkbox__input"
-                                           ng-model="seller.isSelected" ng-click="checkSeller()">
+                                           ng-model="supplier.isSelected" ng-click="checkSupplier()">
                                 </label>
                             </td>
                             <td>{{$index+1}}</td>
                             <td>
-                                <span class="label label-success no-print">{{seller.enabled ? 'مفعل' : ''}}</span>
-                                <span class="label label-danger no-print">{{seller.enabled ? '' : 'معطل'}}</span>
-                                {{seller.contact.shortName}}
+                                <span class="label label-success no-print">{{supplier.enabled ? 'مفعل' : ''}}</span>
+                                <span class="label label-danger no-print">{{supplier.enabled ? '' : 'معطل'}}</span>
+                                {{supplier.contact.shortName}}
                             </td>
-                            <td>{{seller.contact.nationality}}</td>
-                            <td>{{seller.contact.identityNumber}}</td>
-                            <td>{{seller.contact.mobile}}</td>
-                            <td>{{seller.contact.phone}}</td>
+                            <td>{{supplier.contact.nationality}}</td>
+                            <td>{{supplier.contact.identityNumber}}</td>
+                            <td>{{supplier.contact.mobile}}</td>
+                            <td>{{supplier.contact.phone}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
-                            ng-if="!sellers || sellers.length ==0">
+                            ng-if="!suppliers || suppliers.length ==0">
                             <td colspan="7">
-                                <p ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])">
-                                    <span>لا يوجد مستثمرين حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
-                                    <a href="" ng-click="newSeller()">اضغط هنا</a>
+                                <p ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])">
+                                    <span>لا يوجد موردين حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
+                                    <a href="" ng-click="newSupplier()">اضغط هنا</a>
                                 </p>
                             </td>
                         </tr>
@@ -241,17 +241,17 @@
 
             <div class="row" ng-show="toggleList===2">
 
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="seller in sellers">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="supplier in suppliers">
                     <!-- CONTACT ITEM -->
                     <div class="panel panel-default">
                         <div class="panel-body profile mdl-color--primary-dark">
                             <div class="profile-image">
                                 <img width="100" height="100"
-                                     ng-src="/ui/img/{{iconSet}}/seller.{{iconSetType}}"
-                                     alt="{{seller.code}}"/>
+                                     ng-src="/ui/img/{{iconSet}}/supplier.{{iconSetType}}"
+                                     alt="{{supplier.code}}"/>
                             </div>
                             <div class="profile-data">
-                                <div class="profile-data-name">{{seller.contact.shortName}}</div>
+                                <div class="profile-data-name">{{supplier.contact.shortName}}</div>
                             </div>
                             <div class="profile-controls">
                                 <!--<a href="" class="profile-control-left"><span class="fa fa-info-circle"></span></a>-->
@@ -262,27 +262,27 @@
                             <div class="contact-info">
                                 <p>
                                     <strong>الاسم</strong>
-                                    {{seller.contact.shortName}}
+                                    {{supplier.contact.shortName}}
                                 </p>
                                 <hr>
                                 <p>
                                     <strong>رقم الجوال</strong>
-                                    {{seller.contact.mobile}}
+                                    {{supplier.contact.mobile}}
                                 </p>
                                 <hr>
                                 <p>
                                     <strong>السجل المدني</strong>
-                                    {{seller.contact.identityNumber}}
+                                    {{supplier.contact.identityNumber}}
                                 </p>
                             </div>
                         </div>
                         <div class="panel-footer">
                             <div class="row">
-                                <button uib-tooltip="مستثمر جديد"
+                                <button uib-tooltip="مورد جديد"
                                         tooltip-append-to-body="true"
                                         type="button"
-                                        ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])"
-                                        ng-click="newSeller();"
+                                        ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])"
+                                        ng-click="newSupplier();"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/add.{{iconSetType}}" width="24"
                                          height="24">
@@ -290,8 +290,8 @@
                                 <button uib-tooltip="تعديل"
                                         tooltip-append-to-body="true"
                                         type="button"
-                                        ng-if="contains(me.team.authorities, ['ROLE_SELLER_UPDATE'])"
-                                        ng-click="ModalProvider.openSellerUpdateModel(seller)"
+                                        ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_UPDATE'])"
+                                        ng-click="ModalProvider.openSupplierUpdateModel(supplier)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24"
                                          height="24">
@@ -299,8 +299,8 @@
                                 <button uib-tooltip="حذف"
                                         tooltip-append-to-body="true"
                                         type="button"
-                                        ng-if="contains(me.team.authorities, ['ROLE_SELLER_DELETE'])"
-                                        ng-click="deleteSeller(seller)"
+                                        ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_DELETE'])"
+                                        ng-click="deleteSupplier(supplier)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24"
                                          height="24">

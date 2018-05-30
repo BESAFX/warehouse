@@ -17295,7 +17295,7 @@
 
         /* Design notes on the default implementation for SCE.
          *
-         * The API contract for the SCE delegate
+         * The API billPurchase for the SCE delegate
          * -------------------------------------
          * The SCE delegate object must provide the following 3 methods:
          *
@@ -17314,14 +17314,14 @@
          *     This function should return the a value that is safe to use in the context specified by
          *     contextEnum or throw and exception otherwise.
          *
-         * NOTE: This contract deliberately does NOT state that values returned by trustAs() must be
+         * NOTE: This billPurchase deliberately does NOT state that values returned by trustAs() must be
          * opaque or wrapped in some holder object.  That happens to be an implementation detail.  For
          * instance, an implementation could maintain a registry of all trusted objects by context.  In
          * such a case, trustAs() would return the same object that was passed in.  getTrusted() would
          * return the same object passed in if it was found in the registry under a compatible context or
          * throw an exception otherwise.  An implementation might only wrap values some of the time based
          * on some criteria.  getTrusted() might return a value and not throw an exception for special
-         * constants or objects even if not wrapped.  All such implementations fulfill this contract.
+         * constants or objects even if not wrapped.  All such implementations fulfill this billPurchase.
          *
          *
          * A note on the inheritance model for SCE contexts
@@ -17329,7 +17329,7 @@
          * I've used inheritance and made RESOURCE_URL wrapped types a subtype of URL wrapped types.  This
          * is purely an implementation details.
          *
-         * The contract is simply this:
+         * The billPurchase is simply this:
          *
          *     getTrusted($sce.RESOURCE_URL, value) succeeding implies that getTrusted($sce.URL, value)
          *     will also succeed.

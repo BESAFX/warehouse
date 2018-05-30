@@ -9,53 +9,53 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContractProduct implements Serializable {
+public class BillPurchaseProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @GenericGenerator(
-            name = "contractProductSequenceGenerator",
+            name = "billPurchaseProductSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "CONTRACT_PRODUCT_SEQUENCE"),
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "BILL_PURCHASE_PRODUCT_SEQUENCE"),
                     @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
             }
     )
     @Id
-    @GeneratedValue(generator = "contractProductSequenceGenerator")
+    @GeneratedValue(generator = "billPurchaseProductSequenceGenerator")
     private Long id;
 
     private Double quantity;
 
+    private Double unitPurchasePrice;
+
     private Double unitSellPrice;
 
-    private Double unitVat;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "contract")
-    private Contract contract;
+    @JoinColumn(name = "product")
+    private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "productPurchase")
-    private ProductPurchase productPurchase;
+    @JoinColumn(name = "bankTransaction")
+    private BankTransaction bankTransaction;
+
+    @ManyToOne
+    @JoinColumn(name = "billPurchase")
+    private BillPurchase billPurchase;
 
     @JsonCreator
-    public static ContractProduct Create(String jsonString) throws IOException {
+    public static BillPurchaseProduct Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        ContractProduct contractProduct = mapper.readValue(jsonString, ContractProduct.class);
-        return contractProduct;
-    }
-
-    public Double getTotalPriceAfterVat() {
-        try {
-            return (this.quantity * this.unitSellPrice) + (this.quantity * this.unitVat);
-        } catch (Exception ex) {
-            return 0.0;
-        }
+        BillPurchaseProduct billPurchaseProduct = mapper.readValue(jsonString, BillPurchaseProduct.class);
+        return billPurchaseProduct;
     }
 }

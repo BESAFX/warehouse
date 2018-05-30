@@ -1,5 +1,5 @@
-app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 'ProductPurchaseService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
-    function (SellerService, ProductService, ProductPurchaseService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
+app.controller('productPurchaseCreateCtrl', ['SupplierService', 'ProductService', 'ProductPurchaseService', 'ModalProvider', '$scope', '$rootScope', '$timeout', '$log', '$uibModalInstance',
+    function (SupplierService, ProductService, ProductPurchaseService, ModalProvider, $scope, $rootScope, $timeout, $log, $uibModalInstance) {
 
         $scope.buffer = {};
 
@@ -7,7 +7,7 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
 
         $scope.productPurchases = [];
 
-        $scope.sellers = [];
+        $scope.suppliers = [];
 
         $scope.newParent = function () {
             ModalProvider.openParentCreateModel().result.then(function (data) {
@@ -40,12 +40,12 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
             }
         };
 
-        $scope.searchSellers = function ($select, $event) {
+        $scope.searchSuppliers = function ($select, $event) {
 
             // no event means first load!
             if (!$event) {
                 $scope.page = 0;
-                $scope.sellers = [];
+                $scope.suppliers = [];
             } else {
                 $event.stopPropagation();
                 $event.preventDefault();
@@ -81,16 +81,16 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
                     break;
             }
 
-            return SellerService.filter(search.join("")).then(function (data) {
+            return SupplierService.filter(search.join("")).then(function (data) {
                 $scope.buffer.last = data.last;
-                return $scope.sellers = $scope.sellers.concat(data.content);
+                return $scope.suppliers = $scope.suppliers.concat(data.content);
             });
 
         };
 
-        $scope.findSellerBalance = function (seller) {
-            SellerService.findSellerBalance(seller.id).then(function (value) {
-               return $scope.buffer.seller = value;
+        $scope.findSupplierBalance = function (supplier) {
+            SupplierService.findSupplierBalance(supplier.id).then(function (value) {
+               return $scope.buffer.supplier = value;
             })
         };
 
@@ -106,7 +106,7 @@ app.controller('productPurchaseCreateCtrl', ['SellerService', 'ProductService', 
             var tempProductPurchases = [];
             angular.forEach($scope.productPurchases, function (productPurchase) {
                 var tempProductPurchase = JSON.parse(JSON.stringify(productPurchase));
-                tempProductPurchase.seller = $scope.buffer.seller;
+                tempProductPurchase.supplier = $scope.buffer.supplier;
                 tempProductPurchase.note = $scope.buffer.note;
                 ProductPurchaseService.create(tempProductPurchase).then(function (data) {
                     tempProductPurchases.push(data);

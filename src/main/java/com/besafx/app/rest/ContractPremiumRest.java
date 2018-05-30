@@ -1,11 +1,11 @@
 package com.besafx.app.rest;
 
 import com.besafx.app.config.SendSMS;
-import com.besafx.app.entity.ContractPayment;
+import com.besafx.app.entity.BillPurchasePayment;
 import com.besafx.app.entity.ContractPremium;
 import com.besafx.app.search.ContractPremiumSearch;
 import com.besafx.app.service.BankTransactionService;
-import com.besafx.app.service.ContractPaymentService;
+import com.besafx.app.service.BillPurchasePaymentService;
 import com.besafx.app.service.ContractPremiumService;
 import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
@@ -21,11 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -37,7 +35,7 @@ public class ContractPremiumRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "contract[id,code,customer[id,contact,shortName],seller[id,contact,shortName]]," +
+            "billPurchase[id,code,customer[id,contact,shortName],supplier[id,contact,shortName]]," +
             "-contractPayments";
 
     @Autowired
@@ -47,7 +45,7 @@ public class ContractPremiumRest {
     private ContractPremiumSearch contractPremiumSearch;
 
     @Autowired
-    private ContractPaymentService contractPaymentService;
+    private BillPurchasePaymentService billPurchasePaymentService;
 
     @Autowired
     private BankTransactionService bankTransactionService;
@@ -78,11 +76,11 @@ public class ContractPremiumRest {
     public void delete(@PathVariable Long id) {
         ContractPremium contractPremium = contractPremiumService.findOne(id);
         if (contractPremium != null) {
-            contractPaymentService.delete(contractPremium.getContractPayments());
+            billPurchasePaymentService.delete(contractPremium.getContractPayments());
             bankTransactionService.delete(
                     contractPremium.getContractPayments()
                                    .stream()
-                                   .map(ContractPayment::getBankTransaction)
+                                   .map(BillPurchasePayment::getBankTransaction)
                                    .collect(Collectors.toList())
                                          );
             contractPremiumService.delete(id);
@@ -142,7 +140,7 @@ public class ContractPremiumRest {
             //ContractPremium Filters
             @RequestParam(value = "dueDateFrom", required = false) final Long dueDateFrom,
             @RequestParam(value = "dueDateTo", required = false) final Long dueDateTo,
-            //Contract Filters
+            //BillPurchase Filters
             @RequestParam(value = "contractCodeFrom", required = false) final Integer contractCodeFrom,
             @RequestParam(value = "contractCodeTo", required = false) final Integer contractCodeTo,
             @RequestParam(value = "contractDateFrom", required = false) final Long contractDateFrom,
@@ -150,9 +148,9 @@ public class ContractPremiumRest {
             //Customer Filters
             @RequestParam(value = "customerName", required = false) final String customerName,
             @RequestParam(value = "customerMobile", required = false) final String customerMobile,
-            //Seller Filters
-            @RequestParam(value = "sellerName", required = false) final String sellerName,
-            @RequestParam(value = "sellerMobile", required = false) final String sellerMobile,
+            //Supplier Filters
+            @RequestParam(value = "supplierName", required = false) final String supplierName,
+            @RequestParam(value = "supplierMobile", required = false) final String supplierMobile,
             @RequestParam(value = "filterCompareType", required = false) final String filterCompareType,
             Pageable pageable) {
         return SquigglyUtils.stringify(
@@ -168,8 +166,8 @@ public class ContractPremiumRest {
                         contractDateTo,
                         customerName,
                         customerMobile,
-                        sellerName,
-                        sellerMobile,
+                        supplierName,
+                        supplierMobile,
                         filterCompareType,
                         pageable));
     }

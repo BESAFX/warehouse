@@ -7,7 +7,7 @@
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/seller.{{iconSetType}}" width="24" height="24">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/supplier.{{iconSetType}}" width="24" height="24">
                 <strong>{{title}}</strong>
             </span>
         </h3>
@@ -28,12 +28,12 @@
                 <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
                     <div class="mdl-tabs__tab-bar">
-                        <a href="#panel-1-seller" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6 is-active">
+                        <a href="#panel-1-supplier" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6 is-active">
                             <span>بيانات الحساب</span>
                         </a>
                     </div>
 
-                    <div class="mdl-tabs__panel is-active" id="panel-1-seller">
+                    <div class="mdl-tabs__panel is-active" id="panel-1-supplier">
 
                         <div class="form-group row">
 
@@ -45,7 +45,7 @@
                                        disable-validation-message=""
                                        class="form-control"
                                        placeholder="الاسم رباعياً"
-                                       ng-model="seller.contact.name">
+                                       ng-model="supplier.contact.name">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -54,7 +54,7 @@
                                        type="text"
                                        class="form-control"
                                        placeholder="يكتب مكان الميلاد هنا"
-                                       ng-model="seller.contact.birthLocation">
+                                       ng-model="supplier.contact.birthLocation">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -64,7 +64,7 @@
                                            id="endDate"
                                            type="text"
                                            class="form-control is-calendarPicker"
-                                           ng-model="seller.contact.birthDate"
+                                           ng-model="supplier.contact.birthDate"
                                            calendarType="ummalqura"
                                            language="en"
                                            dateFormat="yyyy/mm/dd"
@@ -79,8 +79,8 @@
                                 <input id="nationality"
                                        type="text"
                                        class="form-control"
-                                       placeholder="جنسية المستثمر"
-                                       ng-model="seller.contact.nationality">
+                                       placeholder="جنسية المورد"
+                                       ng-model="supplier.contact.nationality">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -91,7 +91,7 @@
                                        disable-validation-message=""
                                        class="form-control"
                                        placeholder="رقم الهوية الوطنية / الاقامة المكون من 11 رقم"
-                                       ng-model="seller.contact.identityNumber">
+                                       ng-model="supplier.contact.identityNumber">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -102,7 +102,7 @@
                                        disable-validation-message=""
                                        class="form-control"
                                        placeholder="0590780551"
-                                       ng-model="seller.contact.mobile">
+                                       ng-model="supplier.contact.mobile">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -111,7 +111,7 @@
                                        type="text"
                                        class="form-control"
                                        placeholder="0590780551"
-                                       ng-model="seller.contact.phone">
+                                       ng-model="supplier.contact.phone">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -122,7 +122,7 @@
                                        disable-validation-message=""
                                        class="form-control"
                                        placeholder="اسم جهة العمل"
-                                       ng-model="seller.contact.qualification">
+                                       ng-model="supplier.contact.qualification">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -130,18 +130,18 @@
                                 <input id="address"
                                        type="text"
                                        class="form-control"
-                                       placeholder="عنوان المستثمر للتواصل به"
-                                       ng-model="seller.contact.address">
+                                       placeholder="عنوان المورد للتواصل به"
+                                       ng-model="supplier.contact.address">
                             </div>
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="action=='create'">
-                                <label for="openCash" class="control-label">الرصيد الإفتتاحي (إيداع رصيد إفتتاحي للمستثمر)</label>
+                                <label for="openCash" class="control-label">الرصيد الإفتتاحي (إيداع رصيد إفتتاحي للمورد)</label>
                                 <input id="openCash"
                                        type="number"
                                        min="0"
                                        class="form-control"
                                        placeholder="اختياري"
-                                       ng-model="seller.openCash">
+                                       ng-model="supplier.openCash">
                             </div>
 
                         </div>

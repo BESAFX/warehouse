@@ -20,15 +20,15 @@
             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 
                 <div class="mdl-tabs__tab-bar">
-                    <a href="#panel-1-contract-filter" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6 is-active">
+                    <a href="#panel-1-billPurchase-filter" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6 is-active">
                         <span>البيانات الأساسية</span>
                     </a>
-                    <a href="#panel-2-contract-filter" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <a href="#panel-2-billPurchase-filter" class="mdl-tabs__tab col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <span>خيارات</span>
                     </a>
                 </div>
 
-                <div class="mdl-tabs__panel is-active" id="panel-1-contract-filter">
+                <div class="mdl-tabs__panel is-active" id="panel-1-billPurchase-filter">
 
                     <div class="form-group row">
 
@@ -140,28 +140,28 @@
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="sellerName" class="control-label">اسم المستثمر</label>
-                            <input id="sellerName"
+                            <label for="supplierName" class="control-label">اسم المورد</label>
+                            <input id="supplierName"
                                    type="text"
                                    class="form-control"
                                    placeholder="اختياري"
-                                   ng-model="paramContract.sellerName">
+                                   ng-model="paramContract.supplierName">
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <label for="sellerMobile" class="control-label">رقم جوال المستثمر</label>
-                            <input id="sellerMobile"
+                            <label for="supplierMobile" class="control-label">رقم جوال المورد</label>
+                            <input id="supplierMobile"
                                    type="text"
                                    class="form-control"
                                    placeholder="اختياري"
-                                   ng-model="paramContract.sellerMobile">
+                                   ng-model="paramContract.supplierMobile">
                         </div>
 
                     </div>
 
                 </div>
 
-                <div class="mdl-tabs__panel" id="panel-2-contract-filter">
+                <div class="mdl-tabs__panel" id="panel-2-billPurchase-filter">
 
                     <div class="form-group row">
 
@@ -202,8 +202,8 @@
                                                 <option value="date">التاريخ</option>
                                                 <option value="customer.contact.name">اسم العميل</option>
                                                 <option value="customer.contact.mobile">رقم جوال العميل</option>
-                                                <option value="seller.contact.name">اسم المستثمر</option>
-                                                <option value="seller.contact.mobile">رقم جوال المستثمر</option>
+                                                <option value="supplier.contact.name">اسم المورد</option>
+                                                <option value="supplier.contact.mobile">رقم جوال المورد</option>
                                             </select>
                                         </div>
                                     </td>

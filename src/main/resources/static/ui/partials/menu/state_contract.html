@@ -17,12 +17,12 @@
         <div class="row">
 
             <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
-                <button id="contract-menu-lower-right" style="width: 100%;"
+                <button id="billPurchase-menu-lower-right" style="width: 100%;"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
                     <span>العمليات</span>
                 </button>
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                    for="contract-menu-lower-right">
+                    for="billPurchase-menu-lower-right">
                     <li class="mdl-menu__item mdl-list__item mdl-menu__item--full-bleed-divider"
                         ng-click="openContractsFilter()">
                     <span class="mdl-list__item-primary-content">
@@ -163,7 +163,7 @@
                            class="form-control"
                            placeholder="بحث سريع"
                            ng-change="refreshGUI()"
-                           ng-model="contracts.searchText">
+                           ng-model="billPurchases.searchText">
 
                 </div>
 
@@ -179,7 +179,7 @@
                                 <label id="checkAllContracts" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
                                        for="checkbox-0">
                                     <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input"
-                                           ng-model="contracts.checkAll" ng-change="checkAllContracts()">
+                                           ng-model="billPurchases.checkAll" ng-change="checkAllContracts()">
                                 </label>
                             </th>
 
@@ -200,7 +200,7 @@
                             </th>
 
                             <th>
-                                <span>المستثمر</span>
+                                <span>المورد</span>
                             </th>
 
                             <th>
@@ -242,40 +242,40 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="contract in contracts | filter:contracts.searchText"
-                            ng-class="{'mdl-color--primary-dark' : contract.isSelected, 'mdl-color-text--white' : contract.isSelected}"
-                            ng-dblclick="ModalProvider.openContractDetailsModel(contract)"
+                        <tr ng-repeat="billPurchase in billPurchases | filter:billPurchases.searchText"
+                            ng-class="{'mdl-color--primary-dark' : billPurchase.isSelected, 'mdl-color-text--white' : billPurchase.isSelected}"
+                            ng-dblclick="ModalProvider.openContractDetailsModel(billPurchase)"
                             context-menu="rowMenuContract">
                             <td class="fit no-print">
                                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check"
-                                       for="checkbox-contract-{{contract.id}}">
+                                       for="checkbox-billPurchase-{{billPurchase.id}}">
                                     <input type="checkbox"
-                                           id="checkbox-contract-{{contract.id}}"
+                                           id="checkbox-billPurchase-{{billPurchase.id}}"
                                            class="mdl-checkbox__input"
-                                           ng-model="contract.isSelected" ng-click="checkContract()">
+                                           ng-model="billPurchase.isSelected" ng-click="checkContract()">
                                 </label>
                             </td>
                             <td>{{$index+1}}</td>
-                            <td>{{contract.code}}</td>
-                            <td>{{contract.customer.contact.shortName}}</td>
-                            <td>{{contract.customer.contact.mobile}}</td>
-                            <td>{{contract.seller.contact.shortName}}</td>
+                            <td>{{billPurchase.code}}</td>
+                            <td>{{billPurchase.customer.contact.shortName}}</td>
+                            <td>{{billPurchase.customer.contact.mobile}}</td>
+                            <td>{{billPurchase.supplier.contact.shortName}}</td>
                             <td>
-                                <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contract.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contract.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
-                                <span class="label label-info no-print">{{contract.lastPaymentDate | date: 'hh:mm a'}}</span>
+                                <span ng-show="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchase.lastPaymentDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-show="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchase.lastPaymentDate | date: 'yyyy-MM-dd'}}</span>
+                                <span class="label label-info no-print">{{billPurchase.lastPaymentDate | date: 'hh:mm a'}}</span>
                             </td>
-                            <td>{{contract.person.contact.shortName}}</td>
-                            <td>{{contract.capitalCash | currency:' SAR ':2}}</td>
-                            <td>{{contract.profit | currency:' SAR ':2}}</td>
-                            <td>{{contract.totalVat | currency:' SAR ':2}}</td>
-                            <td>{{contract.discount | currency:' SAR ':2}}</td>
-                            <td>{{contract.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
-                            <td>{{contract.paid | currency:' SAR ':2}}</td>
-                            <td>{{contract.remain | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.person.contact.shortName}}</td>
+                            <td>{{billPurchase.capitalCash | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.profit | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.totalVat | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.discount | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.totalPriceAfterDiscountAndVat | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.paid | currency:' SAR ':2}}</td>
+                            <td>{{billPurchase.remain | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
-                            ng-if="!contracts || contracts.length ==0">
+                            ng-if="!billPurchases || billPurchases.length ==0">
                             <td colspan="15">
                                 <p ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_CREATE'])">
                                     <span>لا توجد عقود حتى الآن، يمكنك التسجيل من خلال هذا الرابط </span>
@@ -283,17 +283,17 @@
                                 </p>
                             </td>
                         </tr>
-                        <tr ng-if="contracts.length > 0">
+                        <tr ng-if="billPurchases.length > 0">
                             <td class="info" colspan="8">
                                 <span class="pull-left">المجموع الكلي</span>
                             </td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'totalVat' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'discount' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{contracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'totalVat' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'discount' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{billPurchases | sumByKey:'remain' | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -303,17 +303,17 @@
 
             <div class="row" ng-show="toggleList===2">
 
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="contract in contracts">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="billPurchase in billPurchases">
                     <!-- CONTACT ITEM -->
                     <div class="panel panel-default">
                         <div class="panel-body profile mdl-color--primary-dark">
                             <div class="profile-image">
                                 <img width="100" height="100"
-                                     ng-src="/ui/img/{{iconSet}}/contract.{{iconSetType}}"
-                                     alt="{{contract.code}}"/>
+                                     ng-src="/ui/img/{{iconSet}}/billPurchase.{{iconSetType}}"
+                                     alt="{{billPurchase.code}}"/>
                             </div>
                             <div class="profile-data">
-                                <div class="profile-data-name">{{contract.customer.contact.shortName}}</div>
+                                <div class="profile-data-name">{{billPurchase.customer.contact.shortName}}</div>
                             </div>
                             <div class="profile-controls">
                                 <!--<a href="" class="profile-control-left"><span class="fa fa-info-circle"></span></a>-->
@@ -324,17 +324,17 @@
                             <div class="contact-info">
                                 <p>
                                     <strong>العميل</strong>
-                                    {{contract.customer.contact.shortName}}
+                                    {{billPurchase.customer.contact.shortName}}
                                 </p>
                                 <hr>
                                 <p>
                                     <strong>جوال العميل</strong>
-                                    {{contract.customer.contact.mobile}}
+                                    {{billPurchase.customer.contact.mobile}}
                                 </p>
                                 <hr>
                                 <p>
-                                    <strong>المستثمر</strong>
-                                    {{contract.seller.contact.shortName}}
+                                    <strong>المورد</strong>
+                                    {{billPurchase.supplier.contact.shortName}}
                                 </p>
                             </div>
                         </div>
@@ -353,7 +353,7 @@
                                         tooltip-append-to-body="true"
                                         type="button"
                                         ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_UPDATE'])"
-                                        ng-click="ModalProvider.openContractUpdateModel(contract)"
+                                        ng-click="ModalProvider.openContractUpdateModel(billPurchase)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/edit.{{iconSetType}}" width="24"
                                          height="24">
@@ -362,7 +362,7 @@
                                         tooltip-append-to-body="true"
                                         type="button"
                                         ng-if="contains(me.team.authorities, ['ROLE_CONTRACT_DELETE'])"
-                                        ng-click="deleteContract(contract)"
+                                        ng-click="deleteContract(billPurchase)"
                                         class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/delete.{{iconSetType}}" width="24"
                                          height="24">

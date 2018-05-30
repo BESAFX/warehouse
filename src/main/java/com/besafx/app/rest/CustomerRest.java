@@ -2,18 +2,15 @@ package com.besafx.app.rest;
 
 import com.besafx.app.config.CustomException;
 import com.besafx.app.config.SendSMS;
-import com.besafx.app.entity.ContractPayment;
-import com.besafx.app.entity.ContractPremium;
+import com.besafx.app.entity.BillPurchasePayment;
 import com.besafx.app.entity.Customer;
 import com.besafx.app.search.CustomerSearch;
 import com.besafx.app.service.*;
-import com.besafx.app.util.DateConverter;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +34,11 @@ public class CustomerRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "-contracts";
+            "-billPurchases";
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "contracts[**,-customer,seller[id,contact[id,mobile,shortName]],sponsor1[id,contact[id,mobile,shortName]],sponsor2[id,contact[id,mobile,shortName]],-contractProducts,contractPremiums[**,-contract,-contractPayments],-contractPayments,person[id,contact[id,shortName]]]";
+            "billPurchases[**,-customer,supplier[id,contact[id,mobile,shortName]],sponsor1[id,contact[id,mobile,shortName]],sponsor2[id,contact[id,mobile,shortName]],-billPurchaseProducts,contractPremiums[**,-billPurchase,-contractPayments],-contractPayments,person[id,contact[id,shortName]]]";
 
     private final String FILTER_COMBO = "" +
             "id," +
@@ -55,16 +52,16 @@ public class CustomerRest {
     private CustomerSearch customerSearch;
 
     @Autowired
-    private ContactService contactService;
+    private BillPurchaseService billPurchaseService;
 
     @Autowired
-    private ContractProductService contractProductService;
+    private BillPurchaseProductService billPurchaseProductService;
 
     @Autowired
     private BankTransactionService bankTransactionService;
 
     @Autowired
-    private ContractPaymentService contractPaymentService;
+    private BillPurchasePaymentService billPurchasePaymentService;
 
     @Autowired
     private ContractPremiumService contractPremiumService;
@@ -89,7 +86,7 @@ public class CustomerRest {
         } else {
             customer.setCode(topCustomer.getCode() + 1);
         }
-        customer.setContact(contactService.save(customer.getContact()));
+        customer.setContact(billPurchaseService.save(customer.getContact()));
         customer.setEnabled(true);
         customer = customerService.save(customer);
         notificationService.notifyAll(Notification
@@ -109,7 +106,7 @@ public class CustomerRest {
         }
         Customer object = customerService.findOne(customer.getId());
         if (object != null) {
-            customer.setContact(contactService.save(customer.getContact()));
+            customer.setContact(billPurchaseService.save(customer.getContact()));
             customer = customerService.save(customer);
             notificationService.notifyAll(Notification
                                                   .builder()
@@ -129,36 +126,36 @@ public class CustomerRest {
         Customer customer = customerService.findOne(id);
         if (customer != null) {
             LOG.info("حذف كل سلع العقود");
-            contractProductService.delete(customer.getContracts()
-                                                  .stream()
-                                                  .flatMap(contract -> contract.getContractProducts().stream())
-                                                  .collect(Collectors.toList()));
+            billPurchaseProductService.delete(customer.getBillPurchases()
+                                                      .stream()
+                                                      .flatMap(contract -> contract.getContractProducts().stream())
+                                                      .collect(Collectors.toList()));
 
             LOG.info("حذف كل معاملات البنك لدفعات العقود");
             bankTransactionService.delete(
-                    customer.getContracts()
+                    customer.getBillPurchases()
                             .stream()
                             .flatMap(contract -> contract.getContractPayments().stream())
-                            .map(ContractPayment::getBankTransaction)
+                            .map(BillPurchasePayment::getBankTransaction)
                             .collect(Collectors.toList()));
 
             LOG.info("حذف كل دفعات العقود");
-            contractPaymentService.delete(customer.getContracts()
-                                                  .stream()
-                                                  .flatMap(contract -> contract.getContractPayments().stream())
-                                                  .collect(Collectors.toList()));
+            billPurchasePaymentService.delete(customer.getBillPurchases()
+                                                      .stream()
+                                                      .flatMap(contract -> contract.getContractPayments().stream())
+                                                      .collect(Collectors.toList()));
 
             LOG.info("حذف كل أقساط العقود");
-            contractPremiumService.delete(customer.getContracts()
+            contractPremiumService.delete(customer.getBillPurchases()
                                                   .stream()
                                                   .flatMap(contract -> contract.getContractPremiums().stream())
                                                   .collect(Collectors.toList()));
 
             LOG.info("حذف العقود");
-            contractService.delete(customer.getContracts());
+            contractService.delete(customer.getBillPurchases());
 
             LOG.info("حذف بيانات الاتصال");
-            contactService.delete(customer.getContact());
+            billPurchaseService.delete(customer.getContact());
 
             LOG.info("حذف العميل");
             customerService.delete(customer);

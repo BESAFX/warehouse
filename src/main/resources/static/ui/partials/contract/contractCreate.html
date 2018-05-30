@@ -7,7 +7,7 @@
         </a>
         <h3 class="panel-title mdl-list__item pull-right mdl-color-text--white">
             <span class="mdl-list__item-primary-content">
-                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/contract.{{iconSetType}}" width="24" height="24">
+                <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/billPurchase.{{iconSetType}}" width="24" height="24">
                 <strong>عقد جديد</strong>
             </span>
         </h3>
@@ -29,73 +29,73 @@
 
                     <div class="mdl-tabs__tab-bar">
 
-                        <a href="#panel-1-contract" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4 is-active">
+                        <a href="#panel-1-billPurchase" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4 is-active">
                             <span>المعلومات الأساسية</span>
                         </a>
 
-                        <a href="#panel-2-contract" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <a href="#panel-2-billPurchase" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             <span>تحديد السلع</span>
                         </a>
 
-                        <a href="#panel-4-contract" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <a href="#panel-4-billPurchase" class="mdl-tabs__tab col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             <span>الأقساط</span>
                         </a>
 
                     </div>
 
-                    <div class="mdl-tabs__panel is-active" id="panel-1-contract">
+                    <div class="mdl-tabs__panel is-active" id="panel-1-billPurchase">
 
                         <div class="form-group row">
 
                             <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-3">
-                                <label for="seller" class="control-label">
-                                    <span>المستثمر</span>
+                                <label for="supplier" class="control-label">
+                                    <span>المورد</span>
                                     <strong>
                                         <a href=""
-                                           ng-if="contains(me.team.authorities, ['ROLE_SELLER_CREATE'])"
-                                           ng-click="newSeller()">مستثمر جديد</a>
+                                           ng-if="contains(me.team.authorities, ['ROLE_SUPPLIER_CREATE'])"
+                                           ng-click="newSupplier()">مورد جديد</a>
                                     </strong>
                                 </label>
-                                <ui-select id="seller"
-                                           ng-model="contract.seller"
+                                <ui-select id="supplier"
+                                           ng-model="billPurchase.supplier"
                                            required="required"
                                            disable-validation-message=""
-                                           on-select="findProductPurchasesBySeller(contract.seller)"
+                                           on-select="findProductPurchasesBySupplier(billPurchase.supplier)"
                                            theme="bootstrap">
                                     <ui-select-match placeholder="الحقل مطلوب">
                                         {{$select.selected.contact.shortName}}
                                     </ui-select-match>
                                     <ui-select-choices
-                                            refresh="searchSellers($select)"
+                                            refresh="searchSuppliers($select)"
                                             refresh-delay="300"
-                                            repeat="seller in sellers | filter: $select.search | orderBy:'code' track by $index">
+                                            repeat="supplier in suppliers | filter: $select.search | orderBy:'code' track by $index">
 
                                         <div class="mdl-menu__item--full-bleed-divider"></div>
                                         <li class="mdl-list__item mdl-list__item--two-line" style="padding: unset;cursor: pointer">
                                             <span class="mdl-list__item-primary-content">
                                                 <span class="material-icons mdl-list__item-avatar"
-                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/seller.{{iconSetType}}')"></span>
-                                                <div ng-bind-html="seller.name | highlight: $select.search"></div>
+                                                      style="background-color: unset;background-image: url('/ui/img/{{iconSet}}/supplier.{{iconSetType}}')"></span>
+                                                <div ng-bind-html="supplier.name | highlight: $select.search"></div>
                                                 <span class="mdl-list__item-sub-title">
-                                                    <span>رقم المستثمر / </span>
-                                                    {{seller.code}}
+                                                    <span>رقم المورد / </span>
+                                                    {{supplier.code}}
                                                 </span>
                                                 <span class="mdl-list__item-sub-title">
                                                     <span>الاسم / </span>
-                                                    {{seller.contact.shortName}}
+                                                    {{supplier.contact.shortName}}
                                                 </span>
                                                 <span class="mdl-list__item-sub-title">
                                                     <span>رقم الجوال / </span>
-                                                    {{seller.contact.mobile}}
+                                                    {{supplier.contact.mobile}}
                                                 </span>
                                             </span>
                                         </li>
 
                                         <div ng-if="$index === $select.items.length-1">
                                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                                                    ng-disabled="buffer.lastSeller"
+                                                    ng-disabled="buffer.lastSupplier"
                                                     style="width: 100%; margin-top: 5px;"
-                                                    ng-click="searchSellers($select, $event);">تحميل المزيد
+                                                    ng-click="searchSuppliers($select, $event);">تحميل المزيد
                                             </button>
                                         </div>
 
@@ -113,7 +113,7 @@
                                     </strong>
                                 </label>
                                 <ui-select id="customer"
-                                           ng-model="contract.customer"
+                                           ng-model="billPurchase.customer"
                                            required="required"
                                            disable-validation-message=""
                                            theme="bootstrap">
@@ -168,7 +168,7 @@
                                     </strong>
                                 </label>
                                 <ui-select id="sponsor1"
-                                           ng-model="contract.sponsor1"
+                                           ng-model="billPurchase.sponsor1"
                                            theme="bootstrap">
                                     <ui-select-match placeholder="الحقل اختياري">
                                         {{$select.selected.contact.shortName}}
@@ -221,7 +221,7 @@
                                     </strong>
                                 </label>
                                 <ui-select id="sponsor2"
-                                           ng-model="contract.sponsor2"
+                                           ng-model="billPurchase.sponsor2"
                                            theme="bootstrap">
                                     <ui-select-match placeholder="الحقل اختياري">
                                         {{$select.selected.contact.shortName}}
@@ -279,7 +279,7 @@
                                            placeholder="اجباري"
                                            required="required"
                                            disable-validation-message=""
-                                           ng-model="contract.code">
+                                           ng-model="billPurchase.code">
                                 </div>
                             </div>
 
@@ -295,7 +295,7 @@
                                            disable-validation-message=""
                                            ng-change="findRemainPrice()"
                                            placeholder="اجباري"
-                                           ng-model="contract.discount">
+                                           ng-model="billPurchase.discount">
                                 </div>
                             </div>
 
@@ -321,7 +321,7 @@
                                            id="dateFrom"
                                            type="text"
                                            class="form-control is-calendarPicker"
-                                           ng-model="contract.writtenDate"
+                                           ng-model="billPurchase.writtenDate"
                                            calendarType="ummalqura"
                                            language="en"
                                            dateFormat="yyyy/mm/dd"
@@ -343,7 +343,7 @@
                                        name="input"
                                        required="required"
                                        disable-validation-message=""
-                                       ng-model="contract.writtenDate"
+                                       ng-model="billPurchase.writtenDate"
                                        datetime="yyyy-MM-dd"/>
                             </div>
 
@@ -360,7 +360,7 @@
                                            min="0"
                                            class="form-control"
                                            placeholder="اختياري"
-                                           ng-model="contract.paperFees">
+                                           ng-model="billPurchase.paperFees">
                                 </div>
                             </div>
 
@@ -373,7 +373,7 @@
                                            min="0"
                                            class="form-control"
                                            placeholder="اختياري"
-                                           ng-model="contract.commissionFees">
+                                           ng-model="billPurchase.commissionFees">
                                 </div>
                             </div>
 
@@ -386,7 +386,7 @@
                                            min="0"
                                            class="form-control"
                                            placeholder="اختياري"
-                                           ng-model="contract.lawFees">
+                                           ng-model="billPurchase.lawFees">
                                 </div>
                             </div>
 
@@ -394,15 +394,15 @@
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-2-contract">
+                    <div class="mdl-tabs__panel" id="panel-2-billPurchase">
 
                         <div class="form-group row">
 
                             <button uib-tooltip="تحديث"
                                     tooltip-append-to-body="true"
                                     type="button"
-                                    ng-if="contract.seller.id"
-                                    ng-click="findProductPurchasesBySeller(contract.seller)"
+                                    ng-if="billPurchase.supplier.id"
+                                    ng-click="findProductPurchasesBySupplier(billPurchase.supplier)"
                                     class="mdl-button mdl-js-button mdl-js-ripple-effect">
                                 <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/refresh.{{iconSetType}}" width="24"
                                      height="24">
@@ -517,18 +517,18 @@
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
                                         ng-show="!productPurchases || productPurchases.length ==0">
                                         <td colspan="8">
-                                            <p ng-if="!contract.seller.id">
-                                                <span>فضلاً اختر المستثمر أولاً لعرض كافة السلعة الموجودة بحسابه</span>
+                                            <p ng-if="!billPurchase.supplier.id">
+                                                <span>فضلاً اختر المورد أولاً لعرض كافة السلعة الموجودة بحسابه</span>
                                             </p>
-                                            <p ng-if="contract.seller.id">
-                                                <span>لا توجد سلع حتى الآن في حساب المستثمر / </span>
-                                                <span>{{contract.seller.contact.shortName}}</span>
+                                            <p ng-if="billPurchase.supplier.id">
+                                                <span>لا توجد سلع حتى الآن في حساب المورد / </span>
+                                                <span>{{billPurchase.supplier.contact.shortName}}</span>
                                                 <span ng-if="contains(me.team.authorities, ['ROLE_PRODUCT_PURCHASE_CREATE'])"> - لإضافة سلع جديدة قم بالضغط <a
                                                         href="" ng-click="ModalProvider.openProductPurchaseCreateModel()">هنا</a></span>
                                             </p>
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                         <td colspan="6" class="text-left info">
                                             <span>رأس المال</span>
                                         </td>
@@ -540,7 +540,7 @@
                                                    value="{{capitalCash | currency:'':2}}">
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                         <td colspan="6" class="text-left success">
                                             <span>نسبة الربح</span>
                                         </td>
@@ -553,7 +553,7 @@
                                                    value="{{profitPercentage | currency:' % ':2}}">
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                         <td colspan="6" class="text-left warning">
                                             <span>إجمالي قيمة العقد قبل (الخصم + القيمة المضافة)</span>
                                         </td>
@@ -565,7 +565,7 @@
                                                    value="{{totalPrice | currency:'':2}}">
                                         </td>
                                     </tr>
-                                    <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                    <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                         <td colspan="6" class="text-left warning">
                                             <span>إجمالي قيمة العقد بعد (الخصم + القيمة المضافة)</span>
                                         </td>
@@ -585,7 +585,7 @@
 
                     </div>
 
-                    <div class="mdl-tabs__panel" id="panel-4-contract">
+                    <div class="mdl-tabs__panel" id="panel-4-billPurchase">
 
                         <div class="form-group row">
 
@@ -710,7 +710,7 @@
                                                 </strong>
                                             </td>
                                         </tr>
-                                        <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                        <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                             <td colspan="2" class="text-left info">
                                                 <span>المجموع</span>
                                             </td>
@@ -722,7 +722,7 @@
                                                        value="{{contractPremiumsSum | currency:'':2}}">
                                             </td>
                                         </tr>
-                                        <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                        <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                             <td colspan="2" class="text-left warning">
                                                 <span>إجمالي قيمة العقد بعد (الخصم + القيمة المضافة)</span>
                                             </td>
@@ -735,7 +735,7 @@
                                                        value="{{totalPriceAfterDiscountAndVat | currency:'':2}}">
                                             </td>
                                         </tr>
-                                        <tr ng-if="contract.seller.id && productPurchases.length > 0">
+                                        <tr ng-if="billPurchase.supplier.id && productPurchases.length > 0">
                                             <td colspan="2" class="text-left success">
                                                 <span>المتبقي فى العقد</span>
                                             </td>
