@@ -19,10 +19,10 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/contractProduct/")
-public class ContractProductRest {
+@RequestMapping(value = "/api/billPurchaseProduct/")
+public class BillPurchaseProductRest {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ContractProductRest.class);
+    private final static Logger LOG = LoggerFactory.getLogger(BillPurchaseProductRest.class);
 
     private final String FILTER_TABLE = "" +
             "**," +
@@ -37,33 +37,33 @@ public class ContractProductRest {
 
     @PostMapping(value = "create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_CONTRACT_PRODUCT_CREATE')")
+    @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_PRODUCT_CREATE')")
     @Transactional
     public String create(@RequestBody BillPurchaseProduct billPurchaseProduct) {
         billPurchaseProduct = billPurchaseProductService.save(billPurchaseProduct);
         notificationService.notifyAll(Notification
                                               .builder()
-                                              .message("تم اضافة سلعة للعقد بنجاح")
+                                              .message("تم اضافة سلعة للفاتورة بنجاح")
                                               .type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchaseProduct);
     }
 
     @PostMapping(value = "createBatch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_CONTRACT_PRODUCT_CREATE')")
+    @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_PRODUCT_CREATE')")
     @Transactional
     public String createBatch(@RequestBody List<BillPurchaseProduct> billPurchaseProducts) {
         billPurchaseProducts = Lists.newArrayList(billPurchaseProductService.save(billPurchaseProducts));
         notificationService.notifyAll(Notification
                                               .builder()
-                                              .message("تم اضافة عدد من السلع للعقد بنجاح")
+                                              .message("تم اضافة عدد من السلع للفاتورة بنجاح")
                                               .type("success").build());
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchaseProducts);
     }
 
     @DeleteMapping(value = "delete/{id}")
     @ResponseBody
-    @PreAuthorize("hasRole('ROLE_CONTRACT_PRODUCT_DELETE')")
+    @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_PRODUCT_DELETE')")
     @Transactional
     public void delete(@PathVariable Long id) {
         BillPurchaseProduct billPurchaseProduct = billPurchaseProductService.findOne(id);
@@ -90,10 +90,10 @@ public class ContractProductRest {
                                        billPurchaseProductService.findOne(id));
     }
 
-    @GetMapping(value = "findByContract/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "findByBillPurchase/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String findByContract(@PathVariable Long id) {
+    public String findByBillPurchase(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       billPurchaseProductService.findByContractId(id));
+                                       billPurchaseProductService.findByBillPurchaseId(id));
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -39,6 +40,10 @@ public class BillSellProduct implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "product")

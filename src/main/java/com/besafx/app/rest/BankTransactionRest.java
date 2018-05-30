@@ -2,13 +2,13 @@ package com.besafx.app.rest;
 
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
+import com.besafx.app.entity.Bank;
 import com.besafx.app.entity.BankTransaction;
 import com.besafx.app.entity.Person;
-import com.besafx.app.entity.Supplier;
 import com.besafx.app.init.Initializer;
 import com.besafx.app.search.BankTransactionSearch;
+import com.besafx.app.service.BankService;
 import com.besafx.app.service.BankTransactionService;
-import com.besafx.app.service.SupplierService;
 import com.besafx.app.ws.Notification;
 import com.besafx.app.ws.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,6 @@ public class BankTransactionRest {
     private final String FILTER_TABLE = "" +
             "**," +
             "bank[id,name]," +
-            "supplier[id,contact[id,shortName]]," +
             "transactionType[id,name]," +
             "person[id,contact[id,shortName]]";
 
@@ -51,7 +50,7 @@ public class BankTransactionRest {
     private BankTransactionSearch bankTransactionSearch;
 
     @Autowired
-    private SupplierService supplierService;
+    private BankService bankService;
 
     @Autowired
     private NotificationService notificationService;
@@ -60,8 +59,7 @@ public class BankTransactionRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_DEPOSIT_CREATE')")
     @Transactional
-    public String createDeposit(
-            @RequestBody BankTransaction bankTransaction) {
+    public String createDeposit(@RequestBody BankTransaction bankTransaction) {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         bankTransaction.setBank(Initializer.bank);
         bankTransaction.setTransactionType(Initializer.transactionTypeDeposit);
@@ -71,8 +69,8 @@ public class BankTransactionRest {
         builder.append("إيداع مبلغ نقدي بقيمة ");
         builder.append(bankTransaction.getAmount());
         builder.append("ريال سعودي، ");
-        builder.append(" لـ / ");
-        builder.append(bankTransaction.getSupplier().getContact().getShortName());
+        builder.append(" للحساب البنكي / ");
+        builder.append(bankTransaction.getBank().getName());
         builder.append("، " + bankTransaction.getNote());
         bankTransaction.setNote(builder.toString());
         bankTransaction = bankTransactionService.save(bankTransaction);
@@ -87,8 +85,7 @@ public class BankTransactionRest {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_WITHDRAW_CREATE')")
     @Transactional
-    public String createWithdraw(
-            @RequestBody BankTransaction bankTransaction) {
+    public String createWithdraw(@RequestBody BankTransaction bankTransaction) {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         bankTransaction.setBank(Initializer.bank);
         bankTransaction.setTransactionType(Initializer.transactionTypeWithdraw);
@@ -98,8 +95,8 @@ public class BankTransactionRest {
         builder.append("سحب مبلغ نقدي بقيمة ");
         builder.append(bankTransaction.getAmount());
         builder.append("ريال سعودي، ");
-        builder.append(" من / ");
-        builder.append(bankTransaction.getSupplier().getContact().getShortName());
+        builder.append(" من الحساب البنكي / ");
+        builder.append(bankTransaction.getBank().getName());
         builder.append("، " + bankTransaction.getNote());
         bankTransaction.setNote(builder.toString());
         bankTransaction = bankTransactionService.save(bankTransaction);
@@ -110,19 +107,19 @@ public class BankTransactionRest {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), bankTransaction);
     }
 
-    @GetMapping(value = "createTransfer/{amount}/{fromSupplierId}/{toSupplierId}/{note}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "createTransfer/{amount}/{fromBankId}/{toBankId}/{note}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_TRANSFER_CREATE')")
     @Transactional
     public void createTransfer(
             @PathVariable(value = "amount") Double amount,
-            @PathVariable(value = "fromSupplierId") Long fromSupplierId,
-            @PathVariable(value = "toSupplierId") Long toSupplierId,
+            @PathVariable(value = "fromBankId") Long fromBankId,
+            @PathVariable(value = "toBankId") Long toBankId,
             @PathVariable(value = "note") String note) {
-        Supplier fromSupplier = supplierService.findOne(fromSupplierId);
-        Supplier toSupplier = supplierService.findOne(toSupplierId);
-        if (fromSupplier == null || toSupplier == null) {
-            throw new CustomException("فضلا تأكد من بيانات الموردين");
+        Bank fromBank = bankService.findOne(fromBankId);
+        Bank toBank = bankService.findOne(toBankId);
+        if (fromBank == null || toBank == null) {
+            throw new CustomException("فضلا تأكد من بيانات الحسابات البنكية");
         }
         if (amount <= 0) {
             throw new CustomException("لا يمكن قبول تحويل القيمة الصفرية");
@@ -134,7 +131,6 @@ public class BankTransactionRest {
             LOG.info("القيام بعملية السحب أولا من المرسل");
             BankTransaction bankTransactionWithdraw = new BankTransaction();
             bankTransactionWithdraw.setBank(Initializer.bank);
-            bankTransactionWithdraw.setSupplier(fromSupplier);
             bankTransactionWithdraw.setAmount(amount);
             bankTransactionWithdraw.setTransactionType(Initializer.transactionTypeWithdrawTransfer);
             bankTransactionWithdraw.setDate(new DateTime().toDate());
@@ -143,9 +139,9 @@ public class BankTransactionRest {
             builder.append("سحب مبلغ نقدي بقيمة ");
             builder.append(bankTransactionWithdraw.getAmount());
             builder.append("ريال سعودي، ");
-            builder.append(" من / ");
-            builder.append(bankTransactionWithdraw.getSupplier().getContact().getShortName());
-            builder.append("، عملية تحويل إلى " + toSupplier.getContact().getShortName());
+            builder.append(" من الحساب البنكي / ");
+            builder.append(bankTransactionWithdraw.getBank().getName());
+            builder.append("، عملية تحويل إلى الحساب البنكي /  " + toBank.getName());
             builder.append("، " + note);
             bankTransactionWithdraw.setNote(builder.toString());
             bankTransactionService.save(bankTransactionWithdraw);
@@ -159,7 +155,6 @@ public class BankTransactionRest {
             LOG.info("القيام بعملية الإيداع ثانيا إلى المرسل إليه");
             BankTransaction bankTransactionDeposit = new BankTransaction();
             bankTransactionDeposit.setBank(Initializer.bank);
-            bankTransactionDeposit.setSupplier(toSupplier);
             bankTransactionDeposit.setAmount(amount);
             bankTransactionDeposit.setTransactionType(Initializer.transactionTypeDepositTransfer);
             bankTransactionDeposit.setDate(new DateTime().toDate());
@@ -168,9 +163,9 @@ public class BankTransactionRest {
             builder.append("إيداع مبلغ نقدي بقيمة ");
             builder.append(bankTransactionDeposit.getAmount());
             builder.append("ريال سعودي، ");
-            builder.append(" لـ / ");
-            builder.append(bankTransactionDeposit.getSupplier().getContact().getShortName());
-            builder.append("، عملية تحويل من " + fromSupplier.getContact().getShortName());
+            builder.append(" للحساب البنكي / ");
+            builder.append(bankTransactionDeposit.getBank().getName());
+            builder.append("، عملية تحويل من الحساب البنكي / " + fromBank.getName());
             builder.append("، " + note);
             bankTransactionDeposit.setNote(builder.toString());
             bankTransactionService.save(bankTransactionDeposit);
@@ -195,7 +190,6 @@ public class BankTransactionRest {
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         BankTransaction bankTransaction = new BankTransaction();
         bankTransaction.setBank(Initializer.bank);
-        bankTransaction.setSupplier(caller.getCompany().getSupplier());
         bankTransaction.setAmount(amount);
         bankTransaction.setTransactionType(Initializer.transactionTypeWithdrawCash);
         bankTransaction.setDate(new DateTime().toDate());
@@ -204,8 +198,8 @@ public class BankTransactionRest {
         builder.append("سحب مبلغ نقدي بقيمة ");
         builder.append(bankTransaction.getAmount());
         builder.append("ريال سعودي، ");
-        builder.append(" من / ");
-        builder.append(bankTransaction.getSupplier().getContact().getShortName());
+        builder.append(" من الحساب البنكي / ");
+        builder.append(bankTransaction.getBank().getName());
         builder.append("، " + note);
         bankTransaction.setNote(builder.toString());
         bankTransaction = bankTransactionService.save(bankTransaction);
@@ -221,14 +215,6 @@ public class BankTransactionRest {
     public String findOne(@PathVariable Long id) {
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
                                        bankTransactionService.findOne(id));
-    }
-
-    @GetMapping(value = "findMyBankTransactions", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findMyBankTransactions() {
-        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE),
-                                       bankTransactionService.findBySupplier(caller.getCompany().getSupplier()));
     }
 
     @GetMapping(value = "findByDateBetweenOrTransactionTypeCodeIn", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class ContractSearch {
+public class BillPurchaseSearch {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContractSearch.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BillPurchaseSearch.class);
 
     @Autowired
     private ContractService contractService;
