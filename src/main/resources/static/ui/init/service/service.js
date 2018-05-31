@@ -120,6 +120,24 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
+    this.openSupplierSendMessageModel = function (suppliers) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/supplier/supplierSendMessage.html',
+            controller: "supplierSendMessageCtrl",
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                suppliers: function () {
+                    return suppliers;
+                }
+            }
+        });
+    };
+
     /**************************************************************
      *                                                            *
      * Product Model                                              *
@@ -217,63 +235,50 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
         });
     };
 
-    this.openProductPurchaseCreateModel = function () {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/product/productPurchaseCreate.html',
-            controller: 'productPurchaseCreateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg'
-        });
-    };
-
     /**************************************************************
      *                                                            *
-     * Contract Model                                             *
+     * BillPurchase Model                                         *
      *                                                            *
      *************************************************************/
-    this.openContractCreateModel = function () {
+    this.openBillPurchaseCreateModel = function () {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billPurchase/contractCreate.html',
-            controller: 'contractCreateCtrl',
+            templateUrl: '/ui/partials/billPurchase/billPurchaseCreate.html',
+            controller: 'billPurchaseCreateCtrl',
             backdrop: 'static',
             keyboard: false,
             windowClass: 'xlg'
         });
     };
 
-    this.openContractOldCreateModel = function () {
+    this.openBillPurchaseOldCreateModel = function () {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billPurchase/contractOldCreate.html',
-            controller: 'contractOldCreateCtrl',
+            templateUrl: '/ui/partials/billPurchase/billPurchaseOldCreate.html',
+            controller: 'billPurchaseOldCreateCtrl',
             backdrop: 'static',
             keyboard: false,
             windowClass: 'xlg'
         });
     };
 
-    this.openContractDetailsModel = function (contract) {
+    this.openBillPurchaseDetailsModel = function (billPurchase) {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/billPurchase/contractDetails.html',
-            controller: 'contractDetailsCtrl',
+            templateUrl: '/ui/partials/billPurchase/billPurchaseDetails.html',
+            controller: 'billPurchaseDetailsCtrl',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',
             resolve: {
-                contract: function () {
-                    return contract;
+                billPurchase: function () {
+                    return billPurchase;
                 }
             }
         });
@@ -281,72 +286,22 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
-     * ContractProduct Model                                      *
+     * BillPurchaseProduct Model                                  *
      *                                                            *
      *************************************************************/
-    this.openContractProductCreateModel = function (contract) {
+    this.openBillPurchaseProductCreateModel = function (billPurchase) {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contractProduct/contractProductCreate.html',
-            controller: 'contractProductCreateCtrl',
+            templateUrl: '/ui/partials/billPurchaseProduct/billPurchaseProductCreate.html',
+            controller: 'billPurchaseProductCreateCtrl',
             backdrop: 'static',
             keyboard: false,
             size: 'lg',
             resolve: {
-                contract: ['ProductPurchaseService', function (ProductPurchaseService) {
-                    return ProductPurchaseService.findBySupplierAndRemainFull(contract.supplier.id).then(function (data) {
-                        contract.supplier.productPurchases = [];
-                        angular.forEach(data, function (productPurchase) {
-                            productPurchase.requiredQuantity = 0;
-                            productPurchase.unitSellPrice = 0;
-                            contract.supplier.productPurchases.push(productPurchase);
-                        });
-                        return contract;
-                    });
-                }]
-            }
-        });
-    };
-
-    /**************************************************************
-     *                                                            *
-     * ContractPremium Model                                      *
-     *                                                            *
-     *************************************************************/
-    this.openContractPremiumCreateModel = function (contract) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contractPremium/contractPremiumCreate.html',
-            controller: 'contractPremiumCreateCtrl',
-            backdrop: 'static',
-            keyboard: false,
-            resolve: {
-                contract: ['ContractService', function (ContractService) {
-                    return ContractService.findOne(contract.id).then(function (data) {
-                        return data;
-                    });
-                }]
-            }
-        });
-    };
-
-    this.openContractPremiumSendMessageModel = function (contractPremiums) {
-        return $uibModal.open({
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contractPremium/contractPremiumSendMessage.html',
-            controller: "contractPremiumSendMessageCtrl",
-            backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            resolve: {
-                contractPremiums: function () {
-                    return contractPremiums;
+                billPurchase: function () {
+                    return billPurchase;
                 }
             }
         });
@@ -354,21 +309,115 @@ app.service('ModalProvider', ['$uibModal', '$log', function ($uibModal, $log) {
 
     /**************************************************************
      *                                                            *
-     * ContractPayment Model                                      *
+     * BillPurchasePayment Model                                  *
      *                                                            *
      *************************************************************/
-    this.openContractPaymentCreateModel = function (contract) {
+    this.openBillPurchasePaymentCreateModel = function (billPurchase) {
         return $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            templateUrl: '/ui/partials/contractPayment/contractPaymentCreate.html',
-            controller: 'contractPaymentCreateCtrl',
+            templateUrl: '/ui/partials/billPurchasePayment/billPurchasePaymentCreate.html',
+            controller: 'billPurchasePaymentCreateCtrl',
             backdrop: 'static',
             keyboard: false,
             resolve: {
-                contract: function () {
-                    return contract;
+                billPurchase: function () {
+                    return billPurchase;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * BillSell Model                                             *
+     *                                                            *
+     *************************************************************/
+    this.openBillSellCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billSell/billSellCreate.html',
+            controller: 'billSellCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'xlg'
+        });
+    };
+
+    this.openBillSellOldCreateModel = function () {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billSell/billSellOldCreate.html',
+            controller: 'billSellOldCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'xlg'
+        });
+    };
+
+    this.openBillSellDetailsModel = function (billSell) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billSell/billSellDetails.html',
+            controller: 'billSellDetailsCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                billSell: function () {
+                    return billSell;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * BillSellProduct Model                                      *
+     *                                                            *
+     *************************************************************/
+    this.openBillSellProductCreateModel = function (billSell) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billSellProduct/billSellProductCreate.html',
+            controller: 'billSellProductCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            size: 'lg',
+            resolve: {
+                billSell: function () {
+                    return billSell;
+                }
+            }
+        });
+    };
+
+    /**************************************************************
+     *                                                            *
+     * BillSellPayment Model                                      *
+     *                                                            *
+     *************************************************************/
+    this.openBillSellPaymentCreateModel = function (billSell) {
+        return $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: '/ui/partials/billSellPayment/billSellPaymentCreate.html',
+            controller: 'billSellPaymentCreateCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            resolve: {
+                billSell: function () {
+                    return billSell;
                 }
             }
         });

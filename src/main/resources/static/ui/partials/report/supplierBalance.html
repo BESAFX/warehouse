@@ -108,8 +108,8 @@
                         <td>{{supplierBalance.contact.identityNumber}}</td>
                         <td>{{supplierBalance.contact.mobile}}</td>
                         <td>
-                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{supplierBalance.lastContractDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{supplierBalance.lastContractDate | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{supplierBalance.lastBillPurchaseDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{supplierBalance.lastBillPurchaseDate | date: 'yyyy-MM-dd'}}</span>
                         </td>
                         <td>{{supplierBalance.totalDeposits | currency:' SAR ':2}}</td>
                         <td>{{supplierBalance.totalWithdraws | currency:' SAR ':2}}</td>

@@ -3,7 +3,7 @@ package com.besafx.app.rest;
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
 import com.besafx.app.entity.Person;
-import com.besafx.app.service.BillPurchaseService;
+import com.besafx.app.service.ContactService;
 import com.besafx.app.service.PersonService;
 import com.besafx.app.util.JSONConverter;
 import com.besafx.app.util.Options;
@@ -47,7 +47,7 @@ public class PersonRest {
     private PersonService personService;
 
     @Autowired
-    private BillPurchaseService billPurchaseService;
+    private ContactService contactService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -65,7 +65,7 @@ public class PersonRest {
         }
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         if (person.getContact() != null) {
-            person.setContact(billPurchaseService.save(person.getContact()));
+            person.setContact(contactService.save(person.getContact()));
         }
         person.setTokenExpired(false);
         person.setActive(false);
@@ -93,7 +93,7 @@ public class PersonRest {
                 person.setPassword(passwordEncoder.encode(person.getPassword()));
             }
             if (person.getContact() != null) {
-                person.setContact(billPurchaseService.save(person.getContact()));
+                person.setContact(contactService.save(person.getContact()));
             }
             person = personService.save(person);
             notificationService.notifyAll(Notification
@@ -118,7 +118,7 @@ public class PersonRest {
                 person.setPassword(passwordEncoder.encode(person.getPassword()));
             }
             if (person.getContact() != null) {
-                person.setContact(billPurchaseService.save(person.getContact()));
+                person.setContact(contactService.save(person.getContact()));
             }
             notificationService.notifyAll(Notification
                                                   .builder()

@@ -29,9 +29,6 @@ public class BankTransactionSearch {
             final Integer codeTo,
             final Long dateFrom,
             final Long dateTo,
-            final String supplierName,
-            final String supplierMobile,
-            final String supplierIdentityNumber,
             final List<String> transactionTypeCodes,
             Pageable pageRequest) {
 
@@ -52,18 +49,6 @@ public class BankTransactionSearch {
         Optional.ofNullable(dateTo)
                 .ifPresent(value -> predicates.add(
                         (root, cq, cb) -> cb.lessThanOrEqualTo(root.get("date"), new DateTime(value).plusDays(1).withTimeAtStartOfDay().toDate())));
-
-        Optional.ofNullable(supplierName)
-                .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("name"), "%" + value + "%")));
-
-        Optional.ofNullable(supplierMobile)
-                .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("mobile"), "%" + value + "%")));
-
-        Optional.ofNullable(supplierIdentityNumber)
-                .ifPresent(value -> predicates.add(
-                        (root, cq, cb) -> cb.like(root.get("supplier").get("contact").get("identityNumber"), "%" + value + "%")));
 
         Optional.ofNullable(transactionTypeCodes)
                 .ifPresent(value -> predicates.add(

@@ -47,9 +47,6 @@ public class Customer implements Serializable {
     @JoinColumn(name = "bank")
     private Bank bank;
 
-    @OneToMany(mappedBy = "customer")
-    private List<BillSell> billSells = new ArrayList<>();
-
     @Transient
     private Double balance;
 
@@ -59,10 +56,37 @@ public class Customer implements Serializable {
     @Transient
     private Double totalWithdraws;
 
+    @OneToMany(mappedBy = "customer")
+    private List<BillSell> billSells = new ArrayList<>();
+
     @JsonCreator
     public static Customer Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Customer customer = mapper.readValue(jsonString, Customer.class);
         return customer;
+    }
+
+    public Double getBillsTotalPrice() {
+        try {
+            return this.billSells.stream().mapToDouble(BillSell::getTotalPrice).sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getBillsPaid() {
+        try {
+            return this.billSells.stream().mapToDouble(BillSell::getPaid).sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
+    }
+
+    public Double getBillsRemain() {
+        try {
+            return this.billSells.stream().mapToDouble(BillSell::getRemain).sum();
+        } catch (Exception ex) {
+            return 0.0;
+        }
     }
 }

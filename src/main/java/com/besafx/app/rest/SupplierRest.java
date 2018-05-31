@@ -1,8 +1,8 @@
 package com.besafx.app.rest;
 
-import com.besafx.app.async.TransactionalService;
 import com.besafx.app.auditing.PersonAwareUserDetails;
 import com.besafx.app.config.CustomException;
+import com.besafx.app.config.SendSMS;
 import com.besafx.app.entity.BankTransaction;
 import com.besafx.app.entity.BillPurchasePayment;
 import com.besafx.app.entity.Person;
@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,17 +42,11 @@ public class SupplierRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "-productPurchases," +
-            "-billPurchases," +
-            "-bankTransactions," +
-            "supplier[id]";
+            "-billPurchases";
 
     private final String FILTER_DETAILS = "" +
             "**," +
-            "productPurchases[**,product[id,name],-bankTransaction,-supplier,-billPurchaseProducts,person[id,contact[id,shortName]]]," +
-            "-billPurchases," +
-            "-bankTransactions," +
-            "supplier[id]";
+            "-billPurchases";
 
     private final String FILTER_COMBO = "" +
             "id," +
@@ -63,6 +58,12 @@ public class SupplierRest {
 
     @Autowired
     private SupplierSearch supplierSearch;
+
+    @Autowired
+    private ContactService contactService;
+
+    @Autowired
+    private BankService bankService;
 
     @Autowired
     private BillPurchaseService billPurchaseService;
@@ -77,19 +78,10 @@ public class SupplierRest {
     private BillPurchasePaymentService billPurchasePaymentService;
 
     @Autowired
-    private ContractPremiumService contractPremiumService;
-
-    @Autowired
-    private ProductPurchaseService productPurchaseService;
-
-    @Autowired
-    private ContractService contractService;
-
-    @Autowired
-    private TransactionalService transactionalService;
-
-    @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private SendSMS sendSMS;
 
     @PostMapping(value = "create/{openCash}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -102,34 +94,37 @@ public class SupplierRest {
         } else {
             supplier.setCode(topSupplier.getCode() + 1);
         }
-        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        supplier.setSupplier(caller.getCompany().getSupplier());
         supplier.setRegisterDate(new DateTime().toDate());
         supplier.setEnabled(true);
-        supplier.setContact(billPurchaseService.save(supplier.getContact()));
+        supplier.setContact(contactService.save(supplier.getContact()));
+        supplier.setBank(bankService.save(supplier.getBank()));
         supplier = supplierService.save(supplier);
+
         notificationService.notifyAll(Notification
                                               .builder()
                                               .message("تم انشاء حساب مورد جديد بنجاح")
                                               .type("success").build());
+
+        Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
         LOG.info("إنشاء الرصيد الافتتاحي وعمل عملية إيداع بالمبلغ");
         if (openCash > 0) {
             BankTransaction bankTransaction = new BankTransaction();
             bankTransaction.setAmount(openCash);
-            bankTransaction.setBank(Initializer.bank);
-            bankTransaction.setSupplier(supplier);
-            bankTransaction.setTransactionType(Initializer.transactionTypeDeposit);
             bankTransaction.setDate(new DateTime().toDate());
+            bankTransaction.setBank(supplier.getBank());
+            bankTransaction.setTransactionType(Initializer.transactionTypeDeposit);
             bankTransaction.setPerson(caller);
             StringBuilder builder = new StringBuilder();
             builder.append("إيداع مبلغ نقدي بقيمة ");
             builder.append(openCash);
             builder.append("ريال سعودي، ");
-            builder.append(" لـ / ");
-            builder.append(supplier.getShortName());
+            builder.append(" للمورد / ");
+            builder.append(supplier.getContact().getShortName());
             builder.append("، رصيد افتتاحي");
             bankTransaction.setNote(builder.toString());
+
             bankTransactionService.save(bankTransaction);
+
             notificationService.notifyAll(Notification
                                                   .builder()
                                                   .message(builder.toString())
@@ -148,7 +143,8 @@ public class SupplierRest {
         }
         Supplier object = supplierService.findOne(supplier.getId());
         if (object != null) {
-            supplier.setContact(billPurchaseService.save(supplier.getContact()));
+            supplier.setContact(contactService.save(supplier.getContact()));
+            supplier.setBank(bankService.save(supplier.getBank()));
             supplier = supplierService.save(supplier);
             notificationService.notifyAll(Notification
                                                   .builder()
@@ -168,62 +164,73 @@ public class SupplierRest {
         Supplier supplier = supplierService.findOne(id);
         if (supplier != null) {
 
-            LOG.info("رفض العملية فى حال كان هو المورد الرئيسي");
-            if (Initializer.company.getSupplier().getId().equals(supplier.getId())) {
-                throw new CustomException("لا يمكن حذف المورد الرئيسي للبرنامج");
-            }
-
-            LOG.info("حذف كل سلع العقود");
+            LOG.info("حذف كل سلع فواتير الشراء");
             billPurchaseProductService.delete(supplier.getBillPurchases()
                                                       .stream()
-                                                      .flatMap(contract -> contract.getContractProducts().stream())
+                                                      .flatMap(contract -> contract.getBillPurchaseProducts().stream())
                                                       .collect(Collectors.toList()));
 
-            LOG.info("حذف كل معاملات البنك لدفعات العقود");
-            bankTransactionService.delete(
-                    supplier.getBillPurchases()
-                          .stream()
-                          .flatMap(contract -> contract.getContractPayments().stream())
-                          .map(BillPurchasePayment::getBankTransaction)
-                          .collect(Collectors.toList()));
-
-            LOG.info("حذف كل دفعات العقود");
+            LOG.info("حذف كل دفعات فواتير الشراء");
             billPurchasePaymentService.delete(supplier.getBillPurchases()
                                                       .stream()
-                                                      .flatMap(contract -> contract.getContractPayments().stream())
+                                                      .flatMap(contract -> contract.getBillPurchasePayments().stream())
                                                       .collect(Collectors.toList()));
 
-            LOG.info("حذف كل أقساط العقود");
-            contractPremiumService.delete(supplier.getBillPurchases()
-                                                .stream()
-                                                .flatMap(contract -> contract.getContractPremiums().stream())
-                                                .collect(Collectors.toList()));
+            LOG.info("حذف كل معاملات البنك لدفعات فواتير الشراء");
+            bankTransactionService.delete(
+                    supplier.getBillPurchases()
+                            .stream()
+                            .flatMap(contract -> contract.getBillPurchasePayments().stream())
+                            .map(BillPurchasePayment::getBankTransaction)
+                            .collect(Collectors.toList()));
 
-            LOG.info("حذف العقود");
-            contractService.delete(supplier.getBillPurchases());
-
-            LOG.info("حذف حركات الشراء لهذا المورد");
-            bankTransactionService.delete(supplier.getProductPurchases()
-                                                .stream()
-                                                .map(ProductPurchase::getBankTransaction)
-                                                .collect(Collectors.toList()));
-
-            LOG.info("حذف المشتريات لهذا المورد");
-            productPurchaseService.delete(supplier.getProductPurchases());
-
-            LOG.info("تفريغ كل المعاملات المالية لهذا المورد");
-            transactionalService.setBankTransactionsSupplierToNull(supplier);
+            LOG.info("حذف فواتير الشراء");
+            billPurchaseService.delete(supplier.getBillPurchases());
 
             LOG.info("حذف بيانات الاتصال");
-            billPurchaseService.delete(supplier.getContact());
+            contactService.delete(supplier.getContact());
+
+            LOG.info("حذف كل المعاملات المالية للحساب البنكي");
+            bankTransactionService.delete(supplier.getBank().getBankTransactions());
+
+            LOG.info("حذف الحساب البنكي");
+            bankService.delete(supplier.getBank());
 
             LOG.info("حذف المورد");
             supplierService.delete(supplier);
 
             notificationService.notifyAll(Notification
                                                   .builder()
-                                                  .message("تم حذف المورد وكل ما يتعلق به من عقود وحسابات بنجاح")
+                                                  .message("تم حذف المورد وكل ما يتعلق به من فواتير وحسابات ومعاملات مالية بنجاح")
                                                   .type("error").build());
+        }
+    }
+
+    @PostMapping(value = "sendMessage/{supplierIds}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_SMS_SEND')")
+    @Transactional
+    public void sendMessage(@RequestBody String content, @PathVariable List<Long> supplierIds) throws Exception {
+        ListIterator<Long> listIterator = supplierIds.listIterator();
+        while (listIterator.hasNext()){
+            Long id = listIterator.next();
+            Supplier supplier = supplierService.findOne(id);
+            String message = content.replaceAll("#remain#", supplier.getBillsRemain().toString());
+            Future<String> task = sendSMS.sendMessage(supplier.getContact().getMobile(), message);
+            String taskResult = task.get();
+            StringBuilder builder = new StringBuilder();
+            builder.append("الرقم / ");
+            builder.append(supplier.getContact().getMobile());
+            builder.append("<br/>");
+            builder.append(" محتوى الرسالة : ");
+            builder.append(message);
+            builder.append("<br/>");
+            builder.append(" ، نتيجة الإرسال: ");
+            builder.append(taskResult);
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message(builder.toString())
+                                                  .type("information").build());
         }
     }
 
@@ -243,26 +250,21 @@ public class SupplierRest {
 
     @GetMapping(value = "findSupplierBalance/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @Transactional
     public String findSupplierBalance(@PathVariable(value = "id") Long id) {
         Supplier supplier = supplierService.findOne(id);
 
         Double depositAmount = bankTransactionService
-                .findBySupplierAndTransactionTypeIn(supplier,
-                                                  Lists.newArrayList(
-                                                          Initializer.transactionTypeDeposit,
-                                                          Initializer.transactionTypeDepositPayment,
-                                                          Initializer.transactionTypeDepositTransfer),
-                                                  BankTransactionAmount.class)
+                .findByBankAndTransactionTypeIn(supplier.getBank(), Lists.newArrayList(
+                        Initializer.transactionTypeDeposit,
+                        Initializer.transactionTypeDepositTransfer), BankTransactionAmount.class)
                 .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
         Double withdrawAmount = bankTransactionService
-                .findBySupplierAndTransactionTypeIn(supplier,
-                                                  Lists.newArrayList(
-                                                          Initializer.transactionTypeWithdraw,
-                                                          Initializer.transactionTypeWithdrawCash,
-                                                          Initializer.transactionTypeWithdrawPurchase,
-                                                          Initializer.transactionTypeWithdrawTransfer),
-                                                  BankTransactionAmount.class)
+                .findByBankAndTransactionTypeIn(supplier.getBank(), Lists.newArrayList(
+                        Initializer.transactionTypeWithdraw,
+                        Initializer.transactionTypeWithdrawTransfer,
+                        Initializer.transactionTypeExpense), BankTransactionAmount.class)
                 .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
         LOG.info("مجموع الإيداعات = " + depositAmount);
@@ -278,6 +280,7 @@ public class SupplierRest {
 
     @GetMapping(value = "findAllSupplierBalance", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @Transactional
     public String findAllSupplierBalance() {
         List<Supplier> suppliers = Lists.newArrayList(supplierService.findAll());
         ListIterator<Supplier> bankListIterator = suppliers.listIterator();
@@ -286,22 +289,16 @@ public class SupplierRest {
             Supplier supplier = bankListIterator.next();
 
             Double depositAmount = bankTransactionService
-                    .findBySupplierAndTransactionTypeIn(supplier,
-                                                      Lists.newArrayList(
-                                                              Initializer.transactionTypeDeposit,
-                                                              Initializer.transactionTypeDepositPayment,
-                                                              Initializer.transactionTypeDepositTransfer),
-                                                      BankTransactionAmount.class)
+                    .findByBankAndTransactionTypeIn(supplier.getBank(), Lists.newArrayList(
+                            Initializer.transactionTypeDeposit,
+                            Initializer.transactionTypeDepositTransfer), BankTransactionAmount.class)
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
             Double withdrawAmount = bankTransactionService
-                    .findBySupplierAndTransactionTypeIn(supplier,
-                                                      Lists.newArrayList(
-                                                              Initializer.transactionTypeWithdraw,
-                                                              Initializer.transactionTypeWithdrawCash,
-                                                              Initializer.transactionTypeWithdrawPurchase,
-                                                              Initializer.transactionTypeWithdrawTransfer),
-                                                      BankTransactionAmount.class)
+                    .findByBankAndTransactionTypeIn(supplier.getBank(), Lists.newArrayList(
+                            Initializer.transactionTypeWithdraw,
+                            Initializer.transactionTypeWithdrawTransfer,
+                            Initializer.transactionTypeExpense), BankTransactionAmount.class)
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
             LOG.info("مجموع الإيداعات = " + depositAmount);

@@ -1,0 +1,198 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-body">
+
+        <div class="row">
+            <ul dir="rtl" class="breadcrumb">
+                <li>
+                    <a href="" ng-click="openStateMenu()">
+                        <span>الرئيسية</span>
+                    </a>
+                </li>
+                <li>
+                    <span>سجل الدفعات</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 pull-right">
+                <button id="billPurchasePayment-menu-lower-right" style="width: 100%;"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                    <span>العمليات</span>
+                </button>
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                    for="billPurchasePayment-menu-lower-right">
+
+                    <li class="mdl-menu__item mdl-list__item"
+                        ng-click="openBillPurchasePaymentsFilter()">
+                        <span class="mdl-list__item-primary-content">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24"
+                                 height="24">
+                            <span>البحث المتقدم</span>
+                        </span>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <ul class="panel-controls pull-left"
+                style="margin-top: 2px;">
+                <li>
+                    <a href=""
+                       ng-click="openBillPurchasePaymentsFilter()"
+                       tooltip-append-to-body="true"
+                       uib-tooltip="تحديث البيانات">
+                        <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/search.{{iconSetType}}" width="24" height="24">
+                    </a>
+                </li>
+            </ul>
+            <div class="panel-title-box pull-right">
+                <h3>نتائج البحث</h3>
+            </div>
+        </div>
+        <div class="panel-body">
+
+            <div class="form-group row"
+                 ng-if="pageBillPurchasePayment.totalElements > 0">
+
+                <div class="pull-right btn-toolbar">
+
+                    <div class="btn-group" data-toggle="buttons">
+
+                        <button uib-tooltip="السابق"
+                                tooltip-append-to-body="true"
+                                ng-disabled="pageBillPurchasePayment.first"
+                                type="button"
+                                ng-click="selectPrevBillPurchasePaymentsPage()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
+                            <i class="material-icons md-36">keyboard_arrow_right</i>
+                        </button>
+
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-left">
+                            <input dir="rtl"
+                                   type="text"
+                                   readonly
+                                   class="form-control"
+                                   style="text-align: center!important;"
+                                   ng-model="pageBillPurchasePayment.currentPageString">
+                        </div>
+
+                        <button uib-tooltip="التالي"
+                                tooltip-append-to-body="true"
+                                ng-disabled="pageBillPurchasePayment.last"
+                                type="button"
+                                ng-click="selectNextBillPurchasePaymentsPage()"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect col-xs-1 col-sm-1 col-md-1 col-lg-1 pull-right">
+                            <i class="material-icons md-36">keyboard_arrow_left</i>
+                        </button>
+
+                        <button uib-tooltip="طباعة"
+                                tooltip-append-to-body="true"
+                                type="button"
+                                ng-click="printToCart('printBillPurchasePaymentTable', 'سجل الدفعات')"
+                                class="mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
+                            <img class="material-icons mdl-list__item-icon" ng-src="/ui/img/{{iconSet}}/print.{{iconSetType}}" width="24" height="24">
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="pull-left">
+
+                    <input type="text"
+                           class="form-control"
+                           placeholder="بحث سريع"
+                           ng-change="refreshGUI()"
+                           ng-model="billPurchasePayments.searchText">
+
+                </div>
+
+            </div>
+
+            <div class="form-group row" id="printBillPurchasePaymentTable">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+
+                            <th>
+                                <span>#</span>
+                            </th>
+
+                            <th>
+                                <span>رقم العقد</span>
+                            </th>
+
+                            <th>
+                                <span>العميل</span>
+                            </th>
+
+                            <th>
+                                <span>تاريخ السداد</span>
+                            </th>
+
+                            <th>
+                                <span>البيان</span>
+                            </th>
+
+                            <th>
+                                <span>المبلغ</span>
+                            </th>
+
+                            <th>
+                                <span>الربح</span>
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="billPurchasePayment in billPurchasePayments | filter:billPurchasePayments.searchText">
+                            <td>{{$index+1}}</td>
+                            <td>{{billPurchasePayment.billPurchase.code}}</td>
+                            <td>{{billPurchasePayment.billPurchase.customer.contact.shortName}}</td>
+                            <td>
+                                <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchasePayment.date | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchasePayment.date | date: 'yyyy-MM-dd'}}</span>
+                            </td>
+                            <td>{{billPurchasePayment.note}}</td>
+                            <td>{{billPurchasePayment.amount | currency:' SAR ':2}}</td>
+                            <td>{{billPurchasePayment.profit | currency:' SAR ':2}}</td>
+                        </tr>
+                        <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
+                            ng-if="!billPurchasePayments || billPurchasePayments.length ==0">
+                            <td colspan="8">
+                                <p>
+                                    <span>لا توجد دفعات حتى الآن </span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr ng-if="billPurchasePayments.length > 0">
+                            <td class="info" colspan="5">
+                                <span class="pull-left">المجموع</span>
+                            </td>
+                            <td colspan="1">{{billPurchasePayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                            <td colspan="1">{{billPurchasePayments | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

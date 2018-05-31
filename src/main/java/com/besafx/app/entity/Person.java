@@ -72,7 +72,6 @@ public class Person implements Serializable {
     @JoinColumn(name = "company")
     private Company company;
 
-
     @JsonCreator
     public static Person Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

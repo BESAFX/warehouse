@@ -76,7 +76,7 @@ public class BillPurchase implements Serializable {
         try {
             return this.billPurchaseProducts
                     .stream()
-                    .mapToDouble(billPurchaseProduct -> billPurchaseProduct.getQuantity() * billPurchaseProduct.getUnitSellPrice())
+                    .mapToDouble(billPurchaseProduct -> billPurchaseProduct.getQuantity() * billPurchaseProduct.getUnitPurchasePrice())
                     .sum();
         } catch (Exception ex) {
             return 0.0;

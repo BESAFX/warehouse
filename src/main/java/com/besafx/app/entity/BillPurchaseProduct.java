@@ -36,9 +36,9 @@ public class BillPurchaseProduct implements Serializable {
 
     private Double unitPurchasePrice;
 
-    private Double unitVat;
-
     private Double unitSellPrice;
+
+    private Double unitVat;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
@@ -50,10 +50,6 @@ public class BillPurchaseProduct implements Serializable {
     @ManyToOne
     @JoinColumn(name = "product")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "bankTransaction")
-    private BankTransaction bankTransaction;
 
     @ManyToOne
     @JoinColumn(name = "billPurchase")

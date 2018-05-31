@@ -22,7 +22,7 @@
         <div class="row">
 
             <button type="button"
-                    ng-click="openContractPremiumsFilter()"
+                    ng-click="openBillPurchasePremiumsFilter()"
                     class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                         <span class="mdl-list__item-primary-content">
                             <img class="material-icons mdl-list__item-icon"
@@ -102,26 +102,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="contractPremium in contractPremiums">
+                    <tr ng-repeat="billPurchasePremium in billPurchasePremiums">
                         <td>{{$index+1}}</td>
-                        <td>{{contractPremium.billPurchase.code}}</td>
-                        <td>{{contractPremium.billPurchase.customer.contact.shortName}}</td>
-                        <td>{{contractPremium.billPurchase.customer.contact.mobile}}</td>
+                        <td>{{billPurchasePremium.billPurchase.code}}</td>
+                        <td>{{billPurchasePremium.billPurchase.customer.contact.shortName}}</td>
+                        <td>{{billPurchasePremium.billPurchase.customer.contact.mobile}}</td>
                         <td>
-                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPremium.dueDate | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchasePremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchasePremium.dueDate | date: 'yyyy-MM-dd'}}</span>
                         </td>
-                        <td>{{contractPremium.amount | currency:' SAR ':2}}</td>
-                        <td>{{contractPremium.paid | currency:' SAR ':2}}</td>
-                        <td>{{contractPremium.remain | currency:' SAR ':2}}</td>
+                        <td>{{billPurchasePremium.amount | currency:' SAR ':2}}</td>
+                        <td>{{billPurchasePremium.paid | currency:' SAR ':2}}</td>
+                        <td>{{billPurchasePremium.remain | currency:' SAR ':2}}</td>
                     </tr>
-                    <tr ng-if="contractPremiums.length > 0">
+                    <tr ng-if="billPurchasePremiums.length > 0">
                         <td class="info" colspan="5">
                             <span class="pull-left">المجموع</span>
                         </td>
-                        <td class="success" colspan="1">{{contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchasePremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchasePremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchasePremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>

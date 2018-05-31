@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bohnman.squiggly.Squiggly;
 import com.github.bohnman.squiggly.util.SquigglyUtils;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class BillPurchaseProductRest {
 
     private final String FILTER_TABLE = "" +
             "**," +
-            "productPurchase[id,product[id,name]]," +
+            "product[id,code,name]," +
             "-billPurchase";
 
     @Autowired
@@ -40,6 +41,7 @@ public class BillPurchaseProductRest {
     @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_PRODUCT_CREATE')")
     @Transactional
     public String create(@RequestBody BillPurchaseProduct billPurchaseProduct) {
+        billPurchaseProduct.setDate(new DateTime().toDate());
         billPurchaseProduct = billPurchaseProductService.save(billPurchaseProduct);
         notificationService.notifyAll(Notification
                                               .builder()
@@ -53,6 +55,7 @@ public class BillPurchaseProductRest {
     @PreAuthorize("hasRole('ROLE_BILL_PURCHASE_PRODUCT_CREATE')")
     @Transactional
     public String createBatch(@RequestBody List<BillPurchaseProduct> billPurchaseProducts) {
+        billPurchaseProducts.stream().forEach(billPurchaseProduct -> billPurchaseProduct.setDate(new DateTime().toDate()));
         billPurchaseProducts = Lists.newArrayList(billPurchaseProductService.save(billPurchaseProducts));
         notificationService.notifyAll(Notification
                                               .builder()

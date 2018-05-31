@@ -53,7 +53,10 @@ public class Product implements Serializable {
     private List<Product> childs = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    private List<ProductPurchase> productPurchases = new ArrayList<>();
+    private List<BillPurchaseProduct> billPurchaseProducts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<BillSellProduct> billSellProducts = new ArrayList<>();
 
     @JsonCreator
     public static Product Create(String jsonString) throws IOException {
@@ -62,11 +65,11 @@ public class Product implements Serializable {
         return product;
     }
 
-    public Double getTotalQuantity() {
+    public Double getPurchasedQuantity() {
         try {
-            return this.productPurchases
+            return this.billPurchaseProducts
                     .stream()
-                    .mapToDouble(ProductPurchase::getQuantity)
+                    .mapToDouble(BillPurchaseProduct::getQuantity)
                     .sum();
         } catch (Exception ex) {
             return 0.0;
@@ -75,10 +78,9 @@ public class Product implements Serializable {
 
     public Double getSoledQuantity() {
         try {
-            return this.productPurchases
+            return this.billSellProducts
                     .stream()
-                    .flatMap(productPurchase -> productPurchase.getBillPurchaseProducts().stream())
-                    .mapToDouble(BillPurchaseProduct::getQuantity)
+                    .mapToDouble(BillSellProduct::getQuantity)
                     .sum();
         } catch (Exception ex) {
             return 0.0;
@@ -87,7 +89,7 @@ public class Product implements Serializable {
 
     public Double getRemainQuantity() {
         try {
-            return this.getTotalQuantity() - this.getSoledQuantity();
+            return this.getPurchasedQuantity() - this.getSoledQuantity();
         } catch (Exception ex) {
             return 0.0;
         }

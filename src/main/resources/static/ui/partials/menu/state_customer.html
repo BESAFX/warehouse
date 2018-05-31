@@ -235,9 +235,9 @@
                             <td>{{customer.contact.identityNumber}}</td>
                             <td>{{customer.contact.mobile}}</td>
                             <td>{{customer.contact.phone}}</td>
-                            <td>{{customer.contractsTotalPrice | currency:' SAR ':2}}</td>
-                            <td>{{customer.contractsPaid | currency:' SAR ':2}}</td>
-                            <td>{{customer.contractsRemain | currency:' SAR ':2}}</td>
+                            <td>{{customer.billPurchasesTotalPrice | currency:' SAR ':2}}</td>
+                            <td>{{customer.billPurchasesPaid | currency:' SAR ':2}}</td>
+                            <td>{{customer.billPurchasesRemain | currency:' SAR ':2}}</td>
                         </tr>
                         <tr class="blank_row no-print" style="height: 10px !important; background-color: #FFFFFF;"
                             ng-if="!customers || customers.length ==0">
@@ -252,9 +252,9 @@
                             <td class="info" colspan="7">
                                 <span class="pull-left">المجموع الكلي</span>
                             </td>
-                            <td class="success" colspan="1">{{customers | sumByKey:'contractsTotalPrice' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{customers | sumByKey:'contractsPaid' | currency:' SAR ':2}}</td>
-                            <td class="success" colspan="1">{{customers | sumByKey:'contractsRemain' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{customers | sumByKey:'billPurchasesTotalPrice' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{customers | sumByKey:'billPurchasesPaid' | currency:' SAR ':2}}</td>
+                            <td class="success" colspan="1">{{customers | sumByKey:'billPurchasesRemain' | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>

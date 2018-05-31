@@ -10,7 +10,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @ControllerAdvice
 @RestController
@@ -18,9 +17,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ApiError> handleAll(Exception ex, WebRequest request) {
-        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, Optional.ofNullable(ex.getMessage()).isPresent() ? ex.getMessage() :
-                "هناك خطأ ما، فضلاً قم بإعادة تحميل الصفحة او الاتصال بالدعم بالفني", "error occurred");
-        return new ResponseEntity<ApiError>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+        StringBuilder builder = new StringBuilder();
+        builder.append("هناك خطأ ما، فضلاً قم بإعادة تحميل الصفحة او الاتصال بالدعم بالفني");
+        builder.append(" [ ");
+        builder.append(ex.getLocalizedMessage());
+        builder.append(" ] ");
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, builder.toString(), "error occurred");
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public class ApiError {

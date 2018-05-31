@@ -27,7 +27,7 @@
                            ng-model="supplierStatement.supplier"
                            required="required"
                            disable-validation-message=""
-                           on-select="fetchSupplierStatementContracts();fetchSupplierStatementBanks();"
+                           on-select="fetchSupplierStatementBillPurchases();fetchSupplierStatementBanks();"
                            theme="bootstrap">
                     <ui-select-match placeholder="اختر حساب المورد">
                         {{$select.selected.contact.shortName}}

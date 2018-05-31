@@ -66,7 +66,7 @@ public class BillPurchaseRest {
     private BillPurchaseSearch billPurchaseSearch;
 
     @Autowired
-    private CustomerService customerService;
+    private BankService bankService;
 
     @Autowired
     private SupplierService supplierService;
@@ -87,16 +87,19 @@ public class BillPurchaseRest {
             throw new CustomException("عفواً، رقم الفاتورة المدخل غير متاح، حاول برقم آخر");
         }
         Person caller = ((PersonAwareUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPerson();
-        billPurchase.setPerson(caller);
         billPurchase.setDate(new DateTime().toDate());
+        billPurchase.setPerson(caller);
         billPurchase = billPurchaseService.save(billPurchase);
+
         LOG.info("ربط الأصناف المطلوبة مع الفاتورة");
         ListIterator<BillPurchaseProduct> billPurchaseProductListIterator = billPurchase.getBillPurchaseProducts().listIterator();
         while (billPurchaseProductListIterator.hasNext()) {
             BillPurchaseProduct billPurchaseProduct = billPurchaseProductListIterator.next();
+            billPurchaseProduct.setDate(new DateTime().toDate());
             billPurchaseProduct.setBillPurchase(billPurchase);
             billPurchaseProductListIterator.set(billPurchaseProductService.save(billPurchaseProduct));
         }
+
         StringBuilder builder = new StringBuilder();
         builder.append("تم إنشاء الفاتورة بنجاح بمجموع أسعار = ");
         builder.append(billPurchase.getTotalPrice());
@@ -109,6 +112,7 @@ public class BillPurchaseRest {
                                               .builder()
                                               .message(builder.toString())
                                               .type("success").build());
+
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchase);
     }
 
@@ -126,7 +130,7 @@ public class BillPurchaseRest {
 
         JSONObject jsonObject_billPurchase = jsonObject_wrapper.getJSONObject("obj1");
 
-        LOG.info("إنشاء الفاتورة");
+        LOG.info("إنشاء رأس الفاتورة");
         BillPurchase billPurchase = new BillPurchase();
         billPurchase.setCode(jsonObject_billPurchase.getLong("code"));
         BillPurchase tempBillPurchase = billPurchaseService.findByCode(billPurchase.getCode());
@@ -136,11 +140,29 @@ public class BillPurchaseRest {
         billPurchase.setDiscount(jsonObject_billPurchase.getDouble("discount"));
         billPurchase.setWrittenDate(DateConverter.parseJsonStringDate(jsonObject_billPurchase.getString("writtenDate")));
         billPurchase.setSupplier(supplierService.findOne(jsonObject_billPurchase.getJSONObject("supplier").getLong("id")));
+        billPurchase.setDate(new DateTime().toDate());
         billPurchase.setPerson(caller);
         billPurchase = billPurchaseService.save(billPurchase);
 
-        if(jsonObject_billPurchase.getDouble("paid") > 0){
-            LOG.info("إنشاء الدفعة المالية");
+        LOG.info("ربط الأصناف بالفاتورة");
+        JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
+        for (int i = 0; i < jsonArray_productPurchases.length(); i++) {
+
+            JSONObject jsonObject_productPurchase = jsonArray_productPurchases.getJSONObject(i);
+
+            BillPurchaseProduct billPurchaseProduct = new BillPurchaseProduct();
+            billPurchaseProduct.setBillPurchase(billPurchase);
+            billPurchaseProduct.setProduct(productService.findOne(jsonObject_productPurchase.getJSONObject("product").getLong("id")));
+            billPurchaseProduct.setDate(billPurchase.getWrittenDate());
+            billPurchaseProduct.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
+            billPurchaseProduct.setUnitPurchasePrice(jsonObject_productPurchase.getDouble("unitPurchasePrice"));
+            billPurchaseProduct.setUnitSellPrice(jsonObject_productPurchase.getDouble("unitSellPrice"));
+            billPurchaseProduct.setUnitVat(jsonObject_productPurchase.getDouble("unitVat"));
+            billPurchase.getBillPurchaseProducts().add(billPurchaseProductService.save(billPurchaseProduct));
+        }
+
+        LOG.info("إنشاء الدفعة المالية");
+        if (jsonObject_billPurchase.getDouble("paid") > 0) {
             BillPurchasePayment billPurchasePayment = new BillPurchasePayment();
             BillPurchasePayment topBillPurchasePayment = billPurchasePaymentService.findTopByOrderByCodeDesc();
             if (topBillPurchasePayment == null) {
@@ -152,73 +174,31 @@ public class BillPurchaseRest {
             billPurchasePayment.setAmount(jsonObject_billPurchase.getDouble("paid"));
             billPurchasePayment.setDate(billPurchase.getWrittenDate());
 
-            LOG.info("عملية سداد للدفعة");
-            BankTransaction bankTransaction = new BankTransaction();
+            LOG.info("عملية سحب من حساب المؤسسة بالمبالغ الواصلة");
+            BankTransaction bankTransactionWithdraw = new BankTransaction();
             {
-                bankTransaction.setAmount(billPurchasePayment.getAmount());
-                bankTransaction.setBank(Initializer.bank);
-                bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
-                bankTransaction.setDate(billPurchasePayment.getDate());
-                bankTransaction.setPerson(caller);
-                StringBuilder builder = new StringBuilder();
-                builder.append("إيداع مبلغ نقدي بقيمة ");
-                builder.append(bankTransaction.getAmount());
-                builder.append("ريال سعودي، ");
-                builder.append(" للحساب البنكي / ");
-                builder.append(bankTransaction.getBank().getName());
-                builder.append("، دفعة مالية مستحقة بتاريخ ");
-                builder.append(DateConverter.getDateInFormat(billPurchasePayment.getDate()));
-                builder.append("، للفاتورة رقم / " + billPurchase.getCode());
-                bankTransaction.setNote(builder.toString());
-            }
-
-            billPurchasePayment.setBankTransaction(bankTransactionService.save(bankTransaction));
-            billPurchasePayment.setPerson(caller);
-            billPurchasePayment.setNote(bankTransaction.getNote());
-            billPurchase.getBillPurchasePayments().add(billPurchasePaymentService.save(billPurchasePayment));
-
-        }
-
-        LOG.info("شراء الأصناف");
-        JSONArray jsonArray_productPurchases = jsonObject_wrapper.getJSONArray("obj2");
-        for(int i = 0; i < jsonArray_productPurchases.length(); i++){
-
-            JSONObject jsonObject_productPurchase = jsonArray_productPurchases.getJSONObject(i);
-
-            LOG.info("ربط الأصناف بالفاتورة");
-            BillPurchaseProduct billPurchaseProduct = new BillPurchaseProduct();
-            billPurchaseProduct.setBillPurchase(billPurchase);
-            billPurchaseProduct.setProduct(productService.findOne(jsonObject_productPurchase.getJSONObject("product").getLong("id")));
-            billPurchaseProduct.setDate(billPurchase.getWrittenDate());
-            billPurchaseProduct.setQuantity(jsonObject_productPurchase.getDouble("quantity"));
-            billPurchaseProduct.setUnitPurchasePrice(jsonObject_productPurchase.getDouble("unitPurchasePrice"));
-            billPurchaseProduct.setUnitSellPrice(jsonObject_productPurchase.getDouble("unitSellPrice"));
-            billPurchaseProduct.setUnitVat(jsonObject_productPurchase.getDouble("unitVat"));
-
-            LOG.info("إنشاء عملية السحب للشراء");
-            BankTransaction bankTransactionWithdrawPurchase = new BankTransaction();
-            {
-                bankTransactionWithdrawPurchase.setBank(Initializer.bank);
-                bankTransactionWithdrawPurchase.setAmount(billPurchaseProduct.getQuantity() * billPurchaseProduct.getUnitPurchasePrice());
-                bankTransactionWithdrawPurchase.setTransactionType(Initializer.transactionTypeWithdrawPurchase);
-                bankTransactionWithdrawPurchase.setDate(billPurchaseProduct.getDate());
-                bankTransactionWithdrawPurchase.setPerson(caller);
+                bankTransactionWithdraw.setAmount(billPurchasePayment.getAmount());
+                bankTransactionWithdraw.setDate(billPurchasePayment.getDate());
+                bankTransactionWithdraw.setBank(Initializer.company.getBank());
+                bankTransactionWithdraw.setTransactionType(Initializer.transactionTypeWithdraw);
+                bankTransactionWithdraw.setPerson(caller);
                 StringBuilder builder = new StringBuilder();
                 builder.append("سحب مبلغ نقدي بقيمة ");
-                builder.append(bankTransactionWithdrawPurchase.getAmount());
+                builder.append(bankTransactionWithdraw.getAmount());
                 builder.append("ريال سعودي، ");
-                builder.append(" من الحساب البنكي / ");
-                builder.append(bankTransactionWithdrawPurchase.getBank().getName());
-                builder.append("، قيمة شراء " + billPurchaseProduct.getProduct().getName());
-                builder.append("، عدد /  " + billPurchaseProduct.getQuantity());
-                builder.append("، بسعر الوحدة /  " + billPurchaseProduct.getUnitPurchasePrice());
-                builder.append(" ، " + (billPurchaseProduct.getNote() == null ? "" : billPurchaseProduct.getNote()));
-                bankTransactionWithdrawPurchase.setNote(builder.toString());
+                builder.append(" من حساب المؤسسة / ");
+                builder.append(Initializer.company.getName());
+                builder.append("، دفعة مالية بتاريخ ");
+                builder.append(DateConverter.getDateInFormat(billPurchasePayment.getDate()));
+                builder.append("، للفاتورة رقم / " + billPurchase.getCode());
+                bankTransactionWithdraw.setNote(builder.toString());
             }
 
+            billPurchasePayment.setBankTransaction(bankTransactionService.save(bankTransactionWithdraw));
+            billPurchasePayment.setPerson(caller);
+            billPurchasePayment.setNote(bankTransactionWithdraw.getNote());
+            billPurchase.getBillPurchasePayments().add(billPurchasePaymentService.save(billPurchasePayment));
 
-            billPurchaseProduct.setBankTransaction(bankTransactionWithdrawPurchase);
-            billPurchase.getBillPurchaseProducts().add(billPurchaseProductService.save(billPurchaseProduct));
         }
 
         StringBuilder builder = new StringBuilder();
@@ -233,6 +213,7 @@ public class BillPurchaseRest {
                                               .builder()
                                               .message(builder.toString())
                                               .type("success").build());
+
         return SquigglyUtils.stringify(Squiggly.init(new ObjectMapper(), FILTER_TABLE), billPurchase);
     }
 
@@ -246,22 +227,20 @@ public class BillPurchaseRest {
             LOG.info("حذف كل سلع الفاتورة");
             billPurchaseProductService.delete(billPurchase.getBillPurchaseProducts());
             LOG.info("حذف كل معاملات البنك لدفعات الفاتورة");
-            bankTransactionService.delete(
-                    billPurchase
-                            .getBillPurchasePayments()
-                            .stream()
-                            .map(BillPurchasePayment::getBankTransaction)
-                            .collect(Collectors.toList())
+            bankTransactionService.delete(billPurchase
+                                                  .getBillPurchasePayments()
+                                                  .stream()
+                                                  .map(BillPurchasePayment::getBankTransaction)
+                                                  .collect(Collectors.toList())
                                          );
             LOG.info("حذف كل دفعات الفاتورة");
             billPurchasePaymentService.delete(billPurchase.getBillPurchasePayments());
             LOG.info("حذف الفاتورة");
             billPurchaseService.delete(id);
-            notificationService.notifyAll(
-                    Notification
-                            .builder()
-                            .message("تم حذف الفاتورة وكل ما يتعلق به من حسابات بنجاح")
-                            .type("error").build());
+            notificationService.notifyAll(Notification
+                                                  .builder()
+                                                  .message("تم حذف الفاتورة وكل ما يتعلق به من حسابات بنجاح")
+                                                  .type("error").build());
         }
     }
 
@@ -287,13 +266,6 @@ public class BillPurchaseRest {
             @RequestParam(value = "codeTo", required = false) final Integer codeTo,
             @RequestParam(value = "dateFrom", required = false) final Long dateFrom,
             @RequestParam(value = "dateTo", required = false) final Long dateTo,
-            //Customer Filters
-            @RequestParam(value = "customerCodeFrom", required = false) final Integer customerCodeFrom,
-            @RequestParam(value = "customerCodeTo", required = false) final Integer customerCodeTo,
-            @RequestParam(value = "customerRegisterDateFrom", required = false) final Long customerRegisterDateFrom,
-            @RequestParam(value = "customerRegisterDateTo", required = false) final Long customerRegisterDateTo,
-            @RequestParam(value = "customerName", required = false) final String customerName,
-            @RequestParam(value = "customerMobile", required = false) final String customerMobile,
             //Supplier Filters
             @RequestParam(value = "supplierCodeFrom", required = false) final Integer supplierCodeFrom,
             @RequestParam(value = "supplierCodeTo", required = false) final Integer supplierCodeTo,
@@ -312,12 +284,6 @@ public class BillPurchaseRest {
                         codeTo,
                         dateFrom,
                         dateTo,
-                        customerCodeFrom,
-                        customerCodeTo,
-                        customerRegisterDateFrom,
-                        customerRegisterDateTo,
-                        customerName,
-                        customerMobile,
                         supplierCodeFrom,
                         supplierCodeTo,
                         supplierRegisterDateFrom,

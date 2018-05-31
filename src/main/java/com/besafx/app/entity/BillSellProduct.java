@@ -50,10 +50,6 @@ public class BillSellProduct implements Serializable {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "bankTransaction")
-    private BankTransaction bankTransaction;
-
-    @ManyToOne
     @JoinColumn(name = "billSell")
     private BillSell billSell;
 

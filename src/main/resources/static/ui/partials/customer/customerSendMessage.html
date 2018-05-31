@@ -55,9 +55,9 @@
                             <td>{{$index+1}}</td>
                             <td>{{customer.contact.shortName}}</td>
                             <td>{{customer.contact.mobile}}</td>
-                            <td>{{customer.contractsTotalPrice | currency:' SAR ':2}}</td>
-                            <td>{{customer.contractsPaid | currency:' SAR ':2}}</td>
-                            <td>{{customer.contractsRemain | currency:' SAR ':2}}</td>
+                            <td>{{customer.billPurchasesTotalPrice | currency:' SAR ':2}}</td>
+                            <td>{{customer.billPurchasesPaid | currency:' SAR ':2}}</td>
+                            <td>{{customer.billPurchasesRemain | currency:' SAR ':2}}</td>
                         </tr>
                         </tbody>
                     </table>

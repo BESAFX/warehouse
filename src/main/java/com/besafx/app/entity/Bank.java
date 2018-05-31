@@ -34,9 +34,6 @@ public class Bank implements Serializable {
 
     private String name;
 
-    @OneToMany(mappedBy = "bank")
-    private List<BankTransaction> bankTransactions = new ArrayList<>();
-
     @Transient
     private Double balance;
 
@@ -45,6 +42,9 @@ public class Bank implements Serializable {
 
     @Transient
     private Double totalWithdraws;
+
+    @OneToMany(mappedBy = "bank")
+    private List<BankTransaction> bankTransactions = new ArrayList<>();
 
     @JsonCreator
     public static Bank Create(String jsonString) throws IOException {

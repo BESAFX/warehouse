@@ -22,8 +22,8 @@
         <div class="row">
 
             <button type="button"
-                    ng-click="fetchContractPaymentsProfit()"
-                    ng-disabled="!contractPaymentProfit.dateFrom || !contractPaymentProfit.dateTo"
+                    ng-click="fetchBillPurchasePaymentsProfit()"
+                    ng-disabled="!billPurchasePaymentProfit.dateFrom || !billPurchasePaymentProfit.dateTo"
                     class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon"
@@ -35,8 +35,8 @@
             </button>
 
             <button type="button"
-                    ng-click="printToCart('printContractPaymentsProfitTable', 'تقرير أرباح التحصيل')"
-                    ng-disabled="!contractPaymentProfit.dateFrom || !contractPaymentProfit.dateTo"
+                    ng-click="printToCart('printBillPurchasePaymentsProfitTable', 'تقرير أرباح التحصيل')"
+                    ng-disabled="!billPurchasePaymentProfit.dateFrom || !billPurchasePaymentProfit.dateTo"
                     class="pull-right mdl-button mdl-js-button mdl-js-ripple-effect pull-right">
                     <span class="mdl-list__item-primary-content">
                         <img class="material-icons mdl-list__item-icon"
@@ -51,12 +51,12 @@
 
         <div class="row">
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-init="contractPaymentProfit.calendar='H'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-init="billPurchasePaymentProfit.calendar='H'">
                 <label for="calendar" class="control-label">نوع التقويم</label>
                 <select id="calendar"
                         style="height: 40px"
                         class="form-control"
-                        ng-model="contractPaymentProfit.calendar"
+                        ng-model="billPurchasePaymentProfit.calendar"
                         required="required"
                         disable-validation-message="">
                     <option value="H">تقويم هجري</option>
@@ -64,14 +64,14 @@
                 </select>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="contractPaymentProfit.calendar==='H'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="billPurchasePaymentProfit.calendar==='H'">
                 <label for="dateFrom" class="control-label">التاريخ من</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
                            id="dateFrom"
                            type="text"
                            class="form-control is-calendarPicker"
-                           ng-model="contractPaymentProfit.dateFrom"
+                           ng-model="billPurchasePaymentProfit.dateFrom"
                            calendarType="ummalqura"
                            language="en"
                            dateFormat="yyyy/mm/dd"
@@ -81,14 +81,14 @@
                 </div>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="contractPaymentProfit.calendar==='H'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="billPurchasePaymentProfit.calendar==='H'">
                 <label for="dateTo" class="control-label">التاريخ إلى</label>
                 <div dir="ltr" class="input-group">
                     <input dir="rtl"
                            id="dateTo"
                            type="text"
                            class="form-control is-calendarPicker"
-                           ng-model="contractPaymentProfit.dateTo"
+                           ng-model="billPurchasePaymentProfit.dateTo"
                            calendarType="ummalqura"
                            language="en"
                            dateFormat="yyyy/mm/dd"
@@ -98,25 +98,25 @@
                 </div>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="contractPaymentProfit.calendar==='G'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="billPurchasePaymentProfit.calendar==='G'">
                 <label for="G-dateFrom" class="control-label">التاريخ من</label>
                 <input id="G-dateFrom"
                        class="form-control"
                        dir="ltr"
                        type="text"
                        name="input"
-                       ng-model="contractPaymentProfit.dateFrom"
+                       ng-model="billPurchasePaymentProfit.dateFrom"
                        datetime="yyyy-MM-dd"/>
             </div>
 
-            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="contractPaymentProfit.calendar==='G'">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4" ng-if="billPurchasePaymentProfit.calendar==='G'">
                 <label for="G-dateTo" class="control-label">التاريخ إلى</label>
                 <input id="G-dateTo"
                        class="form-control"
                        dir="ltr"
                        type="text"
                        name="input"
-                       ng-model="contractPaymentProfit.dateTo"
+                       ng-model="billPurchasePaymentProfit.dateTo"
                        datetime="yyyy-MM-dd"/>
             </div>
 
@@ -129,7 +129,7 @@
 
     <div class="panel panel-body">
 
-        <div class="form-group row" id="printContractPaymentsProfitTable">
+        <div class="form-group row" id="printBillPurchasePaymentsProfitTable">
 
             <div class="form-group row">
 
@@ -143,13 +143,13 @@
                     <tr>
                         <td width="20%">الفترة من</td>
                         <td width="30%">
-                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPaymentProfit.dateFrom | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPaymentProfit.dateFrom | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchasePaymentProfit.dateFrom | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchasePaymentProfit.dateFrom | date: 'yyyy-MM-dd'}}</span>
                         </td>
                         <td width="20%">الفترة إلى</td>
                         <td width="30%">
-                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPaymentProfit.dateTo | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPaymentProfit.dateTo | date: 'yyyy-MM-dd'}}</span>
+                            <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchasePaymentProfit.dateTo | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                            <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchasePaymentProfit.dateTo | date: 'yyyy-MM-dd'}}</span>
                         </td>
                     </tr>
                     </tbody>
@@ -204,7 +204,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="billPurchasePayment in contractPaymentProfit.contractPayments">
+                    <tr ng-repeat="billPurchasePayment in billPurchasePaymentProfit.billPurchasePayments">
                         <td>{{$index+1}}</td>
                         <td>{{billPurchasePayment.code}}</td>
                         <td>{{billPurchasePayment.billPurchase.code}}</td>
@@ -219,13 +219,13 @@
                         <td>{{billPurchasePayment.profit | currency:' SAR ':2}}</td>
                         <td>{{billPurchasePayment.amount | currency:' SAR ':2}}</td>
                     </tr>
-                    <tr ng-if="contractPaymentProfit.contractPayments.length > 0">
+                    <tr ng-if="billPurchasePaymentProfit.billPurchasePayments.length > 0">
                         <td class="info" colspan="7">
                             <span class="pull-left">المجموع الكلي</span>
                         </td>
-                        <td class="success" colspan="1">{{contractPaymentProfit.contractPayments | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contractPaymentProfit.contractPayments | sumByKey:'profit' | currency:' SAR ':2}}</td>
-                        <td class="success" colspan="1">{{contractPaymentProfit.contractPayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchasePaymentProfit.billPurchasePayments | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchasePaymentProfit.billPurchasePayments | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                        <td class="success" colspan="1">{{billPurchasePaymentProfit.billPurchasePayments | sumByKey:'amount' | currency:' SAR ':2}}</td>
                     </tr>
                     </tbody>
                 </table>

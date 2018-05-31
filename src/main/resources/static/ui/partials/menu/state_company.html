@@ -20,7 +20,7 @@
                             <span>الشعار الرسمي</span>
                         </a>
                         <a href="#panel-3-company"
-                           ng-click="findMyContracts()"
+                           ng-click="findMyBillPurchases()"
                            class="mdl-tabs__tab">
                             <span>العقود</span>
                         </a>
@@ -248,7 +248,7 @@
 
                     <div class="mdl-tabs__panel mdl-tabs__panel_free" id="panel-3-company">
 
-                        <div class="form-group row" ng-if="myContracts.length > 0">
+                        <div class="form-group row" ng-if="myBillPurchases.length > 0">
 
                             <div class="pull-left">
 
@@ -256,7 +256,7 @@
                                        class="form-control"
                                        placeholder="بحث سريع"
                                        ng-change="refreshGUI()"
-                                       ng-model="myContracts.searchText">
+                                       ng-model="myBillPurchases.searchText">
 
                             </div>
 
@@ -328,8 +328,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="billPurchase in myContracts | filter:myContracts.searchText"
-                                        ng-dblclick="ModalProvider.openContractDetailsModel(billPurchase)">
+                                    <tr ng-repeat="billPurchase in myBillPurchases | filter:myBillPurchases.searchText"
+                                        ng-dblclick="ModalProvider.openBillPurchaseDetailsModel(billPurchase)">
                                         <td>{{$index+1}}</td>
                                         <td>{{billPurchase.code}}</td>
                                         <td>{{billPurchase.customer.contact.shortName}}</td>
@@ -350,23 +350,23 @@
                                         <td>{{billPurchase.remain | currency:' SAR ':2}}</td>
                                     </tr>
                                     <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                        ng-show="!myContracts || myContracts.length ==0">
+                                        ng-show="!myBillPurchases || myBillPurchases.length ==0">
                                         <td colspan="14">
                                             <span>لا توجد عقود حتى الآن</span>
                                         </td>
                                     </tr>
-                                    <tr ng-if="myContracts.length > 0">
+                                    <tr ng-if="myBillPurchases.length > 0">
                                         <td class="info" colspan="6">
                                             <span class="pull-left">المجموع الكلي</span>
                                         </td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'profit' | currency:' SAR ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'totalVat' | currency:' SAR ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'discount' | currency:' SAR ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                                        <td class="success" colspan="1">{{myContracts | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'capitalCash' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'profit' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'profitPercentage' | currency:' % ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'totalVat' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'discount' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'totalPriceAfterDiscountAndVat' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                                        <td class="success" colspan="1">{{myBillPurchases | sumByKey:'remain' | currency:' SAR ':2}}</td>
                                     </tr>
                                     </tbody>
                                 </table>

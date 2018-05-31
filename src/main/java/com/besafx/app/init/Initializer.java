@@ -5,7 +5,6 @@ import com.besafx.app.service.*;
 import com.besafx.app.util.JSONConverter;
 import com.besafx.app.util.Options;
 import com.google.common.collect.Lists;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +19,15 @@ public class Initializer implements CommandLineRunner {
 
     public static Company company;
 
-    public static Bank bank;
-
     public static TransactionType transactionTypeDeposit;
 
     public static TransactionType transactionTypeDepositTransfer;
-
-    public static TransactionType transactionTypeDepositPayment;
 
     public static TransactionType transactionTypeWithdraw;
 
     public static TransactionType transactionTypeWithdrawTransfer;
 
-    public static TransactionType transactionTypeWithdrawPurchase;
-
-    public static TransactionType transactionTypeWithdrawCash;
+    public static TransactionType transactionTypeExpense;
 
     @Autowired
     private CompanyService companyService;
@@ -46,13 +39,10 @@ public class Initializer implements CommandLineRunner {
     private TransactionTypeService transactionTypeService;
 
     @Autowired
-    private SupplierService supplierService;
-
-    @Autowired
     private PersonService personService;
 
     @Autowired
-    private BillPurchaseService billPurchaseService;
+    private ContactService contactService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -74,24 +64,14 @@ public class Initializer implements CommandLineRunner {
 
         if (Lists.newArrayList(companyService.findAll()).isEmpty()) {
 
-            LOG.info("إنشاء الحساب البنكي");
+            LOG.info("إنشاء الحساب البنكي المركزي");
             Bank bank = new Bank();
             bank.setName("الصندوق");
             bankService.save(bank);
 
-            LOG.info("إنشاء حساب مورد لصاحب المؤسسة");
-            Supplier supplier = new Supplier();
-            supplier.setCode(1);
-            supplier.setRegisterDate(new DateTime().toDate());
-            supplier.setEnabled(true);
-            Contact contact = new Contact();
-            contact.setName("مؤسسة الدرع لتقنية المعلومات");
-            supplier.setContact(billPurchaseService.save(contact));
-
             LOG.info("إنشاء حساب الشركة");
             company = new Company();
-            company.setName(supplier.getContact().getName());
-            company.setSupplier(supplierService.save(supplier));
+            company.setBank(bank);
             companyService.save(company);
 
             LOG.info("إنشاء أنواع العمليات المالية");
@@ -109,13 +89,6 @@ public class Initializer implements CommandLineRunner {
             transactionTypeDepositTransfer.setTransactionType(transactionTypeDeposit);
             transactionTypeService.save(transactionTypeDepositTransfer);
 
-            LOG.info("عملية الإيداع[سداد]");
-            TransactionType transactionTypeDepositPayment = new TransactionType();
-            transactionTypeDepositPayment.setCode("Deposit_Payment");
-            transactionTypeDepositPayment.setName("إيداع[سداد]");
-            transactionTypeDepositPayment.setTransactionType(transactionTypeDeposit);
-            transactionTypeService.save(transactionTypeDepositPayment);
-
             LOG.info("عملية السحب");
             TransactionType transactionTypeWithdraw = new TransactionType();
             transactionTypeWithdraw.setCode("Withdraw");
@@ -129,19 +102,12 @@ public class Initializer implements CommandLineRunner {
             transactionTypeWithdrawTransfer.setTransactionType(transactionTypeWithdraw);
             transactionTypeService.save(transactionTypeWithdrawTransfer);
 
-            LOG.info("عملية السحب[شراء]");
-            TransactionType transactionTypeWithdrawPurchase = new TransactionType();
-            transactionTypeWithdrawPurchase.setCode("Withdraw_Purchase");
-            transactionTypeWithdrawPurchase.setName("سحب[شراء]");
-            transactionTypeWithdrawPurchase.setTransactionType(transactionTypeWithdraw);
-            transactionTypeService.save(transactionTypeWithdrawPurchase);
-
-            LOG.info("عملية السحب[مصروفات]");
-            TransactionType transactionTypeWithdrawCash = new TransactionType();
-            transactionTypeWithdrawCash.setCode("Withdraw_Cash");
-            transactionTypeWithdrawCash.setName("سحب[مصروفات]");
-            transactionTypeWithdrawCash.setTransactionType(transactionTypeWithdraw);
-            transactionTypeService.save(transactionTypeWithdrawCash);
+            LOG.info("[مصروفات]");
+            TransactionType transactionTypeExpense = new TransactionType();
+            transactionTypeExpense.setCode("Expense");
+            transactionTypeExpense.setName("[مصروفات]");
+            transactionTypeExpense.setTransactionType(transactionTypeWithdraw);
+            transactionTypeService.save(transactionTypeExpense);
 
         }
 
@@ -152,7 +118,7 @@ public class Initializer implements CommandLineRunner {
             contact.setName("بسام المهدي");
             contact.setPhoto("");
             contact.setQualification("Web Developer");
-            person.setContact(billPurchaseService.save(contact));
+            person.setContact(contactService.save(contact));
             person.setEmail("islamhaker@gmail.com");
             person.setPassword(passwordEncoder.encode("besa2009"));
             person.setHiddenPassword("besa2009");
@@ -167,29 +133,29 @@ public class Initializer implements CommandLineRunner {
                                             "ROLE_DEPOSIT_CREATE",
                                             "ROLE_WITHDRAW_CREATE",
                                             "ROLE_TRANSFER_CREATE",
-                                            "ROLE_WITHDRAW_CASH_CREATE",
+                                            "ROLE_EXPENSE_CREATE",
                                             "ROLE_SMS_SEND",
                                             "ROLE_CUSTOMER_CREATE",
                                             "ROLE_CUSTOMER_UPDATE",
                                             "ROLE_CUSTOMER_DELETE",
-                                            "ROLE_CUSTOMER_NOTE_CREATE",
-                                            "ROLE_CUSTOMER_NOTE_UPDATE",
-                                            "ROLE_CUSTOMER_NOTE_DELETE",
                                             "ROLE_SUPPLIER_CREATE",
                                             "ROLE_SUPPLIER_UPDATE",
                                             "ROLE_SUPPLIER_DELETE",
                                             "ROLE_PRODUCT_CREATE",
                                             "ROLE_PRODUCT_UPDATE",
                                             "ROLE_PRODUCT_DELETE",
-                                            "ROLE_PRODUCT_PURCHASE_CREATE",
-                                            "ROLE_CONTRACT_CREATE",
-                                            "ROLE_CONTRACT_DELETE",
-                                            "ROLE_CONTRACT_PRODUCT_CREATE",
-                                            "ROLE_CONTRACT_PRODUCT_DELETE",
-                                            "ROLE_CONTRACT_PREMIUM_CREATE",
-                                            "ROLE_CONTRACT_PREMIUM_DELETE",
-                                            "ROLE_CONTRACT_PAYMENT_CREATE",
-                                            "ROLE_CONTRACT_PAYMENT_DELETE",
+                                            "ROLE_BILL_PURCHASE_CREATE",
+                                            "ROLE_BILL_PURCHASE_DELETE",
+                                            "ROLE_BILL_PURCHASE_PRODUCT_CREATE",
+                                            "ROLE_BILL_PURCHASE_PRODUCT_DELETE",
+                                            "ROLE_BILL_PURCHASE_PAYMENT_CREATE",
+                                            "ROLE_BILL_PURCHASE_PAYMENT_DELETE",
+                                            "ROLE_BILL_SELL_CREATE",
+                                            "ROLE_BILL_SELL_DELETE",
+                                            "ROLE_BILL_SELL_PRODUCT_CREATE",
+                                            "ROLE_BILL_SELL_PRODUCT_DELETE",
+                                            "ROLE_BILL_SELL_PAYMENT_CREATE",
+                                            "ROLE_BILL_SELL_PAYMENT_DELETE",
                                             "ROLE_PERSON_CREATE",
                                             "ROLE_PERSON_UPDATE",
                                             "ROLE_PERSON_DELETE",
@@ -218,21 +184,15 @@ public class Initializer implements CommandLineRunner {
 
         company = companyService.findFirstBy();
 
-        bank = bankService.findFirstBy();
-
         transactionTypeDeposit = transactionTypeService.findByCode("Deposit");
 
         transactionTypeDepositTransfer = transactionTypeService.findByCode("Deposit_Transfer");
-
-        transactionTypeDepositPayment = transactionTypeService.findByCode("Deposit_Payment");
 
         transactionTypeWithdraw = transactionTypeService.findByCode("Withdraw");
 
         transactionTypeWithdrawTransfer = transactionTypeService.findByCode("Withdraw_Transfer");
 
-        transactionTypeWithdrawPurchase = transactionTypeService.findByCode("Withdraw_Purchase");
-
-        transactionTypeWithdrawCash = transactionTypeService.findByCode("Withdraw_Cash");
+        transactionTypeExpense = transactionTypeService.findByCode("Expense");
 
     }
 }

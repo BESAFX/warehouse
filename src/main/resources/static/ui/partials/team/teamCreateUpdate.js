@@ -126,52 +126,52 @@ app.controller('teamCreateUpdateCtrl', ['TeamService', '$scope', '$rootScope', '
             selected: false,
             category: 'الإدارة'
         });
-        //////////////////////////Contract//////////////////////////////////////////
+        //////////////////////////BillPurchase//////////////////////////////////////////
         $scope.roles.push({
             name: 'إنشاء العقود',
-            value: 'ROLE_CONTRACT_CREATE',
+            value: 'ROLE_BILL_PURCHASE_CREATE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'حذف العقود',
-            value: 'ROLE_CONTRACT_DELETE',
+            value: 'ROLE_BILL_PURCHASE_DELETE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'اضافة سلع للعقود',
-            value: 'ROLE_CONTRACT_PRODUCT_CREATE',
+            value: 'ROLE_BILL_PURCHASE_PRODUCT_CREATE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'حذف سلع من العقود',
-            value: 'ROLE_CONTRACT_PRODUCT_DELETE',
+            value: 'ROLE_BILL_PURCHASE_PRODUCT_DELETE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'اضافة قسط للعقود',
-            value: 'ROLE_CONTRACT_PREMIUM_CREATE',
+            value: 'ROLE_BILL_PURCHASE_PREMIUM_CREATE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'حذف قسط من العقود',
-            value: 'ROLE_CONTRACT_PREMIUM_DELETE',
+            value: 'ROLE_BILL_PURCHASE_PREMIUM_DELETE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'تسديد دفعة مالية',
-            value: 'ROLE_CONTRACT_PAYMENT_CREATE',
+            value: 'ROLE_BILL_PURCHASE_PAYMENT_CREATE',
             selected: false,
             category: 'الإدارة'
         });
         $scope.roles.push({
             name: 'حذف دفعة مالية',
-            value: 'ROLE_CONTRACT_PAYMENT_DELETE',
+            value: 'ROLE_BILL_PURCHASE_PAYMENT_DELETE',
             selected: false,
             category: 'الإدارة'
         });

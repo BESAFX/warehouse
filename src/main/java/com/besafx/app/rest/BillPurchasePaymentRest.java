@@ -81,16 +81,16 @@ public class BillPurchasePaymentRest {
         if (billPurchasePayment.getAmount() > 0) {
             BankTransaction bankTransaction = new BankTransaction();
             bankTransaction.setAmount(billPurchasePayment.getAmount());
-            bankTransaction.setBank(Initializer.bank);
-            bankTransaction.setTransactionType(Initializer.transactionTypeDepositPayment);
             bankTransaction.setDate(new DateTime().toDate());
+            bankTransaction.setBank(Initializer.company.getBank());
+            bankTransaction.setTransactionType(Initializer.transactionTypeWithdraw);
             bankTransaction.setPerson(caller);
             StringBuilder builder = new StringBuilder();
-            builder.append("إيداع مبلغ نقدي بقيمة ");
+            builder.append("سحب مبلغ نقدي بقيمة ");
             builder.append(bankTransaction.getAmount());
             builder.append("ريال سعودي، ");
-            builder.append(" للحساب البنكي / ");
-            builder.append(bankTransaction.getBank().getName());
+            builder.append(" من حساب المؤسسة / ");
+            builder.append(Initializer.company.getBank().getName());
             builder.append("، دفعة مالية بتاريخ ");
             builder.append(DateConverter.getDateInFormat(billPurchasePayment.getDate()));
             builder.append("، للفاتورة رقم / " + billPurchase.getCode());
@@ -114,7 +114,9 @@ public class BillPurchasePaymentRest {
     public void delete(@PathVariable Long id) {
         BillPurchasePayment billPurchasePayment = billPurchasePaymentService.findOne(id);
         if (billPurchasePayment != null) {
+            LOG.info("حذف كل المعاملات للدفعة المالية");
             bankTransactionService.delete(billPurchasePayment.getBankTransaction());
+            LOG.info("حذف الدفعة المالية");
             billPurchasePaymentService.delete(id);
             notificationService.notifyAll(Notification
                                                   .builder()
@@ -158,9 +160,6 @@ public class BillPurchasePaymentRest {
             @RequestParam(value = "billPurchaseCodeTo", required = false) final Integer billPurchaseCodeTo,
             @RequestParam(value = "billPurchaseDateFrom", required = false) final Long billPurchaseDateFrom,
             @RequestParam(value = "billPurchaseDateTo", required = false) final Long billPurchaseDateTo,
-            //Customer Filters
-            @RequestParam(value = "customerName", required = false) final String customerName,
-            @RequestParam(value = "customerMobile", required = false) final String customerMobile,
             //Supplier Filters
             @RequestParam(value = "supplierName", required = false) final String supplierName,
             @RequestParam(value = "supplierMobile", required = false) final String supplierMobile,
@@ -177,8 +176,6 @@ public class BillPurchasePaymentRest {
                         billPurchaseCodeTo,
                         billPurchaseDateFrom,
                         billPurchaseDateTo,
-                        customerName,
-                        customerMobile,
                         supplierName,
                         supplierMobile,
                         filterCompareType,

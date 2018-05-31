@@ -338,32 +338,32 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="contractPremium in role.contractPremiums">
+                            <tr ng-repeat="billPurchasePremium in role.billPurchasePremiums">
                                 <td>{{$index+1}}</td>
                                 <td>
-                                    <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{contractPremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
-                                    <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{contractPremium.dueDate | date: 'yyyy-MM-dd'}}</span>
+                                    <span ng-if="dateType==='H'" ng-class="{'no-print': dateType==='G'}">{{billPurchasePremium.dueDate | kdate: 'yyyy-mm-dd' : 'ar' : 'ummalqura'}}</span>
+                                    <span ng-if="dateType==='G'" ng-class="{'no-print': dateType==='H'}">{{billPurchasePremium.dueDate | date: 'yyyy-MM-dd'}}</span>
                                 </td>
-                                <td>{{contractPremium.state}}</td>
-                                <td>{{contractPremium.amount | currency:' SAR ':2}}</td>
-                                <td>{{contractPremium.paid | currency:' SAR ':2}}</td>
-                                <td>{{contractPremium.remain | currency:' SAR ':2}}</td>
+                                <td>{{billPurchasePremium.state}}</td>
+                                <td>{{billPurchasePremium.amount | currency:' SAR ':2}}</td>
+                                <td>{{billPurchasePremium.paid | currency:' SAR ':2}}</td>
+                                <td>{{billPurchasePremium.remain | currency:' SAR ':2}}</td>
                             </tr>
                             <tr class="blank_row" style="height: 10px !important; background-color: #FFFFFF;"
-                                ng-if="!role.contractPremiums || role.contractPremiums.length ==0">
+                                ng-if="!role.billPurchasePremiums || role.billPurchasePremiums.length ==0">
                                 <td colspan="6">
                                     <p>
                                         <span>لا يوجد أقساط حتى الآن </span>
                                     </p>
                                 </td>
                             </tr>
-                            <tr ng-if="role.contractPremiums.length > 0">
+                            <tr ng-if="role.billPurchasePremiums.length > 0">
                                 <td class="info" colspan="3">
                                     <span class="pull-left">المجموع الكلي</span>
                                 </td>
-                                <td class="success" colspan="1">{{role.contractPremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
-                                <td class="success" colspan="1">{{role.contractPremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
-                                <td class="success" colspan="1">{{role.contractPremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
+                                <td class="success" colspan="1">{{role.billPurchasePremiums | sumByKey:'amount' | currency:' SAR ':2}}</td>
+                                <td class="success" colspan="1">{{role.billPurchasePremiums | sumByKey:'paid' | currency:' SAR ':2}}</td>
+                                <td class="success" colspan="1">{{role.billPurchasePremiums | sumByKey:'remain' | currency:' SAR ':2}}</td>
                             </tr>
                             </tbody>
                         </table>

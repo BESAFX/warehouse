@@ -48,7 +48,6 @@ public class BankRest {
             Double depositAmount = bankTransactionService
                     .findByTransactionTypeIn(Lists.newArrayList(
                             Initializer.transactionTypeDeposit,
-                            Initializer.transactionTypeDepositPayment,
                             Initializer.transactionTypeDepositTransfer),
                                              BankTransactionAmount.class)
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
@@ -56,9 +55,8 @@ public class BankRest {
             Double withdrawAmount = bankTransactionService
                     .findByTransactionTypeIn(Lists.newArrayList(
                             Initializer.transactionTypeWithdraw,
-                            Initializer.transactionTypeWithdrawCash,
-                            Initializer.transactionTypeWithdrawPurchase,
-                            Initializer.transactionTypeWithdrawTransfer),
+                            Initializer.transactionTypeWithdrawTransfer,
+                            Initializer.transactionTypeExpense),
                                              BankTransactionAmount.class)
                     .stream().mapToDouble(BankTransactionAmount::getAmount).sum();
 
