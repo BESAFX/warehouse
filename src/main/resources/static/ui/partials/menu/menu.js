@@ -4,7 +4,6 @@ app.controller("menuCtrl", [
     'SupplierService',
     'ProductService',
     'BillPurchaseService',
-    'BillPurchasePremiumService',
     'BillPurchasePaymentService',
     'BankService',
     'BankTransactionService',
@@ -23,7 +22,6 @@ app.controller("menuCtrl", [
               SupplierService,
               ProductService,
               BillPurchaseService,
-              BillPurchasePremiumService,
               BillPurchasePaymentService,
               BankService,
               BankTransactionService,
@@ -65,7 +63,7 @@ app.controller("menuCtrl", [
                     break;
                 }
                 case 'billPurchasePayment': {
-                    $scope.pageTitle = 'الدفعات';
+                    $scope.pageTitle = 'دفعات الشراء';
                     break;
                 }
                 case 'billSell': {
@@ -73,7 +71,7 @@ app.controller("menuCtrl", [
                     break;
                 }
                 case 'billSellPayment': {
-                    $scope.pageTitle = 'الدفعات';
+                    $scope.pageTitle = 'دفعات البيع';
                     break;
                 }
                 case 'bankTransaction': {
